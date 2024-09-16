@@ -47,8 +47,23 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 			continue
 		}
 
+		currentProp := NewProperty(field.Name)
 		enc := newTypeEncoder(field.Type)
 		if enc == nil {
+			if field.Type.Kind() == reflect.Struct {
+				subStruct, err := Marshal(val.FieldByIndex(field.Index).Interface())
+				if err != nil {
+					return nil, err
+				} else {
+					prefix := currentProp.Name()
+					for k, subV := range subStruct {
+						k.SetPrefix(prefix)
+						properties[k] = subV
+					}
+				}
+				continue
+			}
+
 			log.Println("Unsupported type", field.Type, field.Name)
 			// Skip unsupported types
 			continue
@@ -59,7 +74,7 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 			return nil, err
 		}
 
-		properties[NewProperty(field.Name)] = protoVal
+		properties[currentProp] = protoVal
 	}
 	return properties, nil
 }

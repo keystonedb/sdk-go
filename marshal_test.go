@@ -182,7 +182,8 @@ func TestMarshal(t *testing.T) {
 	errorIf(t, proto.MatchValue(props[NewProperty("HasGlasses")], "HasGlasses", &proto.Value{Bool: true}))
 	errorIf(t, proto.MatchValue(props[NewProperty("FraudScore")], "FraudScore", &proto.Value{Float: 0.5}))
 	errorIf(t, proto.MatchValue(props[NewProperty("AmountPaid")], "AmountPaid", &proto.Value{Text: "USD", Int: 142}))
-	//	matchProperty(t, props[NewProperty("SubStruct")], "SubStruct", &proto.Value{Text: "AAA"})
+
+	errorIf(t, proto.MatchValue(props[NewPrefixProperty("sub_struct", "SubName")], "SubName", &proto.Value{Text: "AAA"}))
 }
 
 func TestMarshalPointer(t *testing.T) {

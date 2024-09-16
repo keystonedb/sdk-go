@@ -9,11 +9,26 @@ func NewProperty(name string) Property {
 	return Property{name: snakeCase(name)}
 }
 
-type Property struct {
-	name string
+func NewPrefixProperty(prefix, name string) Property {
+	return Property{prefix: prefix, name: snakeCase(name)}
 }
 
-func (p Property) Name() string {
+type Property struct {
+	prefix string
+	name   string
+}
+
+func (p *Property) SetPrefix(prefix string) {
+	p.prefix = prefix
+}
+
+func (p *Property) Name() string {
+	if p == nil {
+		return ""
+	}
+	if p.prefix != "" {
+		return p.prefix + "." + p.name
+	}
 	return p.name
 }
 
