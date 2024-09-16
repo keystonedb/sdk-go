@@ -210,17 +210,32 @@ func TestMarshalPointer(t *testing.T) {
 	errorIf(t, proto.MatchValue(props[NewProperty("HasGlasses")], "HasGlasses", &proto.Value{Bool: true}))
 	errorIf(t, proto.MatchValue(props[NewProperty("FraudScore")], "FraudScore", &proto.Value{Float: 0.5}))
 	errorIf(t, proto.MatchValue(props[NewProperty("AmountPaid")], "AmountPaid", &proto.Value{Text: "USD", Int: 142}))
-	//	matchProperty(t, props[NewProperty("SubStruct")], "SubStruct", &proto.Value{Text: "AAA"})
 }
 
-/*
-func TestConvert(t *testing.T) {
-	amount := NewAmount("USD", 142)
-	amountRef := &amount
+func TestMarshal_NestedFailure(t *testing.T) {
+	xErr := errors.New("expect error")
+	x := struct {
+		Name      string
+		SubStruct struct {
+			Issue testValueMarshaler
+		}
+	}{
+		Name: "James",
+		SubStruct: struct {
+			Issue testValueMarshaler
+		}{
+			testValueMarshaler{error: xErr},
+		},
+	}
 
-	log.Println(newTypeEncoder(reflect.TypeOf(amount))(reflect.ValueOf(amount)))
-	log.Println(newTypeEncoder(reflect.TypeOf(amountRef))(reflect.ValueOf(amountRef)))
-}*/
+	resp, err := Marshal(x)
+	if !errors.Is(err, xErr) {
+		t.Errorf("Expected error, got: %v", err)
+	}
+	if resp != nil {
+		t.Errorf("Expected nil response, got: %v", resp)
+	}
+}
 
 func Test_MarshaledEntity_Append(t *testing.T) {
 	m := NewMarshaledEntity()

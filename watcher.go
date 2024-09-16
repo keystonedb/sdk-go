@@ -1,11 +1,20 @@
 package keystone
 
-import "github.com/keystonedb/sdk-go/sdk-go/proto"
+import (
+	"github.com/keystonedb/sdk-go/sdk-go/proto"
+	"reflect"
+)
 
 type Watcher struct {
 	knownValues map[Property]*proto.Value
 }
 
+// NewDefaultsWatcher creates a new watcher with the default values of the given type
+func NewDefaultsWatcher(v interface{}) (*Watcher, error) {
+	return NewWatcher(reflect.New(reflect.ValueOf(v).Type()).Interface())
+}
+
+// NewWatcher creates a new watcher with the given value
 func NewWatcher(v interface{}) (*Watcher, error) {
 	w := &Watcher{
 		knownValues: make(map[Property]*proto.Value),
@@ -18,9 +27,6 @@ func NewWatcher(v interface{}) (*Watcher, error) {
 
 	w.knownValues = current
 	return w, nil
-}
-
-type entity struct {
 }
 
 // Changes returns the changes between the current value and the previous value.
@@ -41,9 +47,7 @@ func (w *Watcher) Changes(v interface{}, update bool) (map[Property]*proto.Value
 	changes := make(map[Property]*proto.Value)
 	for k, lV := range latest {
 		prev, ok := w.knownValues[k]
-		if !ok {
-			changes[k] = lV
-		} else if proto.MatchValue(prev, "_", lV) != nil {
+		if !ok || proto.MatchValue(prev, "_", lV) != nil {
 			changes[k] = lV
 		}
 	}

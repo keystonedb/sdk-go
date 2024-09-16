@@ -1,16 +1,17 @@
 package keystone
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 func TestWatcher_Changes(t *testing.T) {
 	toTest := struct {
-		entity
 		Name string
 		Age  int
 	}{
-		entity: entity{},
-		Name:   "John",
-		Age:    30,
+		Name: "John",
+		Age:  30,
 	}
 
 	nameProp := NewProperty("Name")
@@ -50,13 +51,11 @@ func TestWatcher_ChangesFromNil(t *testing.T) {
 	ageProp := NewProperty("Age")
 
 	toTest := struct {
-		entity
 		Name string
 		Age  int
 	}{
-		entity: entity{},
-		Name:   "John",
-		Age:    30,
+		Name: "John",
+		Age:  30,
 	}
 	changes, err := w.Changes(toTest, true)
 	if len(changes) != 2 {
@@ -67,5 +66,51 @@ func TestWatcher_ChangesFromNil(t *testing.T) {
 	}
 	if changes[ageProp].Int != 30 {
 		t.Errorf("Changes() returned %d, want 30", changes[ageProp].Int)
+	}
+}
+
+func TestWatcher_DefaultWatcher(t *testing.T) {
+	toTest := struct {
+		Name string
+		Age  int
+	}{
+		Age: 30,
+	}
+
+	w, err := NewDefaultsWatcher(toTest)
+	if err != nil {
+		t.Errorf("NewDefaultsWatcher() returned error: %v", err)
+	}
+
+	ageProp := NewProperty("Age")
+
+	// Name is unchanged from defaults, but age should alter the default values
+
+	changes, err := w.Changes(toTest, true)
+	if len(changes) != 1 {
+		t.Fatalf("Changes() returned %d changes, want 2", len(changes))
+	}
+	if changes[ageProp].Int != 30 {
+		t.Errorf("Changes() returned %d, want 30", changes[ageProp].Int)
+	}
+}
+
+func TestWatcher_CatchErrors(t *testing.T) {
+	xErr := errors.New("test error")
+	safe := struct{ Apply testValueMarshaler }{testValueMarshaler{stringValue: "test"}}
+	failing := struct{ Apply testValueMarshaler }{testValueMarshaler{error: xErr}}
+	_, err := NewWatcher(failing)
+	if !errors.Is(err, xErr) {
+		t.Errorf("NewWatcher() returned %v, want %v", err, xErr)
+	}
+
+	w, err := NewWatcher(safe)
+	if err != nil {
+		t.Errorf("NewWatcher() returned error: %v", err)
+	}
+
+	_, err = w.Changes(failing, true)
+	if !errors.Is(err, xErr) {
+		t.Errorf("Changes() returned %v, want %v", err, xErr)
 	}
 }

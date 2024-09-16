@@ -19,7 +19,9 @@ type Property struct {
 }
 
 func (p *Property) SetPrefix(prefix string) {
-	p.prefix = prefix
+	if p != nil {
+		p.prefix = prefix
+	}
 }
 
 func (p *Property) Name() string {
