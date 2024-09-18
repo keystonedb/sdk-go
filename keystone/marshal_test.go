@@ -2,7 +2,7 @@ package keystone
 
 import (
 	"errors"
-	"github.com/keystonedb/sdk-go/sdk-go/proto"
+	"github.com/keystonedb/sdk-go/keystone/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"testing"
 	"time"
@@ -20,7 +20,20 @@ type marshal struct {
 	xName string
 }
 
-func (m marshal) MarshalKeystone() (map[Property]*proto.Value, error) {
+type testValueMarshaler struct {
+	stringValue string
+	error       error
+}
+
+func (t testValueMarshaler) MarshalValue() (*proto.Value, error) {
+	return &proto.Value{Text: t.stringValue}, t.error
+}
+
+func (t testValueMarshaler) UnmarshalValue(*proto.Value) error {
+	return t.error
+}
+
+func (m *marshal) MarshalKeystone() (map[Property]*proto.Value, error) {
 	result := NewMarshaledEntity()
 
 	if err := result.Append("name", m.xName); err != nil {
@@ -28,6 +41,10 @@ func (m marshal) MarshalKeystone() (map[Property]*proto.Value, error) {
 	}
 
 	return result.Properties, nil
+}
+
+func (m *marshal) UnmarshalKeystone(map[Property]*proto.Value) error {
+	return nil
 }
 
 type selfMarshal struct {
@@ -50,6 +67,10 @@ func (s *selfMarshal) MarshalKeystone() (map[Property]*proto.Value, error) {
 	}
 
 	return result.Properties, nil
+}
+
+func (s *selfMarshal) UnmarshalKeystone(map[Property]*proto.Value) error {
+	return nil
 }
 
 type testEntity struct {

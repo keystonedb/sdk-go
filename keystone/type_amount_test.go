@@ -1,7 +1,7 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/sdk-go/proto"
+	"github.com/keystonedb/sdk-go/keystone/proto"
 	"testing"
 )
 

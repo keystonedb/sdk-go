@@ -1,6 +1,6 @@
 package keystone
 
-import "github.com/keystonedb/sdk-go/sdk-go/proto"
+import "github.com/keystonedb/sdk-go/keystone/proto"
 
 // Amount represents money
 type Amount struct {

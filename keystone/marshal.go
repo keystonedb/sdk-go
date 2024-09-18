@@ -2,8 +2,8 @@ package keystone
 
 import (
 	"errors"
-	"github.com/keystonedb/sdk-go/sdk-go/proto"
-	"log"
+	"github.com/keystonedb/sdk-go/keystone/proto"
+	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"reflect"
 )
 
@@ -20,17 +20,13 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 		return m.MarshalKeystone()
 	}
 
-	val := reflect.ValueOf(v)
-	if val.Kind() == reflect.Pointer {
-		val = val.Elem()
-	}
+	val := reflector.Deref(reflect.ValueOf(v))
 
 	if reflect.PointerTo(val.Type()).Implements(marshalerType) {
 		// Support structs with Marshal pointer receiver
 		vp := reflect.New(val.Type())
 		vp.Elem().Set(val)
 		x := vp.Interface()
-
 		if m, ok := x.(Marshaler); ok {
 			return m.MarshalKeystone()
 		}
@@ -48,33 +44,27 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 		}
 
 		currentProp := NewProperty(field.Name)
-		enc := newTypeEncoder(field.Type)
-		if enc == nil {
-			if field.Type.Kind() == reflect.Struct {
-				subStruct, err := Marshal(val.FieldByIndex(field.Index).Interface())
-				if err != nil {
-					return nil, err
-				} else {
-					prefix := currentProp.Name()
-					for k, subV := range subStruct {
-						k.SetPrefix(prefix)
-						properties[k] = subV
-					}
-				}
-				continue
+		currentVal := val.FieldByIndex(field.Index)
+		ref := GetReflector(field.Type, currentVal)
+		if ref != nil {
+			protoVal, err := ref.ToProto(currentVal)
+			if err != nil {
+				return nil, err
+			} else {
+				properties[currentProp] = protoVal
 			}
-
-			log.Println("Unsupported type", field.Type, field.Name)
-			// Skip unsupported types
-			continue
+		} else if field.Type.Kind() == reflect.Struct {
+			subProps, err := Marshal(currentVal.Interface())
+			if err != nil {
+				return nil, err
+			} else {
+				prefix := currentProp.Name()
+				for k, subV := range subProps {
+					k.SetPrefix(prefix)
+					properties[k] = subV
+				}
+			}
 		}
-
-		protoVal, err := enc(val.FieldByIndex(field.Index))
-		if err != nil {
-			return nil, err
-		}
-
-		properties[currentProp] = protoVal
 	}
 	return properties, nil
 }
@@ -82,17 +72,12 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 var CannotMarshalValueError = errors.New("cannot marshal value")
 
 func MarshalValue(v interface{}) (*proto.Value, error) {
-	val := reflect.ValueOf(v)
-	if val.Kind() == reflect.Ptr {
-		val = val.Elem()
+	val := reflector.Deref(reflect.ValueOf(v))
+	ref := GetReflector(val.Type(), val)
+	if ref != nil {
+		return ref.ToProto(val)
 	}
-
-	enc := newTypeEncoder(val.Type())
-	if enc == nil {
-		return nil, CannotMarshalValueError
-	}
-
-	return enc(val)
+	return nil, CannotMarshalValueError
 }
 
 func NewMarshaledEntity() MarshaledEntity {
