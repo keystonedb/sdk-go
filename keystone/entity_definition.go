@@ -1,6 +1,8 @@
 package keystone
 
 import (
+	"errors"
+	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -22,10 +24,18 @@ type TypeDefinition struct {
 	Plural       string // Name for a collection of these entities e.g. Users
 	Options      []proto.Schema_Option
 	KeystoneType proto.Schema_Type
+
+	Properties map[Property]proto.PropertyDefinition
 }
 
-func Define(input interface{}) TypeDefinition {
-	definition := TypeDefinition{}
+func NewTypeDefinition() TypeDefinition {
+	return TypeDefinition{
+		Properties: map[Property]proto.PropertyDefinition{},
+	}
+}
+
+func QuickDefine(input interface{}) TypeDefinition {
+	definition := NewTypeDefinition()
 
 	if definer, ok := input.(EntityDefinition); ok {
 		definition = definer.GetKeystoneDefinition()
@@ -48,4 +58,53 @@ func Define(input interface{}) TypeDefinition {
 	}
 
 	return definition
+}
+
+func Define(input interface{}) TypeDefinition {
+	definition := QuickDefine(input)
+	if props, err := MapProperties(input); err == nil {
+		definition.Properties = props
+	}
+	return definition
+}
+
+var CannotMapPrimitives = errors.New("cannot map primitive type")
+var CannotMapNil = errors.New("cannot map nil")
+
+func MapProperties(v interface{}) (map[Property]proto.PropertyDefinition, error) {
+
+	if v == nil {
+		return nil, CannotMapNil
+	}
+	val := reflector.Deref(reflect.ValueOf(v))
+	if val.Kind() != reflect.Struct {
+		return nil, CannotMapPrimitives
+	}
+
+	properties := make(map[Property]proto.PropertyDefinition)
+
+	for _, field := range reflect.VisibleFields(val.Type()) {
+		if field.Anonymous || !field.IsExported() {
+			continue
+		}
+
+		currentProp := NewProperty(field.Name)
+		currentVal := val.FieldByIndex(field.Index)
+		ref := GetReflector(field.Type, currentVal)
+		if ref != nil {
+			properties[currentProp] = ref.PropertyDefinition()
+		} else if field.Type.Kind() == reflect.Struct {
+			subProps, err := MapProperties(currentVal.Interface())
+			if err != nil {
+				return nil, err
+			} else {
+				prefix := currentProp.Name()
+				for k, subV := range subProps {
+					k.SetPrefix(prefix)
+					properties[k] = subV
+				}
+			}
+		}
+	}
+	return properties, nil
 }

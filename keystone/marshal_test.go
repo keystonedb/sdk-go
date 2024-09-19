@@ -2,7 +2,7 @@ package keystone
 
 import (
 	"errors"
-	proto2 "github.com/keystonedb/sdk-go/proto"
+	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"testing"
 	"time"
@@ -25,15 +25,19 @@ type testValueMarshaler struct {
 	error       error
 }
 
-func (t testValueMarshaler) MarshalValue() (*proto2.Value, error) {
-	return &proto2.Value{Text: t.stringValue}, t.error
+func (t testValueMarshaler) MarshalValue() (*proto.Value, error) {
+	return &proto.Value{Text: t.stringValue}, t.error
 }
 
-func (t testValueMarshaler) UnmarshalValue(*proto2.Value) error {
+func (t testValueMarshaler) UnmarshalValue(*proto.Value) error {
 	return t.error
 }
 
-func (m *marshal) MarshalKeystone() (map[Property]*proto2.Value, error) {
+func (t testValueMarshaler) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Text}
+}
+
+func (m *marshal) MarshalKeystone() (map[Property]*proto.Value, error) {
 	result := NewMarshaledEntity()
 
 	if err := result.Append("name", m.xName); err != nil {
@@ -43,7 +47,7 @@ func (m *marshal) MarshalKeystone() (map[Property]*proto2.Value, error) {
 	return result.Properties, nil
 }
 
-func (m *marshal) UnmarshalKeystone(map[Property]*proto2.Value) error {
+func (m *marshal) UnmarshalKeystone(map[Property]*proto.Value) error {
 	return nil
 }
 
@@ -53,7 +57,7 @@ type selfMarshal struct {
 	hiddenBool  bool
 }
 
-func (s *selfMarshal) MarshalKeystone() (map[Property]*proto2.Value, error) {
+func (s *selfMarshal) MarshalKeystone() (map[Property]*proto.Value, error) {
 	result := NewMarshaledEntity()
 
 	if err := result.Append("name", s.privateName); err != nil {
@@ -69,7 +73,7 @@ func (s *selfMarshal) MarshalKeystone() (map[Property]*proto2.Value, error) {
 	return result.Properties, nil
 }
 
-func (s *selfMarshal) UnmarshalKeystone(map[Property]*proto2.Value) error {
+func (s *selfMarshal) UnmarshalKeystone(map[Property]*proto.Value) error {
 	return nil
 }
 
@@ -146,18 +150,18 @@ func Test_SelfMarshal(t *testing.T) {
 		t.Errorf("Marshal failed: %v", err)
 	}
 
-	errorIf(t, proto2.MatchValue(props[NewProperty("name")], "name", &proto2.Value{Text: "John"}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("age")], "age", &proto2.Value{Int: 30}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("hidden")], "hidden", &proto2.Value{Bool: true}))
+	errorIf(t, proto.MatchValue(props[NewProperty("name")], "name", &proto.Value{Text: "John"}))
+	errorIf(t, proto.MatchValue(props[NewProperty("age")], "age", &proto.Value{Int: 30}))
+	errorIf(t, proto.MatchValue(props[NewProperty("hidden")], "hidden", &proto.Value{Bool: true}))
 
 	propsPoint, err := Marshal(&s)
 	if err != nil {
 		t.Errorf("Marshal failed: %v", err)
 	}
 
-	errorIf(t, proto2.MatchValue(propsPoint[NewProperty("name")], "name", &proto2.Value{Text: "John"}))
-	errorIf(t, proto2.MatchValue(propsPoint[NewProperty("age")], "age", &proto2.Value{Int: 30}))
-	errorIf(t, proto2.MatchValue(propsPoint[NewProperty("hidden")], "hidden", &proto2.Value{Bool: true}))
+	errorIf(t, proto.MatchValue(propsPoint[NewProperty("name")], "name", &proto.Value{Text: "John"}))
+	errorIf(t, proto.MatchValue(propsPoint[NewProperty("age")], "age", &proto.Value{Int: 30}))
+	errorIf(t, proto.MatchValue(propsPoint[NewProperty("hidden")], "hidden", &proto.Value{Bool: true}))
 }
 
 func Test_SelfMarshalNonPointer(t *testing.T) {
@@ -169,14 +173,14 @@ func Test_SelfMarshalNonPointer(t *testing.T) {
 		t.Errorf("Marshal failed: %v", err)
 	}
 
-	errorIf(t, proto2.MatchValue(props[NewProperty("name")], "name", &proto2.Value{Text: "Harry"}))
+	errorIf(t, proto.MatchValue(props[NewProperty("name")], "name", &proto.Value{Text: "Harry"}))
 
 	propsPoint, err := Marshal(&s)
 	if err != nil {
 		t.Errorf("Marshal failed: %v", err)
 	}
 
-	errorIf(t, proto2.MatchValue(propsPoint[NewProperty("name")], "name", &proto2.Value{Text: "Harry"}))
+	errorIf(t, proto.MatchValue(propsPoint[NewProperty("name")], "name", &proto.Value{Text: "Harry"}))
 }
 
 func TestMarshal(t *testing.T) {
@@ -196,15 +200,15 @@ func TestMarshal(t *testing.T) {
 		t.Errorf("Marshal failed: %v", err)
 	}
 
-	errorIf(t, proto2.MatchValue(props[NewProperty("ID")], "ID", &proto2.Value{Text: "xx"}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("Name")], "Name", &proto2.Value{Text: "John"}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("Age")], "Age", &proto2.Value{Int: 30}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("DOB")], "DOB", &proto2.Value{Time: timestamppb.New(time.Date(2009, 2, 13, 23, 31, 30, 12345, time.UTC))}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("HasGlasses")], "HasGlasses", &proto2.Value{Bool: true}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("FraudScore")], "FraudScore", &proto2.Value{Float: 0.5}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("AmountPaid")], "AmountPaid", &proto2.Value{Text: "USD", Int: 142}))
+	errorIf(t, proto.MatchValue(props[NewProperty("ID")], "ID", &proto.Value{Text: "xx"}))
+	errorIf(t, proto.MatchValue(props[NewProperty("Name")], "Name", &proto.Value{Text: "John"}))
+	errorIf(t, proto.MatchValue(props[NewProperty("Age")], "Age", &proto.Value{Int: 30}))
+	errorIf(t, proto.MatchValue(props[NewProperty("DOB")], "DOB", &proto.Value{Time: timestamppb.New(time.Date(2009, 2, 13, 23, 31, 30, 12345, time.UTC))}))
+	errorIf(t, proto.MatchValue(props[NewProperty("HasGlasses")], "HasGlasses", &proto.Value{Bool: true}))
+	errorIf(t, proto.MatchValue(props[NewProperty("FraudScore")], "FraudScore", &proto.Value{Float: 0.5}))
+	errorIf(t, proto.MatchValue(props[NewProperty("AmountPaid")], "AmountPaid", &proto.Value{Text: "USD", Int: 142}))
 
-	errorIf(t, proto2.MatchValue(props[NewPrefixProperty("sub_struct", "SubName")], "SubName", &proto2.Value{Text: "AAA"}))
+	errorIf(t, proto.MatchValue(props[NewPrefixProperty("sub_struct", "SubName")], "SubName", &proto.Value{Text: "AAA"}))
 }
 
 func TestMarshalPointer(t *testing.T) {
@@ -224,13 +228,13 @@ func TestMarshalPointer(t *testing.T) {
 		t.Errorf("Marshal failed: %v", err)
 	}
 
-	errorIf(t, proto2.MatchValue(props[NewProperty("ID")], "ID", &proto2.Value{Text: "xx"}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("Name")], "Name", &proto2.Value{Text: "John"}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("Age")], "Age", &proto2.Value{Int: 30}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("DOB")], "DOB", &proto2.Value{Time: timestamppb.New(time.Date(2009, 2, 13, 23, 31, 30, 12345, time.UTC))}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("HasGlasses")], "HasGlasses", &proto2.Value{Bool: true}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("FraudScore")], "FraudScore", &proto2.Value{Float: 0.5}))
-	errorIf(t, proto2.MatchValue(props[NewProperty("AmountPaid")], "AmountPaid", &proto2.Value{Text: "USD", Int: 142}))
+	errorIf(t, proto.MatchValue(props[NewProperty("ID")], "ID", &proto.Value{Text: "xx"}))
+	errorIf(t, proto.MatchValue(props[NewProperty("Name")], "Name", &proto.Value{Text: "John"}))
+	errorIf(t, proto.MatchValue(props[NewProperty("Age")], "Age", &proto.Value{Int: 30}))
+	errorIf(t, proto.MatchValue(props[NewProperty("DOB")], "DOB", &proto.Value{Time: timestamppb.New(time.Date(2009, 2, 13, 23, 31, 30, 12345, time.UTC))}))
+	errorIf(t, proto.MatchValue(props[NewProperty("HasGlasses")], "HasGlasses", &proto.Value{Bool: true}))
+	errorIf(t, proto.MatchValue(props[NewProperty("FraudScore")], "FraudScore", &proto.Value{Float: 0.5}))
+	errorIf(t, proto.MatchValue(props[NewProperty("AmountPaid")], "AmountPaid", &proto.Value{Text: "USD", Int: 142}))
 }
 
 func TestMarshal_NestedFailure(t *testing.T) {

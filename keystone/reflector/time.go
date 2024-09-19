@@ -21,3 +21,7 @@ func (e Time) SetValue(value *proto.Value, onto reflect.Value) error {
 	onto.Set(reflect.ValueOf(value.GetTime().AsTime()))
 	return nil
 }
+
+func (e Time) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Time}
+}

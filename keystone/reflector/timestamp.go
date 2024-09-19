@@ -20,3 +20,7 @@ func (e Timestamp) SetValue(value *proto.Value, onto reflect.Value) error {
 	onto.Set(reflect.ValueOf(value.GetTime()))
 	return nil
 }
+
+func (e Timestamp) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Time}
+}

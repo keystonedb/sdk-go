@@ -1,16 +1,16 @@
 package reflector
 
 import (
-	proto2 "github.com/keystonedb/sdk-go/proto"
+	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 )
 
 type StringMap struct{}
 
-func (e StringMap) ToProto(value reflect.Value) (*proto2.Value, error) {
+func (e StringMap) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
 	if mapVal, ok := value.Interface().(map[string]string); ok {
-		ret := &proto2.Value{Array: proto2.NewRepeatedKeyValue()}
+		ret := &proto.Value{Array: proto.NewRepeatedKeyValue()}
 		for k, v := range mapVal {
 			ret.Array.KeyValue[k] = []byte(v)
 		}
@@ -19,7 +19,7 @@ func (e StringMap) ToProto(value reflect.Value) (*proto2.Value, error) {
 	return nil, UnsupportedTypeError
 }
 
-func (e StringMap) SetValue(value *proto2.Value, onto reflect.Value) error {
+func (e StringMap) SetValue(value *proto.Value, onto reflect.Value) error {
 	if value.Array == nil {
 		return InvalidValueError
 	}
@@ -29,4 +29,8 @@ func (e StringMap) SetValue(value *proto2.Value, onto reflect.Value) error {
 	}
 	onto.Set(reflect.ValueOf(ret))
 	return nil
+}
+
+func (e StringMap) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_KeyValue}
 }

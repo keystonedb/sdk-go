@@ -34,3 +34,7 @@ func (e Float) SetValue(value *proto.Value, onto reflect.Value) error {
 	onto.SetFloat(value.Float)
 	return nil
 }
+
+func (e Float) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Float}
+}

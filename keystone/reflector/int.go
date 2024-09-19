@@ -38,3 +38,7 @@ func (e Int) SetValue(value *proto.Value, onto reflect.Value) error {
 		return UnsupportedTypeError
 	}
 }
+
+func (e Int) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Number}
+}

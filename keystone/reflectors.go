@@ -109,6 +109,10 @@ func (v valueMarshalReflector) SetValue(value *proto.Value, onto reflect.Value) 
 	return nil
 }
 
+func (v valueMarshalReflector) PropertyDefinition() proto.PropertyDefinition {
+	return v.marshal.PropertyDefinition()
+}
+
 func newValueMarshalReflector(value reflect.Value) Reflector {
 	if value.Kind() == reflect.Invalid || (value.Kind() == reflect.Pointer && value.IsNil()) {
 		return nil

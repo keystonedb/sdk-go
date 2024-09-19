@@ -1,12 +1,20 @@
 package keystone
 
 import (
+	"errors"
 	"github.com/keystonedb/sdk-go/proto"
 	"testing"
 	"time"
 )
 
 type definedEntity struct {
+	Name string
+}
+
+type parentDefinedEntity struct {
+	Child    definedEntity
+	HasSaved bool
+	Numeric  int
 }
 
 type definedTimeSeriesEntity struct{}
@@ -18,16 +26,16 @@ type definedTimeSeriesEntityPoint struct{}
 func (d *definedTimeSeriesEntityPoint) GetTimeSeriesInputTime() time.Time { return time.Now() }
 
 func (e *definedEntity) GetKeystoneDefinition() TypeDefinition {
-	return TypeDefinition{
-		Type:        "entity",
-		Name:        "Entity",
-		Description: "An entity",
-		Singular:    "Entity",
-		Plural:      "Entities",
-	}
+	d := NewTypeDefinition()
+	d.Type = "entity"
+	d.Name = "Entity"
+	d.Description = "An entity"
+	d.Singular = "Entity"
+	d.Plural = "Entities"
+	return d
 }
 
-func Test_Define(t *testing.T) {
+func Test_QuickDefine(t *testing.T) {
 	tests := []struct {
 		name              string
 		with              interface{}
@@ -49,22 +57,88 @@ func Test_Define(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			res := Define(test.with)
+			res := QuickDefine(test.with)
 			if res.Type != test.expectType {
-				t.Errorf("Define().Type = %s; want %s", Define(test.with).Type, test.expectType)
+				t.Errorf("QuickDefine().Type = %s; want %s", res.Type, test.expectType)
 			}
 			if res.Name != test.expectName {
-				t.Errorf("Define().Name = %s; want %s", Define(test.with).Name, test.expectName)
+				t.Errorf("QuickDefine().Name = %s; want %s", res.Name, test.expectName)
 			}
 			if res.Description != test.expectDescription {
-				t.Errorf("Define().Description = %s; want %s", Define(test.with).Description, test.expectDescription)
+				t.Errorf("QuickDefine().Description = %s; want %s", res.Description, test.expectDescription)
 			}
 			if res.Singular != test.expectSingular {
-				t.Errorf("Define().Singular = %s; want %s", Define(test.with).Singular, test.expectSingular)
+				t.Errorf("QuickDefine().Singular = %s; want %s", res.Singular, test.expectSingular)
 			}
 			if res.Plural != test.expectPlural {
-				t.Errorf("Define().Plural = %s; want %s", Define(test.with).Plural, test.expectPlural)
+				t.Errorf("QuickDefine().Plural = %s; want %s", res.Plural, test.expectPlural)
 			}
 		})
+	}
+}
+func Test_MapProperties_Unsupported(t *testing.T) {
+	tests := []struct {
+		name      string
+		with      interface{}
+		expectErr error
+	}{
+		{"nil", nil, CannotMapNil},
+		{"string", "string", CannotMapPrimitives},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := MapProperties(test.with)
+			if !errors.Is(err, test.expectErr) {
+				t.Errorf("MapProperties() = %v; want %v", err, test)
+			}
+		})
+	}
+}
+
+func Test_MapProperties_Nested(t *testing.T) {
+
+	props, err := MapProperties(parentDefinedEntity{})
+	if err != nil {
+		t.Errorf("MapProperties() = %v; want nil", err)
+	}
+	if len(props) != 3 {
+		t.Errorf("MapProperties() = %d; want 3", len(props))
+	}
+
+	child, hasChild := props[NewPrefixProperty("child", "name")]
+	if !hasChild {
+		t.Errorf("MapProperties()[child.name] was not returned")
+	} else if child.DataType != proto.Property_Text {
+		t.Errorf("MapProperties()[child.name] type was %s, want %s", child.DataType, proto.Property_Text)
+	}
+
+	numeric, hasNumeric := props[NewProperty("numeric")]
+	if !hasNumeric {
+		t.Errorf("MapProperties()[numeric] was not returned")
+	} else if numeric.DataType != proto.Property_Number {
+		t.Errorf("MapProperties()[numeric] type was %s, want %s", numeric.DataType, proto.Property_Number)
+	}
+
+	saved, hasHasSaved := props[NewProperty("has_saved")]
+	if !hasHasSaved {
+		t.Errorf("MapProperties()[has_saved] was not returned")
+	} else if saved.DataType != proto.Property_Boolean {
+		t.Errorf("MapProperties()[has_saved] type was %s, want %s", saved.DataType, proto.Property_Boolean)
+	}
+}
+
+func Test_MapProperties_viaDefined(t *testing.T) {
+	def := Define(definedEntity{})
+	props := def.Properties
+
+	if len(props) != 1 {
+		t.Errorf("MapProperties() = %d; want 1", len(props))
+	}
+
+	name, hasName := props[NewProperty("name")]
+	if !hasName {
+		t.Errorf("MapProperties()[name] was not returned")
+	} else if name.DataType != proto.Property_Text {
+		t.Errorf("MapProperties()[name] type was %s, want %s", name.DataType, proto.Property_Text)
 	}
 }

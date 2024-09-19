@@ -16,3 +16,7 @@ func (e String) SetValue(value *proto.Value, onto reflect.Value) error {
 	onto.SetString(value.GetText())
 	return nil
 }
+
+func (e String) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Text}
+}

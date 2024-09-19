@@ -32,3 +32,7 @@ func (a *Amount) UnmarshalValue(value *proto.Value) error {
 	}
 	return nil
 }
+
+func (a *Amount) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Amount}
+}

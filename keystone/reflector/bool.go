@@ -16,3 +16,7 @@ func (e Bool) SetValue(value *proto.Value, onto reflect.Value) error {
 	onto.SetBool(value.GetBool())
 	return nil
 }
+
+func (e Bool) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Boolean}
+}

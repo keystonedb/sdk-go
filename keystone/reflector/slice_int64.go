@@ -24,3 +24,7 @@ func (e Int64Slice) SetValue(value *proto.Value, onto reflect.Value) error {
 	onto.Set(reflect.ValueOf(slice))
 	return nil
 }
+
+func (e Int64Slice) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Ints}
+}

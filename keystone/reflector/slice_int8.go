@@ -29,3 +29,7 @@ func (e Int8Slice) SetValue(value *proto.Value, onto reflect.Value) error {
 	onto.Set(reflect.ValueOf(slice))
 	return nil
 }
+
+func (e Int8Slice) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Ints}
+}
