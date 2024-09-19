@@ -21,3 +21,27 @@ type Reflector interface {
 	SetValue(*proto.Value, reflect.Value) error
 	PropertyDefinition() proto.PropertyDefinition
 }
+
+type Entity interface {
+	GetKeystoneID() string
+	SetKeystoneID(id string)
+}
+
+type ChildEntity interface {
+	GetKeystoneParentID() string
+	GetKeystoneChildID() string
+	SetKeystoneParentID(id string)
+	SetKeystoneChildID(id string)
+}
+
+// NestedChild is an interface that defines a child struct - these are not standalone entities
+type NestedChild interface {
+	ChildID() string
+	SetChildID(id string)
+}
+
+// NestedChildAggregateValue defines the aggregate value of a child entity
+type NestedChildAggregateValue interface {
+	AggregateValue() int64
+	SetAggregateValue(val int64)
+}
