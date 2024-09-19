@@ -2,8 +2,8 @@ package keystone
 
 import (
 	"errors"
-	"github.com/keystonedb/sdk-go/keystone/proto"
 	"github.com/keystonedb/sdk-go/keystone/reflector"
+	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 )
 

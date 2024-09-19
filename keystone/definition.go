@@ -1,6 +1,8 @@
 package keystone
 
 import (
+	"github.com/keystonedb/sdk-go/keystone/reflector"
+	"reflect"
 	"regexp"
 	"strings"
 )
@@ -43,4 +45,9 @@ func snakeCase(str string) string {
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	snake = matchNonAlphaNum.ReplaceAllString(snake, "_")
 	return strings.ToLower(snake)
+}
+
+func Type(input interface{}) string {
+	t := reflector.Deref(reflect.ValueOf(input)).Type()
+	return strings.ReplaceAll(snakeCase(t.Name()), "_", "-")
 }

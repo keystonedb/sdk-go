@@ -1,7 +1,7 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/keystone/proto"
+	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"reflect"
 	"time"

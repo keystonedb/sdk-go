@@ -62,3 +62,21 @@ func Test_Property_SetPrefix(t *testing.T) {
 		})
 	}
 }
+
+func Test_Type(t *testing.T) {
+	tests := []struct {
+		name   string
+		with   interface{}
+		expect string
+	}{
+		{"MarshaledEntity", MarshaledEntity{}, "marshaled-entity"},
+		{"MarshaledEntity", &MarshaledEntity{}, "marshaled-entity"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if Type(test.with) != test.expect {
+				t.Errorf("Type() = %s; want %s", Type(test.with), test.expect)
+			}
+		})
+	}
+}

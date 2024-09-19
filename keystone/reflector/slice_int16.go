@@ -1,7 +1,7 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/keystone/proto"
+	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 )
 

@@ -1,16 +1,16 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/keystone/proto"
+	proto2 "github.com/keystonedb/sdk-go/proto"
 	"reflect"
 )
 
 type Map struct{}
 
-func (e Map) ToProto(value reflect.Value) (*proto.Value, error) {
+func (e Map) ToProto(value reflect.Value) (*proto2.Value, error) {
 	value = Deref(value)
 	if mapVal, ok := value.Interface().(map[string][]byte); ok {
-		ret := &proto.Value{Array: proto.NewRepeatedKeyValue()}
+		ret := &proto2.Value{Array: proto2.NewRepeatedKeyValue()}
 		for k, v := range mapVal {
 			ret.Array.KeyValue[k] = v
 		}
@@ -19,7 +19,7 @@ func (e Map) ToProto(value reflect.Value) (*proto.Value, error) {
 	return nil, UnsupportedTypeError
 }
 
-func (e Map) SetValue(value *proto.Value, onto reflect.Value) error {
+func (e Map) SetValue(value *proto2.Value, onto reflect.Value) error {
 	if value.Array == nil {
 		return InvalidValueError
 	}
