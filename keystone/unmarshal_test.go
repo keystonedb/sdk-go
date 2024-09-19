@@ -1,6 +1,7 @@
 package keystone
 
 import (
+	"errors"
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"testing"
@@ -14,6 +15,16 @@ func Test_UnmarshalNil(t *testing.T) {
 
 	if err := Unmarshal(make(map[Property]*proto.Value), nil); err != nil {
 		t.Errorf("Unmarshal onto nil should not fail : %v", err)
+	}
+}
+
+func Test_UnmarshalNonPointer(t *testing.T) {
+
+	inputData := map[Property]*proto.Value{NewProperty("ID"): {Text: "xx"}}
+	e := testEntity{}
+	err := Unmarshal(inputData, e)
+	if !errors.Is(err, ErrMustPassPointer) {
+		t.Errorf("Unmarshal should fail with ErrMustPassPointer")
 	}
 }
 

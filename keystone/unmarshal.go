@@ -7,6 +7,8 @@ import (
 	"reflect"
 )
 
+var ErrMustPassPointer = errors.New("you must pass a pointer")
+
 func Unmarshal(data map[Property]*proto.Value, v interface{}) error {
 	if v == nil || data == nil {
 		return nil
@@ -14,7 +16,7 @@ func Unmarshal(data map[Property]*proto.Value, v interface{}) error {
 
 	val := reflect.ValueOf(v)
 	if val.Kind() != reflect.Ptr {
-		return errors.New("you must pass a pointer to Unmarshal")
+		return ErrMustPassPointer
 	}
 	val = reflector.Deref(val)
 
