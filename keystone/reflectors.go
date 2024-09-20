@@ -61,7 +61,7 @@ func GetReflector(t reflect.Type, v reflect.Value) Reflector {
 		return ref
 	}
 
-	if t.Kind() == reflect.Map {
+	if t.Kind() == reflect.Map && t.Key().Kind() == reflect.String {
 		if ref, ok := mapKindReflector[t.Elem().Kind()]; ok {
 			return ref
 		}
