@@ -113,3 +113,12 @@ func MapProperties(v interface{}) (map[Property]proto.PropertyDefinition, error)
 func (t TypeDefinition) Schema() *proto.Schema {
 	return nil
 }
+
+func (t TypeDefinition) HasOption(option proto.Schema_Option) bool {
+	for _, o := range t.Options {
+		if o == option {
+			return true
+		}
+	}
+	return false
+}
