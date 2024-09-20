@@ -17,6 +17,7 @@ type EntityDefinition interface {
 
 // TypeDefinition is a definition of a keystone type
 type TypeDefinition struct {
+	id           string // Generated ID from keystone server
 	Type         string // Unique Type Name e.g. user
 	Name         string // Friendly name of the entity e.g. Library User
 	Description  string // Description of the entity
@@ -107,4 +108,8 @@ func MapProperties(v interface{}) (map[Property]proto.PropertyDefinition, error)
 		}
 	}
 	return properties, nil
+}
+
+func (t TypeDefinition) Schema() *proto.Schema {
+	return nil
 }
