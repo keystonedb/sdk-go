@@ -21,13 +21,3 @@ func CreateDate(time time.Time) *Date {
 func NewRepeatedKeyValue() *RepeatedValue {
 	return &RepeatedValue{KeyValue: make(map[string][]byte)}
 }
-
-/*
-func NewValue() *Value {
-	return &Value{
-		Array:       &RepeatedValue{},
-		ArrayAppend: &RepeatedValue{},
-		ArrayReduce: &RepeatedValue{},
-	}
-}
-*/
