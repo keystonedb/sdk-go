@@ -313,3 +313,17 @@ func Test_AsSlice(t *testing.T) {
 		t.Errorf("UnmarshalToMap did not set all items")
 	}
 }
+
+func Test_New(t *testing.T) {
+	entity := &proto.EntityResponse{
+		Entity: &proto.Entity{EntityId: "abc"}, Properties: []*proto.EntityProperty{{Property: "name", Value: &proto.Value{Text: "nma"}}},
+	}
+
+	res, err := New[testEntity](entity)
+	if err != nil {
+		t.Errorf("New failed: %v", err)
+	}
+	if res.Name != "nma" {
+		t.Errorf("New did not set name")
+	}
+}

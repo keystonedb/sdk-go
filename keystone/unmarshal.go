@@ -44,6 +44,12 @@ func forTypeFromResponse(elementType reflect.Type, response *proto.EntityRespons
 	return val, nil
 }
 
+func New[T any](entity *proto.EntityResponse) (T, error) {
+	var dst T
+	err := Unmarshal(entity, &dst)
+	return dst, err
+}
+
 func AsSlice[T any](entities ...*proto.EntityResponse) ([]T, error) {
 	var dst []T
 	err := UnmarshalToSlice(&dst, entities...)
