@@ -5,11 +5,120 @@ import (
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
+	"sort"
 )
 
 var ErrMustPassPointer = errors.New("you must pass a pointer")
+var ErrMustPointerSlice = errors.New("you must pass a pointer to a []Struct")
+var ErrMustMapStringStruct = errors.New("you must pass a map[string]Struct")
+var ErrNilMapGiven = errors.New("you must pass a non-nil map")
+var ErrEntityIDMissing = errors.New("entity ID missing")
+var ErrMustBeMapOrSlice = errors.New("you must unmarshal onto a map or slice")
 
-func Unmarshal(data map[Property]*proto.Value, v interface{}) error {
+func Unmarshal(from *proto.EntityResponse, v interface{}) error {
+	if v == nil || from == nil {
+		return nil
+	}
+	conv := entityConverter{protoResponse: from}
+	data := conv.Properties()
+	return UnmarshalProperties(data, v)
+}
+
+func forTypeFromResponse(elementType reflect.Type, response *proto.EntityResponse) (reflect.Value, error) {
+	pointer := elementType.Kind() == reflect.Ptr
+	if pointer {
+		elementType = elementType.Elem()
+	}
+	dstEle := reflect.New(elementType)
+	ifa := dstEle.Interface()
+	if err := Unmarshal(response, ifa); err != nil {
+		return reflect.Value{}, err
+	}
+	val := reflect.ValueOf(ifa)
+	if pointer {
+		val = reflect.ValueOf(&ifa)
+	}
+	if val.Kind() == reflect.Ptr {
+		val = reflect.ValueOf(val.Elem().Interface())
+	}
+	return val, nil
+}
+
+func AsSlice[T any](entities ...*proto.EntityResponse) ([]T, error) {
+	var dst []T
+	err := UnmarshalToSlice(&dst, entities...)
+	return dst, err
+}
+
+func UnmarshalToSlice(dstPtr any, entities ...*proto.EntityResponse) error {
+	if len(entities) == 0 {
+		return nil
+	}
+	dstT := reflect.TypeOf(dstPtr)
+	if dstPtr == nil || dstT.Kind() != reflect.Pointer || dstT.Elem().Kind() != reflect.Slice || dstT.Elem().Elem().Kind() != reflect.Struct {
+		return ErrMustPointerSlice
+	}
+	sort.Sort(proto.EntityResponseIDSort(entities))
+	elemType := dstT.Elem().Elem()
+
+	valuePtr := reflect.ValueOf(dstPtr)
+	dst := valuePtr.Elem()
+	sliceLen := valuePtr.Elem().Len()
+	appendLen := len(entities)
+	finalSlice := reflect.MakeSlice(reflect.SliceOf(elemType), sliceLen+appendLen, sliceLen+appendLen)
+	for x := 0; x < sliceLen; x++ {
+		finalSlice.Index(x).Set(dst.Index(x))
+	}
+
+	for i, entity := range entities {
+		if entity.Entity == nil || entity.Entity.EntityId == "" {
+			return ErrEntityIDMissing
+		}
+		itm, err := forTypeFromResponse(elemType, entity)
+		if err != nil {
+			return err
+		}
+		finalSlice.Index(i + sliceLen).Set(itm)
+	}
+
+	dst.Set(finalSlice)
+	return nil
+}
+
+func UnmarshalToMap(dst any, entities ...*proto.EntityResponse) error {
+	if len(entities) == 0 {
+		return nil
+	}
+	dstT := reflect.TypeOf(dst)
+	if dst == nil || dstT.Kind() != reflect.Map || dstT.Key().Kind() != reflect.String {
+		// Basic map check
+		return ErrMustMapStringStruct
+	} else if !(dstT.Elem().Kind() == reflect.Struct || (dstT.Elem().Kind() == reflect.Ptr && dstT.Elem().Elem().Kind() == reflect.Struct)) {
+		// Allow structs & pointer to structs
+		return ErrMustMapStringStruct
+	}
+	inVal := reflect.ValueOf(dst)
+	if inVal.IsValid() && inVal.IsZero() {
+		//reflect.MakeMapWithSize(dstT, len(entities))
+		return ErrNilMapGiven
+	}
+
+	elemType := dstT.Elem()
+	for _, entity := range entities {
+		if entity.Entity == nil || entity.Entity.EntityId == "" {
+			return ErrEntityIDMissing
+		}
+		mapItm, err := forTypeFromResponse(elemType, entity)
+		if err != nil {
+			return err
+		}
+		inVal.SetMapIndex(reflect.ValueOf(entity.Entity.EntityId), mapItm)
+	}
+
+	return nil
+}
+
+func UnmarshalProperties(data map[Property]*proto.Value, v interface{}) error {
 	if v == nil || data == nil {
 		return nil
 	}
@@ -51,7 +160,7 @@ func Unmarshal(data map[Property]*proto.Value, v interface{}) error {
 				return err
 			}
 		} else if field.Type.Kind() == reflect.Struct && len(subData) > 0 {
-			if err := Unmarshal(subData, currentVal.Addr().Interface()); err != nil {
+			if err := UnmarshalProperties(subData, currentVal.Addr().Interface()); err != nil {
 				return err
 			}
 		}
