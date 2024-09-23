@@ -41,7 +41,7 @@ func (a *Actor) RemoteMutate(ctx context.Context, src interface{}) error {
 }
 
 // Mutate is a function that can mutate an entity
-func (a *Actor) Mutate(ctx context.Context, src interface{}, comment string, options ...MutateOption) error {
+func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOption) error {
 	if reflect.TypeOf(src).Kind() != reflect.Pointer {
 		return errors.New("mutate requires a pointer to a struct")
 	}
@@ -57,7 +57,6 @@ func (a *Actor) Mutate(ctx context.Context, src interface{}, comment string, opt
 	//children
 	mutation.Mutator = a.user
 	entityID := ""
-	mutation.Comment = comment
 
 	if rawEntity, ok := src.(Entity); ok {
 		entityID = rawEntity.GetKeystoneID()
@@ -81,6 +80,12 @@ func (a *Actor) Mutate(ctx context.Context, src interface{}, comment string, opt
 
 	if entityWithLogs, ok := src.(LogProvider); ok {
 		mutation.Logs = entityWithLogs.GetLogs()
+	}
+
+	if props, err := Marshal(src); err == nil {
+		for propName, prop := range props {
+			mutation.Properties = append(mutation.Properties, &proto.EntityProperty{Property: propName.Name(), Value: prop})
+		}
 	}
 
 	m := &proto.MutateRequest{

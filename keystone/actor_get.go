@@ -62,9 +62,6 @@ func (a *Actor) Get(ctx context.Context, retrieveBy RetrieveBy, dst interface{},
 	if err != nil {
 		return err
 	}
-	if be, ok := dst.(BaseEntity); ok {
-		be._lastLoad = resp
-	}
 
 	if lk, ok := dst.(Locker); ok && resp.GetLock() != nil {
 		LockData := &LockInfo{

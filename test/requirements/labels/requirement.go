@@ -39,7 +39,7 @@ func (d *Requirement) store(actor *keystone.Actor) requirements.TestResult {
 	}
 	usr.AddLabel(d.labelKey, "label-value")
 
-	createErr := actor.Mutate(context.Background(), usr, "Create a user with a label")
+	createErr := actor.Mutate(context.Background(), usr, keystone.WithMutationComment("Create a user with a label"))
 	if createErr == nil {
 		d.createdID = usr.GetKeystoneID()
 	}

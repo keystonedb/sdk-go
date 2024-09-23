@@ -25,6 +25,7 @@ type TypeDefinition struct {
 	Plural       string // Name for a collection of these entities e.g. Users
 	Options      []proto.Schema_Option
 	KeystoneType proto.Schema_Type
+	isChild      bool
 
 	Properties map[Property]proto.PropertyDefinition
 }
@@ -54,6 +55,8 @@ func QuickDefine(input interface{}) TypeDefinition {
 		definition.Name = cases.Title(language.English).String(strings.ReplaceAll(definition.Type, "-", " "))
 	}
 
+	_, definition.isChild = input.(ChildEntity)
+
 	if _, ok := input.(TSEntity); ok {
 		definition.KeystoneType = proto.Schema_TimeSeries
 	}
@@ -73,6 +76,10 @@ var CannotMapPrimitives = errors.New("cannot map primitive type")
 var CannotMapNil = errors.New("cannot map nil")
 
 func MapProperties(v interface{}) (map[Property]proto.PropertyDefinition, error) {
+	return MapPropertiesWithPrefix(v, "")
+}
+
+func MapPropertiesWithPrefix(v interface{}, prefix string) (map[Property]proto.PropertyDefinition, error) {
 
 	if v == nil {
 		return nil, CannotMapNil
@@ -89,19 +96,21 @@ func MapProperties(v interface{}) (map[Property]proto.PropertyDefinition, error)
 			continue
 		}
 
-		currentProp := NewProperty(field.Name)
+		currentProp, def := ReflectProperty(field, prefix)
+		if currentProp.HydrateOnly() {
+			continue
+		}
 		currentVal := val.FieldByIndex(field.Index)
 		ref := GetReflector(field.Type, currentVal)
 		if ref != nil {
-			properties[currentProp] = ref.PropertyDefinition()
+			properties[currentProp] = mergeDefinitions(def, ref.PropertyDefinition())
 		} else if field.Type.Kind() == reflect.Struct {
-			subProps, err := MapProperties(currentVal.Interface())
+			subProps, err := MapPropertiesWithPrefix(currentVal.Interface(), currentProp.Name())
 			if err != nil {
 				return nil, err
 			} else {
-				prefix := currentProp.Name()
 				for k, subV := range subProps {
-					k.SetPrefix(prefix)
+					//k.SetPrefix(prefix)
 					properties[k] = subV
 				}
 			}
@@ -111,7 +120,33 @@ func MapProperties(v interface{}) (map[Property]proto.PropertyDefinition, error)
 }
 
 func (t TypeDefinition) Schema() *proto.Schema {
-	return nil
+	sch := &proto.Schema{
+		Name:        t.Name,
+		Description: t.Description,
+		Type:        t.Type,
+		Singular:    t.Singular,
+		Plural:      t.Plural,
+		Options:     t.Options,
+		IsChild:     t.isChild,
+		KsType:      t.KeystoneType,
+	}
+
+	if len(t.Properties) > 0 {
+		for k, v := range t.Properties {
+			if k.Name() == "" || k.Name()[:1] == "_" {
+				// Skip over internal and empty properties
+				continue
+			}
+			sch.Properties = append(sch.Properties, &proto.Property{
+				Name:         k.Name(),
+				DataType:     v.DataType,
+				ExtendedType: v.ExtendedType,
+				Options:      v.Options,
+			})
+		}
+	}
+
+	return sch
 }
 
 func (t TypeDefinition) HasOption(option proto.Schema_Option) bool {

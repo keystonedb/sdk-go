@@ -11,6 +11,9 @@ type Time struct{}
 
 func (e Time) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
+	if !value.IsValid() {
+		value = reflect.New(reflect.TypeOf(&time.Time{}))
+	}
 	if tme, isTime := value.Interface().(time.Time); isTime {
 		return &proto.Value{Time: timestamppb.New(tme)}, nil
 	}

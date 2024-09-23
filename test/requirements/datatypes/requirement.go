@@ -73,7 +73,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		RawData:      RawData,
 	}
 
-	createErr := actor.Mutate(context.Background(), psn, "Create a default set")
+	createErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Create a default set"))
 	if createErr == nil {
 		d.createdID = psn.GetKeystoneID()
 	}
@@ -129,7 +129,7 @@ func (d *Requirement) append(actor *keystone.Actor) requirements.TestResult {
 	psn := &models.DataTypes{}
 	psn.IntegerSet.Add(7)
 	psn.SetKeystoneID(d.createdID)
-	updateErr := actor.Mutate(context.Background(), psn, "Update a person")
+	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Update a person"))
 
 	return requirements.TestResult{
 		Name:  "Update",
@@ -159,7 +159,7 @@ func (d *Requirement) reduce(actor *keystone.Actor) requirements.TestResult {
 	psn := &models.DataTypes{}
 	psn.IntegerSet.Remove(2)
 	psn.SetKeystoneID(d.createdID)
-	updateErr := actor.Mutate(context.Background(), psn, "Update a person")
+	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Update a person"))
 
 	return requirements.TestResult{
 		Name:  "Update",

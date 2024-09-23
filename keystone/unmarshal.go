@@ -21,6 +21,15 @@ func Unmarshal(from *proto.EntityResponse, v interface{}) error {
 	}
 	conv := entityConverter{protoResponse: from}
 	data := conv.Properties()
+
+	if e, ok := v.(Entity); ok && from.Entity != nil {
+		e.SetKeystoneID(from.Entity.GetEntityId())
+	}
+
+	if e, ok := v.(RelationshipProvider); ok && from.Relationships != nil {
+		e.SetRelationships(from.Relationships)
+	}
+
 	return UnmarshalProperties(data, v)
 }
 
@@ -125,7 +134,7 @@ func UnmarshalToMap(dst any, entities ...*proto.EntityResponse) error {
 }
 
 func UnmarshalProperties(data map[Property]*proto.Value, v interface{}) error {
-	if v == nil || data == nil {
+	if v == nil || data == nil || len(data) == 0 {
 		return nil
 	}
 
@@ -152,7 +161,7 @@ func UnmarshalProperties(data map[Property]*proto.Value, v interface{}) error {
 			continue
 		}
 
-		currentProp := NewProperty(field.Name)
+		currentProp, _ := ReflectProperty(field, "")
 		toHydrate, hasVal := data[currentProp]
 		subData, hasSubData := prefixed[currentProp.Name()]
 		if !hasVal && !hasSubData {

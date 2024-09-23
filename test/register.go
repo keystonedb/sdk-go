@@ -39,14 +39,10 @@ func init() {
 	reqs = append(reqs, &relationships.Requirement{})
 	reqs = append(reqs, &list.Requirement{})
 	reqs = append(reqs, &datatypes.Requirement{})
-
-	//reqs = []requirements.Requirement{}
 	reqs = append(reqs, &timeseries.Requirement{})
 
-	//reqs = []requirements.Requirement{}
-	//reqs = append(reqs, &cru.Requirement{})
-	//
-	//reqs = []requirements.Requirement{}
-	//reqs = append(reqs, &stored.Requirement{})
-	//reqs = append(reqs, &dynamic_properties.Requirement{})
+	if false {
+		reqs = []requirements.Requirement{}
+		reqs = append(reqs, &child_entities.Requirement{})
+	}
 }

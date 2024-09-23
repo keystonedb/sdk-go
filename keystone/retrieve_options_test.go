@@ -1,7 +1,7 @@
 package keystone
 
 import (
-	"github.com/kubex/keystone-go/proto"
+	"github.com/keystonedb/sdk-go/proto"
 	"testing"
 )
 

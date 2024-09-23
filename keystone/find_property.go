@@ -88,7 +88,18 @@ func (f propertyFilter) Apply(config *filterRequest) {
 	})
 }
 
+func valueFromString(value string) *proto.Value {
+	return &proto.Value{Text: value}
+}
+
+func valueFromInt(value int64) *proto.Value {
+	return &proto.Value{Int: value}
+}
+
 func valueFromAny(value any) *proto.Value {
+	if value == nil {
+		return nil
+	}
 	v := reflect.ValueOf(value)
 	ref := GetReflector(v.Type(), v)
 	if ref != nil {

@@ -33,7 +33,7 @@ func (d *Requirement) storeEvent(actor *keystone.Actor) requirements.TestResult 
 	}
 	usr.AddEvent("tst1", map[string]string{"key": "value", "xx": "yy"})
 
-	createErr := actor.Mutate(context.Background(), usr, "Create user, with an event")
+	createErr := actor.Mutate(context.Background(), usr, keystone.WithMutationComment("Create user, with an event"))
 	if createErr == nil {
 		d.createdID = usr.GetKeystoneID()
 	}

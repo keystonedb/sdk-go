@@ -40,7 +40,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		PaymentType: "card",
 	}
 
-	createErr := actor.Mutate(context.Background(), trans, "Lookup Transaction")
+	createErr := actor.Mutate(context.Background(), trans, keystone.WithMutationComment("Lookup Transaction"))
 	if createErr == nil {
 		d.createdID = trans.GetKeystoneID()
 	}

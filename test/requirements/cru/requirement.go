@@ -52,7 +52,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		SecretAnswer: keystone.NewSecretString("Pet Name", "Pe*******"),
 	}
 
-	createErr := actor.Mutate(context.Background(), psn, "Create a person")
+	createErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Create a person"))
 	if createErr == nil {
 		d.createdID = psn.GetKeystoneID()
 	}
@@ -99,7 +99,7 @@ func (d *Requirement) update(actor *keystone.Actor) requirements.TestResult {
 	psn := &models.Person{}
 	psn.SetKeystoneID(d.createdID)
 	psn.Name = Name2
-	updateErr := actor.Mutate(context.Background(), psn, "Update a person", keystone.MutateProperties("name"))
+	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Update a person"), keystone.MutateProperties("name"))
 
 	if updateErr == nil {
 		updateErr = actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithProperties())

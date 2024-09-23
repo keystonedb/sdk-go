@@ -45,7 +45,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Name: "Mr Transaction",
 	}
 
-	psnErr := actor.Mutate(context.Background(), psn, "Create Person")
+	psnErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Create Person"))
 	if psnErr != nil {
 		res.Error = psnErr
 		return res
@@ -58,7 +58,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		PaymentType: "card",
 	}
 	trans.AddRelationship("payee", psn.GetKeystoneID(), nil, time.Now())
-	t1Err := actor.Mutate(context.Background(), trans, "Create Transaction 1")
+	t1Err := actor.Mutate(context.Background(), trans, keystone.WithMutationComment("Create Transaction 1"))
 	if t1Err != nil {
 		res.Error = t1Err
 		return res
@@ -71,7 +71,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		PaymentType: "card",
 	}
 	trans2.AddRelationship("payee", psn.GetKeystoneID(), nil, time.Now())
-	t2Err := actor.Mutate(context.Background(), trans2, "Create Transaction 2")
+	t2Err := actor.Mutate(context.Background(), trans2, keystone.WithMutationComment("Create Transaction 2"))
 	if t2Err != nil {
 		res.Error = t2Err
 		return res
@@ -80,7 +80,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 
 	psn.AddRelationship("payment", trans.GetKeystoneID(), map[string]string{"initial": "true"}, time.Now())
 	psn.AddRelationship("payment", trans2.GetKeystoneID(), nil, time.Now())
-	updatePsn := actor.Mutate(context.Background(), psn, "Create Person")
+	updatePsn := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Create Person"))
 	if updatePsn != nil {
 		res.Error = updatePsn
 		return res

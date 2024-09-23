@@ -38,7 +38,7 @@ func (d *Requirement) measure(actor *keystone.Actor) requirements.TestResult {
 	psn.AddSensorMeasurementWithData("order", 100.12, map[string]string{
 		"currency": "GBP",
 	})
-	updateErr := actor.Mutate(context.Background(), psn, "Write Measurement")
+	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Write Measurement"))
 
 	return requirements.TestResult{
 		Name:  "Store Measurement",

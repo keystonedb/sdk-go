@@ -39,7 +39,7 @@ func (d *Requirement) store(actor *keystone.Actor) requirements.TestResult {
 		Validate:   "qwertyuiop",
 	}
 
-	createErr := actor.Mutate(context.Background(), usr, "Create a user")
+	createErr := actor.Mutate(context.Background(), usr, keystone.WithMutationComment("Create a user"))
 	if createErr == nil {
 		d.createdID = usr.GetKeystoneID()
 	}

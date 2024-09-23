@@ -39,7 +39,7 @@ func (d *Requirement) createSubscription(actor *keystone.Actor) requirements.Tes
 		StartDate: time.Now(),
 	}
 
-	createErr := actor.Mutate(context.Background(), sub, "Create a subscription")
+	createErr := actor.Mutate(context.Background(), sub, keystone.WithMutationComment("Create a subscription"))
 	if createErr == nil {
 		d.subscriptionId = sub.GetKeystoneID()
 	}
@@ -62,7 +62,7 @@ func (d *Requirement) createRenewals(actor *keystone.Actor) requirements.TestRes
 		renewal.SetKeystoneID(d.subscriptionId)
 		start = end
 
-		createErr := actor.Mutate(context.Background(), renewal, "Create renewal "+strconv.Itoa(i))
+		createErr := actor.Mutate(context.Background(), renewal, keystone.WithMutationComment("Create renewal "+strconv.Itoa(i)))
 		if createErr != nil {
 			return requirements.TestResult{
 				Name:  "Create Renewal",

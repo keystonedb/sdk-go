@@ -186,7 +186,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 
 	var createErr error
 	for _, file := range files {
-		createErr = actor.Mutate(context.Background(), file, "Create a file")
+		createErr = actor.Mutate(context.Background(), file, keystone.WithMutationComment("Create a file"))
 		if createErr != nil {
 			return requirements.TestResult{
 				Name:  "Create",

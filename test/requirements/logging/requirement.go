@@ -43,7 +43,7 @@ func (d *Requirement) store(actor *keystone.Actor) requirements.TestResult {
 	usr.LogFatal("This is a fatal message", "ref1", "actor", "trace-123", map[string]string{"key1": "value1"})
 	usr.LogAlert("This is an alert message", "ref1", "actor", "trace-123", map[string]string{"key1": "value1"})
 
-	createErr := actor.Mutate(context.Background(), usr, "Create a user with logs")
+	createErr := actor.Mutate(context.Background(), usr, keystone.WithMutationComment("Create a user with logs"))
 	if createErr == nil {
 		d.createdID = usr.GetKeystoneID()
 	}

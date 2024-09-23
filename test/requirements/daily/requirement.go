@@ -39,7 +39,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Name:       "Tom Daily",
 	}
 
-	createErr := actor.Mutate(context.Background(), psn, "Known entity")
+	createErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Known entity"))
 	if createErr == nil {
 		d.createdID = psn.GetKeystoneID()
 	}

@@ -40,7 +40,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		PaymentType: "card",
 	}
 
-	createErr := actor.Mutate(context.Background(), trans, "New Transaction")
+	createErr := actor.Mutate(context.Background(), trans, keystone.WithMutationComment("New Transaction"))
 	if createErr == nil {
 		d.createdID = trans.GetKeystoneID()
 	}
@@ -59,7 +59,7 @@ func (d *Requirement) update(actor *keystone.Actor) requirements.TestResult {
 	trans := &models.Transaction{}
 	trans.SetKeystoneID(d.createdID)
 	trans.PaymentType = "cash"
-	updateErr := actor.Mutate(context.Background(), trans, "Change payment type")
+	updateErr := actor.Mutate(context.Background(), trans, keystone.WithMutationComment("Change payment type"))
 	if updateErr == nil || !strings.Contains(updateErr.Error(), "Updates are not permitted") {
 		// Allow this error
 		res.Error = fmt.Errorf("expected updates to not be permitted, got %s", updateErr)
