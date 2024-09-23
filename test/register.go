@@ -15,6 +15,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
+	"github.com/keystonedb/sdk-go/test/requirements/setfalse"
 	"github.com/keystonedb/sdk-go/test/requirements/stats"
 	"github.com/keystonedb/sdk-go/test/requirements/timeseries"
 	"github.com/keystonedb/sdk-go/test/requirements/unique_id"
@@ -40,9 +41,10 @@ func init() {
 	reqs = append(reqs, &list.Requirement{})
 	reqs = append(reqs, &datatypes.Requirement{})
 	reqs = append(reqs, &timeseries.Requirement{})
+	reqs = append(reqs, &setfalse.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &child_entities.Requirement{})
+		reqs = append(reqs, &setfalse.Requirement{})
 	}
 }

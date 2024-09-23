@@ -40,8 +40,23 @@ func (a *Actor) RemoteMutate(ctx context.Context, src interface{}) error {
 	return mutateToError(a.connection.Mutate(ctx, m))
 }
 
-// Mutate is a function that can mutate an entity
-func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOption) error {
+func (a *Actor) MutateWithDefaultWatcher(ctx context.Context, src interface{}, options ...MutateOption) error {
+	w, err := NewDefaultsWatcher(src)
+	if err != nil {
+		return err
+	}
+	return a.MutateWithWatcher(ctx, src, w, options...)
+}
+
+func (a *Actor) MutateWithWatcher(ctx context.Context, src interface{}, w *Watcher, options ...MutateOption) error {
+	changes, err := w.Changes(src, true)
+	if err != nil {
+		return err
+	}
+	return a.mutateWithProperties(ctx, src, changes, options...)
+}
+
+func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props map[Property]*proto.Value, options ...MutateOption) error {
 	if reflect.TypeOf(src).Kind() != reflect.Pointer {
 		return errors.New("mutate requires a pointer to a struct")
 	}
@@ -82,7 +97,7 @@ func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOp
 		mutation.Logs = entityWithLogs.GetLogs()
 	}
 
-	if props, err := Marshal(src); err == nil {
+	if len(props) > 0 {
 		for propName, prop := range props {
 			mutation.Properties = append(mutation.Properties, &proto.EntityProperty{Property: propName.Name(), Value: prop})
 		}
@@ -112,6 +127,20 @@ func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOp
 	}
 
 	return mutateToError(mResp, err)
+}
+
+// Mutate is a function that can mutate an entity
+func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOption) error {
+	if reflect.TypeOf(src).Kind() != reflect.Pointer {
+		return errors.New("mutate requires a pointer to a struct")
+	}
+
+	props, err := Marshal(src)
+	if err != nil {
+		return err
+	}
+	return a.mutateWithProperties(ctx, src, props, options...)
+
 }
 
 func mutateToError(resp *proto.MutateResponse, err error) error {

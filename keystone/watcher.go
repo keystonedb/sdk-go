@@ -1,23 +1,25 @@
 package keystone
 
 import (
-	proto2 "github.com/keystonedb/sdk-go/proto"
+	"github.com/keystonedb/sdk-go/keystone/reflector"
+	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 )
 
 type Watcher struct {
-	knownValues map[Property]*proto2.Value
+	knownValues map[Property]*proto.Value
 }
 
 // NewDefaultsWatcher creates a new watcher with the default values of the given type
 func NewDefaultsWatcher(v interface{}) (*Watcher, error) {
-	return NewWatcher(reflect.New(reflect.ValueOf(v).Type()).Interface())
+	val := reflector.Deref(reflect.ValueOf(v))
+	return NewWatcher(reflect.New(val.Type()).Interface())
 }
 
 // NewWatcher creates a new watcher with the given value
 func NewWatcher(v interface{}) (*Watcher, error) {
 	w := &Watcher{
-		knownValues: make(map[Property]*proto2.Value),
+		knownValues: make(map[Property]*proto.Value),
 	}
 
 	current, err := Marshal(v)
@@ -29,9 +31,25 @@ func NewWatcher(v interface{}) (*Watcher, error) {
 	return w, nil
 }
 
+func Changes(a, b interface{}) (map[Property]*proto.Value, error) {
+	w, err := NewWatcher(a)
+	if err != nil {
+		return nil, err
+	}
+	return w.Changes(b, false)
+}
+
+func ChangesFromDefault(v interface{}) (map[Property]*proto.Value, error) {
+	w, err := NewDefaultsWatcher(v)
+	if err != nil {
+		return nil, err
+	}
+	return w.Changes(v, false)
+}
+
 // Changes returns the changes between the current value and the previous value.
 // If update is true, the current value will be stored as the previous value
-func (w *Watcher) Changes(v interface{}, update bool) (map[Property]*proto2.Value, error) {
+func (w *Watcher) Changes(v interface{}, update bool) (map[Property]*proto.Value, error) {
 	latest, err := Marshal(v)
 	if err != nil {
 		return nil, err
@@ -44,10 +62,10 @@ func (w *Watcher) Changes(v interface{}, update bool) (map[Property]*proto2.Valu
 		return latest, nil
 	}
 
-	changes := make(map[Property]*proto2.Value)
+	changes := make(map[Property]*proto.Value)
 	for k, lV := range latest {
 		prev, ok := w.knownValues[k]
-		if !ok || proto2.MatchValue(prev, "_", lV) != nil {
+		if !ok || proto.MatchValue(prev, "_", lV) != nil {
 			changes[k] = lV
 		}
 	}
