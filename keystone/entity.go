@@ -2,6 +2,7 @@ package keystone
 
 type BaseEntity struct {
 	EmbeddedEntity
+	EmbeddedWatcher
 	EmbeddedDetails
 	EmbeddedEvents
 	EmbeddedLabels
