@@ -252,10 +252,10 @@ func Test_UnmarshalSlice(t *testing.T) {
 
 	err := UnmarshalToSlice(&sliceStruct, responses...)
 	if err != nil {
-		t.Errorf("UnmarshalToMap failed: %v", err)
+		t.Errorf("UnmarshalToSlice failed: %v", err)
 	}
 	if len(sliceStruct) != 3 {
-		t.Fatalf("UnmarshalToMap did not set all items")
+		t.Fatalf("UnmarshalToSlice did not set all items")
 	}
 
 	seenABC := false
@@ -274,7 +274,43 @@ func Test_UnmarshalSlice(t *testing.T) {
 		}
 	}
 	if !seenABC || !seen123 || !seenXY {
-		t.Errorf("UnmarshalToMap did not set all items")
+		t.Errorf("UnmarshalToSlice did not set all items")
+	}
+}
+func Test_UnmarshalSlicePointer(t *testing.T) {
+
+	var sliceStruct []*testEntity
+	responses := []*proto.EntityResponse{
+		{Entity: &proto.Entity{EntityId: "abc"}, Properties: []*proto.EntityProperty{{Property: "name", Value: &proto.Value{Text: "nma"}}}},
+		{Entity: &proto.Entity{EntityId: "123"}, Properties: []*proto.EntityProperty{{Property: "name", Value: &proto.Value{Text: "nm1"}}}},
+		{Entity: &proto.Entity{EntityId: "x-y"}, Properties: []*proto.EntityProperty{{Property: "name", Value: &proto.Value{Text: "nmx"}}}},
+	}
+
+	err := UnmarshalToSlice(&sliceStruct, responses...)
+	if err != nil {
+		t.Errorf("UnmarshalToSlice failed: %v", err)
+	}
+	if len(sliceStruct) != 3 {
+		t.Fatalf("UnmarshalToSlice did not set all items")
+	}
+
+	seenABC := false
+	seen123 := false
+	seenXY := false
+
+	for _, v := range sliceStruct {
+		if v.Name == "nma" {
+			seenABC = true
+		}
+		if v.Name == "nm1" {
+			seen123 = true
+		}
+		if v.Name == "nmx" {
+			seenXY = true
+		}
+	}
+	if !seenABC || !seen123 || !seenXY {
+		t.Errorf("UnmarshalToSlice did not set all items")
 	}
 }
 
@@ -288,10 +324,10 @@ func Test_AsSlice(t *testing.T) {
 
 	sliceStruct, err := AsSlice[testEntity](responses...)
 	if err != nil {
-		t.Errorf("UnmarshalToMap failed: %v", err)
+		t.Errorf("AsSlice failed: %v", err)
 	}
 	if len(sliceStruct) != 3 {
-		t.Fatalf("UnmarshalToMap did not set all items")
+		t.Fatalf("AsSlice did not set all items")
 	}
 
 	seenABC := false
@@ -310,7 +346,7 @@ func Test_AsSlice(t *testing.T) {
 		}
 	}
 	if !seenABC || !seen123 || !seenXY {
-		t.Errorf("UnmarshalToMap did not set all items")
+		t.Errorf("AsSlice did not set all items")
 	}
 }
 

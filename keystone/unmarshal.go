@@ -70,9 +70,19 @@ func UnmarshalToSlice(dstPtr any, entities ...*proto.EntityResponse) error {
 		return nil
 	}
 	dstT := reflect.TypeOf(dstPtr)
-	if dstPtr == nil || dstT.Kind() != reflect.Pointer || dstT.Elem().Kind() != reflect.Slice || dstT.Elem().Elem().Kind() != reflect.Struct {
+	if dstPtr == nil || dstT.Kind() != reflect.Pointer || dstT.Elem().Kind() != reflect.Slice {
 		return ErrMustPointerSlice
 	}
+
+	isStruct := dstT.Elem().Elem().Kind() == reflect.Struct
+	isPointer := dstT.Elem().Elem().Kind() == reflect.Pointer
+	if isPointer {
+		isStruct = dstT.Elem().Elem().Elem().Kind() == reflect.Struct
+	}
+	if !isStruct {
+		return ErrMustPointerSlice
+	}
+
 	sort.Sort(proto.EntityResponseIDSort(entities))
 	elemType := dstT.Elem().Elem()
 
