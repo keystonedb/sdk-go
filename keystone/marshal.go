@@ -44,6 +44,12 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 		}
 
 		currentProp, _ := ReflectProperty(field, "")
+
+		if currentProp.HydrateOnly() {
+			// Skip properties that are only for hydration
+			continue
+		}
+
 		currentVal := val.FieldByIndex(field.Index)
 		ref := GetReflector(field.Type, currentVal)
 		if ref != nil {
