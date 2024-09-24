@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+type hydrationProperties struct {
+	PaymentInstrumentID string `keystone:"_entity_id"`
+	RequestID           string `keystone:"_child_id"`
+	ToMarshal           string
+}
+
 type baseE struct {
 	ID string
 }
@@ -299,5 +305,20 @@ func Test_DynamicStructErr(t *testing.T) {
 	}
 	if resp != nil {
 		t.Errorf("Expected nil response, got: %v", resp)
+	}
+}
+
+func Test_Hydration(t *testing.T) {
+	h := hydrationProperties{
+		PaymentInstrumentID: "123",
+		RequestID:           "456",
+		ToMarshal:           "789",
+	}
+	props, err := Marshal(h)
+	if err != nil {
+		t.Errorf("Marshal failed: %v", err)
+	}
+	if len(props) != 1 {
+		t.Errorf("Expected 1 property, got: %d", len(props))
 	}
 }

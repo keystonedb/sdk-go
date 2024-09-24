@@ -30,7 +30,7 @@ type Property struct {
 }
 
 func (p *Property) HydrateOnly() bool {
-	return p != nil && strings.HasSuffix(p.name, "_")
+	return p != nil && strings.HasPrefix(p.name, "_")
 }
 
 func (p *Property) SetPrefix(prefix string) {
