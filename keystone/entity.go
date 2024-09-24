@@ -1,6 +1,7 @@
 package keystone
 
 type BaseEntity struct {
+	EmbeddedEntity
 	EmbeddedDetails
 	EmbeddedEvents
 	EmbeddedLabels
@@ -8,10 +9,13 @@ type BaseEntity struct {
 	EmbeddedLogs
 	EmbeddedRelationships
 	EmbeddedSensors
+}
+
+type EmbeddedEntity struct {
 	_entityID string
 }
 
-func (e *BaseEntity) GetKeystoneID() string {
+func (e *EmbeddedEntity) GetKeystoneID() string {
 	return e._entityID
 }
-func (e *BaseEntity) SetKeystoneID(id string) { e._entityID = id }
+func (e *EmbeddedEntity) SetKeystoneID(id string) { e._entityID = id }

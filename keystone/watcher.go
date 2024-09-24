@@ -76,3 +76,19 @@ func (w *Watcher) Changes(v interface{}, update bool) (map[Property]*proto.Value
 
 	return changes, nil
 }
+
+func (w *Watcher) ReplaceKnownValues(vals map[Property]*proto.Value) {
+	w.knownValues = vals
+}
+
+func (w *Watcher) AppendKnownValues(vals map[Property]*proto.Value) {
+	if w.knownValues == nil || len(w.knownValues) == 0 {
+		w.knownValues = vals
+		return
+	}
+
+	for k, v := range vals {
+		w.knownValues[k] = v
+	}
+	return
+}

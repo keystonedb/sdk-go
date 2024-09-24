@@ -30,6 +30,15 @@ func Unmarshal(from *proto.EntityResponse, v interface{}) error {
 		e.SetRelationships(from.Relationships)
 	}
 
+	if watchable, ok := v.(WatchedEntity); ok && watchable.HasWatcher() {
+		watchable.Watcher().AppendKnownValues(data)
+	} else if entity, settable := v.(SettableWatchedEntity); settable && !watchable.HasWatcher() {
+		if w, err := NewDefaultsWatcher(v); err == nil {
+			w.AppendKnownValues(data)
+			entity.SetWatcher(w)
+		}
+	}
+
 	return UnmarshalProperties(data, v)
 }
 

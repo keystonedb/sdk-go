@@ -135,6 +135,15 @@ func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOp
 		return errors.New("mutate requires a pointer to a struct")
 	}
 
+	if watchable, ok := src.(WatchedEntity); ok && watchable.HasWatcher() {
+		return a.MutateWithWatcher(ctx, src, watchable.Watcher(), options...)
+	} else if entity, settable := src.(SettableWatchedEntity); settable && !watchable.HasWatcher() {
+		if w, err := NewDefaultsWatcher(src); err == nil {
+			entity.SetWatcher(w)
+			return a.MutateWithWatcher(ctx, src, w, options...)
+		}
+	}
+
 	props, err := Marshal(src)
 	if err != nil {
 		return err
