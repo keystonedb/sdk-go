@@ -43,7 +43,7 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 			continue
 		}
 
-		currentProp := NewProperty(field.Name)
+		currentProp, _ := ReflectProperty(field, "")
 		currentVal := val.FieldByIndex(field.Index)
 		ref := GetReflector(field.Type, currentVal)
 		if ref != nil {
