@@ -78,8 +78,8 @@ func Test_Int_Unsupported(t *testing.T) {
 		{Kind: reflect.Int64},
 	}
 
-	ref := Int{}
-	if err := ref.SetValue(nil, reflect.ValueOf(0)); !errors.Is(err, UnsupportedTypeError) {
+	refT := Int{}
+	if err := refT.SetValue(nil, reflect.ValueOf(0)); !errors.Is(err, UnsupportedTypeError) {
 		t.Errorf("unconfigured Int.SetValue returned error: %v, want %v", err, UnsupportedTypeError)
 	}
 
@@ -95,5 +95,55 @@ func Test_Int_Unsupported(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+type extendedInt int64
+
+func Test_Int_Extended(t *testing.T) {
+	input := struct {
+		Val extendedInt
+	}{Val: 42}
+
+	v := reflect.ValueOf(input.Val)
+	ref := Int{Kind: v.Kind()}
+	pVal, err := ref.ToProto(v)
+	if err != nil {
+		t.Errorf("Int.ToProto returned error: %v", err)
+	}
+	if pVal.GetInt() != 42 {
+		t.Errorf("Int.ToProto returned %v, want 42", pVal.GetInt())
+	}
+
+	refVal := reflect.ValueOf(new(extendedInt)).Elem()
+	err = ref.SetValue(pVal, refVal)
+	if err != nil {
+		t.Errorf("Int.SetValue returned error: %v", err)
+	}
+}
+
+type enumType int32
+
+const enumValOne enumType = 1
+
+func Test_Int_Enum(t *testing.T) {
+	input := struct {
+		Val enumType
+	}{Val: enumValOne}
+
+	v := reflect.ValueOf(input.Val)
+	ref := Int{Kind: v.Kind(), Type: v.Type()}
+	pVal, err := ref.ToProto(v)
+	if err != nil {
+		t.Errorf("Int.ToProto returned error: %v", err)
+	}
+	if pVal.GetInt() != 1 {
+		t.Errorf("Int.ToProto returned %v, want 42", pVal.GetInt())
+	}
+
+	refVal := reflect.ValueOf(new(enumType)).Elem()
+	err = ref.SetValue(pVal, refVal)
+	if err != nil {
+		t.Errorf("Int.SetValue returned error: %v", err)
 	}
 }

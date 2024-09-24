@@ -58,6 +58,10 @@ func GetReflector(t reflect.Type, v reflect.Value) Reflector {
 	}
 
 	if ref, ok := kindReflector[t.Kind()]; ok {
+		if intRef, isIntRef := ref.(reflector.Int); isIntRef {
+			intRef.Type = t
+			return intRef
+		}
 		return ref
 	}
 
