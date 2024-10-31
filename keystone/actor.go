@@ -11,6 +11,7 @@ type Actor struct {
 }
 
 func (a *Actor) ReplaceConnection(c *Connection) { a.connection = c }
+func (a *Actor) Connection() *Connection         { return a.connection }
 
 func (a *Actor) UserAgent() string { return a.user.GetUserAgent() }
 func (a *Actor) RemoteIp() string  { return a.user.GetRemoteIp() }

@@ -238,3 +238,17 @@ func (c *Connection) ChartTimeSeries(ctx context.Context, in *proto.ChartTimeSer
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) ShareView(ctx context.Context, in *proto.ShareViewRequest, opts ...grpc.CallOption) (*proto.SharedViewResponse, error) {
+	tl := c.timeLogConfig.NewLog("ShareView", zap.String("EntityId", in.GetEntityId()))
+	resp, err := c.client.ShareView(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) SharedViews(ctx context.Context, in *proto.SharedViewsRequest, opts ...grpc.CallOption) (*proto.SharedViewsResponse, error) {
+	tl := c.timeLogConfig.NewLog("ShareViews", zap.String("EntityId", in.GetEntityId()))
+	resp, err := c.client.SharedViews(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

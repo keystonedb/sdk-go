@@ -88,7 +88,7 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 
 	dt := &models.DataTypes{}
 	log.Println("EID: ", d.createdID)
-	getErr := actor.Get(context.Background(), keystone.ByEntityID(dt, d.createdID), dt, keystone.WithProperties())
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(dt, d.createdID), dt, keystone.WithDecryptedProperties())
 	if getErr == nil {
 		if dt.String != String {
 			getErr = errors.New("string mismatch")

@@ -140,6 +140,11 @@ func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOp
 	} else if entity, settable := src.(SettableWatchedEntity); settable && !watchable.HasWatcher() {
 		if w, err := NewDefaultsWatcher(src); err == nil {
 			entity.SetWatcher(w)
+			for _, option := range options {
+				if prepare, canPrepare := option.(MutationOptionWatcherPrepare); canPrepare {
+					_ = prepare.prepare(w)
+				}
+			}
 			return a.MutateWithWatcher(ctx, src, w, options...)
 		}
 	}

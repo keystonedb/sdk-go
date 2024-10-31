@@ -6,6 +6,10 @@ type MutateOption interface {
 	apply(*proto.MutateRequest)
 }
 
+type MutationOptionWatcherPrepare interface {
+	prepare(*Watcher) error
+}
+
 func WithMutationComment(comment string) MutateOption {
 	return withMutationComment{Comment: comment}
 }
@@ -52,4 +56,11 @@ func (m mutateProperties) apply(mutate *proto.MutateRequest) {
 		}
 	}
 	mutate.Mutation.Properties = keepProps
+}
+
+func (m mutateProperties) prepare(w *Watcher) error {
+	for _, prop := range m.Property {
+		delete(w.knownValues, knownProperty(prop))
+	}
+	return nil
 }

@@ -66,7 +66,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 
 	psn := &models.Person{}
-	getErr := actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithProperties())
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithDecryptedProperties())
 
 	if getErr == nil {
 		if psn.Name != Name {

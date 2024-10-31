@@ -1,6 +1,7 @@
 package keystone
 
 import (
+	"encoding/json"
 	"github.com/keystonedb/sdk-go/proto"
 )
 
@@ -10,9 +11,7 @@ type SecureString struct {
 	Original string `json:"-"`
 }
 
-func (e *SecureString) MarshalJSON() ([]byte, error) {
-	return []byte(e.Masked), nil
-}
+func (e *SecureString) MarshalJSON() ([]byte, error) { return json.Marshal(e.Masked) }
 
 func (e *SecureString) UnmarshalJSON(data []byte) error {
 	e.Masked = string(data)

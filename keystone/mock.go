@@ -27,6 +27,8 @@ type MockServer struct {
 	DailyEntitiesFunc    func(context.Context, *proto.DailyEntityRequest) (*proto.DailyEntityResponse, error)
 	SchemaStatisticsFunc func(context.Context, *proto.SchemaStatisticsRequest) (*proto.SchemaStatisticsResponse, error)
 	ChartTimeSeriesFunc  func(context.Context, *proto.ChartTimeSeriesRequest) (*proto.ChartTimeSeriesResponse, error)
+	ShareViewFunc        func(context.Context, *proto.ShareViewRequest) (*proto.SharedViewResponse, error)
+	SharedViewsFunc      func(context.Context, *proto.SharedViewsRequest) (*proto.SharedViewsResponse, error)
 }
 
 func bufDialer(context.Context, string) (net.Conn, error) {
@@ -53,54 +55,63 @@ func (m *MockServer) Define(ctx context.Context, req *proto.SchemaRequest) (*pro
 	}
 	return m.DefineFunc(ctx, req)
 }
+
 func (m *MockServer) Mutate(ctx context.Context, req *proto.MutateRequest) (*proto.MutateResponse, error) {
 	if m.MutateFunc == nil {
 		return m.UnimplementedKeystoneServer.Mutate(ctx, req)
 	}
 	return m.MutateFunc(ctx, req)
 }
+
 func (m *MockServer) ReportTimeSeries(ctx context.Context, req *proto.ReportTimeSeriesRequest) (*proto.MutateResponse, error) {
 	if m.ReportTimeSeriesFunc == nil {
 		return m.UnimplementedKeystoneServer.ReportTimeSeries(ctx, req)
 	}
 	return m.ReportTimeSeriesFunc(ctx, req)
 }
+
 func (m *MockServer) Retrieve(ctx context.Context, req *proto.EntityRequest) (*proto.EntityResponse, error) {
 	if m.RetrieveFunc == nil {
 		return m.UnimplementedKeystoneServer.Retrieve(ctx, req)
 	}
 	return m.RetrieveFunc(ctx, req)
 }
+
 func (m *MockServer) Find(ctx context.Context, req *proto.FindRequest) (*proto.FindResponse, error) {
 	if m.FindFunc == nil {
 		return m.UnimplementedKeystoneServer.Find(ctx, req)
 	}
 	return m.FindFunc(ctx, req)
 }
+
 func (m *MockServer) List(ctx context.Context, req *proto.ListRequest) (*proto.ListResponse, error) {
 	if m.ListFunc == nil {
 		return m.UnimplementedKeystoneServer.List(ctx, req)
 	}
 	return m.ListFunc(ctx, req)
 }
+
 func (m *MockServer) GroupCount(ctx context.Context, req *proto.GroupCountRequest) (*proto.GroupCountResponse, error) {
 	if m.GroupCountFunc == nil {
 		return m.UnimplementedKeystoneServer.GroupCount(ctx, req)
 	}
 	return m.GroupCountFunc(ctx, req)
 }
+
 func (m *MockServer) Log(ctx context.Context, req *proto.LogRequest) (*proto.LogResponse, error) {
 	if m.LogsFunc == nil {
 		return m.UnimplementedKeystoneServer.Log(ctx, req)
 	}
 	return m.LogFunc(ctx, req)
 }
+
 func (m *MockServer) Logs(ctx context.Context, req *proto.LogsRequest) (*proto.LogsResponse, error) {
 	if m.LogsFunc == nil {
 		return m.UnimplementedKeystoneServer.Logs(ctx, req)
 	}
 	return m.LogsFunc(ctx, req)
 }
+
 func (m *MockServer) Events(ctx context.Context, req *proto.EventRequest) (*proto.EventsResponse, error) {
 	if m.EventsFunc == nil {
 		return m.UnimplementedKeystoneServer.Events(ctx, req)
@@ -125,4 +136,18 @@ func (m *MockServer) ChartTimeSeries(ctx context.Context, req *proto.ChartTimeSe
 		return m.UnimplementedKeystoneServer.ChartTimeSeries(ctx, req)
 	}
 	return m.ChartTimeSeriesFunc(ctx, req)
+}
+
+func (m *MockServer) ShareView(ctx context.Context, req *proto.ShareViewRequest) (*proto.SharedViewResponse, error) {
+	if m.ShareViewFunc == nil {
+		return m.UnimplementedKeystoneServer.ShareView(ctx, req)
+	}
+	return m.ShareViewFunc(ctx, req)
+}
+
+func (m *MockServer) ShareViews(ctx context.Context, req *proto.SharedViewsRequest) (*proto.SharedViewsResponse, error) {
+	if m.SharedViewsFunc == nil {
+		return m.UnimplementedKeystoneServer.SharedViews(ctx, req)
+	}
+	return m.SharedViewsFunc(ctx, req)
 }

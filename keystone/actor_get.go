@@ -79,3 +79,36 @@ func (a *Actor) Get(ctx context.Context, retrieveBy RetrieveBy, dst interface{},
 
 	return Unmarshal(resp, dst)
 }
+
+// GetSharedByID retrieves an entity by the given retrieveBy, storing the result in dst
+func (a *Actor) GetSharedByID(ctx context.Context, owner *proto.VendorApp, entityID string, dst interface{}, retrieve ...RetrieveOption) error {
+	retrieveBy := ByEntityID(Type(dst), entityID)
+	entityRequest := retrieveBy.BaseRequest()
+	entityRequest.Authorization = a.Authorization()
+	for _, rOpt := range retrieve {
+		rOpt.Apply(entityRequest.View)
+		if reOpt, ok := rOpt.(RetrieveEntityOption); ok {
+			reOpt.ApplyRequest(entityRequest)
+		}
+	}
+
+	view := entityRequest.View
+
+	// set source
+	for _, p := range view.Properties {
+		p.Source = owner
+	}
+
+	entityRequest.Schema = &proto.Key{Key: Type(dst), Source: owner}
+
+	resp, err := a.connection.Retrieve(ctx, entityRequest)
+	if err != nil {
+		return err
+	}
+
+	if gr, ok := dst.(GenericResult); ok {
+		return UnmarshalGeneric(resp, gr)
+	}
+
+	return Unmarshal(resp, dst)
+}
