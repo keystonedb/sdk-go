@@ -7,6 +7,11 @@ type TestResult struct {
 	Error error
 }
 
+func (t TestResult) WithError(err error) TestResult {
+	t.Error = err
+	return t
+}
+
 func NewResult(name string, err error) TestResult {
 	return TestResult{
 		Name:  name,

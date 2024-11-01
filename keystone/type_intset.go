@@ -53,9 +53,26 @@ func (s *IntSet) Remove(value int64) {
 	delete(s.toAdd, value)
 }
 
-func (s *IntSet) Values() []int64 {
+func (s *IntSet) CurrentValues() []int64 {
+	s.prepare()
 	var values []int64
 	for value := range s.values {
+		values = append(values, value)
+	}
+	return values
+}
+
+func (s *IntSet) Values() []int64 {
+	s.prepare()
+	var values []int64
+
+	for value := range s.values {
+		if _, ok := s.toRemove[value]; !ok {
+			values = append(values, value)
+		}
+	}
+
+	for value := range s.toAdd {
 		values = append(values, value)
 	}
 	return values
@@ -128,6 +145,13 @@ func (s *IntSet) Diff(values ...int64) []int64 {
 	return diff
 }
 
+func (s *IntSet) merge() {
+	useVals := s.CurrentValues()
+	s.Clear()
+	s.replaceExisting = false
+	s.applyValues(useVals...)
+}
+
 func NewIntSet(values ...int64) IntSet {
 	v := IntSet{}
 	v.Clear()
@@ -170,4 +194,8 @@ func (s *IntSet) UnmarshalValue(value *proto.Value) error {
 
 func (s *IntSet) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_IntSet}
+}
+
+func (s *IntSet) MutationSuccess(resp *proto.MutateResponse) {
+	s.merge()
 }

@@ -124,6 +124,11 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 		if rawEntity, ok := src.(Entity); ok && entityID == "" {
 			rawEntity.SetKeystoneID(mResp.GetEntityId())
 		}
+
+		if rawEntity, ok := src.(MutationObserver); ok {
+			rawEntity.MutationSuccess(mResp)
+			observeMutation(rawEntity, mResp)
+		}
 	}
 
 	return mutateToError(mResp, err)

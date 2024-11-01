@@ -1,5 +1,7 @@
 package keystone
 
+import "github.com/keystonedb/sdk-go/proto"
+
 type BaseEntity struct {
 	EmbeddedEntity
 	EmbeddedWatcher
@@ -14,6 +16,12 @@ type BaseEntity struct {
 
 type EmbeddedEntity struct {
 	_entityID string
+}
+
+func (e *EmbeddedEntity) MutationSuccess(resp *proto.MutateResponse) {
+	if e._entityID == "" && resp.EntityId != "" {
+		e._entityID = resp.EntityId
+	}
 }
 
 func (e *EmbeddedEntity) GetKeystoneID() string {

@@ -45,3 +45,7 @@ type NestedChildAggregateValue interface {
 	AggregateValue() int64
 	SetAggregateValue(val int64)
 }
+
+type MutationObserver interface {
+	MutationSuccess(response *proto.MutateResponse)
+}

@@ -18,6 +18,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/setfalse"
 	"github.com/keystonedb/sdk-go/test/requirements/shared_views"
 	"github.com/keystonedb/sdk-go/test/requirements/stats"
+	"github.com/keystonedb/sdk-go/test/requirements/stringset"
 	"github.com/keystonedb/sdk-go/test/requirements/timeseries"
 	"github.com/keystonedb/sdk-go/test/requirements/unique_id"
 )
@@ -44,9 +45,10 @@ func init() {
 	reqs = append(reqs, &timeseries.Requirement{})
 	reqs = append(reqs, &setfalse.Requirement{})
 	reqs = append(reqs, &shared_views.Requirement{})
+	reqs = append(reqs, &stringset.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &setfalse.Requirement{})
+		reqs = append(reqs, &stringset.Requirement{})
 	}
 }

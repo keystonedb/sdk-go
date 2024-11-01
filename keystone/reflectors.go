@@ -9,12 +9,13 @@ import (
 )
 
 var (
-	marshalerType      = reflect.TypeFor[Marshaler]()
-	valueMarshalerType = reflect.TypeFor[ValueMarshaler]()
-	timeType           = reflect.TypeFor[time.Time]()
-	refTimeType        = reflect.TypeFor[*time.Time]()
-	timestampType      = reflect.TypeFor[timestamppb.Timestamp]()
-	refTimestampType   = reflect.TypeFor[*timestamppb.Timestamp]()
+	marshalerType        = reflect.TypeFor[Marshaler]()
+	valueMarshalerType   = reflect.TypeFor[ValueMarshaler]()
+	timeType             = reflect.TypeFor[time.Time]()
+	refTimeType          = reflect.TypeFor[*time.Time]()
+	timestampType        = reflect.TypeFor[timestamppb.Timestamp]()
+	refTimestampType     = reflect.TypeFor[*timestamppb.Timestamp]()
+	mutationObserverType = reflect.TypeFor[MutationObserver]()
 )
 
 var kindReflector = map[reflect.Kind]Reflector{
