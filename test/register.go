@@ -13,6 +13,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/list"
 	"github.com/keystonedb/sdk-go/test/requirements/logging"
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
+	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
 	"github.com/keystonedb/sdk-go/test/requirements/setfalse"
@@ -46,9 +47,10 @@ func init() {
 	reqs = append(reqs, &setfalse.Requirement{})
 	reqs = append(reqs, &shared_views.Requirement{})
 	reqs = append(reqs, &stringset.Requirement{})
+	reqs = append(reqs, &ratelimit.Requirement{})
 
-	if false {
+	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &stringset.Requirement{})
+		reqs = append(reqs, &ratelimit.Requirement{})
 	}
 }

@@ -32,6 +32,7 @@ const (
 	Keystone_Events_FullMethodName           = "/kubex.keystone.Keystone/Events"
 	Keystone_ShareView_FullMethodName        = "/kubex.keystone.Keystone/ShareView"
 	Keystone_SharedViews_FullMethodName      = "/kubex.keystone.Keystone/SharedViews"
+	Keystone_RateLimit_FullMethodName        = "/kubex.keystone.Keystone/RateLimit"
 	Keystone_DailyEntities_FullMethodName    = "/kubex.keystone.Keystone/DailyEntities"
 	Keystone_SchemaStatistics_FullMethodName = "/kubex.keystone.Keystone/SchemaStatistics"
 )
@@ -58,6 +59,7 @@ type KeystoneClient interface {
 	// Shared Views
 	ShareView(ctx context.Context, in *ShareViewRequest, opts ...grpc.CallOption) (*SharedViewResponse, error)
 	SharedViews(ctx context.Context, in *SharedViewsRequest, opts ...grpc.CallOption) (*SharedViewsResponse, error)
+	RateLimit(ctx context.Context, in *RateLimitRequest, opts ...grpc.CallOption) (*RateLimitResponse, error)
 	// Management
 	DailyEntities(ctx context.Context, in *DailyEntityRequest, opts ...grpc.CallOption) (*DailyEntityResponse, error)
 	SchemaStatistics(ctx context.Context, in *SchemaStatisticsRequest, opts ...grpc.CallOption) (*SchemaStatisticsResponse, error)
@@ -201,6 +203,16 @@ func (c *keystoneClient) SharedViews(ctx context.Context, in *SharedViewsRequest
 	return out, nil
 }
 
+func (c *keystoneClient) RateLimit(ctx context.Context, in *RateLimitRequest, opts ...grpc.CallOption) (*RateLimitResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RateLimitResponse)
+	err := c.cc.Invoke(ctx, Keystone_RateLimit_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *keystoneClient) DailyEntities(ctx context.Context, in *DailyEntityRequest, opts ...grpc.CallOption) (*DailyEntityResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DailyEntityResponse)
@@ -243,6 +255,7 @@ type KeystoneServer interface {
 	// Shared Views
 	ShareView(context.Context, *ShareViewRequest) (*SharedViewResponse, error)
 	SharedViews(context.Context, *SharedViewsRequest) (*SharedViewsResponse, error)
+	RateLimit(context.Context, *RateLimitRequest) (*RateLimitResponse, error)
 	// Management
 	DailyEntities(context.Context, *DailyEntityRequest) (*DailyEntityResponse, error)
 	SchemaStatistics(context.Context, *SchemaStatisticsRequest) (*SchemaStatisticsResponse, error)
@@ -294,6 +307,9 @@ func (UnimplementedKeystoneServer) ShareView(context.Context, *ShareViewRequest)
 }
 func (UnimplementedKeystoneServer) SharedViews(context.Context, *SharedViewsRequest) (*SharedViewsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SharedViews not implemented")
+}
+func (UnimplementedKeystoneServer) RateLimit(context.Context, *RateLimitRequest) (*RateLimitResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RateLimit not implemented")
 }
 func (UnimplementedKeystoneServer) DailyEntities(context.Context, *DailyEntityRequest) (*DailyEntityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DailyEntities not implemented")
@@ -556,6 +572,24 @@ func _Keystone_SharedViews_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Keystone_RateLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RateLimitRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RateLimit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RateLimit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RateLimit(ctx, req.(*RateLimitRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Keystone_DailyEntities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DailyEntityRequest)
 	if err := dec(in); err != nil {
@@ -650,6 +684,10 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SharedViews",
 			Handler:    _Keystone_SharedViews_Handler,
+		},
+		{
+			MethodName: "RateLimit",
+			Handler:    _Keystone_RateLimit_Handler,
 		},
 		{
 			MethodName: "DailyEntities",

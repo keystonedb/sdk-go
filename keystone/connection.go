@@ -252,3 +252,10 @@ func (c *Connection) SharedViews(ctx context.Context, in *proto.SharedViewsReque
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) RateLimit(ctx context.Context, in *proto.RateLimitRequest, opts ...grpc.CallOption) (*proto.RateLimitResponse, error) {
+	tl := c.timeLogConfig.NewLog("RateLimit", zap.String("Key", in.GetKey()))
+	resp, err := c.client.RateLimit(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

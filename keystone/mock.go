@@ -29,6 +29,7 @@ type MockServer struct {
 	ChartTimeSeriesFunc  func(context.Context, *proto.ChartTimeSeriesRequest) (*proto.ChartTimeSeriesResponse, error)
 	ShareViewFunc        func(context.Context, *proto.ShareViewRequest) (*proto.SharedViewResponse, error)
 	SharedViewsFunc      func(context.Context, *proto.SharedViewsRequest) (*proto.SharedViewsResponse, error)
+	RateLimitFunc        func(context.Context, *proto.RateLimitRequest) (*proto.RateLimitResponse, error)
 }
 
 func bufDialer(context.Context, string) (net.Conn, error) {
@@ -150,4 +151,11 @@ func (m *MockServer) ShareViews(ctx context.Context, req *proto.SharedViewsReque
 		return m.UnimplementedKeystoneServer.SharedViews(ctx, req)
 	}
 	return m.SharedViewsFunc(ctx, req)
+}
+
+func (m *MockServer) RateLimit(ctx context.Context, req *proto.RateLimitRequest) (*proto.RateLimitResponse, error) {
+	if m.SharedViewsFunc == nil {
+		return m.UnimplementedKeystoneServer.RateLimit(ctx, req)
+	}
+	return m.RateLimitFunc(ctx, req)
 }
