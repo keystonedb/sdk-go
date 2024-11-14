@@ -117,6 +117,11 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 		mutation.Logs = entityWithLogs.GetLogs()
 	}
 
+	if entityWithLogs, ok := src.(ChildProvider); ok {
+		mutation.Children = entityWithLogs.GetChildrenToStore()
+		mutation.RemoveChildren = entityWithLogs.GetChildrenToRemove()
+	}
+
 	if len(props) > 0 {
 		for propName, prop := range props {
 			mutation.Properties = append(mutation.Properties, &proto.EntityProperty{Property: propName.Name(), Value: prop})

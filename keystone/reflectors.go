@@ -16,6 +16,7 @@ var (
 	timestampType        = reflect.TypeFor[timestamppb.Timestamp]()
 	refTimestampType     = reflect.TypeFor[*timestamppb.Timestamp]()
 	mutationObserverType = reflect.TypeFor[MutationObserver]()
+	NestedChildType      = reflect.TypeFor[NestedChild]()
 )
 
 var kindReflector = map[reflect.Kind]Reflector{
@@ -76,6 +77,11 @@ func GetReflector(t reflect.Type, v reflect.Value) Reflector {
 	}
 
 	if t.Kind() == reflect.Slice {
+		if t.Elem().Implements(NestedChildType) {
+			// Do not marshal nested children
+			return nil
+		}
+
 		if ref, ok := sliceKindReflector[t.Elem().Kind()]; ok {
 			return ref
 		}
