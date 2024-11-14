@@ -4,6 +4,7 @@ import "github.com/keystonedb/sdk-go/proto"
 
 type BaseEntity struct {
 	EmbeddedEntity
+	EmbeddedChildren
 	EmbeddedWatcher
 	EmbeddedDetails
 	EmbeddedEvents

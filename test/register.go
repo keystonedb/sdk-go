@@ -13,6 +13,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/list"
 	"github.com/keystonedb/sdk-go/test/requirements/logging"
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
+	"github.com/keystonedb/sdk-go/test/requirements/nested_children"
 	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
@@ -51,6 +52,6 @@ func init() {
 
 	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &timeseries.Requirement{})
+		reqs = append(reqs, &nested_children.Requirement{})
 	}
 }
