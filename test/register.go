@@ -49,7 +49,7 @@ func init() {
 	reqs = append(reqs, &stringset.Requirement{})
 	reqs = append(reqs, &ratelimit.Requirement{})
 
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
 		reqs = append(reqs, &ratelimit.Requirement{})
 	}
