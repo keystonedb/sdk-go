@@ -49,8 +49,8 @@ func init() {
 	reqs = append(reqs, &stringset.Requirement{})
 	reqs = append(reqs, &ratelimit.Requirement{})
 
-	if false {
+	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &ratelimit.Requirement{})
+		reqs = append(reqs, &timeseries.Requirement{})
 	}
 }

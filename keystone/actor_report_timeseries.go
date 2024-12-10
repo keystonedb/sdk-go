@@ -68,6 +68,8 @@ func (a *Actor) ReportTimeSeries(ctx context.Context, src interface{}) error {
 		if rawEntity, ok := src.(Entity); ok && entityID == "" {
 			rawEntity.SetKeystoneID(mResp.GetEntityId())
 		}
+	} else if err == nil {
+		err = errors.New("failed to store time series data " + mResp.GetTransactionId())
 	}
 
 	return mutateToError(mResp, err)
