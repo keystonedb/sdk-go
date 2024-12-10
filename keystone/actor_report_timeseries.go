@@ -38,8 +38,21 @@ func (a *Actor) ReportTimeSeries(ctx context.Context, src interface{}) error {
 	if entityWithLabels, ok := src.(LabelProvider); ok {
 		mutation.Labels = entityWithLabels.GetLabels()
 	}
+	props, wErr := NewWatcher(src)
+	if wErr != nil {
+		return wErr
+	}
 
-	//TODO: Set Properties
+	props.ReplaceKnownValues(nil) // Track all properties
+	changes, changeErr := props.Changes(src, false)
+
+	if changeErr != nil {
+		return changeErr
+	}
+
+	for propName, prop := range changes {
+		mutation.Properties = append(mutation.Properties, &proto.EntityProperty{Property: propName.Name(), Value: prop})
+	}
 
 	m := &proto.ReportTimeSeriesRequest{
 		Authorization: a.Authorization(),
