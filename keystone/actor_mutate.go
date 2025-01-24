@@ -3,7 +3,6 @@ package keystone
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 )
@@ -172,7 +171,10 @@ func mutateToError(resp *proto.MutateResponse, err error) error {
 	}
 
 	if resp.ErrorCode > 0 || resp.ErrorMessage != "" {
-		return fmt.Errorf("error %d: %s", resp.ErrorCode, resp.ErrorMessage)
+		return &Error{
+			ErrorMessage: resp.GetErrorMessage(), ErrorCode: resp.GetErrorCode(),
+			Extended: resp.GetExtended().GetErrors(), Suggestions: resp.GetExtended().GetSuggestions(),
+		}
 	}
 	return nil
 }

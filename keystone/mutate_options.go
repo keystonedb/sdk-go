@@ -64,3 +64,23 @@ func (m mutateProperties) prepare(w *Watcher) error {
 	}
 	return nil
 }
+
+type matchExisting struct {
+	findOptions []FindOption
+}
+
+func (m matchExisting) apply(mutate *proto.MutateRequest) {
+	for _, opt := range m.findOptions {
+		if filterOpt, ok := opt.(propertyFilter); ok {
+			mutate.Where = append(mutate.Where, &proto.PropertyFilter{
+				Property: filterOpt.key,
+				Operator: filterOpt.operator,
+				Values:   filterOpt.values,
+			})
+		}
+	}
+}
+
+func MatchExisting(options ...FindOption) MutateOption {
+	return matchExisting{findOptions: options}
+}
