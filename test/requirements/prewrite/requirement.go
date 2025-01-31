@@ -158,8 +158,10 @@ func (d *Requirement) updateAgain(actor *keystone.Actor) requirements.TestResult
 	psn := &models.Person{}
 	psn.SetKeystoneID(d.createdID)
 	psn.Name = Name3
-	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Update a person"),
-		keystone.MutateProperties("name"), keystone.MatchExisting(keystone.WhereEquals("name", Name2), keystone.WhereGreaterThan("height_in_cm", 189)))
+	updateErr := actor.Mutate(context.Background(), psn,
+		keystone.WithMutationComment("Update a person"),
+		keystone.MutateProperties("name"),
+		keystone.MatchExisting(keystone.WhereEquals("name", Name2), keystone.WhereGreaterThan("height_in_cm", 189)))
 
 	if updateErr == nil {
 		updateErr = actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithProperties())
