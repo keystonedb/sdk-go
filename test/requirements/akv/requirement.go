@@ -43,7 +43,7 @@ func (d *Requirement) put(actor *keystone.Actor) requirements.TestResult {
 
 func (d *Requirement) get(actor *keystone.Actor) requirements.TestResult {
 
-	resp, getErr := actor.AKVGet(context.Background(), "val1", "val2")
+	resp, getErr := actor.AKVGet(context.Background(), "val1", "val2", "val3")
 
 	if getErr == nil {
 		if val, hasVal := resp["val1"]; !hasVal {
@@ -56,6 +56,10 @@ func (d *Requirement) get(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("val2 not found")
 		} else if val.GetText() != "abc" {
 			getErr = errors.New("val2 has wrong value")
+		}
+
+		if _, hasVal := resp["val3"]; hasVal {
+			getErr = errors.New("val3 should not be found")
 		}
 	}
 
