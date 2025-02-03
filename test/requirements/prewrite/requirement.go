@@ -53,7 +53,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		DOB:          DOB,
 		BankBalance:  keystone.NewAmount(BalanceCurrency, BalanceAmount),
 		FullName:     keystone.NewSecretString("John Doe", "Jo*** D***"),
-		AccountPin:   "4321",
+		AccountPin:   keystone.NewVerifyString("4321"),
 		SecretAnswer: keystone.NewSecretString("Pet Name", "Pe*******"),
 	}
 
@@ -86,9 +86,6 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("balance amount mismatch")
 		} else if psn.FullName.Original != "John Doe" {
 			getErr = errors.New("full name mismatch, got " + psn.FullName.Original)
-			// TODO: Send verify bin, set input value if matched
-			/*} else if psn.AccountPin != "1234" {
-			getErr = errors.New("account pin mismatch")*/
 		} else if psn.SecretAnswer.String() != "Pet Name" {
 			getErr = errors.New("secret answer mismatch")
 		}

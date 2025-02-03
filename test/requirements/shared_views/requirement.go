@@ -48,7 +48,7 @@ func (d *Requirement) share(actor *keystone.Actor) requirements.TestResult {
 		DOB:          time.Now(),
 		BankBalance:  keystone.NewAmount("USD", 345),
 		FullName:     keystone.NewSecretString("John Doe", "Jo*** D***"),
-		AccountPin:   "1234",
+		AccountPin:   keystone.NewVerifyString("1234"),
 		SecretAnswer: keystone.NewSecretString("Pet Name", "Pe*******"),
 	}
 	actor.Mutate(context.Background(), d.psn)

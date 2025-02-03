@@ -35,6 +35,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 	return []requirements.TestResult{
 		d.create(actor),
 		d.read(actor),
+		d.readVerifyFail(actor),
 		d.update(actor),
 	}
 }
@@ -48,7 +49,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		DOB:          DOB,
 		BankBalance:  keystone.NewAmount(BalanceCurrency, BalanceAmount),
 		FullName:     keystone.NewSecretString("John Doe", "Jo*** D***"),
-		AccountPin:   "1234",
+		AccountPin:   keystone.NewVerifyString("1234"),
 		SecretAnswer: keystone.NewSecretString("Pet Name", "Pe*******"),
 	}
 
@@ -66,7 +67,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 
 	psn := &models.Person{}
-	getErr := actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithDecryptedProperties())
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithDecryptedProperties(), keystone.WithVerifiedProperty("account_pin", "1234"))
 
 	if getErr == nil {
 		if psn.Name != Name {
@@ -81,9 +82,10 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("balance amount mismatch")
 		} else if psn.FullName.Original != "John Doe" {
 			getErr = errors.New("full name mismatch, got " + psn.FullName.Original)
-			// TODO: Send verify bin, set input value if matched
-			/*} else if psn.AccountPin != "1234" {
-			getErr = errors.New("account pin mismatch")*/
+		} else if !psn.AccountPin.WasChecked() {
+			getErr = errors.New("account pin was not checked")
+		} else if !psn.AccountPin.Verified() {
+			getErr = errors.New("account pin was not verified")
 		} else if psn.SecretAnswer.String() != "Pet Name" {
 			getErr = errors.New("secret answer mismatch")
 		}
@@ -91,6 +93,24 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 
 	return requirements.TestResult{
 		Name:  "Read",
+		Error: getErr,
+	}
+}
+func (d *Requirement) readVerifyFail(actor *keystone.Actor) requirements.TestResult {
+
+	psn := &models.Person{}
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithVerifiedProperty("account_pin", "4312"))
+
+	if getErr == nil {
+		if !psn.AccountPin.WasChecked() {
+			getErr = errors.New("account pin was not checked")
+		} else if psn.AccountPin.Verified() {
+			getErr = errors.New("account pin was incorrectly verified")
+		}
+	}
+
+	return requirements.TestResult{
+		Name:  "Read Verify Failure",
 		Error: getErr,
 	}
 }

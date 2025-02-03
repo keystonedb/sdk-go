@@ -14,7 +14,7 @@ type Person struct {
 	BankBalance  keystone.Amount       `json:",omitempty"`
 	PaymentCount int64                 `keystone:"_count_relation:payment"`
 	FullName     keystone.SecureString `keystone:",indexed,personal" json:",omitempty"`
-	AccountPin   string                `keystone:",verify"`
+	AccountPin   keystone.VerifyString `keystone:",verify"`
 	SecretAnswer keystone.SecureString `keystone:",indexed,secure" json:",omitempty"`
 }
 

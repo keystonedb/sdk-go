@@ -243,6 +243,29 @@ func (l withLock) ApplyRequest(config *proto.EntityRequest) {
 	config.LockTtlSeconds = l.ttlSeconds
 	config.LockMessage = l.message
 }
+
 func WithLock(note string, ttlSeconds int32) RetrieveOption {
 	return withLock{message: note, ttlSeconds: ttlSeconds}
+}
+
+type verifiedProperty struct {
+	property string
+	compare  string
+}
+
+func WithVerifiedProperty(property, compare string) RetrieveOption {
+	return verifiedProperty{property: property, compare: compare}
+}
+
+func (v verifiedProperty) Apply(view *proto.EntityView) {
+	view.Properties = append(view.Properties, &proto.PropertyRequest{
+		Properties: []string{v.property},
+	})
+}
+
+func (v verifiedProperty) ApplyRequest(req *proto.EntityRequest) {
+	req.VerifyProperties = append(req.VerifyProperties, &proto.EntityProperty{
+		Property: v.property,
+		Value:    &proto.Value{SecureText: v.compare},
+	})
 }

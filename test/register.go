@@ -53,6 +53,6 @@ func init() {
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &prewrite.Requirement{})
+		reqs = append(reqs, &cru.Requirement{})
 	}
 }
