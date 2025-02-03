@@ -319,6 +319,6 @@ func Test_Hydration(t *testing.T) {
 		t.Errorf("Marshal failed: %v", err)
 	}
 	if len(props) != 1 {
-		t.Errorf("Expected 1 property, got: %d", len(props))
+		t.Errorf("Expected 1 Property, got: %d", len(props))
 	}
 }

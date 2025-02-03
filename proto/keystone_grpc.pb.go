@@ -35,6 +35,9 @@ const (
 	Keystone_RateLimit_FullMethodName        = "/kubex.keystone.Keystone/RateLimit"
 	Keystone_DailyEntities_FullMethodName    = "/kubex.keystone.Keystone/DailyEntities"
 	Keystone_SchemaStatistics_FullMethodName = "/kubex.keystone.Keystone/SchemaStatistics"
+	Keystone_AKVGet_FullMethodName           = "/kubex.keystone.Keystone/AKVGet"
+	Keystone_AKVPut_FullMethodName           = "/kubex.keystone.Keystone/AKVPut"
+	Keystone_AKVDel_FullMethodName           = "/kubex.keystone.Keystone/AKVDel"
 )
 
 // KeystoneClient is the client API for Keystone service.
@@ -63,6 +66,10 @@ type KeystoneClient interface {
 	// Management
 	DailyEntities(ctx context.Context, in *DailyEntityRequest, opts ...grpc.CallOption) (*DailyEntityResponse, error)
 	SchemaStatistics(ctx context.Context, in *SchemaStatisticsRequest, opts ...grpc.CallOption) (*SchemaStatisticsResponse, error)
+	// App Key Value Store
+	AKVGet(ctx context.Context, in *AKVGetRequest, opts ...grpc.CallOption) (*AKVGetResponse, error)
+	AKVPut(ctx context.Context, in *AKVPutRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	AKVDel(ctx context.Context, in *AKVDelRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 }
 
 type keystoneClient struct {
@@ -233,6 +240,36 @@ func (c *keystoneClient) SchemaStatistics(ctx context.Context, in *SchemaStatist
 	return out, nil
 }
 
+func (c *keystoneClient) AKVGet(ctx context.Context, in *AKVGetRequest, opts ...grpc.CallOption) (*AKVGetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AKVGetResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) AKVPut(ctx context.Context, in *AKVPutRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVPut_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) AKVDel(ctx context.Context, in *AKVDelRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVDel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KeystoneServer is the server API for Keystone service.
 // All implementations must embed UnimplementedKeystoneServer
 // for forward compatibility.
@@ -259,6 +296,10 @@ type KeystoneServer interface {
 	// Management
 	DailyEntities(context.Context, *DailyEntityRequest) (*DailyEntityResponse, error)
 	SchemaStatistics(context.Context, *SchemaStatisticsRequest) (*SchemaStatisticsResponse, error)
+	// App Key Value Store
+	AKVGet(context.Context, *AKVGetRequest) (*AKVGetResponse, error)
+	AKVPut(context.Context, *AKVPutRequest) (*GenericResponse, error)
+	AKVDel(context.Context, *AKVDelRequest) (*GenericResponse, error)
 	mustEmbedUnimplementedKeystoneServer()
 }
 
@@ -316,6 +357,15 @@ func (UnimplementedKeystoneServer) DailyEntities(context.Context, *DailyEntityRe
 }
 func (UnimplementedKeystoneServer) SchemaStatistics(context.Context, *SchemaStatisticsRequest) (*SchemaStatisticsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SchemaStatistics not implemented")
+}
+func (UnimplementedKeystoneServer) AKVGet(context.Context, *AKVGetRequest) (*AKVGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AKVGet not implemented")
+}
+func (UnimplementedKeystoneServer) AKVPut(context.Context, *AKVPutRequest) (*GenericResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AKVPut not implemented")
+}
+func (UnimplementedKeystoneServer) AKVDel(context.Context, *AKVDelRequest) (*GenericResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AKVDel not implemented")
 }
 func (UnimplementedKeystoneServer) mustEmbedUnimplementedKeystoneServer() {}
 func (UnimplementedKeystoneServer) testEmbeddedByValue()                  {}
@@ -626,6 +676,60 @@ func _Keystone_SchemaStatistics_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Keystone_AKVGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVGet(ctx, req.(*AKVGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_AKVPut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVPutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVPut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVPut_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVPut(ctx, req.(*AKVPutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_AKVDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVDelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVDel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVDel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVDel(ctx, req.(*AKVDelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Keystone_ServiceDesc is the grpc.ServiceDesc for Keystone service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -696,6 +800,18 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SchemaStatistics",
 			Handler:    _Keystone_SchemaStatistics_Handler,
+		},
+		{
+			MethodName: "AKVGet",
+			Handler:    _Keystone_AKVGet_Handler,
+		},
+		{
+			MethodName: "AKVPut",
+			Handler:    _Keystone_AKVPut_Handler,
+		},
+		{
+			MethodName: "AKVDel",
+			Handler:    _Keystone_AKVDel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -16,7 +16,7 @@ func NewDefaultsWatcher(v interface{}) (*Watcher, error) {
 	return NewWatcher(reflect.New(val.Type()).Interface())
 }
 
-// NewWatcher creates a new watcher with the given value
+// NewWatcher creates a new watcher with the given Value
 func NewWatcher(v interface{}) (*Watcher, error) {
 	w := &Watcher{
 		knownValues: make(map[Property]*proto.Value),
@@ -47,8 +47,8 @@ func ChangesFromDefault(v interface{}) (map[Property]*proto.Value, error) {
 	return w.Changes(v, false)
 }
 
-// Changes returns the changes between the current value and the previous value.
-// If update is true, the current value will be stored as the previous value
+// Changes returns the changes between the current Value and the previous Value.
+// If update is true, the current Value will be stored as the previous Value
 func (w *Watcher) Changes(v interface{}, update bool) (map[Property]*proto.Value, error) {
 	latest, err := Marshal(v)
 	if err != nil {

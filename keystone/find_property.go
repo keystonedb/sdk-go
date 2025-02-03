@@ -5,67 +5,67 @@ import (
 	"reflect"
 )
 
-// WhereEquals is a find option that filters entities by a property equaling a value
+// WhereEquals is a find option that filters entities by a Property equaling a Value
 func WhereEquals(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_Equal}
 }
 
-// WhereNotEquals is a find option that filters entities by a property not equaling a value
+// WhereNotEquals is a find option that filters entities by a Property not equaling a Value
 func WhereNotEquals(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_NotEqual}
 }
 
-// WhereGreaterThan is a find option that filters entities by a property being greater than a value
+// WhereGreaterThan is a find option that filters entities by a Property being greater than a Value
 func WhereGreaterThan(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_GreaterThan}
 }
 
-// WhereGreaterThanOrEquals is a find option that filters entities by a property being greater than or equal to a value
+// WhereGreaterThanOrEquals is a find option that filters entities by a Property being greater than or equal to a Value
 func WhereGreaterThanOrEquals(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_GreaterThanOrEqual}
 }
 
-// WhereLessThan is a find option that filters entities by a property being less than a value
+// WhereLessThan is a find option that filters entities by a Property being less than a Value
 func WhereLessThan(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_LessThan}
 }
 
-// WhereLessThanOrEquals is a find option that filters entities by a property being less than or equal to a value
+// WhereLessThanOrEquals is a find option that filters entities by a Property being less than or equal to a Value
 func WhereLessThanOrEquals(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_LessThanOrEqual}
 }
 
-// WhereContains is a find option that filters entities by a property containing a value
+// WhereContains is a find option that filters entities by a Property containing a Value
 func WhereContains(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_Contains}
 }
 
-// WhereNotContains is a find option that filters entities by a property not containing a value
+// WhereNotContains is a find option that filters entities by a Property not containing a Value
 func WhereNotContains(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_NotContains}
 }
 
-// WhereStartsWith is a find option that filters entities by a property starting with a value
+// WhereStartsWith is a find option that filters entities by a Property starting with a Value
 func WhereStartsWith(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_StartsWith}
 }
 
-// WhereEndsWith is a find option that filters entities by a property ending with a value
+// WhereEndsWith is a find option that filters entities by a Property ending with a Value
 func WhereEndsWith(key string, value string) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_EndsWith}
 }
 
-// WhereIn is a find option that filters entities by a property being in a list of values
+// WhereIn is a find option that filters entities by a Property being in a list of values
 func WhereIn(key string, value ...any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value...), operator: proto.Operator_In}
 }
 
-// WhereNotIn is a find option that filters entities by a property not being in a list of values
+// WhereNotIn is a find option that filters entities by a Property not being in a list of values
 func WhereNotIn(key string, value ...any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value...), operator: proto.Operator_Equal}
 }
 
-// WhereBetween is a find option that filters entities by a property being between two values
+// WhereBetween is a find option that filters entities by a Property being between two values
 func WhereBetween(key string, value1, value2 any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value1, value2), operator: proto.Operator_Equal}
 }

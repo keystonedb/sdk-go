@@ -10,7 +10,7 @@ func Test_String(t *testing.T) {
 	str := String("Hello, World!")
 	pVal, err := str.MarshalValue()
 	if err != nil {
-		t.Errorf("Error marshalling value: %v", err)
+		t.Errorf("Error marshalling Value: %v", err)
 	}
 
 	if pVal.GetText() != "Hello, World!" {
@@ -20,7 +20,7 @@ func Test_String(t *testing.T) {
 	var str2 String
 	err = str2.UnmarshalValue(pVal)
 	if err != nil {
-		t.Errorf("Error unmarshalling value: %v", err)
+		t.Errorf("Error unmarshalling Value: %v", err)
 	}
 
 	if cmp.Compare(str2, str) != 0 {

@@ -11,7 +11,7 @@ func TestPropertyLoader(t *testing.T) {
 
 	l.Apply(view)
 	if len(view.Properties) != 1 {
-		t.Error("Expected 1 property request")
+		t.Error("Expected 1 Property request")
 	}
 
 	req0 := view.Properties[0]
@@ -20,7 +20,7 @@ func TestPropertyLoader(t *testing.T) {
 	}
 
 	if req0.GetProperties()[0] != "name" {
-		t.Error("Expected name property")
+		t.Error("Expected name Property")
 	}
 }
 
@@ -30,6 +30,6 @@ func TestRetrieveOptions(t *testing.T) {
 
 	l.Apply(view)
 	if len(view.Properties) != 1 {
-		t.Error("Expected 1 property request")
+		t.Error("Expected 1 Property request")
 	}
 }

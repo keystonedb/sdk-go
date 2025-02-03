@@ -259,3 +259,22 @@ func (c *Connection) RateLimit(ctx context.Context, in *proto.RateLimitRequest, 
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) AKVGet(ctx context.Context, in *proto.AKVGetRequest, opts ...grpc.CallOption) (*proto.AKVGetResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVGet", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVGet(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+func (c *Connection) AKVPut(ctx context.Context, in *proto.AKVPutRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVPut", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVPut(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+func (c *Connection) AKVDel(ctx context.Context, in *proto.AKVDelRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVDel", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVDel(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

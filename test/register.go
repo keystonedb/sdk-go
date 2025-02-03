@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/keystonedb/sdk-go/test/requirements"
+	"github.com/keystonedb/sdk-go/test/requirements/akv"
 	"github.com/keystonedb/sdk-go/test/requirements/child_entities"
 	"github.com/keystonedb/sdk-go/test/requirements/cru"
 	"github.com/keystonedb/sdk-go/test/requirements/daily"
@@ -29,6 +30,7 @@ var reqs []requirements.Requirement
 
 func init() {
 	//reqs = append(reqs, &requirements.DummyRequirement{})
+	reqs = append(reqs, &akv.Requirement{})
 	reqs = append(reqs, &cru.Requirement{})
 	reqs = append(reqs, &dynamic_properties.Requirement{})
 	reqs = append(reqs, &unique_id.Requirement{})
@@ -53,6 +55,6 @@ func init() {
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &cru.Requirement{})
+		reqs = append(reqs, &akv.Requirement{})
 	}
 }

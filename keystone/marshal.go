@@ -75,7 +75,7 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 	return properties, nil
 }
 
-var CannotMarshalValueError = errors.New("cannot marshal value")
+var CannotMarshalValueError = errors.New("cannot marshal Value")
 
 func MarshalValue(v interface{}) (*proto.Value, error) {
 	val := reflector.Deref(reflect.ValueOf(v))

@@ -40,7 +40,7 @@ type NestedChild interface {
 	SetChildID(id string)
 }
 
-// NestedChildAggregateValue defines the aggregate value of a child entity
+// NestedChildAggregateValue defines the aggregate Value of a child entity
 type NestedChildAggregateValue interface {
 	AggregateValue() int64
 	SetAggregateValue(val int64)
