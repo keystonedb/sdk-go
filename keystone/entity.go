@@ -12,6 +12,7 @@ type BaseEntity struct {
 	EmbeddedLogs
 	EmbeddedRelationships
 	EmbeddedSensors
+	EmbeddedObjects
 }
 
 type EmbeddedEntity struct {

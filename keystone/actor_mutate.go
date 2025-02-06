@@ -120,6 +120,12 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 	mResp, err := a.connection.Mutate(ctx, m)
 
 	if err == nil && mResp.Success {
+		for _, option := range options {
+			if optObserver, ok := option.(MutationObserver); ok {
+				optObserver.MutationSuccess(mResp)
+			}
+		}
+
 		if rawEntity, ok := src.(Entity); ok && entityID == "" {
 			rawEntity.SetKeystoneID(mResp.GetEntityId())
 		}

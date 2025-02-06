@@ -12,4 +12,6 @@ type filterRequest struct {
 	PageNumber     int32
 	SortProperty   string
 	SortDescending bool
+	ObjectPaths    []string
+	ListObjects    bool
 }

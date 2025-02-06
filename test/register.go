@@ -14,6 +14,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/list"
 	"github.com/keystonedb/sdk-go/test/requirements/logging"
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
+	"github.com/keystonedb/sdk-go/test/requirements/objects"
 	"github.com/keystonedb/sdk-go/test/requirements/prewrite"
 	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
@@ -52,9 +53,10 @@ func init() {
 	reqs = append(reqs, &stringset.Requirement{})
 	reqs = append(reqs, &ratelimit.Requirement{})
 	reqs = append(reqs, &prewrite.Requirement{})
+	reqs = append(reqs, &objects.Requirement{})
 
-	if false {
+	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &akv.Requirement{})
+		reqs = append(reqs, &objects.Requirement{})
 	}
 }

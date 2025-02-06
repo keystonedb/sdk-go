@@ -269,3 +269,20 @@ func (v verifiedProperty) ApplyRequest(req *proto.EntityRequest) {
 		Value:    &proto.Value{SecureText: v.compare},
 	})
 }
+
+type withObjects struct {
+	paths []string
+}
+
+func (f withObjects) ApplyRequest(req *proto.EntityRequest) {}
+func (f withObjects) Apply(view *proto.EntityView) {
+	if len(f.paths) > 0 {
+		view.ObjectPaths = f.paths
+	} else {
+		view.ListObjects = true
+	}
+}
+
+func WithObjects(paths ...string) RetrieveOption {
+	return withObjects{paths: paths}
+}

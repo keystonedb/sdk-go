@@ -1,6 +1,9 @@
 package keystone
 
-import "github.com/keystonedb/sdk-go/proto"
+import (
+	"github.com/keystonedb/sdk-go/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
+)
 
 type MutateOption interface {
 	apply(*proto.MutateRequest)
@@ -83,4 +86,36 @@ func (m matchExisting) apply(mutate *proto.MutateRequest) {
 
 func MatchExisting(options ...FindOption) MutateOption {
 	return matchExisting{findOptions: options}
+}
+
+type prepareObjects struct {
+	objects []*EntityObject
+}
+
+func (m prepareObjects) apply(mutate *proto.MutateRequest) {
+	for _, obj := range m.objects {
+		pObj := &proto.EntityObject{
+			Path:   obj.GetPath(),
+			Type:   obj.storageClass,
+			Public: obj.public,
+		}
+		if !obj.expiry.IsZero() {
+			pObj.Expiry = timestamppb.New(obj.expiry)
+		}
+		mutate.Mutation.Objects = append(mutate.Mutation.Objects, pObj)
+	}
+}
+func (m prepareObjects) MutationSuccess(response *proto.MutateResponse) {
+	for _, obj := range m.objects {
+		for _, respObj := range response.SignedObjectUrls {
+			if obj.GetPath() == respObj.GetPath() && respObj.GetUrl() != "" {
+				obj.uploadURL = respObj.GetUrl()
+				break
+			}
+		}
+	}
+}
+
+func PrepareUploads(objs ...*EntityObject) MutateOption {
+	return prepareObjects{objects: objs}
 }
