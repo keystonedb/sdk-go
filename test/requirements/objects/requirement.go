@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
+	"io"
 )
 
 type Requirement struct {
@@ -55,7 +57,9 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 				createErr = err
 			} else {
 				if resp.StatusCode != 200 {
-					createErr = errors.New("upload failed")
+					createErr = errors.New("upload failed, status code: " + string(rune(resp.StatusCode)))
+					bdy, _ := io.ReadAll(resp.Body)
+					fmt.Println(string(bdy))
 				}
 			}
 		}

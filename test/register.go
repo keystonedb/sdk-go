@@ -55,7 +55,7 @@ func init() {
 	reqs = append(reqs, &prewrite.Requirement{})
 	reqs = append(reqs, &objects.Requirement{})
 
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
 		reqs = append(reqs, &objects.Requirement{})
 	}
