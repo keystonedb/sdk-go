@@ -18,6 +18,7 @@ type EntityObject struct {
 	contentEncoding    string
 	contentLanguage    string
 	metadata           map[string]string
+	data               []byte
 }
 
 func NewUpload(path string, storageClass proto.ObjectType) *EntityObject {
@@ -54,6 +55,8 @@ func (e *EntityObject) SetMeta(key, value string) {
 	}
 	e.metadata[key] = value
 }
+
+func (e *EntityObject) SetData(data []byte) { e.data = data }
 
 func (e *EntityObject) GetPath() string {
 	return e.path

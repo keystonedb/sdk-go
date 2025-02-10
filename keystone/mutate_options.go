@@ -98,6 +98,7 @@ func (m prepareObjects) apply(mutate *proto.MutateRequest) {
 			Path:   obj.GetPath(),
 			Type:   obj.storageClass,
 			Public: obj.public,
+			Data:   obj.data,
 		}
 		if !obj.expiry.IsZero() {
 			pObj.Expiry = timestamppb.New(obj.expiry)

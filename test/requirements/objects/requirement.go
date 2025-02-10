@@ -41,8 +41,10 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 
 	fileOne := keystone.NewUpload("profile.png", proto.ObjectType_Standard)
 	fileTwo := keystone.NewUpload("policy.pdf", proto.ObjectType_NearLine)
+	fileThree := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
+	fileThree.SetData([]byte("file contents here"))
 
-	createErr := actor.Mutate(context.Background(), psn, keystone.PrepareUploads(fileOne, fileTwo))
+	createErr := actor.Mutate(context.Background(), psn, keystone.PrepareUploads(fileOne, fileTwo, fileThree))
 	if createErr == nil {
 		d.createdID = psn.GetKeystoneID()
 
@@ -77,8 +79,8 @@ func (d *Requirement) list(actor *keystone.Actor) requirements.TestResult {
 	listErr := actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithObjects())
 
 	if listErr == nil {
-		if len(psn.GetObjects()) != 2 {
-			listErr = errors.New("object count is not 2, got " + string(len(psn.GetObjects())))
+		if len(psn.GetObjects()) != 3 {
+			listErr = errors.New("object count is not 3, got " + string(len(psn.GetObjects())))
 		} else if obj := psn.GetObject("profile.png"); obj == nil {
 			listErr = errors.New("object not found")
 		} else {
