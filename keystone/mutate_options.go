@@ -111,6 +111,7 @@ func (m prepareObjects) MutationSuccess(response *proto.MutateResponse) {
 		for _, respObj := range response.SignedObjectUrls {
 			if obj.GetPath() == respObj.GetPath() && respObj.GetUrl() != "" {
 				obj.uploadURL = respObj.GetUrl()
+				obj.uploadHeaders = respObj.GetUploadHeaders()
 				break
 			}
 		}

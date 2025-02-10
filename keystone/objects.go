@@ -18,6 +18,7 @@ type EntityObject struct {
 	contentEncoding    string
 	contentLanguage    string
 	metadata           map[string]string
+	uploadHeaders      map[string]string
 	data               []byte
 }
 
@@ -74,6 +75,11 @@ func (e *EntityObject) Upload(content io.Reader) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodPut, e.GetUploadURL(), content)
 	if err != nil {
 		return nil, err
+	}
+	if e.uploadHeaders != nil {
+		for k, v := range e.uploadHeaders {
+			req.Header.Set(k, v)
+		}
 	}
 	return http.DefaultClient.Do(req)
 }

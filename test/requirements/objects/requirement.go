@@ -10,6 +10,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
 	"io"
+	"time"
 )
 
 type Requirement struct {
@@ -40,7 +41,8 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 	}
 
 	fileOne := keystone.NewUpload("profile.png", proto.ObjectType_Standard)
-	fileTwo := keystone.NewUpload("policy.pdf", proto.ObjectType_NearLine)
+	fileOne.SetExpiry(time.Now().Add(time.Second * 60))
+	fileTwo := keystone.NewUpload("policy.txt", proto.ObjectType_NearLine)
 	fileThree := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
 	fileThree.SetData([]byte("file contents here"))
 
@@ -55,6 +57,24 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 			}
 		} else {
 			resp, err := fileOne.Upload(bytes.NewBuffer([]byte("file contents")))
+			if err != nil {
+				createErr = err
+			} else {
+				if resp.StatusCode != 200 {
+					createErr = errors.New("upload failed, status code: " + string(rune(resp.StatusCode)))
+					bdy, _ := io.ReadAll(resp.Body)
+					fmt.Println(string(bdy))
+				}
+			}
+		}
+
+		if createErr == nil && !fileTwo.ReadyForUpload() {
+			return requirements.TestResult{
+				Name:  "Upload",
+				Error: errors.New("no signed url was created for the upload"),
+			}
+		} else if createErr == nil {
+			resp, err := fileTwo.Upload(bytes.NewBuffer([]byte("policy document")))
 			if err != nil {
 				createErr = err
 			} else {
