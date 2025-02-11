@@ -3,6 +3,7 @@ package keystone
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"github.com/keystonedb/sdk-go/proto"
 	"io"
 	"net/http"
@@ -92,4 +93,18 @@ func (e *EntityObject) UploadToJson(content interface{}) (*http.Response, error)
 		return nil, err
 	}
 	return e.Upload(bytes.NewReader(jsn))
+}
+
+func UploadError(resp *http.Response, err error) error {
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode != http.StatusOK {
+		bdy, readErr := io.ReadAll(resp.Body)
+		if readErr != nil {
+			return readErr
+		}
+		return errors.New("upload failed, status code: " + string(rune(resp.StatusCode)) + " body: " + string(bdy))
+	}
+	return nil
 }
