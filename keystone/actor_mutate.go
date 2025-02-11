@@ -9,11 +9,13 @@ import (
 
 var ErrCommentedMutations = errors.New("you must provide a mutation comment")
 
-func (a *Actor) RemoteMutate(ctx context.Context, src interface{}) error {
+func (a *Actor) RemoteMutate(ctx context.Context, entityID string, src interface{}, options ...MutateOption) error {
 	mutation := &proto.Mutation{}
-	entityID := ""
-	if rawEntity, ok := src.(Entity); ok {
-		entityID = rawEntity.GetKeystoneID()
+
+	if entityID == "" {
+		if rawEntity, ok := src.(Entity); ok {
+			entityID = rawEntity.GetKeystoneID()
+		}
 	}
 
 	if entityID == "" {
@@ -36,7 +38,26 @@ func (a *Actor) RemoteMutate(ctx context.Context, src interface{}) error {
 		Mutation:      mutation,
 	}
 
-	return mutateToError(a.connection.Mutate(ctx, m))
+	for _, option := range options {
+		option.apply(m)
+	}
+
+	mResp, err := a.connection.Mutate(ctx, m)
+
+	if err == nil && mResp.Success {
+		for _, option := range options {
+			if optObserver, ok := option.(MutationObserver); ok {
+				optObserver.MutationSuccess(mResp)
+			}
+		}
+
+		if rawEntity, ok := src.(MutationObserver); ok {
+			rawEntity.MutationSuccess(mResp)
+			observeMutation(rawEntity, mResp)
+		}
+	}
+
+	return mutateToError(mResp, err)
 }
 
 func (a *Actor) MutateWithDefaultWatcher(ctx context.Context, src interface{}, options ...MutateOption) error {
