@@ -1,6 +1,8 @@
 package keystone
 
 import (
+	"bytes"
+	"encoding/json"
 	"github.com/keystonedb/sdk-go/proto"
 	"io"
 	"net/http"
@@ -82,4 +84,12 @@ func (e *EntityObject) Upload(content io.Reader) (*http.Response, error) {
 		}
 	}
 	return http.DefaultClient.Do(req)
+}
+
+func (e *EntityObject) UploadToJson(content interface{}) (*http.Response, error) {
+	jsn, err := json.Marshal(content)
+	if err != nil {
+		return nil, err
+	}
+	return e.Upload(bytes.NewReader(jsn))
 }
