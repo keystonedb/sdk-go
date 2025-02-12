@@ -84,7 +84,7 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 	file1 := keystone.NewUpload("abc", proto.ObjectType_Standard)
 	file1.SetData([]byte("Hello World"))
 
-	remoteMutateErr := d.secondActor.RemoteMutate(context.Background(), d.entityID, psn, keystone.PrepareUploads(file1))
+	remoteMutateErr := psn.Mutate(context.Background(), d.secondActor, keystone.PrepareUploads(file1))
 
 	return requirements.TestResult{
 		Name:  "Upload to Remote Entity",
