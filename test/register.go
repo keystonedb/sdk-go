@@ -18,6 +18,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/prewrite"
 	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
+	"github.com/keystonedb/sdk-go/test/requirements/remote"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
 	"github.com/keystonedb/sdk-go/test/requirements/setfalse"
 	"github.com/keystonedb/sdk-go/test/requirements/shared_views"
@@ -54,10 +55,10 @@ func init() {
 	reqs = append(reqs, &ratelimit.Requirement{})
 	reqs = append(reqs, &prewrite.Requirement{})
 	reqs = append(reqs, &objects.Requirement{})
+	reqs = append(reqs, &remote.Requirement{})
 
-	//TODO: Test Remote Mutate
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &objects.Requirement{})
+		reqs = append(reqs, &remote.Requirement{})
 	}
 }
