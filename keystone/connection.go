@@ -139,6 +139,8 @@ func (c *Connection) SyncSchema() *sync.WaitGroup {
 						c.typeRegister[typ].Options = resp.GetOptions()
 						c.typeRegister[typ].Singular = resp.GetSingular()
 						c.typeRegister[typ].Plural = resp.GetPlural()
+					} else {
+						c.logger.Error("Failed to define schema", zap.Error(err))
 					}
 
 				}
