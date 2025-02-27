@@ -22,6 +22,7 @@ type DataTypes struct {
 	StringSet    keystone.StringSet
 	IntegerSet   keystone.IntSet
 	RawData      []byte
+	MinMax       keystone.MinMax
 }
 
 func (t DataTypes) GetKeystoneDefinition() keystone.TypeDefinition {

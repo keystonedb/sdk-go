@@ -59,6 +59,6 @@ func init() {
 
 	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &remote.Requirement{})
+		reqs = append(reqs, &datatypes.Requirement{})
 	}
 }

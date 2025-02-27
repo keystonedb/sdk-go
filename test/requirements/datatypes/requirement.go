@@ -20,6 +20,7 @@ var (
 	Amount       = keystone.NewAmount("USD", 130)
 	Secret       = keystone.NewSecretString("secretval", "secre***")
 	Verify       = keystone.NewVerifyString("toverify")
+	MinMax       = keystone.NewMinMax(12, 18)
 	Boolean      = true
 	Float        = 19.85
 	Map          = map[string]string{"key": "value", "key2": "value2"} // not setting
@@ -64,6 +65,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Secret:       Secret,
 		Verify:       Verify,
 		Boolean:      Boolean,
+		MinMax:       MinMax,
 		Float:        Float,
 		Map:          Map,
 		StringSlice:  StringSlice,
@@ -102,6 +104,8 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("secret mismatch")
 		} else if dt.Boolean != Boolean {
 			getErr = errors.New("boolean mismatch")
+		} else if dt.MinMax != MinMax {
+			getErr = errors.New("MinMax mismatch")
 		} else if dt.Float != Float {
 			getErr = errors.New("float mismatch")
 		} else if !reflect.DeepEqual(dt.Map, Map) {
