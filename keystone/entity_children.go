@@ -48,27 +48,37 @@ func (e *EmbeddedChildren) setChildID(writeReference, cid string) {
 func (e *EmbeddedChildren) GetChildrenToStore() []*proto.EntityChild {
 	var children []*proto.EntityChild
 	for writeRef, child := range e.ksEntityChildren {
-		var aggregateValue int64
-		if nca, ok := child.(NestedChildAggregateValue); ok {
-			aggregateValue = nca.AggregateValue()
-		}
-
-		cType := ""
-		if c, o := child.(*Child); o {
-			cType = c.keyType()
-		} else {
-			cType = Type(child)
-		}
-
-		children = append(children, &proto.EntityChild{
+		eChild := &proto.EntityChild{
 			WriteReference: writeRef,
-			Type:           &proto.Key{Key: cType},
 			Cid:            child.ChildID(),
-			Value:          aggregateValue,
-			Data:           child.KeystoneData(),
-			AppendData:     child.KeystoneDataAppend(),
-			RemoveData:     child.KeystoneRemoveData(),
-		})
+		}
+
+		if c, o := child.(*DynamicChild); o {
+			eChild.Type = &proto.Key{Key: c.keyType()}
+		} else {
+			eChild.Type = &proto.Key{Key: Type(child)}
+		}
+
+		if nca, ok := child.(NestedChildAggregateValue); ok {
+			eChild.Value = nca.AggregateValue()
+		}
+
+		simpleData := true
+		if nc, ok := child.(NestedChildDataProvider); ok {
+			eChild.Data = nc.KeystoneData()
+			simpleData = false
+		}
+		if nc, ok := child.(NestedChildDataMutator); ok {
+			eChild.AppendData = nc.KeystoneDataAppend()
+			eChild.RemoveData = nc.KeystoneRemoveData()
+			simpleData = false
+		}
+
+		if simpleData {
+			eChild.Data = ToByteMap(child)
+		}
+
+		children = append(children, eChild)
 	}
 	return children
 }

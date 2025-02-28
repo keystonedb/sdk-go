@@ -38,15 +38,21 @@ type ChildEntity interface {
 type NestedChild interface {
 	ChildID() string
 	SetChildID(id string)
-	KeystoneData() map[string][]byte
-	KeystoneDataAppend() map[string][]byte
-	KeystoneRemoveData() []string
 }
 
 // NestedChildAggregateValue defines the aggregate Value of a child entity
 type NestedChildAggregateValue interface {
 	AggregateValue() int64
 	SetAggregateValue(val int64)
+}
+
+type NestedChildDataProvider interface {
+	KeystoneData() map[string][]byte
+}
+
+type NestedChildDataMutator interface {
+	KeystoneDataAppend() map[string][]byte
+	KeystoneRemoveData() []string
 }
 
 type MutationObserver interface {
