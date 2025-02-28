@@ -72,8 +72,13 @@ func (e *Child) SetChildID(id string) {
 	}
 }
 
-func (e *Child) AggregateValue() int64                 { return e._aggregate }
-func (e *Child) SetAggregateValue(val int64)           { e._aggregate = val }
-func (e *Child) KeystoneData() map[string][]byte       { return e._data }
+func (e *Child) AggregateValue() int64       { return e._aggregate }
+func (e *Child) SetAggregateValue(val int64) { e._aggregate = val }
+func (e *Child) KeystoneData() map[string][]byte {
+	if e._data == nil && e._src != nil {
+		return ToByteMap(e._src)
+	}
+	return e._data
+}
 func (e *Child) KeystoneDataAppend() map[string][]byte { return nil }
 func (e *Child) KeystoneRemoveData() []string          { return nil }
