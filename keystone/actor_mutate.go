@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/keystonedb/sdk-go/proto"
+	"github.com/packaged/logger/v3/logger"
 	"reflect"
 )
 
@@ -81,6 +82,9 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 		return errors.New("mutate requires a pointer to a struct")
 	}
 
+	var onSuccess []func() error
+	var onSuccessMutate []func(response *proto.MutateResponse)
+
 	schema, registered := a.connection.registerType(src)
 	if !registered {
 		// wait for the type to be registered with the keystone server
@@ -99,27 +103,37 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 
 	if entityWithLabels, ok := src.(LabelProvider); ok {
 		mutation.Labels = entityWithLabels.GetLabels()
+		onSuccess = append(onSuccess, entityWithLabels.ClearLabels)
 	}
 
 	if entityWithSensor, ok := src.(SensorProvider); ok {
 		mutation.Measurements = entityWithSensor.GetSensorMeasurements()
+		onSuccess = append(onSuccess, entityWithSensor.ClearSensorMeasurements)
 	}
 
 	if entityWithRelationships, ok := src.(RelationshipProvider); ok {
 		mutation.Relationships = entityWithRelationships.GetRelationships()
+		onSuccess = append(onSuccess, entityWithRelationships.ClearRelationships)
 	}
 
 	if entityWithEvents, ok := src.(EventProvider); ok {
 		mutation.Events = entityWithEvents.GetEvents()
+		onSuccess = append(onSuccess, entityWithEvents.ClearEvents)
 	}
 
 	if entityWithLogs, ok := src.(LogProvider); ok {
 		mutation.Logs = entityWithLogs.GetLogs()
+		onSuccess = append(onSuccess, entityWithLogs.ClearLogs)
 	}
 
-	if entityWithLogs, ok := src.(ChildProvider); ok {
-		mutation.Children = entityWithLogs.GetChildrenToStore()
-		mutation.RemoveChildren = entityWithLogs.GetChildrenToRemove()
+	if entityWithChildren, ok := src.(ChildProvider); ok {
+		mutation.Children = entityWithChildren.GetChildrenToStore()
+		mutation.RemoveChildren = entityWithChildren.GetChildrenToRemove()
+
+		if entityWithEChildren, okU := src.(ChildUpdateProvider); okU {
+			onSuccessMutate = append(onSuccessMutate, entityWithEChildren.updateChildren)
+		}
+		onSuccess = append(onSuccess, entityWithChildren.ClearChildChanges)
 	}
 
 	if len(props) > 0 {
@@ -146,6 +160,10 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 	mResp, err := a.connection.Mutate(ctx, m)
 
 	if err == nil && mResp.Success {
+		for _, onMutateSuccessFunc := range onSuccessMutate {
+			onMutateSuccessFunc(mResp)
+		}
+
 		for _, option := range options {
 			if optObserver, ok := option.(MutationObserver); ok {
 				optObserver.MutationSuccess(mResp)
@@ -160,6 +178,11 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 			rawEntity.MutationSuccess(mResp)
 			observeMutation(rawEntity, mResp)
 		}
+
+		for _, onSuccessFunc := range onSuccess {
+			logger.I().ErrorIf(onSuccessFunc(), "failed to run onSuccess function")
+		}
+
 	}
 
 	return mutateToError(mResp, err)

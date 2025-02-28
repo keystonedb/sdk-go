@@ -59,7 +59,7 @@ func init() {
 	reqs = append(reqs, &remote.Requirement{})
 	reqs = append(reqs, &nested_children.Requirement{})
 
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
 		reqs = append(reqs, &nested_children.Requirement{})
 	}

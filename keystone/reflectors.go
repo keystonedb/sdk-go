@@ -84,6 +84,8 @@ func GetReflector(t reflect.Type, v reflect.Value) Reflector {
 
 		if ref, ok := sliceKindReflector[t.Elem().Kind()]; ok {
 			return ref
+		} else {
+			//TODO: Add support for other slice types, maybe json blobs?
 		}
 	}
 
