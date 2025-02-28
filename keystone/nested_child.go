@@ -43,6 +43,21 @@ func (e *DynamicChild) keyType() string {
 	return e._type
 }
 
+func (e *DynamicChild) KeystoneData() map[string][]byte {
+	return e._data
+}
+
+func (e *DynamicChild) KeystoneDataAppend() map[string][]byte {
+	return e._append
+}
+func (e *DynamicChild) KeystoneRemoveData() []string {
+	var keys []string
+	for k := range e._reduce {
+		keys = append(keys, k)
+	}
+	return keys
+}
+
 func (e *DynamicChild) SetChildID(id string) {
 	e._childID = id
 	if e._src == nil {

@@ -73,11 +73,21 @@ func (a *Actor) Get(ctx context.Context, retrieveBy RetrieveBy, dst interface{},
 		lk.SetLockResult(LockData)
 	}
 
+	for _, option := range retrieve {
+		if observe, ok := option.(RetrieveObserver); ok {
+			observe.ObserveRetrieve(resp)
+		}
+	}
+
 	if gr, ok := dst.(GenericResult); ok {
 		return UnmarshalGeneric(resp, gr)
 	}
 
 	return Unmarshal(resp, dst)
+}
+
+type RetrieveObserver interface {
+	ObserveRetrieve(resp *proto.EntityResponse)
 }
 
 // GetSharedByID retrieves an entity by the given retrieveBy, storing the result in dst

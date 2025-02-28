@@ -49,6 +49,9 @@ type NestedChildAggregateValue interface {
 type NestedChildDataProvider interface {
 	KeystoneData() map[string][]byte
 }
+type NestedChildDataReceiver interface {
+	FromKeystoneData(map[string][]byte)
+}
 
 type NestedChildDataMutator interface {
 	KeystoneDataAppend() map[string][]byte

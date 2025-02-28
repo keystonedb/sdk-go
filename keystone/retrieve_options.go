@@ -101,11 +101,6 @@ func WithLabels() RetrieveOption {
 	return labelLoader{labels: true}
 }
 
-// WithChildren is a retrieve option that loads Children
-func WithChildren(childType string, ids ...string) RetrieveOption {
-	return childrenLoader{childType: childType, ids: ids}
-}
-
 type propertyLoader struct {
 	properties []string
 	decrypt    bool
@@ -128,22 +123,6 @@ func (l relationshipsLoader) Apply(config *proto.EntityView) {
 	for _, key := range l.keys {
 		config.RelationshipByType = append(config.RelationshipByType, &proto.Key{Key: key})
 	}
-}
-
-type childrenLoader struct {
-	childType string
-	ids       []string
-}
-
-func (l childrenLoader) Apply(config *proto.EntityView) {
-	if config.Children == nil {
-		config.Children = make([]*proto.ChildRequest, 0)
-	}
-
-	config.Children = append(config.Children, &proto.ChildRequest{
-		Type: &proto.Key{Key: l.childType},
-		Cid:  l.ids,
-	})
 }
 
 type viewName struct{ name string }
