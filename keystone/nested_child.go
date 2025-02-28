@@ -75,8 +75,8 @@ func (e *Child) SetChildID(id string) {
 func (e *Child) AggregateValue() int64       { return e._aggregate }
 func (e *Child) SetAggregateValue(val int64) { e._aggregate = val }
 func (e *Child) KeystoneData() map[string][]byte {
-	if e._data == nil && e._src != nil {
-		return ToByteMap(e._src)
+	if e._data == nil && e._src == nil {
+		return ToByteMap(e)
 	}
 	return e._data
 }
