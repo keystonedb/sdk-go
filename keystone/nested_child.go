@@ -55,10 +55,18 @@ func (e *Child) Reduce(key string) {
 	delete(e._append, key)
 }
 
-func (e *Child) keyType() string { return e._type }
+func (e *Child) keyType() string {
+	if e._type == "" && e._src != nil {
+		e._type = Type(e._src)
+	}
+	return e._type
+}
 func (e *Child) ChildID() string { return e._childID }
 func (e *Child) SetChildID(id string) {
 	e._childID = id
+	if e._src == nil {
+		return
+	}
 	if c, o := e._src.(NestedChild); o {
 		c.SetChildID(id)
 	}
