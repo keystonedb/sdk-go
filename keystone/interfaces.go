@@ -38,6 +38,9 @@ type ChildEntity interface {
 type NestedChild interface {
 	ChildID() string
 	SetChildID(id string)
+	KeystoneData() map[string][]byte
+	KeystoneDataAppend() map[string][]byte
+	KeystoneRemoveData() []string
 }
 
 // NestedChildAggregateValue defines the aggregate Value of a child entity
