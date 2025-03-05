@@ -46,3 +46,26 @@ func TestNewAmount(t *testing.T) {
 		t.Error("Units should be 100")
 	}
 }
+
+func TestSumAmounts(t *testing.T) {
+	tests := []struct {
+		expect  Amount
+		amounts []Amount
+	}{
+		{Amount{"", 0}, []Amount{}},
+		{Amount{"USD", 100}, []Amount{{"USD", 100}}},
+		{Amount{"USD", 200}, []Amount{{"USD", 100}, {"USD", 100}}},
+		{Amount{"USD", 300}, []Amount{{"USD", 100}, {"USD", 100}, {"USD", 100}}},
+		{Amount{CurrencyMixed, 200}, []Amount{{"GBP", 100}, {"USD", 100}}},
+	}
+
+	for _, test := range tests {
+		amount := SumAmounts(test.amounts...)
+		if amount.Currency != test.expect.Currency {
+			t.Error("Currency should be", test.expect.Currency)
+		}
+		if amount.Units != test.expect.Units {
+			t.Error("Units should be", test.expect.Units)
+		}
+	}
+}
