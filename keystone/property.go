@@ -129,6 +129,8 @@ func getFieldOptions(f reflect.StructField) fieldOptions {
 			opt.searchable = true
 		case "immutable":
 			opt.immutable = true
+		case "deprecated":
+			opt.deprecated = true
 		case "required", "req":
 			opt.required = true
 		case "lookup":
@@ -160,6 +162,7 @@ type fieldOptions struct {
 	indexed       bool
 	searchable    bool
 	immutable     bool
+	deprecated    bool
 	required      bool
 	reverseLookup bool
 	verifyOnly    bool
@@ -197,6 +200,7 @@ func (fOpt fieldOptions) applyOptions(onto []proto.Property_Option) []proto.Prop
 	onto = appendOption(proto.Property_Unique, onto, fOpt.unique)
 	onto = appendOption(proto.Property_Indexed, onto, fOpt.indexed)
 	onto = appendOption(proto.Property_Immutable, onto, fOpt.immutable)
+	onto = appendOption(proto.Property_Deprecated, onto, fOpt.deprecated)
 	onto = appendOption(proto.Property_Required, onto, fOpt.required)
 	onto = appendOption(proto.Property_ReverseLookup, onto, fOpt.reverseLookup)
 	onto = appendOption(proto.Property_Searchable, onto, fOpt.searchable)
