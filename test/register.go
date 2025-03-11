@@ -8,6 +8,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/daily"
 	"github.com/keystonedb/sdk-go/test/requirements/datatypes"
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
+	"github.com/keystonedb/sdk-go/test/requirements/embedded"
 	"github.com/keystonedb/sdk-go/test/requirements/events"
 	"github.com/keystonedb/sdk-go/test/requirements/immutable"
 	"github.com/keystonedb/sdk-go/test/requirements/labels"
@@ -58,9 +59,10 @@ func init() {
 	reqs = append(reqs, &objects.Requirement{})
 	reqs = append(reqs, &remote.Requirement{})
 	reqs = append(reqs, &nested_children.Requirement{})
+	reqs = append(reqs, &embedded.Requirement{})
 
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &nested_children.Requirement{})
+		reqs = append(reqs, &embedded.Requirement{})
 	}
 }
