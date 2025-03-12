@@ -62,12 +62,12 @@ func WhereIn(key string, value ...any) FindOption {
 
 // WhereNotIn is a find option that filters entities by a Property not being in a list of values
 func WhereNotIn(key string, value ...any) FindOption {
-	return propertyFilter{key: key, values: valuesFromAny(value...), operator: proto.Operator_Equal}
+	return propertyFilter{key: key, values: valuesFromAny(value...), operator: proto.Operator_NotEqual}
 }
 
 // WhereBetween is a find option that filters entities by a Property being between two values
 func WhereBetween(key string, value1, value2 any) FindOption {
-	return propertyFilter{key: key, values: valuesFromAny(value1, value2), operator: proto.Operator_Equal}
+	return propertyFilter{key: key, values: valuesFromAny(value1, value2), operator: proto.Operator_Between}
 }
 
 type propertyFilter struct {
