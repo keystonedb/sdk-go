@@ -80,7 +80,7 @@ func (d *Requirement) unique(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) find(actor *keystone.Actor) requirements.TestResult {
 
 	mdl := &models.Embedded{}
-	entities, getErr := actor.Find(context.Background(), keystone.Type(mdl), keystone.WithProperties("extended.unique_id"), keystone.WhereEquals("extended.lookup_value", d.lookup))
+	entities, getErr := actor.Find(context.Background(), keystone.Type(mdl), keystone.WithProperties("extended.unique_id", "extended_ref.unique_id"), keystone.WhereEquals("extended.lookup_value", d.lookup))
 
 	if getErr == nil {
 		switch len(entities) {
@@ -92,6 +92,8 @@ func (d *Requirement) find(actor *keystone.Actor) requirements.TestResult {
 				getErr = errors.New("did not find the correct entity")
 			} else if mdl.Extended.UniqueID != d.uid {
 				getErr = errors.New("did not load the extended data")
+			} else if mdl.ExtendedRef.UniqueID != d.uid {
+				getErr = errors.New("did not load the extended ref data")
 			}
 		default:
 			getErr = errors.New("found too many entities")

@@ -201,9 +201,18 @@ func UnmarshalProperties(data map[Property]*proto.Value, v interface{}) error {
 			if err := ref.SetValue(toHydrate, currentVal); err != nil {
 				return err
 			}
-		} else if field.Type.Kind() == reflect.Struct && len(subData) > 0 {
-			if err := UnmarshalProperties(subData, currentVal.Addr().Interface()); err != nil {
-				return err
+		} else if len(subData) > 0 {
+			if field.Type.Kind() == reflect.Ptr && field.Type.Elem().Kind() == reflect.Struct {
+				if currentVal.IsZero() {
+					currentVal.Set(reflect.New(field.Type.Elem()))
+				}
+				if err := UnmarshalProperties(subData, currentVal.Interface()); err != nil {
+					return err
+				}
+			} else if field.Type.Kind() == reflect.Struct {
+				if err := UnmarshalProperties(subData, currentVal.Addr().Interface()); err != nil {
+					return err
+				}
 			}
 		}
 	}
