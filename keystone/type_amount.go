@@ -18,7 +18,14 @@ func NewAmount(currency string, units int64) Amount {
 	}
 }
 
+func (a *Amount) IsZero() bool {
+	return a.Units == 0 && a.Currency == ""
+}
+
 func (a *Amount) MarshalValue() (*proto.Value, error) {
+	if a.IsZero() {
+		return nil, nil
+	}
 	return &proto.Value{
 		Text: a.Currency,
 		Int:  a.Units,
