@@ -27,10 +27,10 @@ func (e *entityConverter) KeystoneProperties() map[Property]*proto.Value {
 
 	if e.protoResponse.Entity != nil {
 		er := e.protoResponse.Entity
-		split := strings.Split(er.GetEntityId(), "-")
-		resp[knownProperty("_entity_id")] = valueFromString(split[0])
-		if len(split) == 2 {
-			resp[knownProperty("_child_id")] = valueFromString(split[1])
+		eid := ID(er.GetEntityId())
+		resp[knownProperty("_entity_id")] = valueFromString(eid.ParentID())
+		if cid := eid.ChildID(); cid != "" {
+			resp[knownProperty("_child_id")] = valueFromString(cid)
 		}
 
 		resp[knownProperty("_schema_id")] = valueFromString(er.GetSchemaId())
@@ -67,6 +67,34 @@ func (e *entityConverter) KeystoneProperties() map[Property]*proto.Value {
 				countReplace[fmt.Sprintf("_count_descendant:%s:%s", t.GetSource().GetAppId(), t.GetKey())] = cnt
 				countReplace[fmt.Sprintf("_count_descendant:%s", t.GetKey())] = cnt
 			}
+		}
+	}
+
+	if e.protoResponse.GetChildSummary() != nil {
+		for _, v := range e.protoResponse.GetChildSummary() {
+			t := v.GetType()
+			childCount := v.GetCount()
+			childSum := v.GetSum()
+			childMin := v.GetMin()
+			childMax := v.GetMax()
+			childAvg := v.GetAvg()
+
+			for replaceType, replaceWith := range map[string]int64{
+				"_child_count": childCount,
+				"_child_sum":   childSum,
+				"_child_min":   childMin,
+				"_child_max":   childMax,
+				"_child_avg":   childAvg,
+			} {
+				if t.GetKey() == "" {
+					countReplace[replaceType] = replaceWith
+				} else {
+					countReplace[fmt.Sprintf("%s:%s:%s:%s", replaceType, t.GetSource().GetVendorId(), t.GetSource().GetAppId(), t.GetKey())] = replaceWith
+					countReplace[fmt.Sprintf("%s:%s:%s", replaceType, t.GetSource().GetAppId(), t.GetKey())] = replaceWith
+					countReplace[fmt.Sprintf("%s:%s", replaceType, t.GetKey())] = replaceWith
+				}
+			}
+
 		}
 	}
 

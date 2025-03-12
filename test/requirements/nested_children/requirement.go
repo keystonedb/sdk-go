@@ -29,6 +29,7 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 	return []requirements.TestResult{
 		d.writeChildren(actor),
+		d.summaryChildren(actor),
 		d.removeChild(actor),
 		d.loadChildren(actor),
 		d.updateChildren(actor),
@@ -75,6 +76,38 @@ func (d *Requirement) writeChildren(actor *keystone.Actor) requirements.TestResu
 		Name:  "Create File with Nested Lines",
 		Error: createErr,
 	}
+}
+
+func (d *Requirement) summaryChildren(actor *keystone.Actor) requirements.TestResult {
+
+	res := requirements.TestResult{
+		Name: "Load the file with child summaries",
+	}
+
+	sub := &models.File{}
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(sub, d.fileID), sub, keystone.WithChildSummary())
+
+	if sub.NumLines != 3 {
+		return res.WithError(fmt.Errorf("expected 3 lines, got %d", sub.NumLines))
+	}
+	if sub.SumLines != 6 {
+		return res.WithError(fmt.Errorf("expected 6 sum, got %d", sub.SumLines))
+	}
+	if sub.MinLines != 1 {
+		return res.WithError(fmt.Errorf("expected 1 min, got %d", sub.MinLines))
+	}
+	if sub.MaxLines != 3 {
+		return res.WithError(fmt.Errorf("expected 3 max, got %d", sub.MaxLines))
+	}
+	if sub.AvgLines != 2 {
+		return res.WithError(fmt.Errorf("expected 2 avg, got %d", sub.AvgLines))
+	}
+
+	if getErr != nil {
+		return res.WithError(getErr)
+	}
+
+	return res
 }
 
 func (d *Requirement) removeChild(actor *keystone.Actor) requirements.TestResult {
@@ -129,6 +162,7 @@ func (d *Requirement) loadChildren(actor *keystone.Actor) requirements.TestResul
 
 	return res
 }
+
 func (d *Requirement) updateChildren(actor *keystone.Actor) requirements.TestResult {
 
 	sub := &models.File{}
@@ -144,6 +178,7 @@ func (d *Requirement) updateChildren(actor *keystone.Actor) requirements.TestRes
 		Error: writeErr,
 	}
 }
+
 func (d *Requirement) verifyChildren(actor *keystone.Actor) requirements.TestResult {
 
 	res := requirements.TestResult{

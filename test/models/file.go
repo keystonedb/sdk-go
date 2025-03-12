@@ -9,6 +9,12 @@ type File struct {
 	FileName string
 	Size     int64
 	Lines    []*FileLine
+
+	NumLines int64 `keystone:"_child_count:file-line"`
+	SumLines int64 `keystone:"_child_sum:file-line"`
+	MinLines int64 `keystone:"_child_min:file-line"`
+	MaxLines int64 `keystone:"_child_max:file-line"`
+	AvgLines int64 `keystone:"_child_avg:file-line"`
 }
 
 type FileLine struct {
