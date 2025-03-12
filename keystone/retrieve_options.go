@@ -12,11 +12,11 @@ type RetrieveBy interface {
 
 // byEntityID is a retriever that retrieves an entity by its ID
 type byEntityID struct {
-	EntityID string
+	EntityID ID
 	Type     string
 }
 
-func ByEntityID(entityType interface{}, entityID string) RetrieveBy {
+func ByEntityID(entityType interface{}, entityID ID) RetrieveBy {
 	return byEntityID{EntityID: entityID, Type: Type(entityType)}
 }
 
@@ -24,7 +24,7 @@ func ByEntityID(entityType interface{}, entityID string) RetrieveBy {
 func (l byEntityID) BaseRequest() *proto.EntityRequest {
 	return &proto.EntityRequest{
 		View:     &proto.EntityView{},
-		EntityId: l.EntityID,
+		EntityId: string(l.EntityID),
 	}
 }
 

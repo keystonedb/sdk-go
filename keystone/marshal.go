@@ -59,8 +59,16 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 			} else {
 				properties[currentProp] = protoVal
 			}
-		} else if field.Type.Kind() == reflect.Struct {
-			subProps, err := Marshal(currentVal.Interface())
+		} else if !currentVal.IsZero() {
+			var subProps map[Property]*proto.Value
+			var err error
+
+			if field.Type.Kind() == reflect.Ptr && field.Type.Elem().Kind() == reflect.Struct {
+				subProps, err = Marshal(reflector.Deref(currentVal).Interface())
+			} else if field.Type.Kind() == reflect.Struct {
+				subProps, err = Marshal(currentVal.Interface())
+			}
+
 			if err != nil {
 				return nil, err
 			} else {

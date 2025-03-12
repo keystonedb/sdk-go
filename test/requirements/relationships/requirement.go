@@ -12,9 +12,9 @@ import (
 )
 
 type Requirement struct {
-	PersonID       string
-	TransactionID  string
-	Transaction2ID string
+	PersonID       keystone.ID
+	TransactionID  keystone.ID
+	Transaction2ID keystone.ID
 }
 
 func (d *Requirement) Name() string {
@@ -140,9 +140,9 @@ func (d *Requirement) lookup(actor *keystone.Actor) requirements.TestResult {
 
 	l1, l2 := false, false
 	for _, t := range transactions {
-		if t.GetEntity().GetEntityId() == d.TransactionID {
+		if d.TransactionID.Matches(t.GetEntity().GetEntityId()) {
 			l1 = true
-		} else if t.GetEntity().GetEntityId() == d.Transaction2ID {
+		} else if d.Transaction2ID.Matches(t.GetEntity().GetEntityId()) {
 			l2 = true
 		}
 	}
@@ -179,7 +179,7 @@ func (d *Requirement) loadRelations(actor *keystone.Actor) requirements.TestResu
 
 	for _, rel := range psn.GetRelationships() {
 		if rel.GetRelationship().GetKey() == "payment" {
-			if rel.GetTargetId() == d.TransactionID {
+			if d.TransactionID.Matches(rel.GetTargetId()) {
 				if rel.GetData()["initial"] != "true" {
 					res.Error = errors.New("initial payment data not found")
 					return res

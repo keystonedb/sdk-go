@@ -13,7 +13,7 @@ const vendor2ID = "ven2"
 const app2ID = "remote"
 
 type Requirement struct {
-	entityID         string
+	entityID         keystone.ID
 	psn              *models.Person
 	secondConnection *keystone.Connection
 	secondActor      *keystone.Actor

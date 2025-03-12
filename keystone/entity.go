@@ -17,16 +17,16 @@ type BaseEntity struct {
 }
 
 type EmbeddedEntity struct {
-	_entityID string
+	_entityID ID
 }
 
 func (e *EmbeddedEntity) MutationSuccess(resp *proto.MutateResponse) {
 	if e._entityID == "" && resp.EntityId != "" {
-		e._entityID = resp.EntityId
+		e._entityID = ID(resp.EntityId)
 	}
 }
 
-func (e *EmbeddedEntity) GetKeystoneID() string {
+func (e *EmbeddedEntity) GetKeystoneID() ID {
 	return e._entityID
 }
-func (e *EmbeddedEntity) SetKeystoneID(id string) { e._entityID = id }
+func (e *EmbeddedEntity) SetKeystoneID(id ID) { e._entityID = id }

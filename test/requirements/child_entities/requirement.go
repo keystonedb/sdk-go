@@ -11,7 +11,7 @@ import (
 )
 
 type Requirement struct {
-	subscriptionId string
+	subscriptionId keystone.ID
 }
 
 func (d *Requirement) Name() string {

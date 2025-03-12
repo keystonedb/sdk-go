@@ -1,7 +1,5 @@
 package keystone
 
-import "strings"
-
 // BaseChildEntity is a full entity, but keyed under a parent entity
 type BaseChildEntity struct {
 	BaseEntity
@@ -9,24 +7,20 @@ type BaseChildEntity struct {
 	_childID  string
 }
 
-func (e *BaseChildEntity) SetKeystoneID(id string) {
+func (e *BaseChildEntity) SetKeystoneID(id ID) {
 	e._entityID = id
-	split := strings.Split(e._entityID, "-")
-	e._parentID = split[0]
-	if len(split) > 1 {
-		e._childID = split[1]
-	}
+	e._parentID = id.ParentID()
+	e._childID = id.ChildID()
 }
 
-func (e *BaseChildEntity) SetKeystoneParentID(id string) {
-	if strings.Contains(id, "-") {
-		e.SetKeystoneID(id)
-	} else {
-		e._parentID = id
-	}
-
+func (e *BaseChildEntity) SetKeystoneParentID(id ID) {
+	e._parentID = id.ParentID()
 	if e._entityID == "" {
-		e._entityID = e._parentID
+		if e._childID != "" {
+			e._entityID = ID(id.ParentID() + "-" + e._childID)
+		} else {
+			e._entityID = ID(id.ParentID())
+		}
 	}
 }
 
@@ -36,20 +30,14 @@ func (e *BaseChildEntity) SetKeystoneChildID(id string) {
 
 func (e *BaseChildEntity) GetKeystoneParentID() string {
 	if e._parentID == "" {
-		split := strings.Split(e._entityID, "-")
-		e._parentID = split[0]
+		return e._entityID.ParentID()
 	}
 	return e._parentID
 }
 
 func (e *BaseChildEntity) GetKeystoneChildID() string {
 	if e._childID == "" {
-		split := strings.Split(e._entityID, "-")
-		if len(split) < 2 {
-			return ""
-		}
-
-		e._childID = split[1]
+		return e._entityID.ChildID()
 	}
 	return e._childID
 }

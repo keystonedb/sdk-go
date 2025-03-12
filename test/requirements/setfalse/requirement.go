@@ -10,14 +10,14 @@ import (
 
 type Todo struct {
 	keystone.BaseEntity
-	ID        string `keystone:"_entity_id" json:"id"`
-	Title     string `json:"title"`
-	Details   string `json:"details"`
-	Completed bool   `json:"completed"`
+	ID        keystone.ID `keystone:"_entity_id" json:"id"`
+	Title     string      `json:"title"`
+	Details   string      `json:"details"`
+	Completed bool        `json:"completed"`
 }
 
 type Requirement struct {
-	createdID string
+	createdID keystone.ID
 }
 
 func (d *Requirement) Name() string {

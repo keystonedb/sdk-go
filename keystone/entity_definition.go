@@ -104,13 +104,19 @@ func MapPropertiesWithPrefix(v interface{}, prefix string) (map[Property]proto.P
 		ref := GetReflector(field.Type, currentVal)
 		if ref != nil {
 			properties[currentProp] = mergeDefinitions(def, ref.PropertyDefinition())
-		} else if field.Type.Kind() == reflect.Struct {
-			subProps, err := MapPropertiesWithPrefix(currentVal.Interface(), currentProp.Name())
+		} else {
+			var subProps map[Property]proto.PropertyDefinition
+			var err error
+			if field.Type.Kind() == reflect.Ptr && field.Type.Elem().Kind() == reflect.Struct {
+				subProps, err = MapPropertiesWithPrefix(reflect.New(field.Type.Elem()).Interface(), currentProp.Name())
+			} else if field.Type.Kind() == reflect.Struct {
+				subProps, err = MapPropertiesWithPrefix(currentVal.Interface(), currentProp.Name())
+			}
 			if err != nil {
 				return nil, err
-			} else {
+			}
+			if subProps != nil {
 				for k, subV := range subProps {
-					//k.SetPrefix(prefix)
 					properties[k] = subV
 				}
 			}

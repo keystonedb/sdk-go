@@ -23,7 +23,7 @@ func Unmarshal(from *proto.EntityResponse, v interface{}) error {
 	data := conv.Properties()
 
 	if e, ok := v.(Entity); ok && from.Entity != nil {
-		e.SetKeystoneID(from.Entity.GetEntityId())
+		e.SetKeystoneID(ID(from.Entity.GetEntityId()))
 	}
 
 	if e, ok := v.(RelationshipProvider); ok && from.Relationships != nil {

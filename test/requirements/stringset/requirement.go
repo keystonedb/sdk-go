@@ -11,7 +11,7 @@ import (
 )
 
 type Requirement struct {
-	createdID string
+	createdID keystone.ID
 }
 
 type Settable struct {

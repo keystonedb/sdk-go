@@ -10,7 +10,7 @@ type SharedView struct {
 	piiProperties    map[string]string
 	secureProperties map[string]string
 	comment          string
-	entityID         string
+	entityID         ID
 	allWorkspaces    bool
 	entityType       string // Specific type if no entity ID specified
 }
@@ -34,7 +34,7 @@ func (s *SharedView) ForType(forType string) *SharedView {
 	return s
 }
 
-func (s *SharedView) ForEntity(entityID string) *SharedView {
+func (s *SharedView) ForEntity(entityID ID) *SharedView {
 	s.entityID = entityID
 	return s
 }
@@ -63,7 +63,7 @@ func (s *SharedView) WithComment(comment string) *SharedView {
 func (a *Actor) ShareView(ctx context.Context, with *proto.VendorApp, def *SharedView) (*proto.SharedViewResponse, error) {
 	req := &proto.ShareViewRequest{
 		Authorization:         a.Authorization(),
-		EntityId:              def.entityID,
+		EntityId:              string(def.entityID),
 		AllWorkspaces:         def.allWorkspaces,
 		EntityType:            def.entityType,
 		ShareWith:             with,
@@ -76,11 +76,11 @@ func (a *Actor) ShareView(ctx context.Context, with *proto.VendorApp, def *Share
 	return a.connection.ShareView(ctx, req)
 }
 
-func (a *Actor) SharedViews(ctx context.Context, with *proto.VendorApp, entityID, entityType string, anyWorkspace bool) (*proto.SharedViewsResponse, error) {
+func (a *Actor) SharedViews(ctx context.Context, with *proto.VendorApp, entityID ID, entityType string, anyWorkspace bool) (*proto.SharedViewsResponse, error) {
 	req := &proto.SharedViewsRequest{
 		Authorization: a.Authorization(),
 		ShareWith:     with,
-		EntityId:      entityID,
+		EntityId:      string(entityID),
 		EntityType:    entityType,
 		AllWorkspaces: anyWorkspace,
 	}

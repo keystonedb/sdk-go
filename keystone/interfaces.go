@@ -23,14 +23,14 @@ type Reflector interface {
 }
 
 type Entity interface {
-	GetKeystoneID() string
-	SetKeystoneID(id string)
+	GetKeystoneID() ID
+	SetKeystoneID(id ID)
 }
 
 type ChildEntity interface {
 	GetKeystoneParentID() string
 	GetKeystoneChildID() string
-	SetKeystoneParentID(id string)
+	SetKeystoneParentID(id ID)
 	SetKeystoneChildID(id string)
 }
 

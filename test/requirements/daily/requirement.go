@@ -13,7 +13,7 @@ import (
 
 type Requirement struct {
 	conn      *keystone.Connection
-	createdID string
+	createdID keystone.ID
 }
 
 func (d *Requirement) Name() string {
@@ -88,7 +88,7 @@ func (d *Requirement) scanEntities(actor *keystone.Actor) requirements.TestResul
 		}
 
 		for _, eid := range entities.GetEntities() {
-			if eid == d.createdID {
+			if d.createdID.Matches(eid) {
 				located = true
 				break
 			}

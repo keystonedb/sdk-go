@@ -10,7 +10,7 @@ import (
 
 var ErrCommentedMutations = errors.New("you must provide a mutation comment")
 
-func (a *Actor) RemoteMutate(ctx context.Context, entityID string, src interface{}, options ...MutateOption) error {
+func (a *Actor) RemoteMutate(ctx context.Context, entityID ID, src interface{}, options ...MutateOption) error {
 	mutation := &proto.Mutation{}
 
 	if entityID == "" {
@@ -35,7 +35,7 @@ func (a *Actor) RemoteMutate(ctx context.Context, entityID string, src interface
 
 	m := &proto.MutateRequest{
 		Authorization: a.Authorization(),
-		EntityId:      entityID,
+		EntityId:      entityID.String(),
 		Mutation:      mutation,
 	}
 
@@ -95,7 +95,7 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 	//properties
 	//children
 	mutation.Mutator = a.user
-	entityID := ""
+	entityID := ID("")
 
 	if rawEntity, ok := src.(Entity); ok {
 		entityID = rawEntity.GetKeystoneID()
@@ -144,7 +144,7 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 
 	m := &proto.MutateRequest{
 		Authorization: a.Authorization(),
-		EntityId:      entityID,
+		EntityId:      entityID.String(),
 		Schema:        &proto.Key{Key: schema.Type, Source: a.VendorApp()},
 		Mutation:      mutation,
 	}
@@ -171,7 +171,7 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 		}
 
 		if rawEntity, ok := src.(Entity); ok && entityID == "" {
-			rawEntity.SetKeystoneID(mResp.GetEntityId())
+			rawEntity.SetKeystoneID(ID(mResp.GetEntityId()))
 		}
 
 		if rawEntity, ok := src.(MutationObserver); ok {

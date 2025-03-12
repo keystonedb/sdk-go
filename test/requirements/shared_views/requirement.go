@@ -15,7 +15,7 @@ const vendor2ID = "ven2"
 const app2ID = "ap2"
 
 type Requirement struct {
-	entityID         string
+	entityID         keystone.ID
 	sharedViewToken  string
 	psn              *models.Person
 	initialView      *proto.SharedViewResponse

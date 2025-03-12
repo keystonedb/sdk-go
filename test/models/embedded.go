@@ -4,8 +4,9 @@ import "github.com/keystonedb/sdk-go/keystone"
 
 type Embedded struct {
 	keystone.BaseEntity
-	Name     string
-	Extended ExtendedData
+	Name        string
+	Extended    ExtendedData
+	ExtendedRef *ExtendedData
 }
 
 type ExtendedData struct {

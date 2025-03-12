@@ -36,10 +36,10 @@ func (e *EmbeddedRelationships) SetRelationships(links []*proto.EntityRelationsh
 }
 
 // AddRelationship adds a relationship
-func (e *EmbeddedRelationships) AddRelationship(relationshipType, target string, meta map[string]string, since time.Time) {
+func (e *EmbeddedRelationships) AddRelationship(relationshipType string, target ID, meta map[string]string, since time.Time) {
 	e.ksEntityRelationships = append(e.ksEntityRelationships, &proto.EntityRelationship{
 		Relationship: &proto.Key{Key: relationshipType},
-		TargetId:     target,
+		TargetId:     target.String(),
 		Data:         meta,
 		Since:        timestamppb.New(since),
 	})

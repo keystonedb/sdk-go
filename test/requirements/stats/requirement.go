@@ -13,7 +13,7 @@ import (
 
 type Requirement struct {
 	conn      *keystone.Connection
-	createdID string
+	createdID keystone.ID
 }
 
 func (d *Requirement) Name() string {

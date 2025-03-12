@@ -11,7 +11,7 @@ import (
 )
 
 type Requirement struct {
-	fileID   string
+	fileID   keystone.ID
 	child1ID string
 	child2ID string
 	child3ID string

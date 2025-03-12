@@ -24,7 +24,7 @@ func (a *Actor) ReportTimeSeries(ctx context.Context, src interface{}) error {
 
 	mutation := &proto.Mutation{}
 	mutation.Mutator = a.user
-	entityID := ""
+	entityID := ID("")
 	if rawEntity, ok := src.(Entity); ok {
 		entityID = rawEntity.GetKeystoneID()
 	}
@@ -56,7 +56,7 @@ func (a *Actor) ReportTimeSeries(ctx context.Context, src interface{}) error {
 
 	m := &proto.ReportTimeSeriesRequest{
 		Authorization: a.Authorization(),
-		EntityId:      entityID,
+		EntityId:      entityID.String(),
 		Schema:        &proto.Key{Key: schema.Type, Source: a.VendorApp()},
 		Mutation:      mutation,
 		Timestamp:     inputTime,
@@ -66,7 +66,7 @@ func (a *Actor) ReportTimeSeries(ctx context.Context, src interface{}) error {
 
 	if err == nil && mResp.Success {
 		if rawEntity, ok := src.(Entity); ok && entityID == "" {
-			rawEntity.SetKeystoneID(mResp.GetEntityId())
+			rawEntity.SetKeystoneID(ID(mResp.GetEntityId()))
 		}
 	} else if err == nil {
 		err = errors.New("failed to store time series data " + mResp.GetTransactionId())

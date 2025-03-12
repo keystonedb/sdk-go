@@ -11,7 +11,7 @@ import (
 )
 
 type Requirement struct {
-	createdID string
+	createdID keystone.ID
 	lookupID  string
 }
 
@@ -70,7 +70,7 @@ func (d *Requirement) lookup(actor *keystone.Actor) requirements.TestResult {
 
 	located := false
 	for _, result := range results {
-		if result.GetEntity().GetEntityId() == d.createdID {
+		if d.createdID.Matches(result.GetEntity().GetEntityId()) {
 			located = true
 			break
 		}

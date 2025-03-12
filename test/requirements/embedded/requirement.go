@@ -11,7 +11,7 @@ import (
 )
 
 type Requirement struct {
-	createdID string
+	createdID keystone.ID
 	uid       string
 	lookup    string
 }
@@ -43,6 +43,8 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 			Price:       keystone.NewAmount("USD", 100),
 		},
 	}
+
+	mdl.ExtendedRef = &mdl.Extended
 
 	d.uid = mdl.Extended.UniqueID
 	d.lookup = mdl.Extended.LookupValue

@@ -6,7 +6,7 @@ import (
 	"github.com/keystonedb/sdk-go/proto"
 )
 
-func (a *Actor) GetByID(ctx context.Context, entityID string, dst interface{}, retrieve ...RetrieveOption) error {
+func (a *Actor) GetByID(ctx context.Context, entityID ID, dst interface{}, retrieve ...RetrieveOption) error {
 	return a.Get(ctx, ByEntityID(Type(dst), entityID), dst, retrieve...)
 }
 
@@ -91,7 +91,7 @@ type RetrieveObserver interface {
 }
 
 // GetSharedByID retrieves an entity by the given retrieveBy, storing the result in dst
-func (a *Actor) GetSharedByID(ctx context.Context, owner *proto.VendorApp, entityID string, dst interface{}, retrieve ...RetrieveOption) error {
+func (a *Actor) GetSharedByID(ctx context.Context, owner *proto.VendorApp, entityID ID, dst interface{}, retrieve ...RetrieveOption) error {
 	retrieveBy := ByEntityID(Type(dst), entityID)
 	entityRequest := retrieveBy.BaseRequest()
 	entityRequest.Authorization = a.Authorization()

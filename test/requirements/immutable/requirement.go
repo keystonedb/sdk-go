@@ -13,7 +13,7 @@ import (
 )
 
 type Requirement struct {
-	createdID string
+	createdID keystone.ID
 }
 
 func (d *Requirement) Name() string {
