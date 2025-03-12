@@ -11,15 +11,41 @@ type Amount struct {
 }
 
 // NewAmount creates a new Amount
-func NewAmount(currency string, units int64) Amount {
-	return Amount{
+func NewAmount(currency string, units int64) *Amount {
+	return &Amount{
 		Currency: currency,
 		Units:    units,
 	}
 }
 
+func (a *Amount) GetUnits() int64 {
+	if a == nil {
+		return 0
+	}
+	return a.Units
+}
+
+func (a *Amount) GetCurrency() string {
+	if a == nil {
+		return ""
+	}
+	return a.Currency
+}
+
 func (a *Amount) IsZero() bool {
-	return a.Units == 0 && a.Currency == ""
+	return a == nil || a.Units == 0 && a.Currency == ""
+}
+
+func (a *Amount) Equals(other *Amount) bool {
+	return a.GetCurrency() == other.GetCurrency() && a.GetUnits() == other.GetUnits()
+}
+
+func (a *Amount) GreaterThan(other *Amount) bool {
+	return a.GetUnits() > other.GetUnits()
+}
+
+func (a *Amount) LessThan(other *Amount) bool {
+	return a.GetUnits() < other.GetUnits()
 }
 
 func (a *Amount) MarshalValue() (*proto.Value, error) {
@@ -46,22 +72,51 @@ func (a *Amount) PropertyDefinition() proto.PropertyDefinition {
 
 const CurrencyMixed = "mixed"
 
-func SumAmounts(amounts ...Amount) Amount {
-	switch len(amounts) {
-	case 0:
-		return Amount{}
-	case 1:
-		return amounts[0]
-	}
+type Amounts []*Amount
 
-	ret := Amount{
-		Currency: amounts[0].Currency,
+func (a Amounts) Sum() *Amount {
+	switch len(a) {
+	case 0:
+		return nil
+	case 1:
+		return a[0]
 	}
-	for _, amt := range amounts {
+	ret := &Amount{}
+	for _, amt := range a {
+		if amt == nil {
+			continue
+		}
 		ret.Units += amt.Units
-		if ret.Currency != amt.Currency {
-			ret.Currency = CurrencyMixed
+		if ret.Currency == "" {
+			ret.Currency = amt.Currency
+		} else if ret.Currency != amt.Currency {
+			ret.Currency = "mixed"
 		}
 	}
+
+	if ret.IsZero() {
+		return nil
+	}
+
 	return ret
+}
+
+func (a Amounts) Max() *Amount {
+	var res *Amount
+	for _, amt := range a {
+		if res == nil || amt.Units > res.Units {
+			res = amt
+		}
+	}
+	return res
+}
+
+func (a Amounts) Min() *Amount {
+	var res *Amount
+	for _, amt := range a {
+		if res == nil || amt.Units < res.Units {
+			res = amt
+		}
+	}
+	return res
 }

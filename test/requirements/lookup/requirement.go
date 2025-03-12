@@ -35,7 +35,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 
 	d.lookupID = "lutid-" + strconv.Itoa(int(time.Now().UnixMilli()))
 	trans := &models.Transaction{
-		Amount:      keystone.NewAmount("GBP", 1023),
+		Amount:      *keystone.NewAmount("GBP", 1023),
 		ID:          d.lookupID,
 		PaymentType: "card",
 	}

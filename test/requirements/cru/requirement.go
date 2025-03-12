@@ -47,7 +47,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Name:         Name,
 		HeightInCm:   HeightInCm,
 		DOB:          DOB,
-		BankBalance:  keystone.NewAmount(BalanceCurrency, BalanceAmount),
+		BankBalance:  *keystone.NewAmount(BalanceCurrency, BalanceAmount),
 		FullName:     keystone.NewSecretString("John Doe", "Jo*** D***"),
 		AccountPin:   keystone.NewVerifyString("1234"),
 		SecretAnswer: keystone.NewSecretString("Pet Name", "Pe*******"),

@@ -35,7 +35,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 
 	trans := &models.Transaction{
-		Amount:      keystone.NewAmount("GBP", 1023),
+		Amount:      *keystone.NewAmount("GBP", 1023),
 		ID:          "trans-ids-" + strconv.Itoa(int(time.Now().UnixMilli())),
 		PaymentType: "card",
 	}

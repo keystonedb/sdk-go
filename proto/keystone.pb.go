@@ -222,7 +222,7 @@ const (
 // Enum value maps for Operator.
 var (
 	Operator_name = map[int32]string{
-		0:  "Equal",
+		0:  "Equals",
 		1:  "NotEqual",
 		2:  "GreaterThan",
 		3:  "GreaterThanOrEqual",
@@ -237,7 +237,7 @@ var (
 		12: "Between",
 	}
 	Operator_value = map[string]int32{
-		"Equal":              0,
+		"Equals":             0,
 		"NotEqual":           1,
 		"GreaterThan":        2,
 		"GreaterThanOrEqual": 3,

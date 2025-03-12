@@ -190,7 +190,7 @@ func Test_SelfMarshalNonPointer(t *testing.T) {
 }
 
 func TestMarshal(t *testing.T) {
-	amnt := NewAmount("USD", 142)
+	amnt := *NewAmount("USD", 142)
 	e := testEntity{
 		baseE:      baseE{ID: "xx"},
 		Name:       "John",
@@ -218,7 +218,7 @@ func TestMarshal(t *testing.T) {
 }
 
 func TestMarshalPointer(t *testing.T) {
-	amnt := NewAmount("USD", 142)
+	amnt := *NewAmount("USD", 142)
 	e := &testEntity{
 		baseE:      baseE{ID: "xx"},
 		Name:       "John",

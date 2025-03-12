@@ -53,7 +53,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	d.PersonID = psn.GetKeystoneID()
 
 	trans := &models.Transaction{
-		Amount:      keystone.NewAmount("GBP", 1023),
+		Amount:      *keystone.NewAmount("GBP", 1023),
 		ID:          "relid-" + strconv.Itoa(int(time.Now().UnixMilli())),
 		PaymentType: "card",
 	}
@@ -66,7 +66,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	d.TransactionID = trans.GetKeystoneID()
 
 	trans2 := &models.Transaction{
-		Amount:      keystone.NewAmount("GBP", 1023),
+		Amount:      *keystone.NewAmount("GBP", 1023),
 		ID:          "relid2-" + strconv.Itoa(int(time.Now().UnixMilli())),
 		PaymentType: "card",
 	}

@@ -46,7 +46,7 @@ func (d *Requirement) share(actor *keystone.Actor) requirements.TestResult {
 		Name:         "John",
 		HeightInCm:   123,
 		DOB:          time.Now(),
-		BankBalance:  keystone.NewAmount("USD", 345),
+		BankBalance:  *keystone.NewAmount("USD", 345),
 		FullName:     keystone.NewSecretString("John Doe", "Jo*** D***"),
 		AccountPin:   keystone.NewVerifyString("1234"),
 		SecretAnswer: keystone.NewSecretString("Pet Name", "Pe*******"),

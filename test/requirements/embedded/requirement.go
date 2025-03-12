@@ -40,7 +40,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Extended: models.ExtendedData{
 			LookupValue: "verify-value-" + time.Now().String(),
 			UniqueID:    "UNIQUE-" + k4id.New().UUID(),
-			Price:       keystone.NewAmount("USD", 100),
+			Price:       *keystone.NewAmount("USD", 100),
 		},
 	}
 
