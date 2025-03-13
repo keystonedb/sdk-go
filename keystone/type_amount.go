@@ -48,6 +48,24 @@ func (a *Amount) LessThan(other *Amount) bool {
 	return a.GetUnits() < other.GetUnits()
 }
 
+/*
+#Not sure if these would be best returning a new amount, or updating the existing
+#Leaving unavailable until a decision is made here
+
+func (a *Amount) Add(u ...*Amount) *Amount {
+	for _, unit := range u {
+		a.Units += unit.GetUnits()
+	}
+	return a
+}
+
+func (a *Amount) Sub(u ...*Amount) *Amount {
+	for _, unit := range u {
+		a.Units -= unit.GetUnits()
+	}
+	return a
+}*/
+
 func (a *Amount) MarshalValue() (*proto.Value, error) {
 	if a.IsZero() {
 		return nil, nil
