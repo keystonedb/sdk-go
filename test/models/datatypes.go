@@ -6,6 +6,13 @@ import (
 	"time"
 )
 
+type EnumValue int32
+
+const (
+	ENUM_VALUE0 EnumValue = 0
+	ENUM_VALUE1 EnumValue = 1
+)
+
 type DataTypes struct {
 	keystone.BaseEntity
 	String       string
@@ -23,6 +30,8 @@ type DataTypes struct {
 	IntegerSet   keystone.IntSet
 	RawData      []byte
 	MinMax       keystone.MinMax
+	Flags        []EnumValue
+	EnumValue    EnumValue
 }
 
 func (t DataTypes) GetKeystoneDefinition() keystone.TypeDefinition {

@@ -29,6 +29,8 @@ var (
 	StringSet    = keystone.NewStringSet("a", "b", "c", "c")           // not setting
 	IntegerSet   = keystone.NewIntSet(1, 2, 3, 4, 4)                   // not setting
 	RawData      = []byte("rawdata")
+	EnumVal      = models.ENUM_VALUE1
+	EnumVals     = []models.EnumValue{models.ENUM_VALUE0, models.ENUM_VALUE1}
 )
 
 type Requirement struct {
@@ -73,6 +75,8 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		StringSet:    StringSet,
 		IntegerSet:   IntegerSet,
 		RawData:      RawData,
+		EnumValue:    EnumVal,
+		Flags:        EnumVals,
 	}
 
 	createErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Create a default set"))
@@ -120,6 +124,10 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("IntegerSet mismatch")
 		} else if !bytes.Equal(dt.RawData, RawData) {
 			getErr = errors.New("RawData mismatch")
+		} else if dt.EnumValue != EnumVal {
+			getErr = errors.New("EnumValue mismatch")
+		} else if !reflect.DeepEqual(dt.Flags, EnumVals) {
+			getErr = errors.New("flags mismatch")
 		}
 	}
 

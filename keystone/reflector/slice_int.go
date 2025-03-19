@@ -9,10 +9,12 @@ type IntSlice struct{}
 
 func (e IntSlice) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
-	if slice, ok := value.Interface().([]int); ok {
+	if value.Type().Kind() == reflect.Slice {
 		ret := &proto.Value{Array: &proto.RepeatedValue{}}
-		for _, i := range slice {
-			ret.Array.Ints = append(ret.Array.Ints, int64(i))
+		if value.Len() > 0 {
+			for i := 0; i < value.Len(); i++ {
+				ret.Array.Ints = append(ret.Array.Ints, value.Index(i).Int())
+			}
 		}
 		return ret, nil
 	}
@@ -20,13 +22,15 @@ func (e IntSlice) ToProto(value reflect.Value) (*proto.Value, error) {
 }
 
 func (e IntSlice) SetValue(value *proto.Value, onto reflect.Value) error {
-	var slice []int
+	elemSlice := reflect.MakeSlice(reflect.SliceOf(onto.Type().Elem()), 0, len(value.Array.Ints))
 	if value.Array != nil {
+		v := reflect.New(onto.Type().Elem()).Elem()
 		for _, i := range value.Array.Ints {
-			slice = append(slice, int(i))
+			v.SetInt(i)
+			elemSlice = reflect.Append(elemSlice, v)
 		}
 	}
-	onto.Set(reflect.ValueOf(slice))
+	onto.Set(elemSlice)
 	return nil
 }
 

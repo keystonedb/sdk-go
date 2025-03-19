@@ -40,10 +40,10 @@ var sliceKindReflector = map[reflect.Kind]Reflector{
 	reflect.Uint8:  reflector.Bytes{},
 	reflect.String: reflector.StringSlice{},
 	reflect.Int:    reflector.IntSlice{},
-	reflect.Int8:   reflector.Int8Slice{},
-	reflect.Int16:  reflector.Int16Slice{},
-	reflect.Int32:  reflector.Int32Slice{},
-	reflect.Int64:  reflector.Int64Slice{},
+	reflect.Int8:   reflector.IntSlice{},
+	reflect.Int16:  reflector.IntSlice{},
+	reflect.Int32:  reflector.IntSlice{},
+	reflect.Int64:  reflector.IntSlice{},
 }
 
 var typeReflector = map[reflect.Type]Reflector{
