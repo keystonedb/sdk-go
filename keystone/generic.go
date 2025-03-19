@@ -27,7 +27,7 @@ func UnmarshalGeneric(resp *proto.EntityResponse, dst GenericResult) error {
 
 		// Handle Secret text
 		if p.Value.GetSecureText() != "" && p.Value.GetText() != "" {
-			dst[p.Property] = NewSecretString(p.Value.GetSecureText(), p.Value.GetText())
+			dst[p.Property] = NewSecureString(p.Value.GetSecureText(), p.Value.GetText())
 		}
 
 		if p.Value.GetText() != "" {

@@ -26,8 +26,8 @@ func (e *SecureString) String() string {
 	return e.Masked
 }
 
-// NewSecretString creates a new SecureString
-func NewSecretString(original, masked string) SecureString {
+// NewSecureString creates a new SecureString
+func NewSecureString(original, masked string) SecureString {
 	return SecureString{
 		Masked:   masked,
 		Original: original,

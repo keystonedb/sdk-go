@@ -18,7 +18,7 @@ var (
 	Integer      = int64(12355)
 	Time         = time.Now()
 	Amount       = keystone.NewAmount("USD", 130)
-	Secret       = keystone.NewSecretString("secretval", "secre***")
+	Secret       = keystone.NewSecureString("secretval", "secre***")
 	Verify       = keystone.NewVerifyString("toverify")
 	MinMax       = keystone.NewMinMax(12, 18)
 	Boolean      = true

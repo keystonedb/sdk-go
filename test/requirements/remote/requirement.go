@@ -49,9 +49,9 @@ func (d *Requirement) prepare(actor *keystone.Actor) requirements.TestResult {
 		HeightInCm:   123,
 		DOB:          time.Now(),
 		BankBalance:  *keystone.NewAmount("USD", 345),
-		FullName:     keystone.NewSecretString("John Doe", "Jo*** D***"),
+		FullName:     keystone.NewSecureString("John Doe", "Jo*** D***"),
 		AccountPin:   keystone.NewVerifyString("1234"),
-		SecretAnswer: keystone.NewSecretString("Pet Name", "Pe*******"),
+		SecretAnswer: keystone.NewSecureString("Pet Name", "Pe*******"),
 	}
 	mutateErr := actor.Mutate(context.Background(), d.psn)
 	d.entityID = d.psn.GetKeystoneID()

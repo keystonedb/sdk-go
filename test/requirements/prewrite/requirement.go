@@ -52,9 +52,9 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		HeightInCm:   HeightInCm,
 		DOB:          DOB,
 		BankBalance:  *keystone.NewAmount(BalanceCurrency, BalanceAmount),
-		FullName:     keystone.NewSecretString("John Doe", "Jo*** D***"),
+		FullName:     keystone.NewSecureString("John Doe", "Jo*** D***"),
 		AccountPin:   keystone.NewVerifyString("4321"),
-		SecretAnswer: keystone.NewSecretString("Pet Name", "Pe*******"),
+		SecretAnswer: keystone.NewSecureString("Pet Name", "Pe*******"),
 	}
 
 	createErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Create a person"))
