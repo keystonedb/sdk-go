@@ -5,6 +5,47 @@ import (
 	"reflect"
 )
 
+// Where allows for filtering entities by a Property, with a string operator
+func Where(key, operator string, values ...any) FindOption {
+	if len(values) == 0 {
+		return nil
+	}
+
+	value := values[0]
+	switch operator {
+	case "eq", "=":
+		return WhereEquals(key, value)
+	case "neq", "!=":
+		return WhereNotEquals(key, value)
+	case "gt", ">":
+		return WhereGreaterThan(key, value)
+	case "gte", ">=":
+		return WhereGreaterThanOrEquals(key, value)
+	case "lt", "<":
+		return WhereLessThan(key, value)
+	case "lte", "<=":
+		return WhereLessThanOrEquals(key, value)
+	case "contains", "c":
+		return WhereContains(key, value)
+	case "notcontains", "nc":
+		return WhereNotContains(key, value)
+	case "startswith", "sw":
+		return WhereStartsWith(key, value)
+	case "endswith", "ew":
+		return WhereEndsWith(key, value)
+	case "in":
+		return WhereIn(key, values...)
+	case "notin":
+		return WhereNotIn(key, values...)
+	case "between", "btw", "><":
+		if len(values) < 2 {
+			return nil
+		}
+		return WhereBetween(key, values[0], values[1])
+	}
+	return nil
+}
+
 // WhereEquals is a find option that filters entities by a Property equaling a Value
 func WhereEquals(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_Equal}
@@ -51,7 +92,7 @@ func WhereStartsWith(key string, value any) FindOption {
 }
 
 // WhereEndsWith is a find option that filters entities by a Property ending with a Value
-func WhereEndsWith(key string, value string) FindOption {
+func WhereEndsWith(key string, value any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value), operator: proto.Operator_EndsWith}
 }
 
