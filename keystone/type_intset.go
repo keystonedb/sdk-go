@@ -199,3 +199,10 @@ func (s *IntSet) PropertyDefinition() proto.PropertyDefinition {
 func (s *IntSet) MutationSuccess(resp *proto.MutateResponse) {
 	s.merge()
 }
+
+func (s *IntSet) IsZero() bool {
+	return s == nil ||
+		(len(s.values) == 0 &&
+			len(s.toAdd) == 0 &&
+			len(s.toRemove) == 0)
+}

@@ -192,6 +192,13 @@ func (s *StringSet) UnmarshalValue(value *proto.Value) error {
 	return nil
 }
 
+func (s *StringSet) IsZero() bool {
+	return s == nil ||
+		(len(s.values) == 0 &&
+			len(s.toAdd) == 0 &&
+			len(s.toRemove) == 0)
+}
+
 func (s *StringSet) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_StringSet}
 }

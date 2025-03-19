@@ -108,6 +108,10 @@ type valueMarshalReflector struct {
 	marshal ValueMarshaler
 }
 
+func (v valueMarshalReflector) IsZero() bool {
+	return v.marshal.IsZero()
+}
+
 func (v valueMarshalReflector) ToProto(value reflect.Value) (*proto.Value, error) {
 	return v.marshal.MarshalValue()
 }
@@ -138,9 +142,6 @@ func (v valueMarshalReflector) PropertyDefinition() proto.PropertyDefinition {
 }
 
 func newValueMarshalReflector(value reflect.Value) Reflector {
-	if value.Kind() == reflect.Invalid || (value.Kind() == reflect.Pointer && value.IsNil()) {
-		//	return nil
-	}
 	m, ok := value.Interface().(ValueMarshaler)
 	if !ok {
 		return nil

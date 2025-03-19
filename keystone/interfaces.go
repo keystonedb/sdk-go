@@ -14,6 +14,7 @@ type ValueMarshaler interface {
 	MarshalValue() (*proto.Value, error)
 	UnmarshalValue(*proto.Value) error
 	PropertyDefinition() proto.PropertyDefinition
+	IsZero() bool
 }
 
 type Reflector interface {

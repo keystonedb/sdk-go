@@ -18,6 +18,10 @@ func (s *String) UnmarshalValue(value *proto.Value) error {
 	return nil
 }
 
+func (s *String) IsZero() bool {
+	return s == nil || *s == ""
+}
+
 func (s *String) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_Text}
 }

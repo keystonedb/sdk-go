@@ -58,13 +58,13 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 }
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
-
+	amnt := keystone.NewAmount(Amount.GetCurrency(), Amount.GetUnits())
 	psn := &models.DataTypes{
 		String:       String,
 		Integer:      Integer,
 		Time:         Time,
-		Amount:       *Amount,
-		AmountPt:     Amount,
+		Amount:       *amnt,
+		AmountPt:     amnt,
 		Secret:       Secret,
 		Verify:       Verify,
 		Boolean:      Boolean,
@@ -107,6 +107,8 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("amount mismatch")
 		} else if !Amount.Equals(dt.AmountPt) {
 			getErr = errors.New("amount mismatch")
+		} else if dt.Amount.GetUnits() != 130 {
+			getErr = errors.New("amount mismatch, expected 130")
 		} else if dt.Secret != Secret {
 			getErr = errors.New("secret mismatch")
 		} else if dt.Boolean != Boolean {

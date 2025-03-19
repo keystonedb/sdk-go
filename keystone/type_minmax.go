@@ -56,3 +56,7 @@ func (s *MinMax) UnmarshalValue(value *proto.Value) error {
 func (s *MinMax) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_Ints}
 }
+
+func (s *MinMax) IsZero() bool {
+	return s == nil || (s.min == 0 && s.max == 0)
+}

@@ -52,3 +52,7 @@ func (e *SecureString) UnmarshalValue(value *proto.Value) error {
 func (e *SecureString) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_SecureText}
 }
+
+func (e *SecureString) IsZero() bool {
+	return e == nil || e.Original == "" && e.Masked == ""
+}

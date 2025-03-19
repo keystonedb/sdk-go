@@ -44,3 +44,7 @@ func (e *VerifyString) UnmarshalValue(value *proto.Value) error {
 func (e *VerifyString) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_VerifyText}
 }
+
+func (e *VerifyString) IsZero() bool {
+	return e == nil || e.Original == ""
+}

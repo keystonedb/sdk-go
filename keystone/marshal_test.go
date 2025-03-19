@@ -29,6 +29,7 @@ type marshal struct {
 type testValueMarshaler struct {
 	stringValue string
 	error       error
+	isZero      bool
 }
 
 func (t testValueMarshaler) MarshalValue() (*proto.Value, error) {
@@ -37,6 +38,10 @@ func (t testValueMarshaler) MarshalValue() (*proto.Value, error) {
 
 func (t testValueMarshaler) UnmarshalValue(*proto.Value) error {
 	return t.error
+}
+
+func (t testValueMarshaler) IsZero() bool {
+	return t.isZero
 }
 
 func (t testValueMarshaler) PropertyDefinition() proto.PropertyDefinition {
