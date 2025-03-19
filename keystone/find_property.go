@@ -70,6 +70,16 @@ func WhereBetween(key string, value1, value2 any) FindOption {
 	return propertyFilter{key: key, values: valuesFromAny(value1, value2), operator: proto.Operator_Between}
 }
 
+// IsNull is a find option that filters entities by a Property being null
+func IsNull(key string) FindOption {
+	return propertyFilter{key: key, operator: proto.Operator_IsNull}
+}
+
+// IsNotNull is a find option that filters entities by a Property not being null
+func IsNotNull(key string) FindOption {
+	return propertyFilter{key: key, operator: proto.Operator_IsNotNull}
+}
+
 type propertyFilter struct {
 	key      string
 	values   []*proto.Value
