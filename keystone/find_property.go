@@ -80,22 +80,46 @@ func IsNotNull(key string) FindOption {
 	return propertyFilter{key: key, operator: proto.Operator_IsNotNull}
 }
 
+func Or(filters ...FindOption) FindOption {
+	return propertyFilter{or: true, nested: filters}
+}
+
+func And(filters ...FindOption) FindOption {
+	return propertyFilter{nested: filters}
+}
+
 type propertyFilter struct {
 	key      string
 	values   []*proto.Value
 	operator proto.Operator
+	or       bool
+	nested   []FindOption
 }
 
 func (f propertyFilter) Apply(config *filterRequest) {
 	if config.Filters == nil {
 		config.Filters = make([]*proto.PropertyFilter, 0)
 	}
+	config.Filters = append(config.Filters, f.toProto())
+}
 
-	config.Filters = append(config.Filters, &proto.PropertyFilter{
+func (f propertyFilter) toProto() *proto.PropertyFilter {
+	ret := &proto.PropertyFilter{
 		Property: f.key,
 		Operator: f.operator,
 		Values:   f.values,
-	})
+		Or:       f.or,
+	}
+
+	if f.nested != nil {
+		for _, filter := range f.nested {
+			if fil, ok := filter.(propertyFilter); ok {
+				ret.Nested = append(ret.Nested, fil.toProto())
+			}
+		}
+	}
+
+	return ret
 }
 
 func valueFromString(value string) *proto.Value {

@@ -15,6 +15,7 @@ type FileData struct {
 	IsPending       bool   `keystone:",indexed"`
 	CheckKey        string `keystone:",indexed"`
 	LineInformation string
+	Identifier      string
 }
 
 func (f FileData) GetKeystoneDefinition() keystone.TypeDefinition {

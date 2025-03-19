@@ -31,6 +31,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.readPending(actor),
 		d.readOneTwo(actor),
 		d.readThree(actor),
+		d.readComplex(actor),
 	}
 }
 
@@ -97,6 +98,50 @@ func (d *Requirement) readThree(actor *keystone.Actor) requirements.TestResult {
 	}
 }
 
+func (d *Requirement) readComplex(actor *keystone.Actor) requirements.TestResult {
+
+	entities, err := actor.List(context.Background(), keystone.Type(models.FileData{}),
+		[]string{"check_key", "identifier"}, keystone.Limit(2, 0), keystone.SortBy("modified", true),
+		keystone.WhereEquals("user_id", "usr1"),
+		keystone.Or(keystone.WhereEquals("state", 1), keystone.WhereEquals("state", 2)))
+	if err == nil && len(entities) < 2 {
+		err = errors.New("not enough entities returned")
+	}
+
+	expect := map[string]bool{
+		"fd0": false,
+		"fd1": false,
+	}
+
+	for _, entity := range entities {
+		file := &models.FileData{}
+		unErr := keystone.Unmarshal(entity, file)
+		if unErr != nil {
+			err = unErr
+			break
+		}
+
+		if file.CheckKey != d.runID {
+			err = errors.New("incorrect check key - " + file.CheckKey + " != " + d.runID)
+			break
+		}
+
+		expect[file.Identifier] = true
+	}
+
+	for k, v := range expect {
+		if !v {
+			err = errors.New("expected identifier not found - " + k)
+			break
+		}
+	}
+
+	return requirements.TestResult{
+		Name:  "readComplex",
+		Error: err,
+	}
+}
+
 func (d *Requirement) readPending(actor *keystone.Actor) requirements.TestResult {
 
 	entities, err := actor.List(context.Background(), keystone.Type(models.FileData{}),
@@ -136,6 +181,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 			IsPending:       false,
 			CheckKey:        d.runID,
 			LineInformation: uuid.NewString(),
+			Identifier:      "fd0",
 		},
 		{
 			UserID:          "usr1",
@@ -145,6 +191,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 			IsPending:       false,
 			CheckKey:        d.runID,
 			LineInformation: uuid.NewString(),
+			Identifier:      "fd1",
 		},
 		{
 			UserID:          "usr1",
@@ -154,6 +201,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 			IsPending:       false,
 			CheckKey:        d.runID,
 			LineInformation: uuid.NewString(),
+			Identifier:      "fd2",
 		},
 		{
 			UserID:          "usr1",
@@ -163,6 +211,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 			IsPending:       true,
 			CheckKey:        d.runID,
 			LineInformation: uuid.NewString(),
+			Identifier:      "fd3",
 		},
 		{
 			UserID:          "usr1",
@@ -172,6 +221,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 			IsPending:       true,
 			CheckKey:        d.runID,
 			LineInformation: uuid.NewString(),
+			Identifier:      "fd4",
 		},
 		{
 			UserID:          "usr1",
@@ -181,6 +231,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 			IsPending:       true,
 			CheckKey:        d.runID,
 			LineInformation: uuid.NewString(),
+			Identifier:      "fd5",
 		},
 	}
 
