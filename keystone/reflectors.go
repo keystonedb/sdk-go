@@ -1,6 +1,7 @@
 package keystone
 
 import (
+	"errors"
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -88,6 +89,9 @@ func GetReflector(t reflect.Type, v reflect.Value) Reflector {
 			//TODO: Add support for other slice types, maybe json blobs?
 		}
 	}
+	if t.Implements(valueMarshalerType) {
+		return newValueMarshalReflector(v)
+	}
 
 	if t.Kind() != reflect.Pointer && reflect.PointerTo(t).Implements(valueMarshalerType) {
 		vp := reflect.New(t)
@@ -109,12 +113,19 @@ func (v valueMarshalReflector) ToProto(value reflect.Value) (*proto.Value, error
 }
 
 func (v valueMarshalReflector) SetValue(value *proto.Value, onto reflect.Value) error {
-	err := v.marshal.UnmarshalValue(value)
+	newVal := reflect.ValueOf(v.marshal)
+	if newVal.IsZero() || newVal.IsNil() {
+		newVal = reflect.New(reflect.TypeOf(v.marshal).Elem())
+	}
+	msh, ok := newVal.Interface().(ValueMarshaler)
+	if !ok {
+		return errors.New("could not convert to ValueMarshaler")
+	}
+	err := msh.UnmarshalValue(value)
 	if err != nil {
 		return err
 	}
-	newVal := reflect.ValueOf(v.marshal)
-	if newVal.Kind() == reflect.Pointer {
+	if newVal.Kind() == reflect.Pointer && onto.Kind() != reflect.Pointer {
 		onto.Set(newVal.Elem())
 	} else {
 		onto.Set(newVal)
@@ -128,7 +139,7 @@ func (v valueMarshalReflector) PropertyDefinition() proto.PropertyDefinition {
 
 func newValueMarshalReflector(value reflect.Value) Reflector {
 	if value.Kind() == reflect.Invalid || (value.Kind() == reflect.Pointer && value.IsNil()) {
-		return nil
+		//	return nil
 	}
 	m, ok := value.Interface().(ValueMarshaler)
 	if !ok {

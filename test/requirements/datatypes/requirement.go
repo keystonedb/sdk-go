@@ -64,6 +64,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Integer:      Integer,
 		Time:         Time,
 		Amount:       *Amount,
+		AmountPt:     Amount,
 		Secret:       Secret,
 		Verify:       Verify,
 		Boolean:      Boolean,
@@ -103,6 +104,8 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 		} else if dt.Time.Unix() != Time.Unix() {
 			getErr = errors.New("time mismatch")
 		} else if !Amount.Equals(&dt.Amount) {
+			getErr = errors.New("amount mismatch")
+		} else if !Amount.Equals(dt.AmountPt) {
 			getErr = errors.New("amount mismatch")
 		} else if dt.Secret != Secret {
 			getErr = errors.New("secret mismatch")

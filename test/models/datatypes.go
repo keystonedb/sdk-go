@@ -19,6 +19,7 @@ type DataTypes struct {
 	Integer      int64
 	Time         time.Time
 	Amount       keystone.Amount
+	AmountPt     *keystone.Amount
 	Secret       keystone.SecureString
 	Verify       keystone.VerifyString
 	Boolean      bool
