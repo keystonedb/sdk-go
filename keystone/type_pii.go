@@ -1,8 +1,9 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"net"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type IPAddress String
@@ -35,54 +36,55 @@ func (s *Country) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_Text, ExtendedType: proto.Property_Country}
 }
 
-type SecurePII SecureString
+type SecurePII struct{ SecureString }
 
 func (s *SecurePII) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_SecureText, ExtendedType: proto.Property_Personal}
 }
 
 func NewSecurePII(info, masked string) SecurePII {
-	return SecurePII(NewSecureString(info, masked))
+	return SecurePII{NewSecureString(info, masked)}
 }
 
-type PersonName SecureString
+type PersonName struct{ SecureString }
 
 func NewPersonName(name string) PersonName {
 	mask := name // TODO: MASK
-	return PersonName(NewSecureString(name, mask))
+	return PersonName{NewSecureString(name, mask)}
 }
 
 func (s *PersonName) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_SecureText, ExtendedType: proto.Property_PersonName}
 }
 
-type Phone SecureString
+type Phone struct{ SecureString }
 
 func NewPhone(phone string) Phone {
 	mask := phone // TODO: MASK
-	return Phone(NewSecureString(phone, mask))
+	return Phone{NewSecureString(phone, mask)}
 }
 
 func (s *Phone) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_SecureText, ExtendedType: proto.Property_Phone}
 }
 
-type Email SecureString
+type Email struct{ SecureString }
 
 func (s *Email) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_SecureText, ExtendedType: proto.Property_Email}
 }
+
 func NewEmail(email string) Email {
 	mask := email // TODO: MASK
-	return Email(NewSecureString(email, mask))
+	return Email{NewSecureString(email, mask)}
 }
 
-type SecureIP SecureString
+type SecureIP struct{ SecureString }
 
 func (s *SecureIP) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_SecureText, ExtendedType: proto.Property_IP}
 }
 
 func NewSecureIPV4(ip string) SecureIP {
-	return SecureIP(NewSecureString(ip, net.ParseIP(ip).Mask(net.IPv4Mask(0xff, 0xff, 0xff, 0)).String()))
+	return SecureIP{NewSecureString(ip, net.ParseIP(ip).Mask(net.IPv4Mask(0xff, 0xff, 0xff, 0)).String())}
 }
