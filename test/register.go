@@ -17,6 +17,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
 	"github.com/keystonedb/sdk-go/test/requirements/nested_children"
 	"github.com/keystonedb/sdk-go/test/requirements/objects"
+	"github.com/keystonedb/sdk-go/test/requirements/pii"
 	"github.com/keystonedb/sdk-go/test/requirements/prewrite"
 	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
@@ -60,9 +61,10 @@ func init() {
 	reqs = append(reqs, &remote.Requirement{})
 	reqs = append(reqs, &nested_children.Requirement{})
 	reqs = append(reqs, &embedded.Requirement{})
+	reqs = append(reqs, &pii.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &embedded.Requirement{})
+		reqs = append(reqs, &pii.Requirement{})
 	}
 }

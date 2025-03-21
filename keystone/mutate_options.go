@@ -121,3 +121,15 @@ func (m prepareObjects) MutationSuccess(response *proto.MutateResponse) {
 func PrepareUploads(objs ...*EntityObject) MutateOption {
 	return prepareObjects{objects: objs}
 }
+
+func WithPiiToken(piiToken string) MutateOption {
+	return withPiiToken{piiToken: piiToken}
+}
+
+type withPiiToken struct {
+	piiToken string
+}
+
+func (m withPiiToken) apply(mutate *proto.MutateRequest) {
+	mutate.Mutation.PiiToken = m.piiToken
+}

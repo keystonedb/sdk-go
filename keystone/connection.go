@@ -280,3 +280,17 @@ func (c *Connection) AKVDel(ctx context.Context, in *proto.AKVDelRequest, opts .
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) PiiToken(ctx context.Context, in *proto.PiiTokenRequest, opts ...grpc.CallOption) (*proto.PiiTokenResponse, error) {
+	tl := c.timeLogConfig.NewLog("PiiToken", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.PiiToken(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) PiiAnonymize(ctx context.Context, in *proto.PiiAnonymizeRequest, opts ...grpc.CallOption) (*proto.PiiAnonymizeResponse, error) {
+	tl := c.timeLogConfig.NewLog("PiiAnonymize", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.PiiAnonymize(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

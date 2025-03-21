@@ -20,6 +20,8 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Keystone_Define_FullMethodName           = "/kubex.keystone.Keystone/Define"
+	Keystone_PiiToken_FullMethodName         = "/kubex.keystone.Keystone/PiiToken"
+	Keystone_PiiAnonymize_FullMethodName     = "/kubex.keystone.Keystone/PiiAnonymize"
 	Keystone_Mutate_FullMethodName           = "/kubex.keystone.Keystone/Mutate"
 	Keystone_Log_FullMethodName              = "/kubex.keystone.Keystone/Log"
 	Keystone_ReportTimeSeries_FullMethodName = "/kubex.keystone.Keystone/ReportTimeSeries"
@@ -47,6 +49,9 @@ const (
 type KeystoneClient interface {
 	// Define
 	Define(ctx context.Context, in *SchemaRequest, opts ...grpc.CallOption) (*Schema, error)
+	// PII
+	PiiToken(ctx context.Context, in *PiiTokenRequest, opts ...grpc.CallOption) (*PiiTokenResponse, error)
+	PiiAnonymize(ctx context.Context, in *PiiAnonymizeRequest, opts ...grpc.CallOption) (*PiiAnonymizeResponse, error)
 	// Store
 	Mutate(ctx context.Context, in *MutateRequest, opts ...grpc.CallOption) (*MutateResponse, error)
 	Log(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error)
@@ -86,6 +91,26 @@ func (c *keystoneClient) Define(ctx context.Context, in *SchemaRequest, opts ...
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Schema)
 	err := c.cc.Invoke(ctx, Keystone_Define_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) PiiToken(ctx context.Context, in *PiiTokenRequest, opts ...grpc.CallOption) (*PiiTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PiiTokenResponse)
+	err := c.cc.Invoke(ctx, Keystone_PiiToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) PiiAnonymize(ctx context.Context, in *PiiAnonymizeRequest, opts ...grpc.CallOption) (*PiiAnonymizeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PiiAnonymizeResponse)
+	err := c.cc.Invoke(ctx, Keystone_PiiAnonymize_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -288,6 +313,9 @@ func (c *keystoneClient) AKVDel(ctx context.Context, in *AKVDelRequest, opts ...
 type KeystoneServer interface {
 	// Define
 	Define(context.Context, *SchemaRequest) (*Schema, error)
+	// PII
+	PiiToken(context.Context, *PiiTokenRequest) (*PiiTokenResponse, error)
+	PiiAnonymize(context.Context, *PiiAnonymizeRequest) (*PiiAnonymizeResponse, error)
 	// Store
 	Mutate(context.Context, *MutateRequest) (*MutateResponse, error)
 	Log(context.Context, *LogRequest) (*LogResponse, error)
@@ -325,6 +353,12 @@ type UnimplementedKeystoneServer struct{}
 
 func (UnimplementedKeystoneServer) Define(context.Context, *SchemaRequest) (*Schema, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Define not implemented")
+}
+func (UnimplementedKeystoneServer) PiiToken(context.Context, *PiiTokenRequest) (*PiiTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PiiToken not implemented")
+}
+func (UnimplementedKeystoneServer) PiiAnonymize(context.Context, *PiiAnonymizeRequest) (*PiiAnonymizeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PiiAnonymize not implemented")
 }
 func (UnimplementedKeystoneServer) Mutate(context.Context, *MutateRequest) (*MutateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Mutate not implemented")
@@ -418,6 +452,42 @@ func _Keystone_Define_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeystoneServer).Define(ctx, req.(*SchemaRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_PiiToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PiiTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).PiiToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_PiiToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).PiiToken(ctx, req.(*PiiTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_PiiAnonymize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PiiAnonymizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).PiiAnonymize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_PiiAnonymize_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).PiiAnonymize(ctx, req.(*PiiAnonymizeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -774,6 +844,14 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Define",
 			Handler:    _Keystone_Define_Handler,
+		},
+		{
+			MethodName: "PiiToken",
+			Handler:    _Keystone_PiiToken_Handler,
+		},
+		{
+			MethodName: "PiiAnonymize",
+			Handler:    _Keystone_PiiAnonymize_Handler,
 		},
 		{
 			MethodName: "Mutate",
