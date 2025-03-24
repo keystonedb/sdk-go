@@ -20,6 +20,8 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Keystone_Define_FullMethodName           = "/kubex.keystone.Keystone/Define"
+	Keystone_IID_FullMethodName              = "/kubex.keystone.Keystone/IID"
+	Keystone_IIDLookup_FullMethodName        = "/kubex.keystone.Keystone/IIDLookup"
 	Keystone_PiiToken_FullMethodName         = "/kubex.keystone.Keystone/PiiToken"
 	Keystone_PiiAnonymize_FullMethodName     = "/kubex.keystone.Keystone/PiiAnonymize"
 	Keystone_Mutate_FullMethodName           = "/kubex.keystone.Keystone/Mutate"
@@ -49,6 +51,9 @@ const (
 type KeystoneClient interface {
 	// Define
 	Define(ctx context.Context, in *SchemaRequest, opts ...grpc.CallOption) (*Schema, error)
+	// Incrementing ID
+	IID(ctx context.Context, in *IIDCreateRequest, opts ...grpc.CallOption) (*IIDResponse, error)
+	IIDLookup(ctx context.Context, in *IIDRequest, opts ...grpc.CallOption) (*IIDsResponse, error)
 	// PII
 	PiiToken(ctx context.Context, in *PiiTokenRequest, opts ...grpc.CallOption) (*PiiTokenResponse, error)
 	PiiAnonymize(ctx context.Context, in *PiiAnonymizeRequest, opts ...grpc.CallOption) (*PiiAnonymizeResponse, error)
@@ -91,6 +96,26 @@ func (c *keystoneClient) Define(ctx context.Context, in *SchemaRequest, opts ...
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Schema)
 	err := c.cc.Invoke(ctx, Keystone_Define_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) IID(ctx context.Context, in *IIDCreateRequest, opts ...grpc.CallOption) (*IIDResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IIDResponse)
+	err := c.cc.Invoke(ctx, Keystone_IID_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) IIDLookup(ctx context.Context, in *IIDRequest, opts ...grpc.CallOption) (*IIDsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IIDsResponse)
+	err := c.cc.Invoke(ctx, Keystone_IIDLookup_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -313,6 +338,9 @@ func (c *keystoneClient) AKVDel(ctx context.Context, in *AKVDelRequest, opts ...
 type KeystoneServer interface {
 	// Define
 	Define(context.Context, *SchemaRequest) (*Schema, error)
+	// Incrementing ID
+	IID(context.Context, *IIDCreateRequest) (*IIDResponse, error)
+	IIDLookup(context.Context, *IIDRequest) (*IIDsResponse, error)
 	// PII
 	PiiToken(context.Context, *PiiTokenRequest) (*PiiTokenResponse, error)
 	PiiAnonymize(context.Context, *PiiAnonymizeRequest) (*PiiAnonymizeResponse, error)
@@ -353,6 +381,12 @@ type UnimplementedKeystoneServer struct{}
 
 func (UnimplementedKeystoneServer) Define(context.Context, *SchemaRequest) (*Schema, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Define not implemented")
+}
+func (UnimplementedKeystoneServer) IID(context.Context, *IIDCreateRequest) (*IIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IID not implemented")
+}
+func (UnimplementedKeystoneServer) IIDLookup(context.Context, *IIDRequest) (*IIDsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IIDLookup not implemented")
 }
 func (UnimplementedKeystoneServer) PiiToken(context.Context, *PiiTokenRequest) (*PiiTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PiiToken not implemented")
@@ -452,6 +486,42 @@ func _Keystone_Define_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeystoneServer).Define(ctx, req.(*SchemaRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_IID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IIDCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).IID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_IID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).IID(ctx, req.(*IIDCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_IIDLookup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).IIDLookup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_IIDLookup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).IIDLookup(ctx, req.(*IIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -844,6 +914,14 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Define",
 			Handler:    _Keystone_Define_Handler,
+		},
+		{
+			MethodName: "IID",
+			Handler:    _Keystone_IID_Handler,
+		},
+		{
+			MethodName: "IIDLookup",
+			Handler:    _Keystone_IIDLookup_Handler,
 		},
 		{
 			MethodName: "PiiToken",

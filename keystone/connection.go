@@ -294,3 +294,17 @@ func (c *Connection) PiiAnonymize(ctx context.Context, in *proto.PiiAnonymizeReq
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) IID(ctx context.Context, in *proto.IIDCreateRequest, opts ...grpc.CallOption) (*proto.IIDResponse, error) {
+	tl := c.timeLogConfig.NewLog("IID", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.IID(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) IIDLookup(ctx context.Context, in *proto.IIDRequest, opts ...grpc.CallOption) (*proto.IIDsResponse, error) {
+	tl := c.timeLogConfig.NewLog("IIDLookup", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.IIDLookup(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

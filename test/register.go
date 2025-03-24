@@ -10,6 +10,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
 	"github.com/keystonedb/sdk-go/test/requirements/embedded"
 	"github.com/keystonedb/sdk-go/test/requirements/events"
+	"github.com/keystonedb/sdk-go/test/requirements/iid"
 	"github.com/keystonedb/sdk-go/test/requirements/immutable"
 	"github.com/keystonedb/sdk-go/test/requirements/labels"
 	"github.com/keystonedb/sdk-go/test/requirements/list"
@@ -62,6 +63,7 @@ func init() {
 	reqs = append(reqs, &embedded.Requirement{})
 	reqs = append(reqs, &pii.Requirement{})
 	reqs = append(reqs, &ratelimit.Requirement{})
+	reqs = append(reqs, &iid.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
