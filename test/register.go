@@ -55,13 +55,13 @@ func init() {
 	reqs = append(reqs, &setfalse.Requirement{})
 	reqs = append(reqs, &shared_views.Requirement{})
 	reqs = append(reqs, &stringset.Requirement{})
-	reqs = append(reqs, &ratelimit.Requirement{})
 	reqs = append(reqs, &prewrite.Requirement{})
 	reqs = append(reqs, &objects.Requirement{})
 	reqs = append(reqs, &remote.Requirement{})
 	reqs = append(reqs, &nested_children.Requirement{})
 	reqs = append(reqs, &embedded.Requirement{})
 	reqs = append(reqs, &pii.Requirement{})
+	reqs = append(reqs, &ratelimit.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
