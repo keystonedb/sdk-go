@@ -50,14 +50,17 @@ func (p *Property) Name() string {
 	return p.name
 }
 
-var matchFirstCap = regexp.MustCompile("(.)([A-Z]+[a-z]+)")
-var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
+var matchWordBoundary = regexp.MustCompile("([A-Z]+[a-z]+|[0-9]+)")
 var matchNonAlphaNum = regexp.MustCompile("([^a-z0-9A-Z])")
 
 func snakeCase(str string) string {
-	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
-	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
+	snake := matchWordBoundary.ReplaceAllString(str, "_${1}_")
 	snake = matchNonAlphaNum.ReplaceAllString(snake, "_")
+	// trim leading and trailing underscores
+	snake = strings.Trim(snake, "_")
+	// remove double underscores
+	snake = strings.ReplaceAll(snake, "__", "_")
+	// lowercase
 	return strings.ToLower(snake)
 }
 

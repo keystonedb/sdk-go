@@ -25,6 +25,15 @@ func Test_Property_Name(t *testing.T) {
 		{"UPPERCASE", "UPPERCASE", "uppercase"},
 		{"lowercase", "lowercase", "lowercase"},
 		{"KeystoneIDs", "KeystoneIDs", "keystone_ids"},
+		{"http2test", "http2test", "http_2_test"},
+		{"http2Test", "http2Test", "http_2_test"},
+		{"Http2test", "Http2test", "http_2_test"},
+		{"Http2Test", "Http2Test", "http_2_test"},
+		{"HTTP2Test", "HTTP2Test", "http_2_test"},
+		{"HTTP2TEST", "HTTP2TEST", "http_2_test"},
+		{"With3dsData", "With3dsData", "with_3_ds_data"},
+		{"test123test", "test123test", "test_123_test"},
+		{"Test123Test", "Test123Test", "test_123_test"},
 	}
 
 	for _, test := range tests {
