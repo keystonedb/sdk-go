@@ -24,6 +24,7 @@ func Test_Property_Name(t *testing.T) {
 		{"kebab-case", "kebab-case", "kebab_case"},
 		{"UPPERCASE", "UPPERCASE", "uppercase"},
 		{"lowercase", "lowercase", "lowercase"},
+		{"KeystoneIDs", "KeystoneIDs", "keystone_ids"},
 	}
 
 	for _, test := range tests {

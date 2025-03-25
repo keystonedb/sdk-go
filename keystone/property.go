@@ -1,11 +1,12 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/keystone/reflector"
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 	"regexp"
 	"strings"
+
+	"github.com/keystonedb/sdk-go/keystone/reflector"
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 func knownProperty(name string) Property {
@@ -49,7 +50,7 @@ func (p *Property) Name() string {
 	return p.name
 }
 
-var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
+var matchFirstCap = regexp.MustCompile("(.)([A-Z]+[a-z]+)")
 var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
 var matchNonAlphaNum = regexp.MustCompile("([^a-z0-9A-Z])")
 
