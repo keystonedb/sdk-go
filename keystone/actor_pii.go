@@ -19,25 +19,27 @@ const (
 	RegulationCCPA PiiRegulation = "CCPA"
 )
 
-func (a *Actor) NewPiiToken(country string, regulation PiiRegulation) (string, error) {
-	return a.NewPiiTokenWithExpiry(country, regulation, time.Time{})
+func (a *Actor) NewPiiToken(reference, country string, regulation PiiRegulation) (string, error) {
+	return a.NewPiiTokenWithExpiry(reference, country, regulation, time.Time{})
 }
 
-func (a *Actor) NewGDPRToken(country string) (string, error) {
-	return a.NewPiiTokenWithExpiry(country, RegulationGDPR, time.Time{})
+func (a *Actor) NewGDPRToken(reference, country string) (string, error) {
+	return a.NewPiiTokenWithExpiry(reference, country, RegulationGDPR, time.Time{})
 }
 
-func (a *Actor) NewCCPAToken() (string, error) {
-	return a.NewPiiTokenWithExpiry("US:CA", RegulationCCPA, time.Time{})
+func (a *Actor) NewCCPAToken(reference string) (string, error) {
+	return a.NewPiiTokenWithExpiry(reference, "US:CA", RegulationCCPA, time.Time{})
 }
 
-func (a *Actor) NewPiiTokenWithExpiry(country string, regulation PiiRegulation, expiry time.Time) (string, error) {
+func (a *Actor) NewPiiTokenWithExpiry(reference, country string, regulation PiiRegulation, expiry time.Time) (string, error) {
 	conn := a.Connection()
 	req := &proto.PiiTokenRequest{
 		Authorization: a.Authorization(),
+		Reference:     reference,
 		Country:       country, // COUNTRY[:STATE[:PROVINCE]]
 		Regulation:    regulation.String(),
 	}
+
 	if !expiry.IsZero() {
 		req.AutoExpire = timestamppb.New(expiry)
 	}

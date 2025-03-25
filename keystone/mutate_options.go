@@ -133,3 +133,21 @@ type withPiiToken struct {
 func (m withPiiToken) apply(mutate *proto.MutateRequest) {
 	mutate.Mutation.PiiToken = m.piiToken
 }
+
+type withPiiReference struct {
+	vendorId string
+	appId    string
+	piiKey   string
+}
+
+func WithPiiReference(vendorId, appId, piiKey string) MutateOption {
+	return withPiiReference{
+		vendorId: vendorId,
+		appId:    appId,
+		piiKey:   piiKey,
+	}
+}
+
+func (m withPiiReference) apply(mutate *proto.MutateRequest) {
+	mutate.Mutation.PiiReference = &proto.Key{Key: m.piiKey, Source: proto.NewVendorApp(m.vendorId, m.appId)}
+}

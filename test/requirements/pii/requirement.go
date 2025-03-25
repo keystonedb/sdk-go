@@ -6,6 +6,7 @@ import (
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
+	"github.com/kubex/k4id"
 	"time"
 )
 
@@ -17,8 +18,10 @@ var (
 )
 
 type Requirement struct {
-	createdID keystone.ID
-	piiToken  string
+	createdID    keystone.ID
+	createdRefID keystone.ID
+	piiToken     string
+	referenceID  string
 }
 
 func (d *Requirement) Name() string {
@@ -31,19 +34,25 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 }
 
 func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+	gen := k4id.DefaultGenerator()
+	d.referenceID = gen.New().UUID()
 	return []requirements.TestResult{
 		d.updateWithoutPii(actor),
 		d.createToken(actor),
 		d.create(actor),
-		d.read(actor, " After Create"),
+		d.createReference(actor),
+		d.read(actor, true, " After Create"),
+		d.read(actor, false, " After Create - Ref"),
 		d.updateWithoutPiiWrite(actor),
 		d.update(actor),
-		d.read(actor, " After Update"),
+		d.read(actor, true, " After Update"),
+		d.read(actor, false, " After Update - Ref"),
 		d.createWithoutToken(actor),
 		d.anonymize(actor),
 		d.readAnonymized(actor),
 		d.restore(actor),
-		d.read(actor, " After Restore"),
+		d.read(actor, true, " After Restore"),
+		d.read(actor, false, " After Restore - Ref"),
 	}
 }
 
@@ -66,7 +75,7 @@ func (d *Requirement) createWithoutToken(actor *keystone.Actor) requirements.Tes
 
 func (d *Requirement) createToken(actor *keystone.Actor) requirements.TestResult {
 	result := requirements.TestResult{Name: "Create Token"}
-	token, err := actor.NewGDPRToken("GB")
+	token, err := actor.NewGDPRToken(d.referenceID, "GB")
 	if err != nil {
 		return result.WithError(err)
 	}
@@ -91,12 +100,34 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	d.createdID = psn.GetKeystoneID()
 	return result
 }
+func (d *Requirement) createReference(actor *keystone.Actor) requirements.TestResult {
+	result := requirements.TestResult{Name: "Create With Reference"}
+	psn := &models.PiiPerson{
+		Name:   keystone.NewPersonName(PersonName),
+		Email:  keystone.NewEmail(Email),
+		Phone:  keystone.NewPhone(Phone),
+		NonPii: "Random Value",
+	}
 
-func (d *Requirement) read(actor *keystone.Actor, reason string) requirements.TestResult {
+	createErr := actor.Mutate(context.Background(), psn, keystone.WithPiiReference(actor.VendorID(), actor.AppID(), d.referenceID))
+	if createErr != nil {
+		return result.WithError(createErr)
+	}
+
+	d.createdRefID = psn.GetKeystoneID()
+	return result
+}
+
+func (d *Requirement) read(actor *keystone.Actor, primaryID bool, reason string) requirements.TestResult {
 	result := requirements.TestResult{Name: "Read " + reason}
 
+	readID := d.createdID
+	if !primaryID {
+		readID = d.createdRefID
+	}
+
 	psn := &models.PiiPerson{}
-	getErr := actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithDecryptedProperties())
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(psn, readID), psn, keystone.WithDecryptedProperties())
 
 	if getErr != nil {
 		return result.WithError(getErr)
