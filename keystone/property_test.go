@@ -18,6 +18,7 @@ func Test_Property_Name(t *testing.T) {
 		property string
 		expect   string
 	}{
+		{"PIIToken", "PIIToken", "pii_token"},
 		{"snake_case", "snake_case", "snake_case"},
 		{"camelCase", "camelCase", "camel_case"},
 		{"PascalCase", "PascalCase", "pascal_case"},
@@ -34,6 +35,7 @@ func Test_Property_Name(t *testing.T) {
 		{"With3dsData", "With3dsData", "with_3_ds_data"},
 		{"test123test", "test123test", "test_123_test"},
 		{"Test123Test", "Test123Test", "test_123_test"},
+		{"KeystoneIDsToUse", "KeystoneIDsToUse", "keystone_ids_to_use"},
 	}
 
 	for _, test := range tests {

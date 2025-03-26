@@ -50,18 +50,23 @@ func (p *Property) Name() string {
 	return p.name
 }
 
-var matchWordBoundary = regexp.MustCompile("([A-Z]+[a-z]+|[0-9]+)")
+var matchWords = []*regexp.Regexp{
+	regexp.MustCompile("([0-9]+|[A-Z][a-z]{2,})"),
+	regexp.MustCompile("([A-Z]+[a-z])([^a-z]|$)"),
+}
 var matchNonAlphaNum = regexp.MustCompile("([^a-z0-9A-Z])")
 
 func snakeCase(str string) string {
-	snake := matchWordBoundary.ReplaceAllString(str, "_${1}_")
-	snake = matchNonAlphaNum.ReplaceAllString(snake, "_")
+	for _, match := range matchWords {
+		str = match.ReplaceAllString(str, "_${1}_${2}")
+	}
+	str = matchNonAlphaNum.ReplaceAllString(str, "_")
 	// trim leading and trailing underscores
-	snake = strings.Trim(snake, "_")
+	str = strings.Trim(str, "_")
 	// remove double underscores
-	snake = strings.ReplaceAll(snake, "__", "_")
+	str = strings.ReplaceAll(str, "__", "_")
 	// lowercase
-	return strings.ToLower(snake)
+	return strings.ToLower(str)
 }
 
 func Type(input interface{}) string {
