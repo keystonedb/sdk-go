@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/keystonedb/sdk-go/proto"
+	"strings"
 )
 
 func (a *Actor) GetByID(ctx context.Context, entityID ID, dst interface{}, retrieve ...RetrieveOption) error {
@@ -71,6 +72,30 @@ func (a *Actor) Get(ctx context.Context, retrieveBy RetrieveBy, dst interface{},
 			Message:      resp.GetLock().GetMessage(),
 		}
 		lk.SetLockResult(LockData)
+	}
+
+	var watcher *Watcher
+	if watchable, ok := dst.(WatchedEntity); ok && watchable.HasWatcher() {
+		watcher = watchable.Watcher()
+	} else if entity, settable := dst.(SettableWatchedEntity); settable && !watchable.HasWatcher() {
+		if w, err := NewDefaultsWatcher(dst); err == nil {
+			entity.SetWatcher(w)
+			watcher = w
+		}
+	}
+
+	if watcher != nil {
+		newProps := map[Property]*proto.Value{}
+		for _, p := range resp.GetProperties() {
+			bits := strings.Split(p.Property, ".")
+			name := bits[len(bits)-1]
+			prefix := ""
+			if len(bits) > 1 {
+				prefix = strings.Join(bits[:len(bits)-1], ".")
+			}
+			newProps[knownPrefixProperty(prefix, name)] = p.Value
+		}
+		watcher.ReplaceKnownValues(newProps)
 	}
 
 	for _, option := range retrieve {
