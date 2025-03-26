@@ -18,11 +18,11 @@ func knownPrefixProperty(prefix, name string) Property {
 }
 
 func NewProperty(name string) Property {
-	return Property{name: snakeCase(name)}
+	return Property{name: PropertyName(name)}
 }
 
 func NewPrefixProperty(prefix, name string) Property {
-	return Property{prefix: prefix, name: snakeCase(name)}
+	return Property{prefix: prefix, name: PropertyName(name)}
 }
 
 type Property struct {
@@ -56,7 +56,7 @@ var matchWords = []*regexp.Regexp{
 }
 var matchNonAlphaNum = regexp.MustCompile("([^a-z0-9A-Z])")
 
-func snakeCase(str string) string {
+func PropertyName(str string) string {
 	for _, match := range matchWords {
 		str = match.ReplaceAllString(str, "_${1}_${2}")
 	}
@@ -71,7 +71,7 @@ func snakeCase(str string) string {
 
 func Type(input interface{}) string {
 	t := reflector.Deref(reflect.ValueOf(input)).Type()
-	return strings.ReplaceAll(snakeCase(t.Name()), "_", "-")
+	return strings.ReplaceAll(PropertyName(t.Name()), "_", "-")
 }
 
 func ReflectProperty(f reflect.StructField, prefix string) (Property, proto.PropertyDefinition) {
@@ -118,7 +118,7 @@ func getFieldOptions(f reflect.StructField) fieldOptions {
 		part = strings.TrimSpace(part)
 		if i == 0 {
 			if part == "" {
-				opt.name = snakeCase(f.Name)
+				opt.name = PropertyName(f.Name)
 			} else if part == "-" {
 				return opt
 			} else {
