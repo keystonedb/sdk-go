@@ -39,6 +39,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 	return []requirements.TestResult{
 		d.updateWithoutPii(actor),
 		d.createToken(actor),
+		d.createReuseToken(actor),
 		d.create(actor),
 		d.createReference(actor),
 		d.read(actor, true, " After Create"),
@@ -80,6 +81,18 @@ func (d *Requirement) createToken(actor *keystone.Actor) requirements.TestResult
 		return result.WithError(err)
 	}
 	d.piiToken = token
+	return result
+}
+
+func (d *Requirement) createReuseToken(actor *keystone.Actor) requirements.TestResult {
+	result := requirements.TestResult{Name: "ReUse PII Token"}
+	token, err := actor.NewGDPRToken(d.referenceID, "GB")
+	if err != nil {
+		return result.WithError(err)
+	}
+	if d.piiToken != token {
+		return result.WithError(errors.New("pii token not reused"))
+	}
 	return result
 }
 
