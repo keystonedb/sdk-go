@@ -190,7 +190,8 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 
 // Mutate is a function that can mutate an entity
 func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOption) error {
-	if reflect.TypeOf(src).Kind() != reflect.Pointer {
+	srcType := reflect.TypeOf(src)
+	if srcType.Kind() != reflect.Pointer || srcType.Elem().Kind() == reflect.Pointer {
 		return errors.New("mutate requires a pointer to a struct")
 	}
 
