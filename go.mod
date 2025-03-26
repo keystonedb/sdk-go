@@ -4,18 +4,22 @@ go 1.23.0
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/kubex/k4id v0.0.0-20240819162626-37a1ffe32be1
-	github.com/packaged/environment v1.0.0
+	github.com/kubex/k4id v0.0.0-20250324170849-19087e5e7601
+	github.com/packaged/environment v1.1.0
 	github.com/packaged/logger/v3 v3.1.0
+	github.com/stretchr/testify v1.8.1
 	go.uber.org/zap v1.27.0
-	golang.org/x/text v0.18.0
-	google.golang.org/grpc v1.67.0
-	google.golang.org/protobuf v1.34.2
+	golang.org/x/text v0.23.0
+	google.golang.org/grpc v1.71.0
+	google.golang.org/protobuf v1.36.6
 )
 
 require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/net v0.29.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1 // indirect
+	golang.org/x/net v0.37.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250324211829-b45e905df463 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

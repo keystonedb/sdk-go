@@ -77,7 +77,16 @@ func (s *Email) PropertyDefinition() proto.PropertyDefinition {
 }
 
 func NewEmail(email string) Email {
-	mask := email // TODO: MASK
+	var mask string
+	split := strings.SplitN(email, "@", 2)
+	mask = BasicMask(split[0])
+	if len(split) > 1 {
+		if strings.HasSuffix(split[1], ".me") {
+			mask += "@" + BasicMask(strings.TrimSuffix(split[1], ".me")) + ".me"
+		} else {
+			mask += "@" + split[1]
+		}
+	}
 	return Email{NewSecureString(email, mask)}
 }
 
