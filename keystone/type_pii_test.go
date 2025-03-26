@@ -18,8 +18,9 @@ func TestMaskEmail(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.email, func(t *testing.T) {
-			masked := NewEmail(test.email)
-			assert.Regexp(t, test.expectedMatch, masked.Masked)
+			secure := NewEmail(test.email)
+			assert.Equal(t, test.email, secure.Original)
+			assert.Regexp(t, test.expectedMatch, secure.Masked)
 		})
 	}
 }
