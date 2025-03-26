@@ -119,7 +119,7 @@ func (d *Requirement) createReference(actor *keystone.Actor) requirements.TestRe
 		Name:   keystone.NewPersonName(PersonName),
 		Email:  keystone.NewEmail(Email),
 		Phone:  keystone.NewPhone(Phone),
-		NonPii: "Random Value",
+		NonPii: "Random Referenced Value",
 	}
 
 	createErr := actor.Mutate(context.Background(), psn, keystone.WithPiiReference(actor.VendorID(), actor.AppID(), d.referenceID))
