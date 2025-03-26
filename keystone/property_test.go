@@ -36,6 +36,9 @@ func Test_Property_Name(t *testing.T) {
 		{"test123test", "test123test", "test_123_test"},
 		{"Test123Test", "Test123Test", "test_123_test"},
 		{"KeystoneIDsToUse", "KeystoneIDsToUse", "keystone_ids_to_use"},
+		{"Line1", "Line1", "line1"},
+		{"Last4", "Last4", "last4"},
+		{"CardLast4", "CardLast4", "card_last4"},
 	}
 
 	for _, test := range tests {

@@ -51,7 +51,8 @@ func (p *Property) Name() string {
 }
 
 var matchWords = []*regexp.Regexp{
-	regexp.MustCompile("([0-9]+|[A-Z][a-z]{2,})"),
+	regexp.MustCompile("([0-9]+)([A-Za-z])"),
+	regexp.MustCompile("([A-Z][a-z0-9]{2,})"),
 	regexp.MustCompile("([A-Z]+[a-z])([^a-z]|$)"),
 }
 var matchNonAlphaNum = regexp.MustCompile("([^a-z0-9A-Z])")
