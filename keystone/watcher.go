@@ -7,7 +7,12 @@ import (
 )
 
 type Watcher struct {
-	knownValues map[Property]*proto.Value
+	knownValues map[string]*watcherValue
+}
+
+type watcherValue struct {
+	Property Property
+	Value    *proto.Value
 }
 
 // NewDefaultsWatcher creates a new watcher with the default values of the given type
@@ -18,17 +23,19 @@ func NewDefaultsWatcher(v interface{}) (*Watcher, error) {
 
 // NewWatcher creates a new watcher with the given Value
 func NewWatcher(v interface{}) (*Watcher, error) {
-	w := &Watcher{
-		knownValues: make(map[Property]*proto.Value),
-	}
-
 	current, err := Marshal(v)
 	if err != nil {
 		return nil, err
 	}
+	return &Watcher{convert(current)}, nil
+}
 
-	w.knownValues = current
-	return w, nil
+func convert(current map[Property]*proto.Value) map[string]*watcherValue {
+	res := make(map[string]*watcherValue)
+	for k, currentV := range current {
+		res[k.Name()] = &watcherValue{Property: k, Value: currentV}
+	}
+	return res
 }
 
 func Changes(a, b interface{}) (map[Property]*proto.Value, error) {
@@ -55,40 +62,42 @@ func (w *Watcher) Changes(v interface{}, update bool) (map[Property]*proto.Value
 		return nil, err
 	}
 
+	latestV := convert(latest)
+
 	if w.knownValues == nil || len(w.knownValues) == 0 {
 		if update {
-			w.knownValues = latest
+			w.knownValues = latestV
 		}
 		return latest, nil
 	}
 
 	changes := make(map[Property]*proto.Value)
 	for k, lV := range latest {
-		prev, ok := w.knownValues[k]
-		if !ok || proto.MatchValue(prev, "_", lV) != nil {
+		prev, ok := w.knownValues[k.Name()]
+		if !ok || proto.MatchValue(prev.Value, "_", lV) != nil {
 			changes[k] = lV
 		}
 	}
 
 	if update {
-		w.knownValues = latest
+		w.knownValues = latestV
 	}
 
 	return changes, nil
 }
 
 func (w *Watcher) ReplaceKnownValues(vals map[Property]*proto.Value) {
-	w.knownValues = vals
+	w.knownValues = convert(vals)
 }
 
 func (w *Watcher) AppendKnownValues(vals map[Property]*proto.Value) {
 	if w.knownValues == nil || len(w.knownValues) == 0 {
-		w.knownValues = vals
+		w.knownValues = convert(vals)
 		return
 	}
 
 	for k, v := range vals {
-		w.knownValues[k] = v
+		w.knownValues[k.Name()] = &watcherValue{Property: k, Value: v}
 	}
 	return
 }

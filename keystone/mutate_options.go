@@ -63,7 +63,7 @@ func (m mutateProperties) apply(mutate *proto.MutateRequest) {
 
 func (m mutateProperties) prepare(w *Watcher) error {
 	for _, prop := range m.Property {
-		delete(w.knownValues, knownProperty(prop))
+		delete(w.knownValues, prop)
 	}
 	return nil
 }
