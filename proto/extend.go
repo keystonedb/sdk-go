@@ -21,3 +21,7 @@ func CreateDate(time time.Time) *Date {
 func NewRepeatedKeyValue() *RepeatedValue {
 	return &RepeatedValue{KeyValue: make(map[string][]byte)}
 }
+
+func (x *RepeatedValue) IsZero() bool {
+	return x == nil || (len(x.KeyValue) == 0 && len(x.Strings) == 0 && len(x.Ints) == 0)
+}

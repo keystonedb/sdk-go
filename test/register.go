@@ -30,6 +30,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/stringset"
 	"github.com/keystonedb/sdk-go/test/requirements/timeseries"
 	"github.com/keystonedb/sdk-go/test/requirements/unique_id"
+	"github.com/keystonedb/sdk-go/test/requirements/watcher"
 )
 
 var reqs []requirements.Requirement
@@ -64,9 +65,10 @@ func init() {
 	reqs = append(reqs, &pii.Requirement{})
 	reqs = append(reqs, &ratelimit.Requirement{})
 	reqs = append(reqs, &iid.Requirement{})
+	reqs = append(reqs, &watcher.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &pii.Requirement{})
+		reqs = append(reqs, &watcher.Requirement{})
 	}
 }

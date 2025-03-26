@@ -51,15 +51,15 @@ func MatchValue(prop *Value, name string, expect *Value) error {
 }
 
 func MatchRepeatedValue(input, expect *RepeatedValue) error {
-	if input == nil && expect == nil {
+	if input.IsZero() && expect.IsZero() {
 		return nil
 	}
 
-	if input == nil {
+	if input.IsZero() {
 		return fmt.Errorf("input is nil, expect is not")
 	}
 
-	if expect == nil {
+	if expect.IsZero() {
 		return fmt.Errorf("expect is nil, input is not")
 	}
 

@@ -73,8 +73,17 @@ func (w *Watcher) Changes(v interface{}, update bool) (map[Property]*proto.Value
 
 	changes := make(map[Property]*proto.Value)
 	for k, lV := range latest {
+		updated := false
 		prev, ok := w.knownValues[k.Name()]
-		if !ok || proto.MatchValue(prev.Value, "_", lV) != nil {
+		if !ok {
+			// If we don't have a previous value, consider changed
+			updated = true
+		} else {
+			matchErr := proto.MatchValue(prev.Value, "_", lV)
+			// If the values do not match, consider changed
+			updated = matchErr != nil
+		}
+		if updated {
 			changes[k] = lV
 		}
 	}

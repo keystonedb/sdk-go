@@ -23,8 +23,6 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 }
 
 func (d *Requirement) action(actor *keystone.Actor) requirements.TestResult {
-	return requirements.TestResult{
-		Name:  "Action",
-		Error: errors.New("not Implemented"),
-	}
+	res := requirements.TestResult{Name: "Action"}
+	return res.WithError(errors.New("not Implemented"))
 }
