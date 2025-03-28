@@ -25,3 +25,10 @@ func (id ID) ChildID() string {
 func (id ID) Matches(input string) bool {
 	return string(id) == input
 }
+
+func NewID(parent, child string) ID {
+	if child == "" {
+		return ID(parent)
+	}
+	return ID(parent + "-" + child)
+}
