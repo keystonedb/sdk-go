@@ -5,6 +5,7 @@ import (
 	"net"
 	"regexp"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/keystonedb/sdk-go/proto"
 )
@@ -110,11 +111,17 @@ func BasicMask(unmasked string) string {
 	for i, word := range words {
 		word = strings.TrimSpace(word)
 		// if greater than 2 characters, put 3-7 asterisks between the first and last letter
-		if l := len(word); l > 2 {
-			words[i] = word[:1] + strings.Repeat("*", rand.IntN(7)+3) + word[l-1:]
+		if l := utf8.RuneCountInString(word); l > 2 {
+			first, _ := utf8.DecodeRuneInString(word)
+			last, _ := utf8.DecodeLastRuneInString(word)
+			words[i] = string(first) + strings.Repeat("*", rand.IntN(7)+3) + string(last)
 		} else if l > 1 {
 			// whole word becomes 3-7 asterisks
-			words[i] = word[:1] + strings.Repeat("*", rand.IntN(7)+3)
+			first, _ := utf8.DecodeRuneInString(word)
+			words[i] = string(first) + strings.Repeat("*", rand.IntN(7)+3)
+		} else {
+			// single character, mask it
+			words[i] = strings.Repeat("*", rand.IntN(7)+3)
 		}
 	}
 	return strings.Join(words, " ")

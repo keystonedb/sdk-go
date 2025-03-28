@@ -7,6 +7,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestBasicMask(t *testing.T) {
+	tests := []struct {
+		text          string
+		expectedMatch *regexp.Regexp
+	}{
+		{"Tom Kay", regexp.MustCompile("T\\*+m K\\*+y")},
+		{"Testing Út 106 5", regexp.MustCompile("T\\*+g Ú\\*+ 1\\*+6 \\*+")},
+	}
+
+	for _, test := range tests {
+		t.Run(test.text, func(t *testing.T) {
+			masked := BasicMask(test.text)
+			assert.NotEqual(t, test.text, masked)
+			assert.Regexp(t, test.expectedMatch, masked)
+		})
+	}
+}
+
 func TestMaskEmail(t *testing.T) {
 	tests := []struct {
 		email         string
