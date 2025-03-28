@@ -24,3 +24,21 @@ func TestMaskEmail(t *testing.T) {
 		})
 	}
 }
+
+func TestMaskPhone(t *testing.T) {
+	tests := []struct {
+		phone         string
+		expectedMatch *regexp.Regexp
+	}{
+		{"+440123456789", regexp.MustCompile("\\+44012\\*+789")},
+		{"0010123456789", regexp.MustCompile("001012\\*+789")},
+	}
+
+	for _, test := range tests {
+		t.Run(test.phone, func(t *testing.T) {
+			secure := NewPhone(test.phone)
+			assert.Equal(t, test.phone, secure.Original)
+			assert.Regexp(t, test.expectedMatch, secure.Masked)
+		})
+	}
+}

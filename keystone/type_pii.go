@@ -3,6 +3,7 @@ package keystone
 import (
 	"math/rand/v2"
 	"net"
+	"regexp"
 	"strings"
 
 	"github.com/keystonedb/sdk-go/proto"
@@ -61,8 +62,11 @@ func (s *PersonName) PropertyDefinition() proto.PropertyDefinition {
 
 type Phone struct{ SecureString }
 
+// keep last 3, mask 4 preceeding, keep rest
+var phoneMask = regexp.MustCompile(`^(.*?)(\d{0,4})(\d{3})$`)
+
 func NewPhone(phone string) Phone {
-	mask := phone // TODO: MASK
+	mask := phoneMask.ReplaceAllString(phone, "${1}"+strings.Repeat("*", rand.IntN(1)+4)+"${3}")
 	return Phone{NewSecureString(phone, mask)}
 }
 
