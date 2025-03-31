@@ -2,12 +2,27 @@ package keystone
 
 import "github.com/keystonedb/sdk-go/proto"
 
+const noWorkspace = "__"
+
 // Actor is a struct that represents an actor making requests to keystone
 type Actor struct {
 	connection  *Connection
 	workspaceID string
 	traceID     string
 	user        *proto.User
+}
+
+func (a *Actor) CloneWithoutWorkspace() *Actor {
+	if a == nil {
+		return nil
+	}
+
+	return &Actor{
+		connection:  a.connection,
+		workspaceID: noWorkspace,
+		traceID:     a.traceID,
+		user:        a.user,
+	}
 }
 
 func (a *Actor) ReplaceConnection(c *Connection) { a.connection = c }
