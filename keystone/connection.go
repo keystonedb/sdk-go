@@ -308,3 +308,10 @@ func (c *Connection) IIDLookup(ctx context.Context, in *proto.IIDRequest, opts .
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) EventStream(ctx context.Context, in *proto.EventStreamRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[proto.EventStreamResponse], error) {
+	tl := c.timeLogConfig.NewLog("EventStream", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.EventStream(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

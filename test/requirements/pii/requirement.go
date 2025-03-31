@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	PersonName = "John Smith"
+	PersonName = "John Út Smith"
 	Email      = "john.smith@example.com"
 	Phone      = "1234567890"
 	Phone2     = "87654567867"
@@ -42,18 +42,18 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.createReuseToken(actor),
 		d.create(actor),
 		d.createReference(actor),
-		d.read(actor, true, " After Create"),
-		d.read(actor, false, " After Create - Ref"),
+		d.read(actor, true, "After Create"),
+		d.read(actor, false, "After Create - Ref"),
 		d.updateWithoutPiiWrite(actor),
 		d.update(actor),
-		d.read(actor, true, " After Update"),
-		d.read(actor, false, " After Update - Ref"),
+		d.read(actor, true, "After Update"),
+		d.read(actor, false, "After Update - Ref"),
 		d.createWithoutToken(actor),
 		d.anonymize(actor),
 		d.readAnonymized(actor),
 		d.restore(actor),
-		d.read(actor, true, " After Restore"),
-		d.read(actor, false, " After Restore - Ref"),
+		d.read(actor, true, "After Restore"),
+		d.read(actor, false, "After Restore - Ref"),
 	}
 }
 
