@@ -28,7 +28,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 func (d *Requirement) action(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Stream Receive"}
 
-	err := actor.EventStream(context.Background(), d.Handle, "actions", true, nil, keystone.OwnKey("tst2"))
+	err := actor.EventStream(context.Background(), d.Handle, "actions", true, keystone.OwnKey("tst2"))
 	return res.WithError(err)
 }
 

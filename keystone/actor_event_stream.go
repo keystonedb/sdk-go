@@ -46,12 +46,11 @@ func (k *Key) toProto(a *Actor) *proto.Key {
 	return ret
 }
 
-func (a *Actor) EventStream(ctx context.Context, handler func(response *proto.EventStreamResponse) error, name string, allWorkspaces bool, schema, eventType *Key) error {
+func (a *Actor) EventStream(ctx context.Context, handler func(response *proto.EventStreamResponse) error, name string, allWorkspaces bool, eventType *Key) error {
 	req := &proto.EventStreamRequest{
 		Authorization: a.Authorization(),
 		StreamName:    name,
 		AllWorkspaces: allWorkspaces,
-		Schema:        schema.toProto(a),
 		EventType:     eventType.toProto(a),
 	}
 
