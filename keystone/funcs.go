@@ -7,3 +7,7 @@ func mapKeys(m map[string]string) []string {
 	}
 	return keys
 }
+
+func Pointer[T any](d T) *T {
+	return &d
+}

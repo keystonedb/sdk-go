@@ -104,6 +104,10 @@ func (a *Actor) Get(ctx context.Context, retrieveBy RetrieveBy, dst interface{},
 		}
 	}
 
+	if observe, ok := dst.(RetrieveObserver); ok {
+		observe.ObserveRetrieve(resp)
+	}
+
 	if gr, ok := dst.(GenericResult); ok {
 		return UnmarshalGeneric(resp, gr)
 	}
