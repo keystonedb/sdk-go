@@ -38,6 +38,18 @@ func (m onConflictUseID) apply(mutate *proto.MutateRequest) {
 	mutate.ConflictUniquePropertyAcquire = m.Property
 }
 
+// OnConflictIgnore will skip the mutation if the entity already exists
+func OnConflictIgnore() MutateOption {
+	return onConflictIgnore{}
+}
+
+type onConflictIgnore struct {
+}
+
+func (m onConflictIgnore) apply(mutate *proto.MutateRequest) {
+	mutate.Options = append(mutate.Options, proto.MutateRequest_OnConflictIgnore)
+}
+
 // MutateProperties Only mutate the specified properties
 func MutateProperties(property ...string) MutateOption {
 	return mutateProperties{Property: property}
