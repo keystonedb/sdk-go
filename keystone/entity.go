@@ -23,7 +23,7 @@ type EmbeddedEntity struct {
 	_exists   *bool
 }
 
-func (e *EmbeddedEntity) MutationSuccess(resp *proto.MutateResponse) {
+func (e *EmbeddedEntity) ObserveMutation(resp *proto.MutateResponse) {
 	if e._entityID == "" && resp.EntityId != "" {
 		e._entityID = ID(resp.EntityId)
 		e._exists = Pointer(true)

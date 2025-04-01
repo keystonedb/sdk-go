@@ -23,14 +23,14 @@ func observeMutation(v interface{}, m *proto.MutateResponse) {
 			vp.Elem().Set(currentVal)
 			x := vp.Interface()
 			if mo, ok := x.(MutationObserver); ok {
-				mo.MutationSuccess(m)
+				mo.ObserveMutation(m)
 				currentVal.Set(reflector.Deref(vp))
 				continue
 			}
 		}
 
 		if currentVal.Type().Implements(mutationObserverType) {
-			currentVal.Interface().(MutationObserver).MutationSuccess(m)
+			currentVal.Interface().(MutationObserver).ObserveMutation(m)
 		} else if field.Type.Kind() == reflect.Struct && !currentVal.IsZero() && currentVal.CanInterface() {
 			observeMutation(currentVal.Interface(), m)
 		}

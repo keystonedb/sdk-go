@@ -60,5 +60,5 @@ type NestedChildDataMutator interface {
 }
 
 type MutationObserver interface {
-	MutationSuccess(response *proto.MutateResponse)
+	ObserveMutation(response *proto.MutateResponse)
 }

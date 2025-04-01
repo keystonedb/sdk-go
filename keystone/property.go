@@ -133,6 +133,8 @@ func getFieldOptions(f reflect.StructField) fieldOptions {
 
 		case "unique":
 			opt.unique = true
+		case "primary":
+			opt.primary = true
 		case "indexed", "query":
 			opt.indexed = true
 		case "searchable", "search":
@@ -169,6 +171,7 @@ type fieldOptions struct {
 
 	// options
 	unique        bool
+	primary       bool
 	indexed       bool
 	searchable    bool
 	immutable     bool
@@ -208,6 +211,7 @@ func (fOpt fieldOptions) applyTypes(onto proto.PropertyDefinition) proto.Propert
 
 func (fOpt fieldOptions) applyOptions(onto []proto.Property_Option) []proto.Property_Option {
 	onto = appendOption(proto.Property_Unique, onto, fOpt.unique)
+	onto = appendOption(proto.Property_Primary, onto, fOpt.primary)
 	onto = appendOption(proto.Property_Indexed, onto, fOpt.indexed)
 	onto = appendOption(proto.Property_Immutable, onto, fOpt.immutable)
 	onto = appendOption(proto.Property_Deprecated, onto, fOpt.deprecated)

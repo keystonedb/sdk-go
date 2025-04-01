@@ -45,15 +45,15 @@ func (a *Actor) RemoteMutate(ctx context.Context, entityID ID, src interface{}, 
 
 	mResp, err := a.connection.Mutate(ctx, m)
 
-	if err == nil && mResp.Success {
+	if err == nil {
 		for _, option := range options {
 			if optObserver, ok := option.(MutationObserver); ok {
-				optObserver.MutationSuccess(mResp)
+				optObserver.ObserveMutation(mResp)
 			}
 		}
 
 		if rawEntity, ok := src.(MutationObserver); ok {
-			rawEntity.MutationSuccess(mResp)
+			rawEntity.ObserveMutation(mResp)
 			observeMutation(rawEntity, mResp)
 		}
 	}
@@ -159,28 +159,33 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 
 	mResp, err := a.connection.Mutate(ctx, m)
 
-	if err == nil && mResp.Success {
-		for _, onMutateSuccessFunc := range onSuccessMutate {
-			onMutateSuccessFunc(mResp)
+	if err == nil {
+
+		if mResp.GetSuccess() {
+			for _, onMutateSuccessFunc := range onSuccessMutate {
+				onMutateSuccessFunc(mResp)
+			}
 		}
 
 		for _, option := range options {
 			if optObserver, ok := option.(MutationObserver); ok {
-				optObserver.MutationSuccess(mResp)
+				optObserver.ObserveMutation(mResp)
 			}
 		}
 
-		if rawEntity, ok := src.(Entity); ok && entityID == "" {
+		if rawEntity, ok := src.(Entity); ok && entityID == "" && mResp.GetEntityId() != "" {
 			rawEntity.SetKeystoneID(ID(mResp.GetEntityId()))
 		}
 
 		if rawEntity, ok := src.(MutationObserver); ok {
-			rawEntity.MutationSuccess(mResp)
+			rawEntity.ObserveMutation(mResp)
 			observeMutation(rawEntity, mResp)
 		}
 
-		for _, onSuccessFunc := range onSuccess {
-			logger.I().ErrorIf(onSuccessFunc(), "failed to run onSuccess function")
+		if mResp.GetSuccess() {
+			for _, onSuccessFunc := range onSuccess {
+				logger.I().ErrorIf(onSuccessFunc(), "failed to run onSuccess function")
+			}
 		}
 
 	}

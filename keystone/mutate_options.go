@@ -118,7 +118,10 @@ func (m prepareObjects) apply(mutate *proto.MutateRequest) {
 		mutate.Mutation.Objects = append(mutate.Mutation.Objects, pObj)
 	}
 }
-func (m prepareObjects) MutationSuccess(response *proto.MutateResponse) {
+func (m prepareObjects) ObserveMutation(response *proto.MutateResponse) {
+	if !response.GetSuccess() {
+		return
+	}
 	for _, obj := range m.objects {
 		for _, respObj := range response.SignedObjectUrls {
 			if obj.GetPath() == respObj.GetPath() && respObj.GetUrl() != "" {

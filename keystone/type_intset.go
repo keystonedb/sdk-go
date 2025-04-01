@@ -196,8 +196,10 @@ func (s *IntSet) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_IntSet}
 }
 
-func (s *IntSet) MutationSuccess(resp *proto.MutateResponse) {
-	s.merge()
+func (s *IntSet) ObserveMutation(resp *proto.MutateResponse) {
+	if resp.GetSuccess() {
+		s.merge()
+	}
 }
 
 func (s *IntSet) IsZero() bool {

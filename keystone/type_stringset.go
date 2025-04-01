@@ -203,6 +203,8 @@ func (s *StringSet) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_StringSet}
 }
 
-func (s *StringSet) MutationSuccess(resp *proto.MutateResponse) {
-	s.merge()
+func (s *StringSet) ObserveMutation(resp *proto.MutateResponse) {
+	if resp.GetSuccess() {
+		s.merge()
+	}
 }
