@@ -25,7 +25,7 @@ type Transaction struct {
 	PaymentType string
 }
 
-func (t Transaction) GetKeystoneDefinition() keystone.TypeDefinition {
+func (t *Transaction) GetKeystoneDefinition() keystone.TypeDefinition {
 	return keystone.TypeDefinition{
 		Options: []proto.Schema_Option{proto.Schema_Immutable},
 	}

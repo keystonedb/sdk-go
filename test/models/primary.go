@@ -3,6 +3,7 @@ package models
 import (
 	"crypto/sha1"
 	"fmt"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
 )
@@ -19,7 +20,7 @@ func (w *WithPrimary) SetHash() {
 	w.NameHash = fmt.Sprintf("%x", sha1.Sum([]byte(toHash)))[:12]
 }
 
-func (w WithPrimary) GetKeystoneDefinition() keystone.TypeDefinition {
+func (w *WithPrimary) GetKeystoneDefinition() keystone.TypeDefinition {
 	return keystone.TypeDefinition{
 		Options: []proto.Schema_Option{proto.Schema_Immutable},
 	}

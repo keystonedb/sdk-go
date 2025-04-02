@@ -1,9 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
-	"time"
 )
 
 type EnumValue int32
@@ -35,7 +36,7 @@ type DataTypes struct {
 	EnumValue    EnumValue
 }
 
-func (t DataTypes) GetKeystoneDefinition() keystone.TypeDefinition {
+func (t *DataTypes) GetKeystoneDefinition() keystone.TypeDefinition {
 	return keystone.TypeDefinition{
 		Options: []proto.Schema_Option{proto.Schema_StoreMutations},
 	}

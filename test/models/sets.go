@@ -18,6 +18,6 @@ type FileData struct {
 	Identifier      string
 }
 
-func (f FileData) GetKeystoneDefinition() keystone.TypeDefinition {
+func (f *FileData) GetKeystoneDefinition() keystone.TypeDefinition {
 	return keystone.TypeDefinition{}
 }
