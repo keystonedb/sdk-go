@@ -12,6 +12,32 @@ func Test_PropertyNils(t *testing.T) {
 	prop.SetPrefix("")
 }
 
+func Test_Property_Names(t *testing.T) {
+	tests := []struct {
+		name     string
+		property []string
+		expect   []string
+	}{
+		{"empty", []string{}, []string{}},
+		{"single", []string{"TestOne"}, []string{"test_one"}},
+		{"multiple", []string{"TestTwo", "TestThree"}, []string{"test_two", "test_three"}},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			names := PropertyNames(test.property...)
+			if len(names) != len(test.expect) {
+				t.Errorf("PropertyNames() = %v; want %v", names, test.expect)
+			}
+			for i, name := range names {
+				if name != test.expect[i] {
+					t.Errorf("PropertyNames()[%d] = %s; want %s", i, name, test.expect[i])
+				}
+			}
+		})
+	}
+}
+
 func Test_Property_Name(t *testing.T) {
 	tests := []struct {
 		name     string

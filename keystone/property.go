@@ -57,6 +57,14 @@ var matchWords = []*regexp.Regexp{
 }
 var matchNonAlphaNum = regexp.MustCompile("([^a-z0-9A-Z])")
 
+func PropertyNames(str ...string) []string {
+	names := make([]string, len(str))
+	for i, s := range str {
+		names[i] = PropertyName(s)
+	}
+	return names
+}
+
 func PropertyName(str string) string {
 	for _, match := range matchWords {
 		str = match.ReplaceAllString(str, "_${1}_${2}")
