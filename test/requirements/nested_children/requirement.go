@@ -34,6 +34,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.loadChildren(actor),
 		d.updateChildren(actor),
 		d.verifyChildren(actor),
+		d.truncateChildren(actor),
 	}
 }
 
@@ -212,6 +213,54 @@ func (d *Requirement) verifyChildren(actor *keystone.Actor) requirements.TestRes
 
 	if string(sub.Lines[0].Data) != "updated data" {
 		return res.WithError(errors.New("child data was not correct, got " + string(sub.Lines[0].Data)))
+	}
+
+	return res
+}
+
+func (d *Requirement) truncateChildren(actor *keystone.Actor) requirements.TestResult {
+	res := requirements.TestResult{
+		Name: "Truncate Children",
+	}
+
+	sub := &models.File{}
+	sub.SetKeystoneID(d.fileID)
+
+	// Check children exist
+
+	lines := keystone.WithChildren(keystone.Type(models.FileLine{}))
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(sub, d.fileID), sub, &lines)
+	if getErr != nil {
+		return res.WithError(getErr)
+	}
+
+	sub.Lines = keystone.ChildrenFromLoader[models.FileLine](lines)
+	if len(sub.Lines) == 0 {
+		return res.WithError(fmt.Errorf("expected lines, got %d", len(sub.Lines)))
+	}
+
+	sub.TruncateByType(models.FileLine{})
+
+	/*
+		TODO: Check adding children of a different type alongside the delete
+		chd := keystone.NewDynamicChild(models.FileLine{})
+		chd.Append("data", []byte("New Child"))
+		sub.AddChild(chd)
+	*/
+	removeErr := actor.Mutate(context.Background(), sub, keystone.WithMutationComment("Remove all children"))
+	if removeErr != nil {
+		return res.WithError(removeErr)
+	}
+
+	lines = keystone.WithChildren(keystone.Type(models.FileLine{}))
+	getErr = actor.Get(context.Background(), keystone.ByEntityID(sub, d.fileID), sub, &lines)
+	if getErr != nil {
+		return res.WithError(getErr)
+	}
+
+	sub.Lines = keystone.ChildrenFromLoader[models.FileLine](lines)
+	if len(sub.Lines) != 0 {
+		return res.WithError(fmt.Errorf("expected 0 lines, got %d", len(sub.Lines)))
 	}
 
 	return res

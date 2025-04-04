@@ -129,6 +129,7 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 	if entityWithChildren, ok := src.(ChildProvider); ok {
 		mutation.Children = entityWithChildren.GetChildrenToStore()
 		mutation.RemoveChildren = entityWithChildren.GetChildrenToRemove()
+		mutation.RemoveAllChildrenByType = entityWithChildren.GetTruncateChildrenType()
 
 		if entityWithEChildren, okU := src.(ChildUpdateProvider); okU {
 			onSuccessMutate = append(onSuccessMutate, entityWithEChildren.updateChildren)

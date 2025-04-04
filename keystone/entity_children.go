@@ -12,6 +12,7 @@ type ChildProvider interface {
 	GetChildrenToStore() []*proto.EntityChild
 	GetChildrenToRemove() []*proto.EntityChild
 	ClearChildChanges() error
+	GetTruncateChildrenType() []*proto.Key
 }
 
 type ChildUpdateProvider interface {
@@ -23,11 +24,18 @@ type EmbeddedChildren struct {
 	ksEntityChildren map[string]NestedChild
 	// ksEntityChildrenToRemove is a map keyed by child ID, with the value being the child type
 	ksEntityChildrenToRemove map[string]string
+	ksTruncateChildrenType   []*proto.Key
+}
+
+// WARNING: Adding children by this same type will not work in a single mutate call
+func (e *EmbeddedChildren) TruncateByType(childType interface{}) {
+	e.ksTruncateChildrenType = append(e.ksTruncateChildrenType, &proto.Key{Key: Type(childType)})
 }
 
 func (e *EmbeddedChildren) ClearChildChanges() error {
 	e.ksEntityChildren = make(map[string]NestedChild)
 	e.ksEntityChildrenToRemove = nil
+	e.ksTruncateChildrenType = nil
 	return nil
 }
 
@@ -81,6 +89,10 @@ func (e *EmbeddedChildren) GetChildrenToStore() []*proto.EntityChild {
 		children = append(children, eChild)
 	}
 	return children
+}
+
+func (e *EmbeddedChildren) GetTruncateChildrenType() []*proto.Key {
+	return e.ksTruncateChildrenType
 }
 
 func (e *EmbeddedChildren) GetChildrenToRemove() []*proto.EntityChild {

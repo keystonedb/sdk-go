@@ -9,7 +9,6 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/datatypes"
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
 	"github.com/keystonedb/sdk-go/test/requirements/embedded"
-	"github.com/keystonedb/sdk-go/test/requirements/event_stream"
 	"github.com/keystonedb/sdk-go/test/requirements/events"
 	"github.com/keystonedb/sdk-go/test/requirements/exists"
 	"github.com/keystonedb/sdk-go/test/requirements/iid"
@@ -71,8 +70,8 @@ func init() {
 	reqs = append(reqs, &exists.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
 
-	if false {
+	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &exists.Requirement{})
+		reqs = append(reqs, &nested_children.Requirement{})
 	}
 }
