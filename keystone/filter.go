@@ -7,6 +7,7 @@ type filterRequest struct {
 	Filters        []*proto.PropertyFilter
 	Labels         []*proto.EntityLabel
 	RelationOf     *proto.RelationOf
+	EntityIds      []string
 	ParentEntityID string
 	PerPage        int32
 	PageNumber     int32

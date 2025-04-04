@@ -27,6 +27,7 @@ func (a *Actor) Find(ctx context.Context, entityType string, retrieve RetrieveOp
 	findRequest.LabelFilters = fReq.Labels
 	findRequest.RelationOf = fReq.RelationOf
 	findRequest.ParentEntityId = fReq.ParentEntityID
+	findRequest.EntityIds = fReq.EntityIds
 
 	resp, err := a.connection.Find(ctx, findRequest)
 	if err != nil {
