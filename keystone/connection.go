@@ -315,3 +315,10 @@ func (c *Connection) EventStream(ctx context.Context, in *proto.EventStreamReque
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) QueryIndex(ctx context.Context, in *proto.QueryIndexRequest, opts ...grpc.CallOption) (*proto.QueryIndexResponse, error) {
+	tl := c.timeLogConfig.NewLog("QueryIndex", zap.String("schema", in.GetSchema().GetKey()))
+	resp, err := c.client.QueryIndex(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

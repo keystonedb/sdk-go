@@ -5,9 +5,14 @@ import (
 	"github.com/keystonedb/sdk-go/proto"
 )
 
-// List returns a list of entities within an active set
+// Deprecated: use keystone.Connection.List instead
 func (a *Actor) List(ctx context.Context, entityType string, retrieveProperties []string, options ...FindOption) ([]*proto.EntityResponse, error) {
-	listRequest := &proto.ListRequest{
+	return a.QueryIndex(ctx, entityType, retrieveProperties, options...)
+}
+
+// QueryIndex returns a list of entities within the index
+func (a *Actor) QueryIndex(ctx context.Context, entityType string, retrieveProperties []string, options ...FindOption) ([]*proto.EntityResponse, error) {
+	listRequest := &proto.QueryIndexRequest{
 		Authorization: a.Authorization(),
 		Schema:        &proto.Key{Key: entityType, Source: a.Authorization().Source},
 		Properties:    retrieveProperties,
@@ -31,7 +36,7 @@ func (a *Actor) List(ctx context.Context, entityType string, retrieveProperties 
 		}}
 	}
 
-	resp, err := a.connection.List(ctx, listRequest)
+	resp, err := a.connection.QueryIndex(ctx, listRequest)
 	if err != nil {
 		return nil, err
 	}

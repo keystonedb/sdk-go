@@ -31,6 +31,7 @@ const (
 	Keystone_Retrieve_FullMethodName         = "/kubex.keystone.Keystone/Retrieve"
 	Keystone_Find_FullMethodName             = "/kubex.keystone.Keystone/Find"
 	Keystone_List_FullMethodName             = "/kubex.keystone.Keystone/List"
+	Keystone_QueryIndex_FullMethodName       = "/kubex.keystone.Keystone/QueryIndex"
 	Keystone_Lookup_FullMethodName           = "/kubex.keystone.Keystone/Lookup"
 	Keystone_GroupCount_FullMethodName       = "/kubex.keystone.Keystone/GroupCount"
 	Keystone_Logs_FullMethodName             = "/kubex.keystone.Keystone/Logs"
@@ -67,7 +68,9 @@ type KeystoneClient interface {
 	// Load
 	Retrieve(ctx context.Context, in *EntityRequest, opts ...grpc.CallOption) (*EntityResponse, error)
 	Find(ctx context.Context, in *FindRequest, opts ...grpc.CallOption) (*FindResponse, error)
+	// Deprecated: Do not use.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
+	QueryIndex(ctx context.Context, in *QueryIndexRequest, opts ...grpc.CallOption) (*QueryIndexResponse, error)
 	Lookup(ctx context.Context, in *LookupRequest, opts ...grpc.CallOption) (*LookupResponse, error)
 	GroupCount(ctx context.Context, in *GroupCountRequest, opts ...grpc.CallOption) (*GroupCountResponse, error)
 	Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsResponse, error)
@@ -204,10 +207,21 @@ func (c *keystoneClient) Find(ctx context.Context, in *FindRequest, opts ...grpc
 	return out, nil
 }
 
+// Deprecated: Do not use.
 func (c *keystoneClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListResponse)
 	err := c.cc.Invoke(ctx, Keystone_List_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) QueryIndex(ctx context.Context, in *QueryIndexRequest, opts ...grpc.CallOption) (*QueryIndexResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryIndexResponse)
+	err := c.cc.Invoke(ctx, Keystone_QueryIndex_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -374,7 +388,9 @@ type KeystoneServer interface {
 	// Load
 	Retrieve(context.Context, *EntityRequest) (*EntityResponse, error)
 	Find(context.Context, *FindRequest) (*FindResponse, error)
+	// Deprecated: Do not use.
 	List(context.Context, *ListRequest) (*ListResponse, error)
+	QueryIndex(context.Context, *QueryIndexRequest) (*QueryIndexResponse, error)
 	Lookup(context.Context, *LookupRequest) (*LookupResponse, error)
 	GroupCount(context.Context, *GroupCountRequest) (*GroupCountResponse, error)
 	Logs(context.Context, *LogsRequest) (*LogsResponse, error)
@@ -436,6 +452,9 @@ func (UnimplementedKeystoneServer) Find(context.Context, *FindRequest) (*FindRes
 }
 func (UnimplementedKeystoneServer) List(context.Context, *ListRequest) (*ListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedKeystoneServer) QueryIndex(context.Context, *QueryIndexRequest) (*QueryIndexResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryIndex not implemented")
 }
 func (UnimplementedKeystoneServer) Lookup(context.Context, *LookupRequest) (*LookupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Lookup not implemented")
@@ -709,6 +728,24 @@ func _Keystone_List_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeystoneServer).List(ctx, req.(*ListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_QueryIndex_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryIndexRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).QueryIndex(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_QueryIndex_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).QueryIndex(ctx, req.(*QueryIndexRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -994,6 +1031,10 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Keystone_List_Handler,
+		},
+		{
+			MethodName: "QueryIndex",
+			Handler:    _Keystone_QueryIndex_Handler,
 		},
 		{
 			MethodName: "Lookup",
