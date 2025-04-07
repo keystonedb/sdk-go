@@ -34,6 +34,7 @@ type DataTypes struct {
 	MinMax       keystone.MinMax
 	Flags        []EnumValue
 	EnumValue    EnumValue
+	ExternalID   keystone.ExternalID
 }
 
 func (t *DataTypes) GetKeystoneDefinition() keystone.TypeDefinition {

@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-func NewExternalID(vendorID, appID, entityType string, id ID) *ExternalID {
-	return &ExternalID{
+func NewExternalID(vendorID, appID, entityType string, id ID) ExternalID {
+	return ExternalID{
 		vendorID:   vendorID,
 		appID:      appID,
 		entityType: entityType,
@@ -24,7 +24,7 @@ type ExternalID struct {
 
 func (f *ExternalID) MarshalValue() (*proto.Value, error) {
 	return &proto.Value{
-		Text: f.vendorID + "/" + f.appID + "/" + f.entityType + "/" + f.id.String(),
+		Text: f.String(),
 	}, nil
 }
 
@@ -35,7 +35,37 @@ func (f *ExternalID) UnmarshalValue(value *proto.Value) error {
 	if value.Text == "" {
 		return nil
 	}
-	parts := strings.Split(value.Text, "/")
+	return f.FromString(value.Text)
+}
+
+func (f *ExternalID) PropertyDefinition() proto.PropertyDefinition {
+	return proto.PropertyDefinition{DataType: proto.Property_Text, ExtendedType: proto.Property_ExternalID}
+}
+
+func (f *ExternalID) IsZero() bool {
+	return f == nil || f.id.ParentID() == ""
+}
+
+func (f *ExternalID) ID() *ID {
+	if f == nil {
+		return nil
+	}
+	return &f.id
+}
+
+func (f *ExternalID) Source() *Key {
+	return NewKey(f.vendorID, f.appID, f.entityType)
+}
+
+func (f *ExternalID) String() string {
+	if f == nil {
+		return ""
+	}
+	return f.vendorID + "/" + f.appID + "/" + f.entityType + "/" + f.id.String()
+}
+
+func (f *ExternalID) FromString(input string) error {
+	parts := strings.Split(input, "/")
 	switch len(parts) {
 	case 1:
 		f.id = ID(parts[0])
@@ -57,21 +87,11 @@ func (f *ExternalID) UnmarshalValue(value *proto.Value) error {
 	return nil
 }
 
-func (f *ExternalID) PropertyDefinition() proto.PropertyDefinition {
-	return proto.PropertyDefinition{DataType: proto.Property_Text, ExtendedType: proto.Property_ExternalID}
-}
-
-func (f *ExternalID) IsZero() bool {
-	return f == nil || f.id.ParentID() == ""
-}
-
-func (f *ExternalID) ID() *ID {
-	if f == nil {
-		return nil
+func ExternalIDFromString(input string) (*ExternalID, error) {
+	f := &ExternalID{}
+	err := f.FromString(input)
+	if err != nil {
+		return nil, err
 	}
-	return &f.id
-}
-
-func (f *ExternalID) Source() *Key {
-	return NewKey(f.vendorID, f.appID, f.entityType)
+	return f, nil
 }

@@ -31,6 +31,7 @@ var (
 	RawData      = []byte("rawdata")
 	EnumVal      = models.ENUM_VALUE1
 	EnumVals     = []models.EnumValue{models.ENUM_VALUE0, models.ENUM_VALUE1}
+	ExternalID   = keystone.NewExternalID("ven", "app", "etype", "external_id")
 )
 
 type Requirement struct {
@@ -78,6 +79,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		RawData:      RawData,
 		EnumValue:    EnumVal,
 		Flags:        EnumVals,
+		ExternalID:   ExternalID,
 	}
 
 	createErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Create a default set"))
@@ -133,6 +135,8 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("EnumValue mismatch")
 		} else if !reflect.DeepEqual(dt.Flags, EnumVals) {
 			getErr = errors.New("flags mismatch")
+		} else if dt.ExternalID.String() != ExternalID.String() {
+			getErr = errors.New("ExternalID mismatch")
 		}
 	}
 

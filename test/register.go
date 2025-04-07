@@ -70,7 +70,7 @@ func init() {
 	reqs = append(reqs, &exists.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
 
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
 		reqs = append(reqs, &nested_children.Requirement{})
 	}
