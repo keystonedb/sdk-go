@@ -25,6 +25,7 @@ const (
 	Keystone_PiiToken_FullMethodName         = "/kubex.keystone.Keystone/PiiToken"
 	Keystone_PiiAnonymize_FullMethodName     = "/kubex.keystone.Keystone/PiiAnonymize"
 	Keystone_Mutate_FullMethodName           = "/kubex.keystone.Keystone/Mutate"
+	Keystone_Destroy_FullMethodName          = "/kubex.keystone.Keystone/Destroy"
 	Keystone_Log_FullMethodName              = "/kubex.keystone.Keystone/Log"
 	Keystone_ReportTimeSeries_FullMethodName = "/kubex.keystone.Keystone/ReportTimeSeries"
 	Keystone_ChartTimeSeries_FullMethodName  = "/kubex.keystone.Keystone/ChartTimeSeries"
@@ -61,6 +62,7 @@ type KeystoneClient interface {
 	PiiAnonymize(ctx context.Context, in *PiiAnonymizeRequest, opts ...grpc.CallOption) (*PiiAnonymizeResponse, error)
 	// Store
 	Mutate(ctx context.Context, in *MutateRequest, opts ...grpc.CallOption) (*MutateResponse, error)
+	Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error)
 	Log(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error)
 	// Reporting
 	ReportTimeSeries(ctx context.Context, in *ReportTimeSeriesRequest, opts ...grpc.CallOption) (*MutateResponse, error)
@@ -151,6 +153,16 @@ func (c *keystoneClient) Mutate(ctx context.Context, in *MutateRequest, opts ...
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MutateResponse)
 	err := c.cc.Invoke(ctx, Keystone_Mutate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DestroyResponse)
+	err := c.cc.Invoke(ctx, Keystone_Destroy_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -381,6 +393,7 @@ type KeystoneServer interface {
 	PiiAnonymize(context.Context, *PiiAnonymizeRequest) (*PiiAnonymizeResponse, error)
 	// Store
 	Mutate(context.Context, *MutateRequest) (*MutateResponse, error)
+	Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error)
 	Log(context.Context, *LogRequest) (*LogResponse, error)
 	// Reporting
 	ReportTimeSeries(context.Context, *ReportTimeSeriesRequest) (*MutateResponse, error)
@@ -434,6 +447,9 @@ func (UnimplementedKeystoneServer) PiiAnonymize(context.Context, *PiiAnonymizeRe
 }
 func (UnimplementedKeystoneServer) Mutate(context.Context, *MutateRequest) (*MutateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Mutate not implemented")
+}
+func (UnimplementedKeystoneServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
 func (UnimplementedKeystoneServer) Log(context.Context, *LogRequest) (*LogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Log not implemented")
@@ -620,6 +636,24 @@ func _Keystone_Mutate_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeystoneServer).Mutate(ctx, req.(*MutateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DestroyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).Destroy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_Destroy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).Destroy(ctx, req.(*DestroyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1007,6 +1041,10 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Mutate",
 			Handler:    _Keystone_Mutate_Handler,
+		},
+		{
+			MethodName: "Destroy",
+			Handler:    _Keystone_Destroy_Handler,
 		},
 		{
 			MethodName: "Log",

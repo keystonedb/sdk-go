@@ -7,6 +7,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/cru"
 	"github.com/keystonedb/sdk-go/test/requirements/daily"
 	"github.com/keystonedb/sdk-go/test/requirements/datatypes"
+	"github.com/keystonedb/sdk-go/test/requirements/destroy"
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
 	"github.com/keystonedb/sdk-go/test/requirements/embedded"
 	"github.com/keystonedb/sdk-go/test/requirements/events"
@@ -68,10 +69,11 @@ func init() {
 	reqs = append(reqs, &iid.Requirement{})
 	reqs = append(reqs, &watcher.Requirement{})
 	reqs = append(reqs, &exists.Requirement{})
+	reqs = append(reqs, &destroy.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &nested_children.Requirement{})
+		reqs = append(reqs, &destroy.Requirement{})
 	}
 }

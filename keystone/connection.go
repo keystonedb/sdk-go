@@ -322,3 +322,10 @@ func (c *Connection) QueryIndex(ctx context.Context, in *proto.QueryIndexRequest
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) Destroy(ctx context.Context, in *proto.DestroyRequest, opts ...grpc.CallOption) (*proto.DestroyResponse, error) {
+	tl := c.timeLogConfig.NewLog("Destroy", zap.String("schema", in.GetSchema().GetKey()))
+	resp, err := c.client.Destroy(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

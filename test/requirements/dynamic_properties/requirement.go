@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
 	"github.com/kubex/k4id"
 	"time"
@@ -37,14 +38,20 @@ func (d *Requirement) Name() string {
 }
 
 func (d *Requirement) Register(conn *keystone.Connection) error {
-	//d.createdID = "DYP-" + strconv.Itoa(int(time.Now().Unix()))
-	idGen := k4id.DefaultGenerator()
-	idGen.SetHostID("DYP")
-	d.createdID = idGen.New().String() + "-dkh"
 	return nil
 }
 
 func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+
+	usr := &models.User{
+		ExternalID: k4id.New().String(),
+	}
+	mutateErr := actor.Mutate(context.Background(), usr)
+	if mutateErr != nil {
+		return []requirements.TestResult{requirements.NewResult("Unable to prepare test", mutateErr)}
+	}
+	d.createdID = usr.GetKeystoneID().String()
+
 	return []requirements.TestResult{
 		d.apply(actor),
 		d.read(actor),
