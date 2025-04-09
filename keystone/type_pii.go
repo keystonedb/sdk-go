@@ -53,6 +53,9 @@ func NewSecurePII(info, masked string) SecurePII {
 type PersonName struct{ SecureString }
 
 func NewPersonName(name string) PersonName {
+	if name == "" {
+		return PersonName{}
+	}
 	mask := BasicMask(name)
 	return PersonName{NewSecureString(name, mask)}
 }
@@ -67,6 +70,9 @@ type Phone struct{ SecureString }
 var phoneMask = regexp.MustCompile(`^(.*?)(\d{0,4})(\d{3})$`)
 
 func NewPhone(phone string) Phone {
+	if phone == "" {
+		return Phone{}
+	}
 	mask := phoneMask.ReplaceAllString(phone, "${1}"+strings.Repeat("*", rand.IntN(1)+4)+"${3}")
 	return Phone{NewSecureString(phone, mask)}
 }
@@ -83,6 +89,9 @@ func (s *Email) PropertyDefinition() proto.PropertyDefinition {
 
 func NewEmail(email string) Email {
 	var mask string
+	if email == "" {
+		return Email{}
+	}
 	split := strings.SplitN(email, "@", 2)
 	mask = BasicMask(split[0])
 	if len(split) > 1 {
@@ -111,6 +120,9 @@ func NewSecureIPV4(ip string) SecureIP {
 }
 
 func BasicMask(unmasked string) string {
+	if unmasked == "" {
+		return ""
+	}
 	// split masked into words
 	words := strings.Split(unmasked, " ")
 	for i, word := range words {

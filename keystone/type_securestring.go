@@ -54,5 +54,5 @@ func (e *SecureString) PropertyDefinition() proto.PropertyDefinition {
 }
 
 func (e *SecureString) IsZero() bool {
-	return e == nil || e.Original == "" && e.Masked == ""
+	return e == nil || e.Original == ""
 }
