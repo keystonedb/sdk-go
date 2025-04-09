@@ -60,3 +60,23 @@ func TestMaskPhone(t *testing.T) {
 		})
 	}
 }
+
+func TestMaskIPAddress(t *testing.T) {
+	tests := []struct {
+		ip               string
+		expectedOriginal string
+		expectedMasked   string
+	}{
+		{"", "", ""},
+		{"invalid", "", ""},
+		{"10.10.10.10", "10.10.10.10", "10.10.10.0"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.ip, func(t *testing.T) {
+			secure := NewSecureIPV4(test.ip)
+			assert.Equal(t, test.expectedOriginal, secure.Original)
+			assert.Equal(t, test.expectedMasked, secure.Masked)
+		})
+	}
+}

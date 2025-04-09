@@ -102,7 +102,12 @@ func (s *SecureIP) PropertyDefinition() proto.PropertyDefinition {
 }
 
 func NewSecureIPV4(ip string) SecureIP {
-	return SecureIP{NewSecureString(ip, net.ParseIP(ip).Mask(net.IPv4Mask(0xff, 0xff, 0xff, 0)).String())}
+	if parsed := net.ParseIP(ip); parsed != nil {
+		if maskedIP := parsed.Mask(net.IPv4Mask(0xff, 0xff, 0xff, 0)); maskedIP != nil {
+			return SecureIP{NewSecureString(ip, maskedIP.String())}
+		}
+	}
+	return SecureIP{}
 }
 
 func BasicMask(unmasked string) string {
