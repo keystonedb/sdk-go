@@ -56,6 +56,19 @@ func (a *Amount) LessThan(other *Amount) bool {
 	return a.GetUnits() < other.GetUnits()
 }
 
+func (a *Amount) Diff(with *Amount) *Amount {
+	if a == nil || with == nil {
+		return nil
+	}
+	if a.GetCurrency() != with.GetCurrency() {
+		return nil
+	}
+	return &Amount{
+		Currency: a.GetCurrency(),
+		Units:    a.GetUnits() - with.GetUnits(),
+	}
+}
+
 /*
 #Not sure if these would be best returning a new amount, or updating the existing
 #Leaving unavailable until a decision is made here

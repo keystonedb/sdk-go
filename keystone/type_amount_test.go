@@ -102,3 +102,15 @@ func TestAmountChecks(t *testing.T) {
 		t.Error("200 should be less than 300")
 	}
 }
+
+func TestAmountDiff(t *testing.T) {
+	total := NewAmount("USD", 100)
+	preTax := NewAmount("USD", 80)
+	diff := total.Diff(preTax)
+	if diff.GetUnits() != 20 {
+		t.Error("Difference should be 20")
+	}
+	if diff.GetCurrency() != "USD" {
+		t.Error("Currency should be USD")
+	}
+}
