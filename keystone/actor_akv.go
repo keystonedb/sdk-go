@@ -19,6 +19,17 @@ func (p *AKVProperty) toProto() *proto.AKVProperty {
 	}
 }
 
+func AKVRaw(property string, value *proto.Value) AKVProperty {
+	prop := AKVProperty{
+		Property: &proto.Property{
+			Name:     property,
+			DataType: proto.Property_Unmanaged,
+		},
+		Value: value,
+	}
+	return prop
+}
+
 func AKV(property string, value any) AKVProperty {
 	prop := AKVProperty{
 		Property: &proto.Property{
