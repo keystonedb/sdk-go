@@ -30,3 +30,10 @@ func (t *Transaction) GetKeystoneDefinition() keystone.TypeDefinition {
 		Options: []proto.Schema_Option{proto.Schema_Immutable},
 	}
 }
+
+type Config struct {
+	keystone.BaseEntity
+	ConfigType string `keystone:",indexed"`
+	Name       string
+	TestID     string `keystone:",indexed"`
+}
