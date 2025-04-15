@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"fmt"
+
 	"github.com/keystonedb/sdk-go/proto"
 )
 
@@ -38,6 +39,12 @@ func (a *Amount) String() string {
 		return ""
 	}
 	return fmt.Sprintf("%.2f %s", float64(a.Units)/100, a.Currency)
+}
+func (a *Amount) UnitString() string {
+	if a == nil {
+		return ""
+	}
+	return fmt.Sprintf("%.2f", float64(a.Units)/100)
 }
 
 func (a *Amount) IsZero() bool {
