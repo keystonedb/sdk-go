@@ -63,7 +63,7 @@ type KeystoneClient interface {
 	// Store
 	Mutate(ctx context.Context, in *MutateRequest, opts ...grpc.CallOption) (*MutateResponse, error)
 	Destroy(ctx context.Context, in *DestroyRequest, opts ...grpc.CallOption) (*DestroyResponse, error)
-	Log(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error)
+	Log(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[LogRequest, LogResponse], error)
 	// Reporting
 	ReportTimeSeries(ctx context.Context, in *ReportTimeSeriesRequest, opts ...grpc.CallOption) (*MutateResponse, error)
 	ChartTimeSeries(ctx context.Context, in *ChartTimeSeriesRequest, opts ...grpc.CallOption) (*ChartTimeSeriesResponse, error)
@@ -169,15 +169,18 @@ func (c *keystoneClient) Destroy(ctx context.Context, in *DestroyRequest, opts .
 	return out, nil
 }
 
-func (c *keystoneClient) Log(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+func (c *keystoneClient) Log(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[LogRequest, LogResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LogResponse)
-	err := c.cc.Invoke(ctx, Keystone_Log_FullMethodName, in, out, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Keystone_ServiceDesc.Streams[0], Keystone_Log_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &grpc.GenericClientStream[LogRequest, LogResponse]{ClientStream: stream}
+	return x, nil
 }
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Keystone_LogClient = grpc.BidiStreamingClient[LogRequest, LogResponse]
 
 func (c *keystoneClient) ReportTimeSeries(ctx context.Context, in *ReportTimeSeriesRequest, opts ...grpc.CallOption) (*MutateResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -282,7 +285,7 @@ func (c *keystoneClient) Events(ctx context.Context, in *EventRequest, opts ...g
 
 func (c *keystoneClient) EventStream(ctx context.Context, in *EventStreamRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[EventStreamResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &Keystone_ServiceDesc.Streams[0], Keystone_EventStream_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Keystone_ServiceDesc.Streams[1], Keystone_EventStream_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -394,7 +397,7 @@ type KeystoneServer interface {
 	// Store
 	Mutate(context.Context, *MutateRequest) (*MutateResponse, error)
 	Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error)
-	Log(context.Context, *LogRequest) (*LogResponse, error)
+	Log(grpc.BidiStreamingServer[LogRequest, LogResponse]) error
 	// Reporting
 	ReportTimeSeries(context.Context, *ReportTimeSeriesRequest) (*MutateResponse, error)
 	ChartTimeSeries(context.Context, *ChartTimeSeriesRequest) (*ChartTimeSeriesResponse, error)
@@ -451,8 +454,8 @@ func (UnimplementedKeystoneServer) Mutate(context.Context, *MutateRequest) (*Mut
 func (UnimplementedKeystoneServer) Destroy(context.Context, *DestroyRequest) (*DestroyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
-func (UnimplementedKeystoneServer) Log(context.Context, *LogRequest) (*LogResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Log not implemented")
+func (UnimplementedKeystoneServer) Log(grpc.BidiStreamingServer[LogRequest, LogResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method Log not implemented")
 }
 func (UnimplementedKeystoneServer) ReportTimeSeries(context.Context, *ReportTimeSeriesRequest) (*MutateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReportTimeSeries not implemented")
@@ -658,23 +661,12 @@ func _Keystone_Destroy_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Keystone_Log_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LogRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeystoneServer).Log(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Keystone_Log_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeystoneServer).Log(ctx, req.(*LogRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+func _Keystone_Log_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(KeystoneServer).Log(&grpc.GenericServerStream[LogRequest, LogResponse]{ServerStream: stream})
 }
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Keystone_LogServer = grpc.BidiStreamingServer[LogRequest, LogResponse]
 
 func _Keystone_ReportTimeSeries_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ReportTimeSeriesRequest)
@@ -1047,10 +1039,6 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Keystone_Destroy_Handler,
 		},
 		{
-			MethodName: "Log",
-			Handler:    _Keystone_Log_Handler,
-		},
-		{
 			MethodName: "ReportTimeSeries",
 			Handler:    _Keystone_ReportTimeSeries_Handler,
 		},
@@ -1124,6 +1112,12 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Log",
+			Handler:       _Keystone_Log_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
 		{
 			StreamName:    "EventStream",
 			Handler:       _Keystone_EventStream_Handler,

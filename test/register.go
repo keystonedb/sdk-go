@@ -18,6 +18,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/immutable"
 	"github.com/keystonedb/sdk-go/test/requirements/labels"
 	"github.com/keystonedb/sdk-go/test/requirements/list"
+	"github.com/keystonedb/sdk-go/test/requirements/log_stream"
 	"github.com/keystonedb/sdk-go/test/requirements/logging"
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
 	"github.com/keystonedb/sdk-go/test/requirements/nested_children"
@@ -41,6 +42,7 @@ var reqs []requirements.Requirement
 
 func init() {
 	//reqs = append(reqs, &requirements.DummyRequirement{})
+
 	reqs = append(reqs, &akv.Requirement{})
 	reqs = append(reqs, &cru.Requirement{})
 	reqs = append(reqs, &dynamic_properties.Requirement{})
@@ -54,6 +56,7 @@ func init() {
 	reqs = append(reqs, &stats.Requirement{})
 	reqs = append(reqs, &immutable.Requirement{})
 	reqs = append(reqs, &lookup.Requirement{})
+	reqs = append(reqs, &log_stream.Requirement{})
 	reqs = append(reqs, &relationships.Requirement{})
 	reqs = append(reqs, &list.Requirement{})
 	reqs = append(reqs, &datatypes.Requirement{})
@@ -76,8 +79,8 @@ func init() {
 	reqs = append(reqs, &hashed_id.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
 
-	if false {
+	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &destroy.Requirement{})
+		reqs = append(reqs, &log_stream.Requirement{})
 	}
 }

@@ -21,7 +21,7 @@ type MockServer struct {
 	FindFunc             func(context.Context, *proto.FindRequest) (*proto.FindResponse, error)
 	ListFunc             func(context.Context, *proto.ListRequest) (*proto.ListResponse, error)
 	GroupCountFunc       func(context.Context, *proto.GroupCountRequest) (*proto.GroupCountResponse, error)
-	LogFunc              func(context.Context, *proto.LogRequest) (*proto.LogResponse, error)
+	LogFunc              func(grpc.BidiStreamingServer[proto.LogRequest, proto.LogResponse]) error
 	LogsFunc             func(context.Context, *proto.LogsRequest) (*proto.LogsResponse, error)
 	EventsFunc           func(context.Context, *proto.EventRequest) (*proto.EventsResponse, error)
 	DailyEntitiesFunc    func(context.Context, *proto.DailyEntityRequest) (*proto.DailyEntityResponse, error)
@@ -99,11 +99,11 @@ func (m *MockServer) GroupCount(ctx context.Context, req *proto.GroupCountReques
 	return m.GroupCountFunc(ctx, req)
 }
 
-func (m *MockServer) Log(ctx context.Context, req *proto.LogRequest) (*proto.LogResponse, error) {
+func (m *MockServer) Log(stream grpc.BidiStreamingServer[proto.LogRequest, proto.LogResponse]) error {
 	if m.LogsFunc == nil {
-		return m.UnimplementedKeystoneServer.Log(ctx, req)
+		return m.UnimplementedKeystoneServer.Log(stream)
 	}
-	return m.LogFunc(ctx, req)
+	return m.LogFunc(stream)
 }
 
 func (m *MockServer) Logs(ctx context.Context, req *proto.LogsRequest) (*proto.LogsResponse, error) {
