@@ -20,6 +20,10 @@ func ByEntityID(entityType interface{}, entityID ID) RetrieveBy {
 	return byEntityID{EntityID: entityID, Type: Type(entityType)}
 }
 
+func ByHashID(entityType interface{}, entityID string) RetrieveBy {
+	return byEntityID{EntityID: HashID(entityID), Type: Type(entityType)}
+}
+
 // BaseRequest returns the base byEntityID request
 func (l byEntityID) BaseRequest() *proto.EntityRequest {
 	return &proto.EntityRequest{

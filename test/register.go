@@ -13,6 +13,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/events"
 	"github.com/keystonedb/sdk-go/test/requirements/exists"
 	"github.com/keystonedb/sdk-go/test/requirements/group_count"
+	"github.com/keystonedb/sdk-go/test/requirements/hashed_id"
 	"github.com/keystonedb/sdk-go/test/requirements/iid"
 	"github.com/keystonedb/sdk-go/test/requirements/immutable"
 	"github.com/keystonedb/sdk-go/test/requirements/labels"
@@ -72,6 +73,7 @@ func init() {
 	reqs = append(reqs, &exists.Requirement{})
 	reqs = append(reqs, &destroy.Requirement{})
 	reqs = append(reqs, &group_count.Requirement{})
+	reqs = append(reqs, &hashed_id.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
 
 	if false {

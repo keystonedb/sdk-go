@@ -1,7 +1,9 @@
 package keystone
 
 import (
+	"errors"
 	"github.com/keystonedb/sdk-go/proto"
+	"regexp"
 )
 
 type BaseEntity struct {
@@ -51,3 +53,13 @@ func (e *EmbeddedEntity) GetKeystoneID() ID {
 	return e._entityID
 }
 func (e *EmbeddedEntity) SetKeystoneID(id ID) { e._entityID = id }
+
+var hashCheck = regexp.MustCompile("^([a-zA-Z0-9:\\-_]+)$")
+
+func (e *EmbeddedEntity) SetHashID(id string) error {
+	if !hashCheck.MatchString(id) {
+		return errors.New("the provided ID is not compatible with the hashed ID format (a-Z0-9:_-)")
+	}
+	e.SetKeystoneID(HashID(id))
+	return nil
+}

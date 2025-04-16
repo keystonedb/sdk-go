@@ -32,3 +32,22 @@ func NewID(parent, child string) ID {
 	}
 	return ID(parent + "-" + child)
 }
+
+func assertHashID(input string) {
+	if strings.Contains(input, "#") {
+		panic("keystone HashID input cannot contain #")
+	}
+}
+
+func HashID(input string) ID {
+	assertHashID(input)
+	return ID("#" + input + "#")
+}
+
+func HashCID(input, child string) ID {
+	if child == "" {
+		return HashID(input)
+	}
+	assertHashID(input)
+	return ID("#" + input + "#-" + child)
+}
