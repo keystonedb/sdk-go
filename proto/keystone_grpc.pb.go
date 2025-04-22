@@ -46,6 +46,8 @@ const (
 	Keystone_AKVGet_FullMethodName           = "/kubex.keystone.Keystone/AKVGet"
 	Keystone_AKVPut_FullMethodName           = "/kubex.keystone.Keystone/AKVPut"
 	Keystone_AKVDel_FullMethodName           = "/kubex.keystone.Keystone/AKVDel"
+	Keystone_PushTask_FullMethodName         = "/kubex.keystone.Keystone/PushTask"
+	Keystone_TaskStream_FullMethodName       = "/kubex.keystone.Keystone/TaskStream"
 )
 
 // KeystoneClient is the client API for Keystone service.
@@ -89,6 +91,8 @@ type KeystoneClient interface {
 	AKVGet(ctx context.Context, in *AKVGetRequest, opts ...grpc.CallOption) (*AKVGetResponse, error)
 	AKVPut(ctx context.Context, in *AKVPutRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	AKVDel(ctx context.Context, in *AKVDelRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	PushTask(ctx context.Context, in *PushTaskRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	TaskStream(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[TaskAckRequest, TaskResponse], error)
 }
 
 type keystoneClient struct {
@@ -379,6 +383,29 @@ func (c *keystoneClient) AKVDel(ctx context.Context, in *AKVDelRequest, opts ...
 	return out, nil
 }
 
+func (c *keystoneClient) PushTask(ctx context.Context, in *PushTaskRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_PushTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) TaskStream(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[TaskAckRequest, TaskResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Keystone_ServiceDesc.Streams[1], Keystone_TaskStream_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[TaskAckRequest, TaskResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Keystone_TaskStreamClient = grpc.BidiStreamingClient[TaskAckRequest, TaskResponse]
+
 // KeystoneServer is the server API for Keystone service.
 // All implementations must embed UnimplementedKeystoneServer
 // for forward compatibility.
@@ -420,6 +447,8 @@ type KeystoneServer interface {
 	AKVGet(context.Context, *AKVGetRequest) (*AKVGetResponse, error)
 	AKVPut(context.Context, *AKVPutRequest) (*GenericResponse, error)
 	AKVDel(context.Context, *AKVDelRequest) (*GenericResponse, error)
+	PushTask(context.Context, *PushTaskRequest) (*GenericResponse, error)
+	TaskStream(grpc.BidiStreamingServer[TaskAckRequest, TaskResponse]) error
 	mustEmbedUnimplementedKeystoneServer()
 }
 
@@ -510,6 +539,12 @@ func (UnimplementedKeystoneServer) AKVPut(context.Context, *AKVPutRequest) (*Gen
 }
 func (UnimplementedKeystoneServer) AKVDel(context.Context, *AKVDelRequest) (*GenericResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AKVDel not implemented")
+}
+func (UnimplementedKeystoneServer) PushTask(context.Context, *PushTaskRequest) (*GenericResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PushTask not implemented")
+}
+func (UnimplementedKeystoneServer) TaskStream(grpc.BidiStreamingServer[TaskAckRequest, TaskResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method TaskStream not implemented")
 }
 func (UnimplementedKeystoneServer) mustEmbedUnimplementedKeystoneServer() {}
 func (UnimplementedKeystoneServer) testEmbeddedByValue()                  {}
@@ -1011,6 +1046,31 @@ func _Keystone_AKVDel_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Keystone_PushTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PushTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).PushTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_PushTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).PushTask(ctx, req.(*PushTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_TaskStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(KeystoneServer).TaskStream(&grpc.GenericServerStream[TaskAckRequest, TaskResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Keystone_TaskStreamServer = grpc.BidiStreamingServer[TaskAckRequest, TaskResponse]
+
 // Keystone_ServiceDesc is the grpc.ServiceDesc for Keystone service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1122,12 +1182,22 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "AKVDel",
 			Handler:    _Keystone_AKVDel_Handler,
 		},
+		{
+			MethodName: "PushTask",
+			Handler:    _Keystone_PushTask_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "EventStream",
 			Handler:       _Keystone_EventStream_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "TaskStream",
+			Handler:       _Keystone_TaskStream_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "keystone.proto",

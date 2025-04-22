@@ -1,6 +1,10 @@
 package keystone
 
-import "github.com/keystonedb/sdk-go/proto"
+import (
+	"context"
+	"github.com/keystonedb/sdk-go/proto"
+	"google.golang.org/grpc/metadata"
+)
 
 const noWorkspace = "__"
 
@@ -63,6 +67,21 @@ func (a *Actor) Authorization() *proto.Authorization {
 		WorkspaceId: a.workspaceID,
 		User:        a.User(),
 	}
+}
+
+func (a *Actor) AuthorizeContext(ctx context.Context) context.Context {
+	meta := metadata.New(map[string]string{
+		"workspace_id": a.WorkspaceID(),
+		"trace_id":     a.TraceID(),
+		"vendor_id":    a.VendorID(),
+		"app_id":       a.AppID(),
+		"token":        a.Connection().token,
+		"client":       a.Client(),
+		"user_id":      a.UserId(),
+		"user_agent":   a.UserAgent(),
+		"remote_ip":    a.RemoteIp(),
+	})
+	return metadata.NewOutgoingContext(ctx, meta)
 }
 
 // SetClientName sets the client name for the actor

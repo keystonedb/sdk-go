@@ -32,6 +32,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/shared_views"
 	"github.com/keystonedb/sdk-go/test/requirements/stats"
 	"github.com/keystonedb/sdk-go/test/requirements/stringset"
+	"github.com/keystonedb/sdk-go/test/requirements/tasks"
 	"github.com/keystonedb/sdk-go/test/requirements/timeseries"
 	"github.com/keystonedb/sdk-go/test/requirements/unique_id"
 	"github.com/keystonedb/sdk-go/test/requirements/watcher"
@@ -75,9 +76,10 @@ func init() {
 	reqs = append(reqs, &group_count.Requirement{})
 	reqs = append(reqs, &hashed_id.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
+	reqs = append(reqs, &tasks.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &destroy.Requirement{})
+		reqs = append(reqs, &tasks.Requirement{})
 	}
 }

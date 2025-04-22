@@ -316,6 +316,20 @@ func (c *Connection) EventStream(ctx context.Context, in *proto.EventStreamReque
 	return resp, err
 }
 
+func (c *Connection) PushTask(ctx context.Context, in *proto.PushTaskRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("PushTask", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.PushTask(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) TaskStream(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[proto.TaskAckRequest, proto.TaskResponse], error) {
+	tl := c.timeLogConfig.NewLog("TaskStream")
+	resp, err := c.client.TaskStream(ctx, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
 func (c *Connection) QueryIndex(ctx context.Context, in *proto.QueryIndexRequest, opts ...grpc.CallOption) (*proto.QueryIndexResponse, error) {
 	tl := c.timeLogConfig.NewLog("QueryIndex", zap.String("schema", in.GetSchema().GetKey()))
 	resp, err := c.client.QueryIndex(ctx, in, opts...)
