@@ -166,3 +166,15 @@ func WithPiiReference(vendorId, appId, piiKey string) MutateOption {
 func (m withPiiReference) apply(mutate *proto.MutateRequest) {
 	mutate.Mutation.PiiReference = &proto.Key{Key: m.piiKey, Source: proto.NewVendorApp(m.vendorId, m.appId)}
 }
+
+// BackgroundIndex will avoid waiting for indexing to complete
+func BackgroundIndex() MutateOption {
+	return backgroundIndex{}
+}
+
+type backgroundIndex struct {
+}
+
+func (m backgroundIndex) apply(mutate *proto.MutateRequest) {
+	mutate.Options = append(mutate.Options, proto.MutateRequest_BackgroundIndex)
+}
