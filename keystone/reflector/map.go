@@ -10,7 +10,7 @@ type Map struct{}
 func (e Map) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
 	if mapVal, ok := value.Interface().(map[string][]byte); ok {
-		ret := &proto.Value{Array: proto.NewRepeatedKeyValue()}
+		ret := &proto.Value{Array: proto.NewRepeatedValue()}
 		for k, v := range mapVal {
 			ret.Array.KeyValue[k] = v
 		}

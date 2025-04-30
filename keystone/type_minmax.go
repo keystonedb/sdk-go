@@ -36,7 +36,7 @@ func NewMinMax(min, max int64) MinMax {
 
 func (s *MinMax) MarshalValue() (*proto.Value, error) {
 	val := &proto.Value{}
-	val.Array = proto.NewRepeatedKeyValue()
+	val.Array = proto.NewRepeatedValue()
 	val.Array.Ints = []int64{s.min, s.max}
 	return val, nil
 }

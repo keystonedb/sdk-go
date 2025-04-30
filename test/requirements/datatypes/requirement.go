@@ -32,6 +32,8 @@ var (
 	EnumVal      = models.ENUM_VALUE1
 	EnumVals     = []models.EnumValue{models.ENUM_VALUE0, models.ENUM_VALUE1}
 	ExternalID   = keystone.NewExternalID("ven", "app", "etype", "external_id")
+	MixedVal     = keystone.NewMixed(nil)
+	MixedKey     = keystone.NewKeyMixed(nil)
 )
 
 type Requirement struct {
@@ -48,6 +50,16 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 }
 
 func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+	MixedVal.SetInt(12)
+	MixedVal.SetString("stringval")
+	MixedVal.SetBool(true)
+	MixedVal.SetFloat(12.5)
+	MixedVal.SetTime(time.Now())
+	MixedVal.SetRaw([]byte("rawdata"))
+
+	MixedKey.Set("first", MixedVal)
+	MixedKey.Set("second", keystone.NewMixed("text"))
+
 	return []requirements.TestResult{
 		d.create(actor),
 		d.read(actor),
@@ -80,6 +92,8 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		EnumValue:    EnumVal,
 		Flags:        EnumVals,
 		ExternalID:   ExternalID,
+		Mixed:        MixedVal,
+		MixedKey:     MixedKey,
 	}
 
 	createErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Create a default set"))
@@ -137,6 +151,10 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("flags mismatch")
 		} else if dt.ExternalID.String() != ExternalID.String() {
 			getErr = errors.New("ExternalID mismatch")
+		} else if !dt.Mixed.Matches(&MixedVal) {
+			getErr = errors.New("MixedVal mismatch")
+		} else if len(dt.MixedKey.Diff(MixedKey.Values())) != 0 {
+			getErr = errors.New("MixedKey mismatch")
 		}
 	}
 
@@ -150,6 +168,9 @@ func (d *Requirement) append(actor *keystone.Actor) requirements.TestResult {
 	psn := &models.DataTypes{}
 	psn.IntegerSet.Add(7)
 	psn.SetKeystoneID(d.createdID)
+
+	psn.MixedKey.Append("third", keystone.NewMixed("newval"))
+
 	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Update a person"))
 
 	return requirements.TestResult{
@@ -161,12 +182,17 @@ func (d *Requirement) append(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) readPostAppend(actor *keystone.Actor) requirements.TestResult {
 
 	dt := &models.DataTypes{}
-	getErr := actor.Get(context.Background(), keystone.ByEntityID(dt, d.createdID), dt, keystone.WithProperties("integer_set"))
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(dt, d.createdID), dt, keystone.WithProperties("integer_set", "mixed_key"))
 	if getErr == nil {
+		mixCheck := keystone.NewMixed("newval")
 		if !dt.IntegerSet.Has(7) {
 			getErr = errors.New("IntegerSet did not append 7")
 		} else if !dt.IntegerSet.Has(1) {
 			getErr = errors.New("IntegerSet did not return 1")
+		} else if !dt.MixedKey.Has("third") {
+			getErr = errors.New("MixedKey did not append third")
+		} else if !dt.MixedKey.Get("third").Matches(&mixCheck) {
+			getErr = errors.New("MixedKey did not append third")
 		}
 	}
 
@@ -179,6 +205,7 @@ func (d *Requirement) readPostAppend(actor *keystone.Actor) requirements.TestRes
 func (d *Requirement) reduce(actor *keystone.Actor) requirements.TestResult {
 	psn := &models.DataTypes{}
 	psn.IntegerSet.Remove(2)
+	psn.MixedKey.Remove("third")
 	psn.SetKeystoneID(d.createdID)
 	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Update a person"))
 
@@ -191,12 +218,14 @@ func (d *Requirement) reduce(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) readPostReduce(actor *keystone.Actor) requirements.TestResult {
 
 	dt := &models.DataTypes{}
-	getErr := actor.Get(context.Background(), keystone.ByEntityID(dt, d.createdID), dt, keystone.WithProperties("integer_set"))
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(dt, d.createdID), dt, keystone.WithProperties("integer_set", "mixed_key"))
 	if getErr == nil {
 		if dt.IntegerSet.Has(2) {
 			getErr = errors.New("IntegerSet did not remove 2")
 		} else if !dt.IntegerSet.Has(1) {
 			getErr = errors.New("IntegerSet did not return 1")
+		} else if dt.MixedKey.Has("third") {
+			getErr = errors.New("MixedKey did not remove third")
 		}
 	}
 

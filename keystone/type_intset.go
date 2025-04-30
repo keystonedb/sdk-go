@@ -161,16 +161,16 @@ func NewIntSet(values ...int64) IntSet {
 
 func (s *IntSet) MarshalValue() (*proto.Value, error) {
 	val := &proto.Value{}
-	val.Array = proto.NewRepeatedKeyValue()
+	val.Array = proto.NewRepeatedValue()
 	val.Array.Ints = s.Values()
 
 	if len(s.toAdd) > 0 {
-		val.ArrayAppend = proto.NewRepeatedKeyValue()
+		val.ArrayAppend = proto.NewRepeatedValue()
 		val.ArrayAppend.Ints = s.ToAdd()
 	}
 
 	if len(s.toRemove) > 0 {
-		val.ArrayReduce = proto.NewRepeatedKeyValue()
+		val.ArrayReduce = proto.NewRepeatedValue()
 		val.ArrayReduce.Ints = s.ToRemove()
 	}
 

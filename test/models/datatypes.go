@@ -35,6 +35,8 @@ type DataTypes struct {
 	Flags        []EnumValue
 	EnumValue    EnumValue
 	ExternalID   keystone.ExternalID
+	Mixed        keystone.Mixed
+	MixedKey     keystone.KeyMixed
 }
 
 func (t *DataTypes) GetKeystoneDefinition() keystone.TypeDefinition {

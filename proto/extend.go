@@ -18,8 +18,8 @@ func CreateDate(time time.Time) *Date {
 	}
 }
 
-func NewRepeatedKeyValue() *RepeatedValue {
-	return &RepeatedValue{KeyValue: make(map[string][]byte)}
+func NewRepeatedValue() *RepeatedValue {
+	return &RepeatedValue{KeyValue: make(map[string][]byte), Mixed: make(map[string]*Value)}
 }
 
 func (x *RepeatedValue) IsZero() bool {

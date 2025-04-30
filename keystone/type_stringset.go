@@ -161,16 +161,16 @@ func NewStringSet(values ...string) StringSet {
 
 func (s *StringSet) MarshalValue() (*proto.Value, error) {
 	val := &proto.Value{}
-	val.Array = proto.NewRepeatedKeyValue()
+	val.Array = proto.NewRepeatedValue()
 	val.Array.Strings = s.Values()
 
 	if len(s.toAdd) > 0 {
-		val.ArrayAppend = proto.NewRepeatedKeyValue()
+		val.ArrayAppend = proto.NewRepeatedValue()
 		val.ArrayAppend.Strings = s.ToAdd()
 	}
 
 	if len(s.toRemove) > 0 {
-		val.ArrayReduce = proto.NewRepeatedKeyValue()
+		val.ArrayReduce = proto.NewRepeatedValue()
 		val.ArrayReduce.Strings = s.ToRemove()
 	}
 
