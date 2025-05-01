@@ -64,21 +64,24 @@ func MatchRepeatedValue(input, expect *RepeatedValue) error {
 	}
 
 	if len(input.KeyValue) != len(expect.KeyValue) {
-		return fmt.Errorf("array length mismatch: %d != %d", len(input.KeyValue), len(expect.KeyValue))
+		return fmt.Errorf("array.keyvalue length mismatch: %d != %d", len(input.KeyValue), len(expect.KeyValue))
+	}
+	if len(input.Mixed) != len(expect.Mixed) {
+		return fmt.Errorf("array.mixed length mismatch: %d != %d", len(input.Mixed), len(expect.Mixed))
 	}
 
 	if len(input.Ints) != len(expect.Ints) {
-		return fmt.Errorf("array length mismatch: %d != %d", len(input.Ints), len(expect.Ints))
+		return fmt.Errorf("array.ints length mismatch: %d != %d", len(input.Ints), len(expect.Ints))
 	}
 
 	if len(input.Strings) != len(expect.Strings) {
-		return fmt.Errorf("array length mismatch: %d != %d", len(input.Strings), len(expect.Strings))
+		return fmt.Errorf("array.strings length mismatch: %d != %d", len(input.Strings), len(expect.Strings))
 	}
 
 	if len(input.KeyValue) > 0 {
 		for i, v := range expect.KeyValue {
 			if !bytes.Equal(input.KeyValue[i], v) {
-				return fmt.Errorf("array value mismatch: %v != %v", input.KeyValue[i], v)
+				return fmt.Errorf("array.keyValue value mismatch: %v != %v", input.KeyValue[i], v)
 			}
 		}
 	}
@@ -113,6 +116,18 @@ func MatchRepeatedValue(input, expect *RepeatedValue) error {
 		for k, v := range expectMap {
 			if inputMap[k] != v {
 				return fmt.Errorf("array value mismatch: %v != %v", inputMap[k], v)
+			}
+		}
+	}
+
+	if len(input.Mixed) > 0 {
+		for i, v := range expect.Mixed {
+			checkV, ok := input.Mixed[i]
+			if !ok {
+				return fmt.Errorf("array value mismatch: %v != %v", input.Mixed[i], v)
+			}
+			if valErr := MatchValue(checkV, "mixed."+i, v); valErr != nil {
+				return valErr
 			}
 		}
 	}

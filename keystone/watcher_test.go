@@ -114,3 +114,41 @@ func TestWatcher_CatchErrors(t *testing.T) {
 		t.Errorf("Changes() returned %v, want %v", err, xErr)
 	}
 }
+
+func TestWatcher_DataTypeChanges(t *testing.T) {
+	toTest := struct {
+		Name Mixed
+		Keys KeyMixed
+	}{
+		Name: NewMixed("John"),
+		Keys: NewKeyMixed(nil),
+	}
+
+	toTest.Keys.Set("key1", NewMixed("value1"))
+
+	nameProp := NewProperty("Name")
+	keysProp := NewProperty("Keys")
+
+	watched, err := NewWatcher(toTest)
+	if err != nil {
+		t.Errorf("NewWatcher() returned error: %v", err)
+	}
+
+	toTest.Name.SetString("Smith")
+	toTest.Keys.Append("key2", NewMixed("value1"))
+
+	changes, err := watched.Changes(toTest, false)
+	if err != nil {
+		t.Errorf("Changes() returned error: %v", err)
+	}
+
+	if len(changes) != 2 {
+		t.Fatalf("Changes() returned %d changes, want 2", len(changes))
+	}
+	if changes[nameProp].Text != "Smith" {
+		t.Errorf("Changes() returned %s, want Smith", changes[nameProp].Text)
+	}
+	if changes[keysProp].ArrayAppend.GetMixed()["key2"].GetText() != "value1" {
+		t.Errorf("Changes() returned %s, want value1", changes[keysProp].ArrayAppend.GetMixed()["key2"].GetText())
+	}
+}

@@ -23,5 +23,5 @@ func NewRepeatedValue() *RepeatedValue {
 }
 
 func (x *RepeatedValue) IsZero() bool {
-	return x == nil || (len(x.KeyValue) == 0 && len(x.Strings) == 0 && len(x.Ints) == 0)
+	return x == nil || (len(x.KeyValue) == 0 && len(x.Strings) == 0 && len(x.Ints) == 0 && len(x.Mixed) == 0)
 }
