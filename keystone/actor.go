@@ -33,8 +33,8 @@ func (a *Actor) ReplaceConnection(c *Connection) { a.connection = c }
 func (a *Actor) Connection() *Connection         { return a.connection }
 
 func (a *Actor) UserAgent() string { return a.user.GetUserAgent() }
-func (a *Actor) RemoteIp() string  { return a.user.GetRemoteIp() }
-func (a *Actor) UserId() string    { return a.user.GetUserId() }
+func (a *Actor) RemoteIP() string  { return a.user.GetRemoteIp() }
+func (a *Actor) UserID() string    { return a.user.GetUserId() }
 func (a *Actor) Client() string    { return a.user.GetClient() }
 func (a *Actor) User() *proto.User { return a.user }
 
@@ -77,9 +77,9 @@ func (a *Actor) AuthorizeContext(ctx context.Context) context.Context {
 		"app_id":       a.AppID(),
 		"token":        a.Connection().token,
 		"client":       a.Client(),
-		"user_id":      a.UserId(),
+		"user_id":      a.UserID(),
 		"user_agent":   a.UserAgent(),
-		"remote_ip":    a.RemoteIp(),
+		"remote_ip":    a.RemoteIP(),
 	})
 	return metadata.NewOutgoingContext(ctx, meta)
 }
