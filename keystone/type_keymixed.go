@@ -71,10 +71,10 @@ func (s *KeyMixed) Has(value string) bool {
 
 func (s *KeyMixed) Get(key string) *Mixed {
 	s.prepare()
-	if value, ok := s.values[key]; ok {
+	if value, ok := s.toAdd[key]; ok {
 		return &value
 	}
-	if value, ok := s.toAdd[key]; ok {
+	if value, ok := s.values[key]; ok {
 		return &value
 	}
 	return nil
