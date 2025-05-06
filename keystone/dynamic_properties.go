@@ -105,3 +105,18 @@ func NewDynamicProperty(key string, value interface{}) *proto.EntityProperty {
 	}
 	return nil
 }
+
+func DynamicPropertiesFromStruct(s interface{}) ([]*proto.EntityProperty, error) {
+	res, err := Marshal(s)
+	if err != nil {
+		return nil, err
+	}
+	properties := make([]*proto.EntityProperty, 0, len(res))
+	for key, value := range res {
+		properties = append(properties, &proto.EntityProperty{
+			Property: key.Name(),
+			Value:    value,
+		})
+	}
+	return properties, nil
+}
