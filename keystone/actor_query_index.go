@@ -24,16 +24,10 @@ func (a *Actor) QueryIndex(ctx context.Context, entityType string, retrievePrope
 	}
 
 	listRequest.Filters = fReq.Filters
+	listRequest.Sort = fReq.sortBy
 	listRequest.Page = &proto.PageRequest{
 		PerPage:    fReq.PerPage,
 		PageNumber: fReq.PageNumber,
-	}
-
-	if fReq.SortProperty != "" {
-		listRequest.Sort = []*proto.PropertySort{{
-			Property:   fReq.SortProperty,
-			Descending: fReq.SortDescending,
-		}}
 	}
 
 	resp, err := a.connection.QueryIndex(ctx, listRequest)
