@@ -28,6 +28,10 @@ var kindReflector = map[reflect.Kind]Reflector{
 	reflect.Int16:   reflector.Int{Kind: reflect.Int16},
 	reflect.Int32:   reflector.Int{Kind: reflect.Int32},
 	reflect.Int64:   reflector.Int{Kind: reflect.Int64},
+	reflect.Uint:    reflector.Int{Kind: reflect.Uint},
+	reflect.Uint8:   reflector.Int{Kind: reflect.Uint8},
+	reflect.Uint16:  reflector.Int{Kind: reflect.Uint16},
+	reflect.Uint32:  reflector.Int{Kind: reflect.Uint32},
 	reflect.Float64: reflector.Float{},
 	reflect.Float32: reflector.Float{Is32: true},
 }
@@ -44,6 +48,8 @@ var sliceKindReflector = map[reflect.Kind]Reflector{
 	reflect.Int8:   reflector.IntSlice{},
 	reflect.Int16:  reflector.IntSlice{},
 	reflect.Int32:  reflector.IntSlice{},
+	reflect.Uint16: reflector.IntSlice{},
+	reflect.Uint32: reflector.IntSlice{},
 	reflect.Int64:  reflector.IntSlice{},
 }
 
