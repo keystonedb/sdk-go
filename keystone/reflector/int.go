@@ -12,10 +12,14 @@ type Int struct {
 
 func (e Int) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
-	if !value.CanInt() {
-		return nil, UnsupportedTypeError
+	if value.CanInt() {
+		return &proto.Value{Int: value.Int()}, nil
 	}
-	return &proto.Value{Int: value.Int()}, nil
+
+	if value.CanUint() && value.Kind() != reflect.Uint64 && value.Kind() != reflect.Uintptr {
+		return &proto.Value{Int: int64(value.Uint())}, nil
+	}
+	return nil, UnsupportedTypeError
 }
 
 func (e Int) cast(value reflect.Value) reflect.Value {
