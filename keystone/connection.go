@@ -343,3 +343,17 @@ func (c *Connection) Destroy(ctx context.Context, in *proto.DestroyRequest, opts
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) SQUID(ctx context.Context, in *proto.SquidRequest, opts ...grpc.CallOption) (*proto.SquidResponse, error) {
+	tl := c.timeLogConfig.NewLog("SQUID", zap.String("App", in.GetAuthorization().GetSource().String()), zap.String("key", in.GetSequenceKey()))
+	resp, err := c.client.SQUID(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) SQUIDRecover(ctx context.Context, in *proto.SquidRecoverRequest, opts ...grpc.CallOption) (*proto.SquidResponse, error) {
+	tl := c.timeLogConfig.NewLog("SQUIDRecover", zap.String("App", in.GetAuthorization().GetSource().String()), zap.String("key", in.GetSequenceKey()))
+	resp, err := c.client.SQUIDRecover(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

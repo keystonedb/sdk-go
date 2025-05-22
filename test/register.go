@@ -30,6 +30,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
 	"github.com/keystonedb/sdk-go/test/requirements/setfalse"
 	"github.com/keystonedb/sdk-go/test/requirements/shared_views"
+	"github.com/keystonedb/sdk-go/test/requirements/squid"
 	"github.com/keystonedb/sdk-go/test/requirements/stats"
 	"github.com/keystonedb/sdk-go/test/requirements/stringset"
 	"github.com/keystonedb/sdk-go/test/requirements/tasks"
@@ -77,6 +78,7 @@ func init() {
 	reqs = append(reqs, &hashed_id.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
 	reqs = append(reqs, &tasks.Requirement{})
+	reqs = append(reqs, &squid.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
