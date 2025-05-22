@@ -42,6 +42,15 @@ func (e Int) SetValue(value *proto.Value, onto reflect.Value) error {
 	case reflect.Int64:
 		onto.SetInt(value.Int)
 		return nil
+	case reflect.Uint8:
+		onto.Set(e.cast(reflect.ValueOf(uint8(value.Int))))
+		return nil
+	case reflect.Uint16:
+		onto.Set(e.cast(reflect.ValueOf(uint16(value.Int))))
+		return nil
+	case reflect.Uint32:
+		onto.Set(e.cast(reflect.ValueOf(uint32(value.Int))))
+		return nil
 	default:
 		return UnsupportedTypeError
 	}
