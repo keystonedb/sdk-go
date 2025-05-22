@@ -5,7 +5,6 @@ import (
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
-	"sort"
 )
 
 var ErrMustPassPointer = errors.New("you must pass a pointer")
@@ -100,7 +99,8 @@ func UnmarshalToSlice(dstPtr any, entities ...*proto.EntityResponse) error {
 		return ErrMustPointerSlice
 	}
 
-	sort.Sort(proto.EntityResponseIDSort(entities))
+	// Do not sort, as the order may have been pre-defined in the query
+	//sort.Sort(proto.EntityResponseIDSort(entities))
 	elemType := dstT.Elem().Elem()
 
 	valuePtr := reflect.ValueOf(dstPtr)
