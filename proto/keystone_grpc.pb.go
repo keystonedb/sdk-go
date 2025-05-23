@@ -29,6 +29,7 @@ const (
 	Keystone_Log_FullMethodName              = "/kubex.keystone.Keystone/Log"
 	Keystone_SQUID_FullMethodName            = "/kubex.keystone.Keystone/SQUID"
 	Keystone_SQUIDRecover_FullMethodName     = "/kubex.keystone.Keystone/SQUIDRecover"
+	Keystone_SnapshotReport_FullMethodName   = "/kubex.keystone.Keystone/SnapshotReport"
 	Keystone_ReportTimeSeries_FullMethodName = "/kubex.keystone.Keystone/ReportTimeSeries"
 	Keystone_ChartTimeSeries_FullMethodName  = "/kubex.keystone.Keystone/ChartTimeSeries"
 	Keystone_Retrieve_FullMethodName         = "/kubex.keystone.Keystone/Retrieve"
@@ -71,6 +72,7 @@ type KeystoneClient interface {
 	SQUID(ctx context.Context, in *SquidRequest, opts ...grpc.CallOption) (*SquidResponse, error)
 	SQUIDRecover(ctx context.Context, in *SquidRecoverRequest, opts ...grpc.CallOption) (*SquidResponse, error)
 	// Reporting
+	SnapshotReport(ctx context.Context, in *SnapshotReportRequest, opts ...grpc.CallOption) (*MutateResponse, error)
 	ReportTimeSeries(ctx context.Context, in *ReportTimeSeriesRequest, opts ...grpc.CallOption) (*MutateResponse, error)
 	ChartTimeSeries(ctx context.Context, in *ChartTimeSeriesRequest, opts ...grpc.CallOption) (*ChartTimeSeriesResponse, error)
 	// Load
@@ -201,6 +203,16 @@ func (c *keystoneClient) SQUIDRecover(ctx context.Context, in *SquidRecoverReque
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SquidResponse)
 	err := c.cc.Invoke(ctx, Keystone_SQUIDRecover_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) SnapshotReport(ctx context.Context, in *SnapshotReportRequest, opts ...grpc.CallOption) (*MutateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MutateResponse)
+	err := c.cc.Invoke(ctx, Keystone_SnapshotReport_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -449,6 +461,7 @@ type KeystoneServer interface {
 	SQUID(context.Context, *SquidRequest) (*SquidResponse, error)
 	SQUIDRecover(context.Context, *SquidRecoverRequest) (*SquidResponse, error)
 	// Reporting
+	SnapshotReport(context.Context, *SnapshotReportRequest) (*MutateResponse, error)
 	ReportTimeSeries(context.Context, *ReportTimeSeriesRequest) (*MutateResponse, error)
 	ChartTimeSeries(context.Context, *ChartTimeSeriesRequest) (*ChartTimeSeriesResponse, error)
 	// Load
@@ -514,6 +527,9 @@ func (UnimplementedKeystoneServer) SQUID(context.Context, *SquidRequest) (*Squid
 }
 func (UnimplementedKeystoneServer) SQUIDRecover(context.Context, *SquidRecoverRequest) (*SquidResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SQUIDRecover not implemented")
+}
+func (UnimplementedKeystoneServer) SnapshotReport(context.Context, *SnapshotReportRequest) (*MutateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SnapshotReport not implemented")
 }
 func (UnimplementedKeystoneServer) ReportTimeSeries(context.Context, *ReportTimeSeriesRequest) (*MutateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReportTimeSeries not implemented")
@@ -775,6 +791,24 @@ func _Keystone_SQUIDRecover_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeystoneServer).SQUIDRecover(ctx, req.(*SquidRecoverRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_SnapshotReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SnapshotReportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).SnapshotReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_SnapshotReport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).SnapshotReport(ctx, req.(*SnapshotReportRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1185,6 +1219,10 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SQUIDRecover",
 			Handler:    _Keystone_SQUIDRecover_Handler,
+		},
+		{
+			MethodName: "SnapshotReport",
+			Handler:    _Keystone_SnapshotReport_Handler,
 		},
 		{
 			MethodName: "ReportTimeSeries",

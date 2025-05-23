@@ -357,3 +357,10 @@ func (c *Connection) SQUIDRecover(ctx context.Context, in *proto.SquidRecoverReq
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) SnapshotReport(ctx context.Context, in *proto.SnapshotReportRequest, opts ...grpc.CallOption) (*proto.MutateResponse, error) {
+	tl := c.timeLogConfig.NewLog("SnapshotReport", zap.String("App", in.GetAuthorization().GetSource().String()), zap.String("eid", in.GetEntityId()))
+	resp, err := c.client.SnapshotReport(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
