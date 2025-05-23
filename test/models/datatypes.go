@@ -21,7 +21,7 @@ type DataTypes struct {
 	Time         time.Time
 	Amount       keystone.Amount
 	AmountPt     *keystone.Amount
-	Secret       keystone.SecureString
+	Secret       keystone.SecureString `keystone:",no-snapshot"`
 	Verify       keystone.VerifyString
 	Boolean      bool
 	Float        float64

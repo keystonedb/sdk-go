@@ -161,6 +161,8 @@ func getFieldOptions(f reflect.StructField) fieldOptions {
 			opt.metric = true
 		case "metricFilter":
 			opt.metricFilter = true
+		case "no-snapshot", "skip-snapshot":
+			opt.noSnapshot = true
 
 		case "pii", "personal", "gdpr":
 			opt.personalData = true
@@ -190,6 +192,7 @@ type fieldOptions struct {
 
 	metric       bool
 	metricFilter bool
+	noSnapshot   bool
 
 	// Data classification
 	personalData  bool
@@ -228,6 +231,7 @@ func (fOpt fieldOptions) applyOptions(onto []proto.Property_Option) []proto.Prop
 	onto = appendOption(proto.Property_Searchable, onto, fOpt.searchable)
 	onto = appendOption(proto.Property_Metric, onto, fOpt.metric)
 	onto = appendOption(proto.Property_MetricFilter, onto, fOpt.metricFilter)
+	onto = appendOption(proto.Property_NoSnapshot, onto, fOpt.noSnapshot)
 	return onto
 }
 
