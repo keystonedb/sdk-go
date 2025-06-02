@@ -89,11 +89,12 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 
 	return res
 }
+
 func (d *Requirement) readAndUpdate(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Read and Update"}
 
 	dt := &models.DataTypes{}
-	err := actor.GetByID(context.Background(), d.eid, dt, keystone.WithProperties())
+	err := actor.GetByID(context.Background(), d.eid, dt, keystone.WithProperties("string"))
 	if err != nil {
 		return res.WithError(err)
 	}

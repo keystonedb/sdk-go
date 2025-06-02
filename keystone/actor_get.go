@@ -95,7 +95,7 @@ func (a *Actor) Get(ctx context.Context, retrieveBy RetrieveBy, dst interface{},
 			}
 			newProps[knownPrefixProperty(prefix, name)] = p.Value
 		}
-		watcher.ReplaceKnownValues(newProps)
+		watcher.AppendKnownValues(newProps)
 	}
 
 	for _, option := range retrieve {
