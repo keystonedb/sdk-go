@@ -23,6 +23,15 @@ func (a *Actor) RemoteMutate(ctx context.Context, entityID ID, src interface{}, 
 		return errors.New("entityID is required for remote mutations")
 	}
 
+	if _, isDyn := src.(ConvertStructToDynamicProperties); isDyn {
+		props, err := DynamicPropertiesFromStructWithoutDefaults(src)
+		if err == nil {
+			mutation.DynamicProperties = props
+		} else {
+			return err
+		}
+	}
+
 	if entityWithSensor, ok := src.(SensorProvider); ok {
 		mutation.Measurements = entityWithSensor.GetSensorMeasurements()
 	}

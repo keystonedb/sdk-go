@@ -43,7 +43,7 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 			continue
 		}
 
-		currentProp, _ := ReflectProperty(field, "")
+		currentProp, propDef := ReflectProperty(field, "")
 
 		if currentProp.HydrateOnly() {
 			// Skip properties that are only for hydration
@@ -57,6 +57,7 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 				continue
 			}
 			protoVal, err := ref.ToProto(currentVal)
+			protoVal.KnownType = mergeDefinitions(propDef, ref.PropertyDefinition()).DataType
 			if err != nil {
 				return nil, err
 			} else {

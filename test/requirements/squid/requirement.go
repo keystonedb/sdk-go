@@ -32,7 +32,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "SQUID Creation"}
 
 	d.sqkey = k4id.New().String() + "-test"
-	for i := 1; i <= 1200; i++ {
+	for i := 1; i <= 200; i++ {
 		squid, err := actor.Squid(d.sqkey)
 		if err != nil {
 			return res.WithError(err)

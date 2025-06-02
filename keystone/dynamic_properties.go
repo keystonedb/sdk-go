@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"context"
+	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 )
@@ -43,6 +44,30 @@ func (a *Actor) GetDynamicProperties(ctx context.Context, entityID string, prope
 	}
 
 	return res, nil
+}
+func (a *Actor) RemoteGet(ctx context.Context, entityID ID, dst interface{}, properties ...string) error {
+	if len(properties) == 0 {
+		properties = []string{"~"}
+	}
+
+	m := &proto.EntityRequest{
+		Authorization: a.Authorization(),
+		EntityId:      entityID.String(),
+		View: &proto.EntityView{
+			DynamicProperties: properties,
+		},
+	}
+
+	resp, err := a.connection.Retrieve(ctx, m)
+	if err != nil {
+		return err
+	}
+
+	res := make(map[Property]*proto.Value)
+	for _, prop := range resp.GetDynamicProperties() {
+		res[NewProperty(prop.Property)] = prop.GetValue()
+	}
+	return UnmarshalProperties(res, dst)
 }
 
 type PropertyValueList map[string]*proto.Value
@@ -113,6 +138,34 @@ func DynamicPropertiesFromStruct(s interface{}) ([]*proto.EntityProperty, error)
 	}
 	properties := make([]*proto.EntityProperty, 0, len(res))
 	for key, value := range res {
+		properties = append(properties, &proto.EntityProperty{
+			Property: key.Name(),
+			Value:    value,
+		})
+	}
+	return properties, nil
+}
+
+func DynamicPropertiesFromStructWithoutDefaults(s interface{}) ([]*proto.EntityProperty, error) {
+
+	val := reflect.ValueOf(s)
+	defaultValues := reflect.New(reflector.Deref(val).Type()).Interface()
+	defMarshal, err := Marshal(defaultValues)
+	if err != nil {
+		return nil, err
+	}
+	res, err := Marshal(s)
+	if err != nil {
+		return nil, err
+	}
+	properties := make([]*proto.EntityProperty, 0, len(res))
+	for key, value := range res {
+		if defVal, ok := defMarshal[key]; ok {
+			if proto.MatchValue(defVal, key.Name(), value) == nil {
+				// If the value matches the default value, skip it
+				continue
+			}
+		}
 		properties = append(properties, &proto.EntityProperty{
 			Property: key.Name(),
 			Value:    value,

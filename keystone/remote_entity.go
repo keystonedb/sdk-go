@@ -21,3 +21,15 @@ func (r Remote) SetKeystoneID(id ID) { r._entityID = id }
 func (r Remote) Mutate(ctx context.Context, actor *Actor, options ...MutateOption) error {
 	return actor.RemoteMutate(ctx, r.GetKeystoneID(), &r, options...)
 }
+
+type DynamicRemoteEntity struct {
+	Remote
+}
+
+func (d *DynamicRemoteEntity) convertToDynamicProperties() bool {
+	return true
+}
+
+type ConvertStructToDynamicProperties interface {
+	convertToDynamicProperties() bool
+}

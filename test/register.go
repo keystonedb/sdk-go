@@ -8,6 +8,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/daily"
 	"github.com/keystonedb/sdk-go/test/requirements/datatypes"
 	"github.com/keystonedb/sdk-go/test/requirements/destroy"
+	"github.com/keystonedb/sdk-go/test/requirements/dynamic_entity"
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
 	"github.com/keystonedb/sdk-go/test/requirements/embedded"
 	"github.com/keystonedb/sdk-go/test/requirements/events"
@@ -47,6 +48,7 @@ func init() {
 	reqs = append(reqs, &akv.Requirement{})
 	reqs = append(reqs, &cru.Requirement{})
 	reqs = append(reqs, &dynamic_properties.Requirement{})
+	reqs = append(reqs, &dynamic_entity.Requirement{})
 	reqs = append(reqs, &unique_id.Requirement{})
 	reqs = append(reqs, &sensor.Requirement{})
 	reqs = append(reqs, &labels.Requirement{})
