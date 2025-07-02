@@ -364,3 +364,10 @@ func (c *Connection) SnapshotReport(ctx context.Context, in *proto.SnapshotRepor
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) Status(ctx context.Context, in *proto.Authorization, opts ...grpc.CallOption) (*proto.StatusResponse, error) {
+	tl := c.timeLogConfig.NewLog("Status", zap.String("App", in.GetSource().String()))
+	resp, err := c.client.Status(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

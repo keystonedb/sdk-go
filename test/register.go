@@ -34,6 +34,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/snapshot"
 	"github.com/keystonedb/sdk-go/test/requirements/squid"
 	"github.com/keystonedb/sdk-go/test/requirements/stats"
+	"github.com/keystonedb/sdk-go/test/requirements/status"
 	"github.com/keystonedb/sdk-go/test/requirements/stringset"
 	"github.com/keystonedb/sdk-go/test/requirements/tasks"
 	"github.com/keystonedb/sdk-go/test/requirements/timeseries"
@@ -83,9 +84,11 @@ func init() {
 	reqs = append(reqs, &tasks.Requirement{})
 	reqs = append(reqs, &squid.Requirement{})
 	reqs = append(reqs, &snapshot.Requirement{})
+	reqs = append(reqs, &status.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &tasks.Requirement{})
+		reqs = append(reqs, &status.Requirement{})
+		//reqs = append(reqs, &tasks.Requirement{})
 	}
 }
