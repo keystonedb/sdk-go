@@ -2,10 +2,12 @@ package remote
 
 import (
 	"context"
+	"errors"
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
+	"strconv"
 	"time"
 )
 
@@ -39,6 +41,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.prepare(actor),
 		d.log(actor),
 		d.upload(actor),
+		d.uploadList(actor),
 	}
 }
 
@@ -90,4 +93,26 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 		Name:  "Upload to Remote Entity",
 		Error: remoteMutateErr,
 	}
+}
+
+func (d *Requirement) uploadList(actor *keystone.Actor) requirements.TestResult {
+	res := requirements.TestResult{Name: "Upload list on Remote Entity"}
+
+	//RetrieveObserver - with Objects
+	psn := keystone.RemoteEntity(d.entityID)
+	listErr := d.secondActor.RemoteGet(context.Background(), d.entityID, psn, keystone.WithObjects())
+
+	if listErr == nil {
+		if len(psn.GetObjects()) != 1 {
+			listErr = errors.New("object count is not 1, got " + strconv.FormatInt(int64(len(psn.GetObjects())), 10))
+		} else if obj := psn.GetObject("abc"); obj == nil {
+			listErr = errors.New("object not found")
+		} else {
+			if obj.GetUrl() == "" {
+				listErr = errors.New("object url is empty")
+			}
+		}
+	}
+
+	return res.WithError(listErr)
 }

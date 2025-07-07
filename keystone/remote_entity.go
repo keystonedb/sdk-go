@@ -12,6 +12,7 @@ type Remote struct {
 	EmbeddedSensors
 	EmbeddedLogs
 	EmbeddedEvents
+	EmbeddedObjects
 	//EmbeddedRelationships //TODO: Review is this is possible
 }
 

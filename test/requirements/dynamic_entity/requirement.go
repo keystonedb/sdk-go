@@ -112,7 +112,7 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 
 	dt := &models.DynamicRemote{}
 	log.Println("EID: ", d.createdID)
-	getErr := actor.RemoteGet(context.Background(), d.createdID, dt)
+	getErr := actor.RemoteGetProperties(context.Background(), d.createdID, dt)
 	if getErr == nil {
 		if dt.String != String {
 			getErr = errors.New("string mismatch")
@@ -185,7 +185,7 @@ func (d *Requirement) append(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) readPostAppend(actor *keystone.Actor) requirements.TestResult {
 
 	dt := &models.DynamicRemote{}
-	getErr := actor.RemoteGet(context.Background(), d.createdID, dt, "integer_set", "mixed_key")
+	getErr := actor.RemoteGetProperties(context.Background(), d.createdID, dt, "integer_set", "mixed_key")
 	if getErr == nil {
 		mixCheck := keystone.NewMixed("newval")
 		if !dt.IntegerSet.Has(7) {
@@ -221,7 +221,7 @@ func (d *Requirement) reduce(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) readPostReduce(actor *keystone.Actor) requirements.TestResult {
 
 	dt := &models.DynamicRemote{}
-	getErr := actor.RemoteGet(context.Background(), d.createdID, dt, "integer_set", "mixed_key")
+	getErr := actor.RemoteGetProperties(context.Background(), d.createdID, dt, "integer_set", "mixed_key")
 	if getErr == nil {
 		if dt.IntegerSet.Has(2) {
 			getErr = errors.New("IntegerSet did not remove 2")

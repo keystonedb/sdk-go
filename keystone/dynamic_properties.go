@@ -45,7 +45,7 @@ func (a *Actor) GetDynamicProperties(ctx context.Context, entityID string, prope
 
 	return res, nil
 }
-func (a *Actor) RemoteGet(ctx context.Context, entityID ID, dst interface{}, properties ...string) error {
+func (a *Actor) RemoteGetProperties(ctx context.Context, entityID ID, dst interface{}, properties ...string) error {
 	if len(properties) == 0 {
 		properties = []string{"~"}
 	}
