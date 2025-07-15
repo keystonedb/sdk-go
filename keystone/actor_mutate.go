@@ -183,7 +183,7 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 			}
 		}
 
-		if rawEntity, ok := src.(Entity); ok && entityID == "" && mResp.GetEntityId() != "" {
+		if rawEntity, ok := src.(Entity); ok && mResp.GetEntityId() != "" {
 			rawEntity.SetKeystoneID(ID(mResp.GetEntityId()))
 		}
 
