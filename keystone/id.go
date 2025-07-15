@@ -1,9 +1,28 @@
 package keystone
 
-import "strings"
+import (
+	"github.com/kubex/k4id"
+	"strconv"
+	"strings"
+	"time"
+)
 
 // ID is a unique identifier for a remote object
 type ID string
+
+// Time returns the time of the parent ID
+func (id ID) Time() time.Time {
+	return k4id.TimeGeneratorNano.Parse(id.ParentID())
+}
+
+// ChildTime returns the time of the child ID if available, and not a custom ID
+func (id ID) ChildTime() time.Time {
+	if id.ChildID() != "" {
+		tid, _ := strconv.ParseInt(id.ChildID(), 36, 64)
+		return time.Unix(0, tid)
+	}
+	return time.Time{}
+}
 
 func (id ID) String() string {
 	return string(id)
