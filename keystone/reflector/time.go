@@ -1,10 +1,11 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"reflect"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Time struct{}
@@ -15,7 +16,7 @@ func (e Time) ToProto(value reflect.Value) (*proto.Value, error) {
 		value = reflect.New(reflect.TypeOf(&time.Time{}))
 	}
 	if tme, isTime := value.Interface().(time.Time); isTime {
-		return &proto.Value{Time: timestamppb.New(tme)}, nil
+		return &proto.Value{Time: timestamppb.New(tme), KnownType: proto.Property_Time}, nil
 	}
 	return nil, UnsupportedTypeError
 }

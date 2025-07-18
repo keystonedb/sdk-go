@@ -1,15 +1,16 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type String struct{}
 
 func (e String) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
-	return &proto.Value{Text: value.String()}, nil
+	return &proto.Value{Text: value.String(), KnownType: proto.Property_Text}, nil
 }
 
 func (e String) SetValue(value *proto.Value, onto reflect.Value) error {

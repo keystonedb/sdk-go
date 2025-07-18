@@ -1,8 +1,9 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type IntSlice struct{}
@@ -10,7 +11,7 @@ type IntSlice struct{}
 func (e IntSlice) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
 	if value.Type().Kind() == reflect.Slice {
-		ret := &proto.Value{Array: &proto.RepeatedValue{}}
+		ret := &proto.Value{Array: &proto.RepeatedValue{}, KnownType: proto.Property_Ints}
 		if value.Len() > 0 {
 			for i := 0; i < value.Len(); i++ {
 				ret.Array.Ints = append(ret.Array.Ints, value.Index(i).Int())

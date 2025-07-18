@@ -2,9 +2,10 @@ package reflector
 
 import (
 	"fmt"
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 	"strconv"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type Float struct {
@@ -14,13 +15,13 @@ type Float struct {
 func (e Float) ToProto(value reflect.Value) (*proto.Value, error) {
 	if value.Kind() == reflect.Float32 && e.Is32 {
 		newF, _ := strconv.ParseFloat(fmt.Sprintf("%f", value.Interface().(float32)), 64)
-		return &proto.Value{Float: newF}, nil
+		return &proto.Value{Float: newF, KnownType: proto.Property_Float}, nil
 	} else if value.Kind() == reflect.Float64 && !e.Is32 {
-		return &proto.Value{Float: value.Float()}, nil
+		return &proto.Value{Float: value.Float(), KnownType: proto.Property_Float}, nil
 	}
 	switch value.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return &proto.Value{Float: float64(value.Int())}, nil
+		return &proto.Value{Float: float64(value.Int()), KnownType: proto.Property_Float}, nil
 	}
 	return nil, UnsupportedTypeError
 }

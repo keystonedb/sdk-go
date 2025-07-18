@@ -1,8 +1,9 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type Int struct {
@@ -13,11 +14,11 @@ type Int struct {
 func (e Int) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
 	if value.CanInt() {
-		return &proto.Value{Int: value.Int()}, nil
+		return &proto.Value{Int: value.Int(), KnownType: proto.Property_Number}, nil
 	}
 
 	if value.CanUint() && value.Kind() != reflect.Uint64 && value.Kind() != reflect.Uintptr {
-		return &proto.Value{Int: int64(value.Uint())}, nil
+		return &proto.Value{Int: int64(value.Uint()), KnownType: proto.Property_Number}, nil
 	}
 	return nil, UnsupportedTypeError
 }

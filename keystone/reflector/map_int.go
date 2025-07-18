@@ -1,9 +1,10 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
 	"strconv"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type IntMap struct{}
@@ -11,7 +12,7 @@ type IntMap struct{}
 func (e IntMap) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
 	if mapVal, ok := value.Interface().(map[string]int); ok {
-		ret := &proto.Value{Array: proto.NewRepeatedValue()}
+		ret := &proto.Value{Array: proto.NewRepeatedValue(), KnownType: proto.Property_KeyValue}
 		for k, v := range mapVal {
 			ret.Array.KeyValue[k] = []byte(strconv.Itoa(v))
 		}

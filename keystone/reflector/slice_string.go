@@ -1,8 +1,9 @@
 package reflector
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type StringSlice struct{}
@@ -10,7 +11,7 @@ type StringSlice struct{}
 func (e StringSlice) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
 	if slice, ok := value.Interface().([]string); ok {
-		return &proto.Value{Array: &proto.RepeatedValue{Strings: slice}}, nil
+		return &proto.Value{Array: &proto.RepeatedValue{Strings: slice}, KnownType: proto.Property_Strings}, nil
 	}
 	return nil, UnsupportedTypeError
 }
