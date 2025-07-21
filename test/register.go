@@ -18,13 +18,13 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/iid"
 	"github.com/keystonedb/sdk-go/test/requirements/immutable"
 	"github.com/keystonedb/sdk-go/test/requirements/labels"
-	"github.com/keystonedb/sdk-go/test/requirements/list"
 	"github.com/keystonedb/sdk-go/test/requirements/logging"
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
 	"github.com/keystonedb/sdk-go/test/requirements/nested_children"
 	"github.com/keystonedb/sdk-go/test/requirements/objects"
 	"github.com/keystonedb/sdk-go/test/requirements/pii"
 	"github.com/keystonedb/sdk-go/test/requirements/prewrite"
+	"github.com/keystonedb/sdk-go/test/requirements/query"
 	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/keystonedb/sdk-go/test/requirements/remote"
@@ -61,7 +61,7 @@ func init() {
 	reqs = append(reqs, &immutable.Requirement{})
 	reqs = append(reqs, &lookup.Requirement{})
 	reqs = append(reqs, &relationships.Requirement{})
-	reqs = append(reqs, &list.Requirement{})
+	reqs = append(reqs, &query.Requirement{})
 	reqs = append(reqs, &datatypes.Requirement{})
 	reqs = append(reqs, &timeseries.Requirement{})
 	reqs = append(reqs, &setfalse.Requirement{})

@@ -1,4 +1,4 @@
-package list
+package query
 
 import (
 	"context"
@@ -16,7 +16,7 @@ type Requirement struct {
 }
 
 func (d *Requirement) Name() string {
-	return "List Entities"
+	return "Query Entity Index"
 }
 
 func (d *Requirement) Register(conn *keystone.Connection) error {
@@ -37,7 +37,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 
 func (d *Requirement) readOneTwo(actor *keystone.Actor) requirements.TestResult {
 
-	entities, err := actor.List(context.Background(), keystone.Type(models.FileData{}),
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.FileData{}),
 		[]string{"check_key", "line_information"}, keystone.Limit(2, 0), keystone.SortBy("modified", true),
 		keystone.WhereIn("state", 1, 2))
 
@@ -71,7 +71,7 @@ func (d *Requirement) readOneTwo(actor *keystone.Actor) requirements.TestResult 
 }
 func (d *Requirement) readThree(actor *keystone.Actor) requirements.TestResult {
 
-	entities, err := actor.List(context.Background(), keystone.Type(models.FileData{}),
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.FileData{}),
 		[]string{"check_key"}, keystone.Limit(2, 0), keystone.SortBy("modified", true),
 		keystone.WhereEquals("connector_id", "tester"))
 	if err == nil && len(entities) < 2 {
@@ -100,7 +100,7 @@ func (d *Requirement) readThree(actor *keystone.Actor) requirements.TestResult {
 
 func (d *Requirement) readComplex(actor *keystone.Actor) requirements.TestResult {
 
-	entities, err := actor.List(context.Background(), keystone.Type(models.FileData{}),
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.FileData{}),
 		[]string{"check_key", "identifier"}, keystone.Limit(2, 0), keystone.SortBy("modified", true),
 		keystone.WhereEquals("user_id", "usr1"),
 		keystone.Or(keystone.WhereEquals("state", 1), keystone.WhereEquals("state", 2)))
@@ -144,7 +144,7 @@ func (d *Requirement) readComplex(actor *keystone.Actor) requirements.TestResult
 
 func (d *Requirement) readPending(actor *keystone.Actor) requirements.TestResult {
 
-	entities, err := actor.List(context.Background(), keystone.Type(models.FileData{}),
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.FileData{}),
 		[]string{"check_key"}, keystone.Limit(3, 0), keystone.SortBy("modified", true),
 		keystone.WhereEquals("is_pending", true))
 
