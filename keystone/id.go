@@ -7,12 +7,14 @@ import (
 	"time"
 )
 
+var k7ID = k4id.NewGenerator(k4id.TimeGeneratorNano)
+
 // ID is a unique identifier for a remote object
 type ID string
 
 // Time returns the time of the parent ID
 func (id ID) Time() time.Time {
-	return k4id.TimeGeneratorNano.Parse(id.ParentID())
+	return k7ID.ExtractTime(id.ParentID())
 }
 
 // ChildTime returns the time of the child ID if available, and not a custom ID
