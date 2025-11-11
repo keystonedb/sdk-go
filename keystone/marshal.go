@@ -2,9 +2,10 @@ package keystone
 
 import (
 	"errors"
+	"reflect"
+
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
-	"reflect"
 )
 
 var CannotMarshalPrimitives = errors.New("cannot marshal primitive type")
@@ -57,12 +58,11 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 				continue
 			}
 			protoVal, err := ref.ToProto(currentVal)
-			protoVal.KnownType = mergeDefinitions(propDef, ref.PropertyDefinition()).DataType
 			if err != nil {
 				return nil, err
-			} else {
-				properties[currentProp] = protoVal
 			}
+			protoVal.KnownType = mergeDefinitions(propDef, ref.PropertyDefinition()).DataType
+			properties[currentProp] = protoVal
 		} else if !currentVal.IsZero() {
 			var subProps map[Property]*proto.Value
 			var err error
