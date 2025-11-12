@@ -38,6 +38,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/stringset"
 	"github.com/keystonedb/sdk-go/test/requirements/tasks"
 	"github.com/keystonedb/sdk-go/test/requirements/timeseries"
+	"github.com/keystonedb/sdk-go/test/requirements/translations"
 	"github.com/keystonedb/sdk-go/test/requirements/unique_id"
 	"github.com/keystonedb/sdk-go/test/requirements/watcher"
 )
@@ -82,6 +83,7 @@ func init() {
 	reqs = append(reqs, &hashed_id.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
 	reqs = append(reqs, &tasks.Requirement{})
+	reqs = append(reqs, &translations.Requirement{})
 	reqs = append(reqs, &squid.Requirement{})
 	reqs = append(reqs, &snapshot.Requirement{})
 	reqs = append(reqs, &status.Requirement{})
