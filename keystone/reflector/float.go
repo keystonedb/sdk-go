@@ -13,6 +13,10 @@ type Float struct {
 }
 
 func (e Float) ToProto(value reflect.Value) (*proto.Value, error) {
+	value = Deref(value)
+	if !value.IsValid() {
+		return &proto.Value{Float: 0, KnownType: proto.Property_Float}, nil
+	}
 	if value.Kind() == reflect.Float32 && e.Is32 {
 		newF, _ := strconv.ParseFloat(fmt.Sprintf("%f", value.Interface().(float32)), 64)
 		return &proto.Value{Float: newF, KnownType: proto.Property_Float}, nil
@@ -27,6 +31,12 @@ func (e Float) ToProto(value reflect.Value) (*proto.Value, error) {
 }
 
 func (e Float) SetValue(value *proto.Value, onto reflect.Value) error {
+	if onto.Kind() == reflect.Pointer {
+		if onto.IsNil() {
+			onto.Set(reflect.New(onto.Type().Elem()))
+		}
+		onto = onto.Elem()
+	}
 	if e.Is32 {
 		newF, _ := strconv.ParseFloat(fmt.Sprintf("%f", value.GetFloat()), 64)
 		onto.Set(reflect.ValueOf(float32(newF)))

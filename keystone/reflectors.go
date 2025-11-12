@@ -2,11 +2,12 @@ package keystone
 
 import (
 	"errors"
+	"reflect"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"reflect"
-	"time"
 )
 
 var (
@@ -61,6 +62,13 @@ var typeReflector = map[reflect.Type]Reflector{
 }
 
 func GetReflector(t reflect.Type, v reflect.Value) Reflector {
+	// Unwrap pointer types so primitive pointers use the same reflectors
+	for t.Kind() == reflect.Pointer {
+		if v.IsValid() {
+			v = reflector.Deref(v)
+		}
+		t = t.Elem()
+	}
 
 	if ref, ok := typeReflector[t]; ok {
 		return ref
@@ -96,14 +104,27 @@ func GetReflector(t reflect.Type, v reflect.Value) Reflector {
 		}
 	}
 	if t.Implements(valueMarshalerType) {
+		// Ensure we don't pass an invalid reflect.Value to newValueMarshalReflector
+		if !v.IsValid() {
+			vz := reflect.New(t).Elem()
+			return newValueMarshalReflector(vz)
+		}
 		return newValueMarshalReflector(v)
 	}
 
 	if t.Kind() != reflect.Pointer && reflect.PointerTo(t).Implements(valueMarshalerType) {
 		vp := reflect.New(t)
-		vp.Elem().Set(v)
+		// Only set if we have a valid value; otherwise keep zero value
+		if v.IsValid() {
+			vp.Elem().Set(v)
+		}
 		return newValueMarshalReflector(vp)
 	} else if t.Implements(valueMarshalerType) {
+		// Duplicate guard for completeness when reaching here
+		if !v.IsValid() {
+			vz := reflect.New(t).Elem()
+			return newValueMarshalReflector(vz)
+		}
 		return newValueMarshalReflector(v)
 	}
 

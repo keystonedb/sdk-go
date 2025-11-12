@@ -13,7 +13,7 @@ type Time struct{}
 func (e Time) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
 	if !value.IsValid() {
-		value = reflect.New(reflect.TypeOf(&time.Time{}))
+		return &proto.Value{Time: timestamppb.New(time.Time{}), KnownType: proto.Property_Time}, nil
 	}
 	if tme, isTime := value.Interface().(time.Time); isTime {
 		return &proto.Value{Time: timestamppb.New(tme), KnownType: proto.Property_Time}, nil
@@ -22,7 +22,14 @@ func (e Time) ToProto(value reflect.Value) (*proto.Value, error) {
 }
 
 func (e Time) SetValue(value *proto.Value, onto reflect.Value) error {
-	onto.Set(reflect.ValueOf(value.GetTime().AsTime()))
+	timeValue := value.GetTime().AsTime()
+	if onto.Kind() == reflect.Pointer {
+		if onto.IsNil() {
+			onto.Set(reflect.New(onto.Type().Elem()))
+		}
+		onto = onto.Elem()
+	}
+	onto.Set(reflect.ValueOf(timeValue))
 	return nil
 }
 

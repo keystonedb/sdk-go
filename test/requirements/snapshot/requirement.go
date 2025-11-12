@@ -3,10 +3,11 @@ package snapshot
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
-	"time"
 )
 
 var (
@@ -67,8 +68,10 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	amnt := keystone.NewAmount(Amount.GetCurrency(), Amount.GetUnits())
 	psn := &models.DataTypes{
 		String:       String,
+		StringPtr:    &String,
 		Integer:      Integer,
 		Time:         Time,
+		TimePt:       &Time,
 		Amount:       *amnt,
 		AmountPt:     amnt,
 		Secret:       Secret,

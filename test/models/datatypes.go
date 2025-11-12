@@ -17,14 +17,19 @@ const (
 type DataTypes struct {
 	keystone.BaseEntity
 	String       string
+	StringPtr    *string
 	Integer      int64
+	IntegerPtr   *int64
 	Time         time.Time
+	TimePt       *time.Time
 	Amount       keystone.Amount
 	AmountPt     *keystone.Amount
 	Secret       keystone.SecureString `keystone:",no-snapshot"`
 	Verify       keystone.VerifyString
 	Boolean      bool
+	BooleanPtr   *bool
 	Float        float64
+	FloatPtr     *float64
 	Map          map[string]string
 	StringSlice  []string
 	IntegerSlice []int
