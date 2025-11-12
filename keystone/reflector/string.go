@@ -10,10 +10,19 @@ type String struct{}
 
 func (e String) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
+	if !value.IsValid() {
+		return &proto.Value{Text: "", KnownType: proto.Property_Text}, nil
+	}
 	return &proto.Value{Text: value.String(), KnownType: proto.Property_Text}, nil
 }
 
 func (e String) SetValue(value *proto.Value, onto reflect.Value) error {
+	if onto.Kind() == reflect.Pointer {
+		if onto.IsNil() {
+			onto.Set(reflect.New(onto.Type().Elem()))
+		}
+		onto = onto.Elem()
+	}
 	onto.SetString(value.GetText())
 	return nil
 }

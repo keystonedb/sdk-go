@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/keystonedb/sdk-go/keystone"
-	"github.com/keystonedb/sdk-go/test/models"
-	"github.com/keystonedb/sdk-go/test/requirements"
 	"log"
 	"reflect"
 	"strings"
 	"time"
+
+	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/test/models"
+	"github.com/keystonedb/sdk-go/test/requirements"
 )
 
 var (
@@ -74,15 +75,20 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	amnt := keystone.NewAmount(Amount.GetCurrency(), Amount.GetUnits())
 	psn := &models.DataTypes{
 		String:       String,
+		StringPtr:    &String,
 		Integer:      Integer,
+		IntegerPtr:   &Integer,
 		Time:         Time,
+		TimePt:       &Time,
 		Amount:       *amnt,
 		AmountPt:     amnt,
 		Secret:       Secret,
 		Verify:       Verify,
 		Boolean:      Boolean,
+		BooleanPtr:   &Boolean,
 		MinMax:       MinMax,
 		Float:        Float,
+		FloatPtr:     &Float,
 		Map:          Map,
 		StringSlice:  StringSlice,
 		IntegerSlice: IntegerSlice,
@@ -115,24 +121,42 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 	if getErr == nil {
 		if dt.String != String {
 			getErr = errors.New("string mismatch")
+		} else if dt.StringPtr == nil {
+			getErr = errors.New("string pointer mismatch")
+		} else if *dt.StringPtr != String {
+			getErr = errors.New("string (ptr) mismatch")
 		} else if dt.Integer != Integer {
 			getErr = errors.New("integer mismatch")
+		} else if dt.IntegerPtr == nil {
+			getErr = errors.New("integer pointer mismatch")
+		} else if *dt.IntegerPtr != Integer {
+			getErr = errors.New("integer (ptr) mismatch")
 		} else if dt.Time.Unix() != Time.Unix() {
 			getErr = errors.New("time mismatch")
+		} else if dt.TimePt.Unix() != Time.Unix() {
+			getErr = errors.New("time (ptr) mismatch")
 		} else if !Amount.Equals(&dt.Amount) {
 			getErr = errors.New("amount mismatch")
 		} else if !Amount.Equals(dt.AmountPt) {
-			getErr = errors.New("amount mismatch")
+			getErr = errors.New("amount (ptr) mismatch")
 		} else if dt.Amount.GetUnits() != 130 {
 			getErr = errors.New("amount mismatch, expected 130")
 		} else if dt.Secret != Secret {
 			getErr = errors.New("secret mismatch")
 		} else if dt.Boolean != Boolean {
 			getErr = errors.New("boolean mismatch")
+		} else if dt.BooleanPtr == nil {
+			getErr = errors.New("boolean pointer mismatch")
+		} else if *dt.BooleanPtr != Boolean {
+			getErr = errors.New("boolean (ptr) mismatch")
 		} else if dt.MinMax != MinMax {
 			getErr = errors.New("MinMax mismatch")
 		} else if dt.Float != Float {
 			getErr = errors.New("float mismatch")
+		} else if dt.FloatPtr == nil {
+			getErr = errors.New("float pointer mismatch")
+		} else if *dt.FloatPtr != Float {
+			getErr = errors.New("float (ptr) mismatch")
 		} else if !reflect.DeepEqual(dt.Map, Map) {
 			getErr = errors.New("map mismatch")
 		} else if !reflect.DeepEqual(dt.StringSlice, StringSlice) {

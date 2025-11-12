@@ -13,10 +13,12 @@ type Int struct {
 
 func (e Int) ToProto(value reflect.Value) (*proto.Value, error) {
 	value = Deref(value)
+	if !value.IsValid() {
+		return &proto.Value{Int: 0, KnownType: proto.Property_Number}, nil
+	}
 	if value.CanInt() {
 		return &proto.Value{Int: value.Int(), KnownType: proto.Property_Number}, nil
 	}
-
 	if value.CanUint() && value.Kind() != reflect.Uint64 && value.Kind() != reflect.Uintptr {
 		return &proto.Value{Int: int64(value.Uint()), KnownType: proto.Property_Number}, nil
 	}
@@ -31,6 +33,12 @@ func (e Int) cast(value reflect.Value) reflect.Value {
 }
 
 func (e Int) SetValue(value *proto.Value, onto reflect.Value) error {
+	if onto.Kind() == reflect.Pointer {
+		if onto.IsNil() {
+			onto.Set(reflect.New(onto.Type().Elem()))
+		}
+		onto = onto.Elem()
+	}
 	switch e.Kind {
 	case reflect.Int:
 		onto.Set(e.cast(reflect.ValueOf(int(value.Int))))
