@@ -26,6 +26,7 @@ var (
 	Float        = 19.85
 	Map          = map[string]string{"key": "value", "key2": "value2"} // not setting
 	StringSlice  = []string{"a", "b", "c", "c"}                        // not setting
+	IDSlice      = []keystone.ID{"a", "b", "c", "c"}                   // not setting
 	IntegerSlice = []int{1, 2, 3, 4, 4}                                // not setting
 	StringSet    = keystone.NewStringSet("a", "b", "c", "c")           // not setting
 	IntegerSet   = keystone.NewIntSet(1, 2, 3, 4, 4)                   // not setting
@@ -91,6 +92,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		FloatPtr:     &Float,
 		Map:          Map,
 		StringSlice:  StringSlice,
+		IDSlice:      IDSlice,
 		IntegerSlice: IntegerSlice,
 		StringSet:    StringSet,
 		IntegerSet:   IntegerSet,
@@ -161,6 +163,8 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("map mismatch")
 		} else if !reflect.DeepEqual(dt.StringSlice, StringSlice) {
 			getErr = errors.New("StringSlice mismatch")
+		} else if !reflect.DeepEqual(dt.IDSlice, IDSlice) {
+			getErr = errors.New("IDSlice mismatch")
 		} else if !reflect.DeepEqual(dt.IntegerSlice, IntegerSlice) {
 			getErr = errors.New("IntegerSlice mismatch")
 		} else if len(dt.StringSet.Diff(StringSet.Values()...)) != 0 {

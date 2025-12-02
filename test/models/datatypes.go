@@ -42,6 +42,7 @@ type DataTypes struct {
 	ExternalID   keystone.ExternalID
 	Mixed        keystone.Mixed
 	MixedKey     keystone.KeyMixed
+	IDSlice      []keystone.ID
 }
 
 func (t *DataTypes) GetKeystoneDefinition() keystone.TypeDefinition {
