@@ -5,12 +5,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"log"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
-	"io"
-	"time"
 )
 
 type Requirement struct {
@@ -45,8 +47,10 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 	fileTwo := keystone.NewUpload("policy.txt", proto.ObjectType_NearLine)
 	fileThree := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
 	fileThree.SetData([]byte("file contents here"))
+	fileRemote := keystone.NewUpload("README.md", proto.ObjectType_Standard)
+	fileRemote.SetPublic(true)
 
-	createErr := actor.Mutate(context.Background(), psn, keystone.PrepareUploads(fileOne, fileTwo, fileThree))
+	createErr := actor.Mutate(context.Background(), psn, keystone.PrepareUploads(fileOne, fileTwo, fileThree, fileRemote))
 	if createErr == nil {
 		d.createdID = psn.GetKeystoneID()
 
@@ -85,6 +89,24 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 				}
 			}
 		}
+
+		if !fileRemote.ReadyForUpload() {
+			return requirements.TestResult{
+				Name:  "Upload",
+				Error: errors.New("no signed url was created for the upload"),
+			}
+		} else {
+			resp, err := fileRemote.CopyFromURL("https://raw.githubusercontent.com/keystonedb/sdk-go/refs/heads/main/README.md")
+			if err != nil {
+				createErr = err
+			} else {
+				if resp.StatusCode != 200 {
+					createErr = errors.New("upload failed, status code: " + string(rune(resp.StatusCode)))
+					bdy, _ := io.ReadAll(resp.Body)
+					fmt.Println(string(bdy))
+				}
+			}
+		}
 	}
 
 	return requirements.TestResult{
@@ -99,7 +121,9 @@ func (d *Requirement) list(actor *keystone.Actor) requirements.TestResult {
 	listErr := actor.Get(context.Background(), keystone.ByEntityID(psn, d.createdID), psn, keystone.WithObjects())
 
 	if listErr == nil {
-		if len(psn.GetObjects()) != 3 {
+		o := psn.GetObject("README.md")
+		log.Println(o.GetUrl())
+		if len(psn.GetObjects()) != 4 {
 			listErr = errors.New("object count is not 3, got " + string(len(psn.GetObjects())))
 		} else if obj := psn.GetObject("profile.png"); obj == nil {
 			listErr = errors.New("object not found")
