@@ -1,6 +1,7 @@
 package keystone
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/keystonedb/sdk-go/proto"
@@ -162,6 +163,42 @@ func Test_Translations_MarshalUnmarshal(t *testing.T) {
 		t.Errorf("Expected 'Hallo' for 'de', got %v", text)
 	}
 
+	if _, ok := translations2.Get("fr"); ok {
+		t.Errorf("Expected 'fr' to be removed")
+	}
+}
+
+func Test_Translations_JSON(t *testing.T) {
+	translations := &Translations{}
+	translations.Add("en", "Hello")
+	translations.Add("fr", "Bonjour")
+	translations.Add("de", "Hallo")
+	translations.Remove("fr")
+
+	jsnVal, err := json.Marshal(translations)
+	if err != nil {
+		t.Fatalf("Error marshalling: %v", err)
+	}
+
+	if string(jsnVal) != "{\"de\":\"Hallo\",\"en\":\"Hello\"}" {
+		t.Errorf("Expected specific json string, got %v", string(jsnVal))
+	}
+
+	var translations2 Translations
+	err = json.Unmarshal(jsnVal, &translations2)
+	if err != nil {
+		t.Fatalf("Error unmarshalling: %v", err)
+	}
+	all := translations2.All()
+	if len(all) != 2 {
+		t.Errorf("Expected 2 translations (en, de), got %d: %v", len(all), all)
+	}
+	if text, ok := translations2.Get("en"); !ok || text != "Hello" {
+		t.Errorf("Expected 'Hello' for 'en', got %v", text)
+	}
+	if text, ok := translations2.Get("de"); !ok || text != "Hallo" {
+		t.Errorf("Expected 'Hallo' for 'de', got %v", text)
+	}
 	if _, ok := translations2.Get("fr"); ok {
 		t.Errorf("Expected 'fr' to be removed")
 	}

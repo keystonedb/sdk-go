@@ -1,6 +1,10 @@
 package keystone
 
-import "github.com/keystonedb/sdk-go/proto"
+import (
+	"encoding/json"
+
+	"github.com/keystonedb/sdk-go/proto"
+)
 
 // Translations is a map of language codes to translated text
 type Translations struct {
@@ -156,4 +160,16 @@ func (t *Translations) ObserveMutation(resp *proto.MutateResponse) {
 	if resp.GetSuccess() {
 		t.merge()
 	}
+}
+
+func (t *Translations) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.All())
+}
+func (t *Translations) UnmarshalJSON(data []byte) error {
+	newMap := make(map[string]string)
+	if err := json.Unmarshal(data, &newMap); err != nil {
+		return err
+	}
+	t.Replace(newMap)
+	return nil
 }
