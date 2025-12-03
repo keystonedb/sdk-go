@@ -3,8 +3,9 @@ package keystone
 import (
 	"context"
 	"errors"
-	"github.com/keystonedb/sdk-go/proto"
 	"strings"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 func (a *Actor) GetByID(ctx context.Context, entityID ID, dst interface{}, retrieve ...RetrieveOption) error {
@@ -143,6 +144,16 @@ func (a *Actor) GetSharedByID(ctx context.Context, owner *proto.VendorApp, entit
 	resp, err := a.connection.Retrieve(ctx, entityRequest)
 	if err != nil {
 		return err
+	}
+
+	for _, option := range retrieve {
+		if observe, ok := option.(RetrieveObserver); ok {
+			observe.ObserveRetrieve(resp)
+		}
+	}
+
+	if observe, ok := dst.(RetrieveObserver); ok {
+		observe.ObserveRetrieve(resp)
 	}
 
 	if gr, ok := dst.(GenericResult); ok {
