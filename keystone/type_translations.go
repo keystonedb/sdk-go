@@ -65,6 +65,25 @@ func (t *Translations) Get(language string) (string, bool) {
 	return text, ok
 }
 
+func (t *Translations) FallbackLang(language string, fallbackLang string) string {
+	t.prepare()
+	if res, ok := t.Get(language); ok {
+		return res
+	}
+	if res, ok := t.Get(fallbackLang); ok {
+		return res
+	}
+	return ""
+}
+
+func (t *Translations) Fallback(language, text string) string {
+	t.prepare()
+	if res, ok := t.Get(language); ok {
+		return res
+	}
+	return text
+}
+
 // All returns all current translations
 func (t *Translations) All() map[string]string {
 	t.prepare()
