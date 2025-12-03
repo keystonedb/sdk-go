@@ -30,6 +30,20 @@ func NewUpload(path string, storageClass proto.ObjectType) *EntityObject {
 	return &EntityObject{path: path, metadata: make(map[string]string), storageClass: storageClass}
 }
 
+func NewUploadFromURL(path, remoteUrl string, storageClass proto.ObjectType) (*EntityObject, error) {
+	eo := &EntityObject{path: path, metadata: make(map[string]string), storageClass: storageClass}
+	data, err := getRemoteFile(remoteUrl)
+	if err != nil {
+		return nil, err
+	}
+	fileContent, readErr := io.ReadAll(data)
+	if readErr != nil {
+		return nil, readErr
+	}
+	eo.SetData(fileContent)
+	return eo, nil
+}
+
 func (e *EntityObject) SetPublic(public bool) {
 	e.public = public
 }
@@ -93,8 +107,29 @@ func (e *EntityObject) CopyFromURL(source string) (*http.Response, error) {
 		return nil, errors.New("upload URL is empty; call the API to initialize upload first")
 	}
 
+	src, err := getRemoteFile(source)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, e.GetUploadURL(), src)
+	if err != nil {
+		return nil, err
+	}
+
+	// If we have headers provided for the upload, apply them
+	if e.uploadHeaders != nil {
+		for k, v := range e.uploadHeaders {
+			req.Header.Set(k, v)
+		}
+	}
+
+	return http.DefaultClient.Do(req)
+}
+
+func getRemoteFile(url string) (io.Reader, error) {
 	// Fetch the source content
-	srcResp, err := http.Get(source)
+	srcResp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -107,32 +142,9 @@ func (e *EntityObject) CopyFromURL(source string) (*http.Response, error) {
 		return nil, errors.New("failed to download source: status " + srcResp.Status + " body: " + string(b))
 	}
 
-	// Prepare the upload PUT request with the downloaded body as content
-	req, err := http.NewRequest(http.MethodPut, e.GetUploadURL(), srcResp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	// If we have headers provided for the upload, apply them
-	if e.uploadHeaders != nil {
-		for k, v := range e.uploadHeaders {
-			req.Header.Set(k, v)
-		}
-	}
-
-	// Preserve the content-type from the source if not explicitly set already
-	if req.Header.Get("Content-Type") == "" {
-		if ct := srcResp.Header.Get("Content-Type"); ct != "" {
-			req.Header.Set("Content-Type", ct)
-		}
-	}
-
-	// If the server provided a content-length, forward it (optional; http will chunk if absent)
-	if cl := srcResp.Header.Get("Content-Length"); cl != "" {
-		req.Header.Set("Content-Length", cl)
-	}
-
-	return http.DefaultClient.Do(req)
+	buf := bytes.NewBuffer(nil)
+	_, err = io.Copy(buf, srcResp.Body)
+	return buf, err
 }
 
 func (e *EntityObject) UploadToJson(content interface{}) (*http.Response, error) {

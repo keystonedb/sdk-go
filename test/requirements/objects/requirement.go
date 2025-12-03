@@ -47,7 +47,13 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 	fileTwo := keystone.NewUpload("policy.txt", proto.ObjectType_NearLine)
 	fileThree := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
 	fileThree.SetData([]byte("file contents here"))
-	fileRemote := keystone.NewUpload("README.md", proto.ObjectType_Standard)
+	fileRemote, err := keystone.NewUploadFromURL("README.md", "https://raw.githubusercontent.com/keystonedb/sdk-go/refs/heads/main/README.md", proto.ObjectType_Standard)
+	if err != nil {
+		return requirements.TestResult{
+			Name:  "Upload",
+			Error: errors.New("unable to upload from URL"),
+		}
+	}
 	fileRemote.SetPublic(true)
 
 	createErr := actor.Mutate(context.Background(), psn, keystone.PrepareUploads(fileOne, fileTwo, fileThree, fileRemote))
@@ -79,24 +85,6 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 			}
 		} else if createErr == nil {
 			resp, err := fileTwo.Upload(bytes.NewBuffer([]byte("policy document")))
-			if err != nil {
-				createErr = err
-			} else {
-				if resp.StatusCode != 200 {
-					createErr = errors.New("upload failed, status code: " + string(rune(resp.StatusCode)))
-					bdy, _ := io.ReadAll(resp.Body)
-					fmt.Println(string(bdy))
-				}
-			}
-		}
-
-		if !fileRemote.ReadyForUpload() {
-			return requirements.TestResult{
-				Name:  "Upload",
-				Error: errors.New("no signed url was created for the upload"),
-			}
-		} else {
-			resp, err := fileRemote.CopyFromURL("https://raw.githubusercontent.com/keystonedb/sdk-go/refs/heads/main/README.md")
 			if err != nil {
 				createErr = err
 			} else {
