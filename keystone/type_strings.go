@@ -25,3 +25,10 @@ func (s *String) IsZero() bool {
 func (s *String) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_Text}
 }
+
+func (s *String) String() string {
+	if s == nil {
+		return ""
+	}
+	return string(*s)
+}
