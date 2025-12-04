@@ -3,11 +3,12 @@ package child_entities
 import (
 	"context"
 	"errors"
+	"strconv"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
-	"strconv"
-	"time"
 )
 
 type Requirement struct {
@@ -93,9 +94,16 @@ func (d *Requirement) getSummary(actor *keystone.Actor) requirements.TestResult 
 	}
 }
 func (d *Requirement) getRenewals(actor *keystone.Actor) requirements.TestResult {
-	return requirements.TestResult{
-		Name: "Get Renewals",
-		//Error: errors.New("not implemented"),
-		//TODO: Add This
+	req := requirements.TestResult{Name: "Get Renewals"}
+
+	entities, err := actor.Find(context.Background(), keystone.Type(models.Renewal{}), keystone.WithProperties(), keystone.ChildOf(d.subscriptionId.String()))
+	if err != nil {
+		return req.WithError(err)
 	}
+
+	if len(entities) != 30 {
+		return req.WithError(errors.New("number of renewals mismatch"))
+	}
+
+	return req
 }
