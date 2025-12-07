@@ -106,6 +106,21 @@ func (t *Translations) All() map[string]*Translation {
 	return all
 }
 
+// SingularMap returns all singular forms
+func (t *Translations) SingularMap() map[string]string {
+	t.prepare()
+	all := make(map[string]string)
+	for lang, text := range t.values {
+		if _, ok := t.toRemove[lang]; !ok {
+			all[lang] = text.String()
+		}
+	}
+	for lang, text := range t.toAdd {
+		all[lang] = text.String()
+	}
+	return all
+}
+
 func (t *Translations) applyValues(with map[string]*Translation) {
 	t.prepare()
 	t.values = with
