@@ -57,6 +57,14 @@ var matchWords = []*regexp.Regexp{
 }
 var matchNonAlphaNum = regexp.MustCompile("([^a-z0-9A-Z])")
 
+func PrefixedPropertyNames(prefix string, str ...string) []string {
+	names := make([]string, len(str))
+	for i, s := range str {
+		names[i] = PropertyName(prefix + s)
+	}
+	return names
+}
+
 func PropertyNames(str ...string) []string {
 	names := make([]string, len(str))
 	for i, s := range str {
