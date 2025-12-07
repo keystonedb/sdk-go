@@ -15,7 +15,10 @@ require (
 )
 
 require (
+	github.com/alexsergivan/transliterator v1.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/gorilla/schema v1.4.1 // indirect
+	github.com/packaged/helpers-go v0.0.0-20251202110759-284b6f76f045 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.45.0 // indirect

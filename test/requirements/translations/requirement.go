@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/requirements"
 )
@@ -52,10 +53,10 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	}
 
 	// Set initial translations
-	item.Description.Replace(map[string]string{
-		"en": "A great product",
-		"fr": "Un excellent produit",
-		"es": "Un gran producto",
+	item.Description.Replace(map[string]*keystone.Translation{
+		"en": keystone.NewTranslation("A great product"),
+		"fr": keystone.NewTranslation("Un excellent produit"),
+		"es": keystone.NewTranslation("Un gran producto"),
 	})
 
 	mutateErr := actor.Mutate(context.Background(), item)
@@ -82,18 +83,18 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 
 	// Verify translations were stored correctly
 	enText, ok := item.Description.Get("en")
-	if !ok || enText != "A great product" {
-		return resp.WithError(fmt.Errorf("expected 'A great product' for 'en', got '%s' (ok: %v)", enText, ok))
+	if !ok || enText.String() != "A great product" {
+		return resp.WithError(fmt.Errorf("expected 'A great product' for 'en', got '%s' (ok: %v)", enText.String(), ok))
 	}
 
 	frText, ok := item.Description.Get("fr")
-	if !ok || frText != "Un excellent produit" {
-		return resp.WithError(fmt.Errorf("expected 'Un excellent produit' for 'fr', got '%s' (ok: %v)", frText, ok))
+	if !ok || frText.String() != "Un excellent produit" {
+		return resp.WithError(fmt.Errorf("expected 'Un excellent produit' for 'fr', got '%s' (ok: %v)", frText.String(), ok))
 	}
 
 	esText, ok := item.Description.Get("es")
-	if !ok || esText != "Un gran producto" {
-		return resp.WithError(fmt.Errorf("expected 'Un gran producto' for 'es', got '%s' (ok: %v)", esText, ok))
+	if !ok || esText.String() != "Un gran producto" {
+		return resp.WithError(fmt.Errorf("expected 'Un gran producto' for 'es', got '%s' (ok: %v)", esText.String(), ok))
 	}
 
 	// Verify All() returns all translations
@@ -141,25 +142,25 @@ func (d *Requirement) readAfterAdd(actor *keystone.Actor) requirements.TestResul
 
 	// Verify new translations were added
 	deText, ok := item.Description.Get("de")
-	if !ok || deText != "Ein großartiges Produkt" {
-		return resp.WithError(fmt.Errorf("expected 'Ein großartiges Produkt' for 'de', got '%s' (ok: %v)", deText, ok))
+	if !ok || deText.String() != "Ein großartiges Produkt" {
+		return resp.WithError(fmt.Errorf("expected 'Ein großartiges Produkt' for 'de', got '%s' (ok: %v)", deText.String(), ok))
 	}
 
 	itText, ok := item.Description.Get("it")
-	if !ok || itText != "Un ottimo prodotto" {
-		return resp.WithError(fmt.Errorf("expected 'Un ottimo prodotto' for 'it', got '%s' (ok: %v)", itText, ok))
+	if !ok || itText.String() != "Un ottimo prodotto" {
+		return resp.WithError(fmt.Errorf("expected 'Un ottimo prodotto' for 'it', got '%s' (ok: %v)", itText.String(), ok))
 	}
 
 	// Verify existing translation was updated
 	enText, ok := item.Description.Get("en")
-	if !ok || enText != "An amazing product" {
-		return resp.WithError(fmt.Errorf("expected 'An amazing product' for 'en' (updated), got '%s' (ok: %v)", enText, ok))
+	if !ok || enText.String() != "An amazing product" {
+		return resp.WithError(fmt.Errorf("expected 'An amazing product' for 'en' (updated), got '%s' (ok: %v)", enText.String(), ok))
 	}
 
 	// Verify original translations still exist
 	frText, ok := item.Description.Get("fr")
-	if !ok || frText != "Un excellent produit" {
-		return resp.WithError(fmt.Errorf("expected 'Un excellent produit' for 'fr', got '%s' (ok: %v)", frText, ok))
+	if !ok || frText.String() != "Un excellent produit" {
+		return resp.WithError(fmt.Errorf("expected 'Un excellent produit' for 'fr', got '%s' (ok: %v)", frText.String(), ok))
 	}
 
 	// Verify All() returns all 5 translations
@@ -210,8 +211,8 @@ func (d *Requirement) readAfterRemove(actor *keystone.Actor) requirements.TestRe
 
 	// Verify other translations still exist
 	enText, ok := item.Description.Get("en")
-	if !ok || enText != "An amazing product" {
-		return resp.WithError(fmt.Errorf("expected 'An amazing product' for 'en', got '%s' (ok: %v)", enText, ok))
+	if !ok || enText.String() != "An amazing product" {
+		return resp.WithError(fmt.Errorf("expected 'An amazing product' for 'en', got '%s' (ok: %v)", enText.String(), ok))
 	}
 
 	// Verify All() returns 4 translations (5 - 1 removed)
@@ -232,10 +233,10 @@ func (d *Requirement) replaceTranslations(actor *keystone.Actor) requirements.Te
 	item.SetKeystoneID(d.createdID)
 
 	// Replace all translations with new ones
-	item.Description.Replace(map[string]string{
-		"en": "New product description",
-		"ja": "新しい製品の説明",
-		"zh": "新产品描述",
+	item.Description.Replace(map[string]*keystone.Translation{
+		"en": keystone.NewTranslation("New product description"),
+		"ja": keystone.NewTranslation("新しい製品の説明"),
+		"zh": keystone.NewTranslation("新产品描述"),
 	})
 
 	mutateErr := actor.Mutate(context.Background(), item, keystone.MutateProperties("description"))
@@ -271,18 +272,18 @@ func (d *Requirement) readAfterReplace(actor *keystone.Actor) requirements.TestR
 
 	// Verify new translations exist
 	enText, ok := item.Description.Get("en")
-	if !ok || enText != "New product description" {
-		return resp.WithError(fmt.Errorf("expected 'New product description' for 'en', got '%s' (ok: %v)", enText, ok))
+	if !ok || enText.String() != "New product description" {
+		return resp.WithError(fmt.Errorf("expected 'New product description' for 'en', got '%s' (ok: %v)", enText.String(), ok))
 	}
 
 	jaText, ok := item.Description.Get("ja")
-	if !ok || jaText != "新しい製品の説明" {
-		return resp.WithError(fmt.Errorf("expected '新しい製品の説明' for 'ja', got '%s' (ok: %v)", jaText, ok))
+	if !ok || jaText.String() != "新しい製品の説明" {
+		return resp.WithError(fmt.Errorf("expected '新しい製品の説明' for 'ja', got '%s' (ok: %v)", jaText.String(), ok))
 	}
 
 	zhText, ok := item.Description.Get("zh")
-	if !ok || zhText != "新产品描述" {
-		return resp.WithError(fmt.Errorf("expected '新产品描述' for 'zh', got '%s' (ok: %v)", zhText, ok))
+	if !ok || zhText.String() != "新产品描述" {
+		return resp.WithError(fmt.Errorf("expected '新产品描述' for 'zh', got '%s' (ok: %v)", zhText.String(), ok))
 	}
 
 	// Verify All() returns exactly 3 translations

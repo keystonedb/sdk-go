@@ -10,24 +10,24 @@ import (
 func Test_Translations(t *testing.T) {
 	// Test basic Replace and Get
 	translations := &Translations{}
-	translations.Replace(map[string]string{
-		"en": "Hello",
-		"fr": "Bonjour",
-		"es": "Hola",
+	translations.Replace(map[string]*Translation{
+		"en": NewTranslation("Hello"),
+		"fr": NewTranslation("Bonjour"),
+		"es": NewTranslation("Hola"),
 	})
 
-	if text, ok := translations.Get("en"); !ok || text != "Hello" {
-		t.Errorf("Expected 'Hello', got %v (ok: %v)", text, ok)
+	if text, ok := translations.Get("en"); !ok || text.String() != "Hello" {
+		t.Errorf("Expected 'Hello', got %v (ok: %v)", text.String(), ok)
 	}
 
-	if text, ok := translations.Get("fr"); !ok || text != "Bonjour" {
-		t.Errorf("Expected 'Bonjour', got %v (ok: %v)", text, ok)
+	if text, ok := translations.Get("fr"); !ok || text.String() != "Bonjour" {
+		t.Errorf("Expected 'Bonjour', got %v (ok: %v)", text.String(), ok)
 	}
 
 	// Test Add
 	translations.Add("de", "Hallo")
-	if text, ok := translations.Get("de"); !ok || text != "Hallo" {
-		t.Errorf("Expected 'Hallo', got %v (ok: %v)", text, ok)
+	if text, ok := translations.Get("de"); !ok || text.String() != "Hallo" {
+		t.Errorf("Expected 'Hallo', got %v (ok: %v)", text.String(), ok)
 	}
 
 	// Test Remove
@@ -66,8 +66,8 @@ func Test_Translations(t *testing.T) {
 	}
 
 	// Verify individual values
-	if text, ok := translations2.Get("en"); !ok || text != "Hello" {
-		t.Errorf("After unmarshal, expected 'Hello' for 'en', got %v (ok: %v)", text, ok)
+	if text, ok := translations2.Get("en"); !ok || text.String() != "Hello" {
+		t.Errorf("After unmarshal, expected 'Hello' for 'en', got %v (ok: %v)", text.String(), ok)
 	}
 
 	// Test PropertyDefinition
@@ -116,22 +116,22 @@ func Test_Translations_AddRemove(t *testing.T) {
 
 func Test_Translations_Update(t *testing.T) {
 	translations := &Translations{}
-	translations.Replace(map[string]string{"en": "Hello"})
+	translations.Replace(map[string]*Translation{"en": NewTranslation("Hello")})
 
 	// Update existing translation
 	translations.Add("en", "Hi")
 
 	text, ok := translations.Get("en")
-	if !ok || text != "Hi" {
+	if !ok || text.String() != "Hi" {
 		t.Errorf("Expected 'Hi' after update, got %v (ok: %v)", text, ok)
 	}
 }
 
 func Test_Translations_MarshalUnmarshal(t *testing.T) {
 	translations := &Translations{}
-	translations.Replace(map[string]string{
-		"en": "Hello",
-		"fr": "Bonjour",
+	translations.Replace(map[string]*Translation{
+		"en": NewTranslation("Hello"),
+		"fr": NewTranslation("Bonjour"),
 	})
 	translations.Add("de", "Hallo")
 	translations.Remove("fr")
@@ -155,12 +155,12 @@ func Test_Translations_MarshalUnmarshal(t *testing.T) {
 		t.Errorf("Expected 2 translations (en, de), got %d: %v", len(all), all)
 	}
 
-	if text, ok := translations2.Get("en"); !ok || text != "Hello" {
-		t.Errorf("Expected 'Hello' for 'en', got %v", text)
+	if text, ok := translations2.Get("en"); !ok || text.String() != "Hello" {
+		t.Errorf("Expected 'Hello' for 'en', got %v", text.String())
 	}
 
-	if text, ok := translations2.Get("de"); !ok || text != "Hallo" {
-		t.Errorf("Expected 'Hallo' for 'de', got %v", text)
+	if text, ok := translations2.Get("de"); !ok || text.String() != "Hallo" {
+		t.Errorf("Expected 'Hallo' for 'de', got %v", text.String())
 	}
 
 	if _, ok := translations2.Get("fr"); ok {
@@ -180,7 +180,7 @@ func Test_Translations_JSON(t *testing.T) {
 		t.Fatalf("Error marshalling: %v", err)
 	}
 
-	if string(jsnVal) != "{\"de\":\"Hallo\",\"en\":\"Hello\"}" {
+	if string(jsnVal) != "{\"de\":{\"s\":\"Hallo\"},\"en\":{\"s\":\"Hello\"}}" {
 		t.Errorf("Expected specific json string, got %v", string(jsnVal))
 	}
 
@@ -193,11 +193,11 @@ func Test_Translations_JSON(t *testing.T) {
 	if len(all) != 2 {
 		t.Errorf("Expected 2 translations (en, de), got %d: %v", len(all), all)
 	}
-	if text, ok := translations2.Get("en"); !ok || text != "Hello" {
-		t.Errorf("Expected 'Hello' for 'en', got %v", text)
+	if text, ok := translations2.Get("en"); !ok || text.String() != "Hello" {
+		t.Errorf("Expected 'Hello' for 'en', got %v", text.String())
 	}
-	if text, ok := translations2.Get("de"); !ok || text != "Hallo" {
-		t.Errorf("Expected 'Hallo' for 'de', got %v", text)
+	if text, ok := translations2.Get("de"); !ok || text.String() != "Hallo" {
+		t.Errorf("Expected 'Hallo' for 'de', got %v", text.String())
 	}
 	if _, ok := translations2.Get("fr"); ok {
 		t.Errorf("Expected 'fr' to be removed")

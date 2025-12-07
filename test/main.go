@@ -1,9 +1,10 @@
 package main
 
 import (
+	"log"
+
 	"github.com/packaged/environment/environment"
 	"github.com/packaged/logger/v3/logger"
-	"log"
 )
 
 const (
@@ -16,7 +17,6 @@ func init() {
 }
 
 func main() {
-
 	totalRun := 0
 	totalFailures := 0
 	var failedRequirements []string
