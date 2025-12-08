@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -243,6 +244,9 @@ func NewTranslation(input ...string) *Translation {
 }
 
 func (t *Translation) fromRaw(data []byte) error {
+	if t == nil {
+		return errors.New("invalid translation")
+	}
 	if len(data) == 0 {
 		return nil
 	}
@@ -255,10 +259,16 @@ func (t *Translation) fromRaw(data []byte) error {
 }
 
 func (t *Translation) String() string {
+	if t == nil {
+		return ""
+	}
 	return t.Singular
 }
 
 func (t *Translation) GetPlural(quantity int64) string {
+	if t == nil {
+		return ""
+	}
 	if quantity != 1 && t.Plural == "" {
 		t.Plural = strings.ReplaceAll(t.Plural, "(s)", helpers.If(quantity == 1, "", "s"))
 	}
