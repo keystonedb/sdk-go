@@ -19,6 +19,7 @@ var (
 	Integer      = int64(12355)
 	Time         = time.Now()
 	Amount       = keystone.NewAmount("USD", 130)
+	IntervalVal  = keystone.NewInterval(keystone.IntervalMonth, 3)
 	Secret       = keystone.NewSecureString("secretval", "secre***")
 	Verify       = keystone.NewVerifyString("toverify")
 	MinMax       = keystone.NewMinMax(12, 18)
@@ -74,6 +75,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	amnt := keystone.NewAmount(Amount.GetCurrency(), Amount.GetUnits())
+	intr := keystone.NewInterval(IntervalVal.GetType(), IntervalVal.GetCount())
 	psn := &models.DataTypes{
 		String:       String,
 		StringPtr:    &String,
@@ -83,6 +85,8 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		TimePt:       &Time,
 		Amount:       *amnt,
 		AmountPt:     amnt,
+		Interval:     *intr,
+		IntervalPt:   intr,
 		Secret:       Secret,
 		Verify:       Verify,
 		Boolean:      Boolean,
@@ -141,6 +145,10 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("amount mismatch")
 		} else if !Amount.Equals(dt.AmountPt) {
 			getErr = errors.New("amount (ptr) mismatch")
+		} else if !IntervalVal.Equals(&dt.Interval) {
+			getErr = errors.New("interval mismatch")
+		} else if dt.IntervalPt == nil || !IntervalVal.Equals(dt.IntervalPt) {
+			getErr = errors.New("interval (ptr) mismatch")
 		} else if dt.Amount.GetUnits() != 130 {
 			getErr = errors.New("amount mismatch, expected 130")
 		} else if dt.Secret != Secret {

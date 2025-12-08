@@ -24,6 +24,8 @@ type DataTypes struct {
 	TimePt       *time.Time
 	Amount       keystone.Amount
 	AmountPt     *keystone.Amount
+	Interval     keystone.Interval
+	IntervalPt   *keystone.Interval
 	Secret       keystone.SecureString `keystone:",no-snapshot"`
 	Verify       keystone.VerifyString
 	Boolean      bool

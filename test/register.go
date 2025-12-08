@@ -17,6 +17,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/hashed_id"
 	"github.com/keystonedb/sdk-go/test/requirements/iid"
 	"github.com/keystonedb/sdk-go/test/requirements/immutable"
+	"github.com/keystonedb/sdk-go/test/requirements/interval"
 	"github.com/keystonedb/sdk-go/test/requirements/labels"
 	"github.com/keystonedb/sdk-go/test/requirements/logging"
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
@@ -25,7 +26,6 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/pii"
 	"github.com/keystonedb/sdk-go/test/requirements/prewrite"
 	"github.com/keystonedb/sdk-go/test/requirements/query"
-	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/keystonedb/sdk-go/test/requirements/remote"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
@@ -64,6 +64,7 @@ func init() {
 	reqs = append(reqs, &relationships.Requirement{})
 	reqs = append(reqs, &query.Requirement{})
 	reqs = append(reqs, &datatypes.Requirement{})
+	reqs = append(reqs, &interval.Requirement{})
 	reqs = append(reqs, &timeseries.Requirement{})
 	reqs = append(reqs, &setfalse.Requirement{})
 	reqs = append(reqs, &shared_views.Requirement{})
