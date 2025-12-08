@@ -75,7 +75,7 @@ func init() {
 	reqs = append(reqs, &nested_children.Requirement{})
 	reqs = append(reqs, &embedded.Requirement{})
 	reqs = append(reqs, &pii.Requirement{})
-	reqs = append(reqs, &ratelimit.Requirement{})
+	//reqs = append(reqs, &ratelimit.Requirement{})
 	reqs = append(reqs, &iid.Requirement{})
 	reqs = append(reqs, &watcher.Requirement{})
 	reqs = append(reqs, &exists.Requirement{})
@@ -91,7 +91,7 @@ func init() {
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &status.Requirement{})
+		reqs = append(reqs, &child_entities.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
 	}
 }
