@@ -46,7 +46,7 @@ func (r *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 
 func (r *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 	got := &models.IntervalEntity{}
-	err := actor.Get(context.Background(), keystone.ByEntityID(got, r.createdID), got)
+	err := actor.Get(context.Background(), keystone.ByEntityID(got, r.createdID), got, keystone.WithProperties())
 	if err == nil {
 		if got.Name != "subscription" {
 			err = errors.New("name mismatch")
@@ -70,7 +70,7 @@ func (r *Requirement) update(actor *keystone.Actor) requirements.TestResult {
 
 func (r *Requirement) readUpdated(actor *keystone.Actor) requirements.TestResult {
 	got := &models.IntervalEntity{}
-	err := actor.Get(context.Background(), keystone.ByEntityID(got, r.createdID), got)
+	err := actor.Get(context.Background(), keystone.ByEntityID(got, r.createdID), got, keystone.WithProperties())
 	if err == nil {
 		if got.Period.GetType() != keystone.IntervalWeek || got.Period.GetCount() != 2 {
 			err = errors.New("updated period mismatch")

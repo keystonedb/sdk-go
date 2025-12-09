@@ -1,8 +1,9 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 // Where allows for filtering entities by a Property, with a string operator
@@ -185,10 +186,18 @@ func valueFromAny(value any) *proto.Value {
 	return nil
 }
 
+func nilValue() *proto.Value {
+	return &proto.Value{IsNull: true}
+}
+
 func valuesFromAny(values ...any) []*proto.Value {
 	var result []*proto.Value
 	for _, v := range values {
-		result = append(result, valueFromAny(v))
+		if v == nil {
+			result = append(result, nilValue())
+		} else {
+			result = append(result, valueFromAny(v))
+		}
 	}
 	return result
 }
