@@ -36,7 +36,7 @@ func (s *SharedView) ForType(forType string) *SharedView {
 }
 
 func (s *SharedView) ForDynamicProperties() *SharedView {
-	s.entityType = "__dynamic"
+	s.entityType = "_dynamic"
 	return s
 }
 
