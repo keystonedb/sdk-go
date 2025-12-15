@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"context"
+
 	"github.com/keystonedb/sdk-go/proto"
 )
 
@@ -31,6 +32,11 @@ func NewSharedView(properties ...string) *SharedView {
 
 func (s *SharedView) ForType(forType string) *SharedView {
 	s.entityType = forType
+	return s
+}
+
+func (s *SharedView) ForDynamicProperties() *SharedView {
+	s.entityType = "__dynamic"
 	return s
 }
 
