@@ -63,7 +63,7 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 			}
 			protoVal.KnownType = mergeDefinitions(propDef, ref.PropertyDefinition()).DataType
 			properties[currentProp] = protoVal
-		} else if !currentVal.IsZero() {
+		} else if !(currentVal.Type().Kind() == reflect.Ptr && currentVal.IsNil()) {
 			var subProps map[Property]*proto.Value
 			var err error
 
