@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/keystonedb/sdk-go/keystone"
-	"github.com/keystonedb/sdk-go/test/models"
-	"github.com/keystonedb/sdk-go/test/requirements"
 	"log"
 	"reflect"
 	"strings"
 	"time"
+
+	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/test/models"
+	"github.com/keystonedb/sdk-go/test/requirements"
 )
 
 var (
@@ -171,10 +172,11 @@ func (d *Requirement) append(actor *keystone.Actor) requirements.TestResult {
 	psn := &models.DynamicRemote{}
 	psn.IntegerSet.Add(7)
 	psn.SetKeystoneID(d.createdID)
+	psn.Boolean = false
 
 	psn.MixedKey.Append("third", keystone.NewMixed("newval"))
 
-	updateErr := actor.RemoteMutate(context.Background(), d.createdID, psn, keystone.WithMutationComment("Update a person"))
+	updateErr := actor.RemoteMutate(context.Background(), d.createdID, psn, keystone.WithMutationComment("Update a person"), keystone.MutateProperties("boolean"))
 
 	return requirements.TestResult{
 		Name:  "Update",
@@ -185,7 +187,7 @@ func (d *Requirement) append(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) readPostAppend(actor *keystone.Actor) requirements.TestResult {
 
 	dt := &models.DynamicRemote{}
-	getErr := actor.RemoteGetProperties(context.Background(), d.createdID, dt, "integer_set", "mixed_key")
+	getErr := actor.RemoteGetProperties(context.Background(), d.createdID, dt, "integer_set", "mixed_key", "boolean")
 	if getErr == nil {
 		mixCheck := keystone.NewMixed("newval")
 		if !dt.IntegerSet.Has(7) {
@@ -196,6 +198,9 @@ func (d *Requirement) readPostAppend(actor *keystone.Actor) requirements.TestRes
 			getErr = errors.New("MixedKey did not append third")
 		} else if !dt.MixedKey.Get("third").Matches(&mixCheck) {
 			getErr = errors.New("MixedKey did not append third")
+		}
+		if dt.Boolean {
+			getErr = errors.New("boolean mismatch")
 		}
 	}
 

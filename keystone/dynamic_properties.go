@@ -2,9 +2,10 @@ package keystone
 
 import (
 	"context"
+	"reflect"
+
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
-	"reflect"
 )
 
 func (a *Actor) SetDynamicProperties(ctx context.Context, entityID string, setProperties []*proto.EntityProperty, removeProperties []string, comment string) error {
@@ -146,7 +147,7 @@ func DynamicPropertiesFromStruct(s interface{}) ([]*proto.EntityProperty, error)
 	return properties, nil
 }
 
-func DynamicPropertiesFromStructWithoutDefaults(s interface{}) ([]*proto.EntityProperty, error) {
+func DynamicPropertiesFromStructWithoutDefaults(s interface{}, forceProperties map[string]bool) ([]*proto.EntityProperty, error) {
 
 	val := reflect.ValueOf(s)
 	defaultValues := reflect.New(reflector.Deref(val).Type()).Interface()
@@ -160,10 +161,14 @@ func DynamicPropertiesFromStructWithoutDefaults(s interface{}) ([]*proto.EntityP
 	}
 	properties := make([]*proto.EntityProperty, 0, len(res))
 	for key, value := range res {
-		if defVal, ok := defMarshal[key]; ok {
-			if proto.MatchValue(defVal, key.Name(), value) == nil {
-				// If the value matches the default value, skip it
-				continue
+		if force, ok := forceProperties[key.Name()]; ok && !force {
+			continue
+		} else if !ok {
+			if defVal, defaultOk := defMarshal[key]; defaultOk {
+				if proto.MatchValue(defVal, key.Name(), value) == nil {
+					// If the value matches the default value, skip it
+					continue
+				}
 			}
 		}
 		properties = append(properties, &proto.EntityProperty{

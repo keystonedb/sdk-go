@@ -3,9 +3,10 @@ package keystone
 import (
 	"context"
 	"errors"
+	"reflect"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/packaged/logger/v3/logger"
-	"reflect"
 )
 
 var ErrCommentedMutations = errors.New("you must provide a mutation comment")
@@ -24,7 +25,18 @@ func (a *Actor) RemoteMutate(ctx context.Context, entityID ID, src interface{}, 
 	}
 
 	if _, isDyn := src.(ConvertStructToDynamicProperties); isDyn {
-		props, err := DynamicPropertiesFromStructWithoutDefaults(src)
+		withProps := make(map[string]bool)
+
+		for _, option := range options {
+			if mpOpt, ok := option.(mutateProperties); ok {
+				for _, k := range mpOpt.Property {
+					// Force properties to write
+					withProps[k] = true
+				}
+			}
+		}
+
+		props, err := DynamicPropertiesFromStructWithoutDefaults(src, withProps)
 		if err == nil {
 			mutation.DynamicProperties = props
 		} else {
