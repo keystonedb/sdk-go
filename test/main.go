@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/packaged/environment/environment"
 	"github.com/packaged/logger/v3/logger"
@@ -30,6 +31,7 @@ func main() {
 
 	actor := Actor()
 
+	startTime := time.Now()
 	log.Println("Running Requirements Test - Against " + kHost + ":" + kPort)
 	for _, req := range reqs {
 		totalRun++
@@ -59,6 +61,7 @@ func main() {
 	log.Println("")
 	log.Printf("Total requirements run: %d", totalRun)
 	log.Printf("Total requirements failed: %d", totalFailures)
+	log.Printf("Total Duration: %v", time.Since(startTime))
 	if totalFailures > 0 {
 		log.Println("Failed requirements:")
 		for _, req := range failedRequirements {

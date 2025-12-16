@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sort"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
-	"sort"
 )
 
 type Requirement struct {
@@ -69,7 +70,7 @@ func (d *Requirement) writeChildren(actor *keystone.Actor) requirements.TestResu
 		d.child3ID = f3.ChildID()
 
 		if d.child1ID == "" || d.child2ID == "" || d.child3ID == "" {
-			createErr = errors.New("failed to create children, or children did not return a child ID")
+			createErr = fmt.Errorf("failed to create children, or children did not return a child ID, %s : %s : %s", d.child1ID, d.child2ID, d.child3ID)
 		}
 	}
 

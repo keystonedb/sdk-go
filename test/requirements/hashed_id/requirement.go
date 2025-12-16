@@ -3,10 +3,10 @@ package hashed_id
 import (
 	"context"
 	"errors"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
-	"time"
 )
 
 var (
@@ -50,7 +50,6 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	}
 
 	createErr := actor.Mutate(context.Background(), hashi, keystone.WithMutationComment("Create a person"))
-	time.Sleep(time.Second * 3)
 	return res.WithError(createErr)
 }
 
