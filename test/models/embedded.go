@@ -15,4 +15,5 @@ type ExtendedData struct {
 	Price       keystone.Amount
 	BoolValue   bool
 	StringValue string
+	MapValue    map[string]bool
 }

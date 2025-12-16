@@ -121,8 +121,9 @@ func (d *Requirement) update(actor *keystone.Actor) requirements.TestResult {
 	mdl.SetKeystoneID(d.createdID)
 
 	mdl.Extended.StringValue = "abc"
+	mdl.Extended.MapValue = map[string]bool{"aaa": true, "bbb": false}
 
-	updateErr := actor.Mutate(context.Background(), mdl, keystone.MutateProperties("extended.string_value", "extended.bool_value"))
+	updateErr := actor.Mutate(context.Background(), mdl, keystone.MutateProperties("extended.string_value", "extended.bool_value", "extended.map_value"))
 	if updateErr == nil {
 		return ret.WithError(updateErr)
 	}
@@ -134,7 +135,7 @@ func (d *Requirement) reFind(actor *keystone.Actor) requirements.TestResult {
 	ret := requirements.TestResult{Name: "ReLoad Embedded"}
 
 	mdl := &models.Embedded{}
-	getErr := actor.GetByID(context.Background(), d.createdID, mdl, keystone.WithProperties("extended.string_value", "extended.bool_value"))
+	getErr := actor.GetByID(context.Background(), d.createdID, mdl, keystone.WithProperties("extended.string_value", "extended.bool_value", "extended.map_value"))
 	if getErr != nil {
 		return ret.WithError(getErr)
 	}

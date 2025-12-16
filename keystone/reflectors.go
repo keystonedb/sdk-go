@@ -40,6 +40,7 @@ var kindReflector = map[reflect.Kind]Reflector{
 var mapKindReflector = map[reflect.Kind]Reflector{
 	reflect.String: reflector.StringMap{},
 	reflect.Int:    reflector.IntMap{},
+	reflect.Bool:   reflector.BoolMap{},
 }
 
 var sliceKindReflector = map[reflect.Kind]Reflector{
