@@ -13,4 +13,6 @@ type ExtendedData struct {
 	LookupValue string `keystone:",lookup,query"`
 	UniqueID    string `keystone:",unique"`
 	Price       keystone.Amount
+	BoolValue   bool
+	StringValue string
 }

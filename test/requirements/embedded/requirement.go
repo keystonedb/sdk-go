@@ -3,11 +3,12 @@ package embedded
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
 	"github.com/kubex/k4id"
-	"time"
 )
 
 type Requirement struct {
@@ -30,6 +31,8 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.create(actor),
 		d.unique(actor),
 		d.find(actor),
+		d.update(actor),
+		d.reFind(actor),
 	}
 }
 
@@ -40,6 +43,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Extended: models.ExtendedData{
 			LookupValue: "verify-value-" + time.Now().String(),
 			UniqueID:    "UNIQUE-" + k4id.New().UUID(),
+			BoolValue:   true,
 			Price:       *keystone.NewAmount("USD", 100),
 		},
 	}
@@ -80,7 +84,7 @@ func (d *Requirement) unique(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) find(actor *keystone.Actor) requirements.TestResult {
 
 	mdl := &models.Embedded{}
-	entities, getErr := actor.Find(context.Background(), keystone.Type(mdl), keystone.WithProperties("extended.unique_id", "extended_ref.unique_id"), keystone.WhereEquals("extended.lookup_value", d.lookup))
+	entities, getErr := actor.Find(context.Background(), keystone.Type(mdl), keystone.WithProperties("extended.unique_id", "extended_ref.unique_id", "extended.bool_value"), keystone.WhereEquals("extended.lookup_value", d.lookup))
 
 	if getErr == nil {
 		switch len(entities) {
@@ -94,6 +98,8 @@ func (d *Requirement) find(actor *keystone.Actor) requirements.TestResult {
 				getErr = errors.New("did not load the extended data")
 			} else if mdl.ExtendedRef.UniqueID != d.uid {
 				getErr = errors.New("did not load the extended ref data")
+			} else if mdl.Extended.BoolValue != true {
+				getErr = errors.New("did not find the correct entity (bool)")
 			}
 		default:
 			getErr = errors.New("found too many entities")
@@ -104,4 +110,42 @@ func (d *Requirement) find(actor *keystone.Actor) requirements.TestResult {
 		Name:  "Find By Lookup Value",
 		Error: getErr,
 	}
+}
+
+func (d *Requirement) update(actor *keystone.Actor) requirements.TestResult {
+	ret := requirements.TestResult{Name: "Update embedded"}
+
+	mdl := &models.Embedded{
+		Extended: models.ExtendedData{},
+	}
+	mdl.SetKeystoneID(d.createdID)
+
+	mdl.Extended.StringValue = "abc"
+
+	updateErr := actor.Mutate(context.Background(), mdl, keystone.MutateProperties("extended.string_value", "extended.bool_value"))
+	if updateErr == nil {
+		return ret.WithError(updateErr)
+	}
+
+	return ret
+}
+
+func (d *Requirement) reFind(actor *keystone.Actor) requirements.TestResult {
+	ret := requirements.TestResult{Name: "ReLoad Embedded"}
+
+	mdl := &models.Embedded{}
+	getErr := actor.GetByID(context.Background(), d.createdID, mdl, keystone.WithProperties("extended.string_value", "extended.bool_value"))
+	if getErr != nil {
+		return ret.WithError(getErr)
+	}
+
+	if mdl.GetKeystoneID() != d.createdID {
+		return ret.WithError(errors.New("did not find the correct entity"))
+	} else if mdl.Extended.StringValue != "abc" {
+		return ret.WithError(errors.New("incorrect string value"))
+	} else if mdl.Extended.BoolValue != false {
+		return ret.WithError(errors.New("incorrect boolean value"))
+	}
+
+	return ret
 }
