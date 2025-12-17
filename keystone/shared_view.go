@@ -10,6 +10,7 @@ type SharedView struct {
 	properties       map[string]string
 	piiProperties    map[string]string
 	secureProperties map[string]string
+	childTypes       map[string]string
 	comment          string
 	entityID         ID
 	allWorkspaces    bool
@@ -21,6 +22,7 @@ func NewSharedView(properties ...string) *SharedView {
 		properties:       make(map[string]string),
 		piiProperties:    make(map[string]string),
 		secureProperties: make(map[string]string),
+		childTypes:       make(map[string]string),
 	}
 
 	for _, p := range properties {
@@ -61,6 +63,11 @@ func (s *SharedView) Add(property string, allowPii, allowSecure bool) *SharedVie
 	return s
 }
 
+func (s *SharedView) AllowChildType(typeName string) *SharedView {
+	s.childTypes[typeName] = typeName
+	return s
+}
+
 func (s *SharedView) WithComment(comment string) *SharedView {
 	s.comment = comment
 	return s
@@ -77,6 +84,7 @@ func (a *Actor) ShareView(ctx context.Context, with *proto.VendorApp, def *Share
 		AllowProperties:       mapKeys(def.properties),
 		AllowPiiProperties:    mapKeys(def.piiProperties),
 		AllowSecureProperties: mapKeys(def.secureProperties),
+		AllowChildTypes:       mapKeys(def.childTypes),
 	}
 
 	return a.connection.ShareView(ctx, req)
