@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/keystonedb/sdk-go/keystone"
 	"time"
+
+	"github.com/keystonedb/sdk-go/keystone"
 )
 
 type DynamicRemote struct {

@@ -2,10 +2,11 @@ package keystone
 
 import (
 	"context"
+	"net"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
-	"net"
 )
 
 const bufSize = 1024 * 1024

@@ -1,8 +1,9 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type EntityDetail interface {

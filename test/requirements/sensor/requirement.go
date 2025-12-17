@@ -2,10 +2,11 @@ package sensor
 
 import (
 	"context"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
-	"time"
 )
 
 type Requirement struct {

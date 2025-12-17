@@ -3,10 +3,11 @@ package exists
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
-	"time"
 )
 
 type Requirement struct {

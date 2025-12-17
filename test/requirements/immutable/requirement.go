@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/keystonedb/sdk-go/keystone"
-	"github.com/keystonedb/sdk-go/test/models"
-	"github.com/keystonedb/sdk-go/test/requirements"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/test/models"
+	"github.com/keystonedb/sdk-go/test/requirements"
 )
 
 type Requirement struct {

@@ -2,9 +2,10 @@ package keystone
 
 import (
 	"errors"
-	"github.com/keystonedb/sdk-go/proto"
 	"testing"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type definedEntity struct {

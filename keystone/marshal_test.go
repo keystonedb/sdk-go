@@ -2,10 +2,11 @@ package keystone
 
 import (
 	"errors"
-	"github.com/keystonedb/sdk-go/proto"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"testing"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type hydrationProperties struct {

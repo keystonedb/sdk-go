@@ -1,9 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
-	"time"
 )
 
 type Person struct {

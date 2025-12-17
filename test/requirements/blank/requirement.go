@@ -2,6 +2,7 @@ package blank
 
 import (
 	"errors"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/requirements"
 )

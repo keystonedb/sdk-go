@@ -5,11 +5,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/requirements"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"time"
 )
 
 var rawVal = &proto.Value{

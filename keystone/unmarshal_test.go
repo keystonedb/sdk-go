@@ -2,11 +2,12 @@ package keystone
 
 import (
 	"errors"
-	"github.com/keystonedb/sdk-go/proto"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 	"testing"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func Test_UnmarshalPropertiesNil(t *testing.T) {

@@ -2,8 +2,9 @@ package keystone
 
 import (
 	"errors"
-	"github.com/keystonedb/sdk-go/proto"
 	"regexp"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type BaseEntity struct {

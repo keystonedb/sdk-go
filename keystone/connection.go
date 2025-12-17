@@ -2,15 +2,16 @@ package keystone
 
 import (
 	"context"
+	"log"
+	"reflect"
+	"sync"
+	"time"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/packaged/logger/v3/logger"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
-	"reflect"
-	"sync"
-	"time"
 )
 
 // Connection is a connection to a keystone server

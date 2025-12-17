@@ -1,12 +1,13 @@
 package main
 
 import (
+	"log"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
-	"time"
 )
 
 const (

@@ -2,6 +2,7 @@ package event_stream
 
 import (
 	"context"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/requirements"

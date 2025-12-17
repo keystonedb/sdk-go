@@ -2,8 +2,9 @@ package keystone
 
 import (
 	"cmp"
-	"github.com/keystonedb/sdk-go/proto"
 	"testing"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 func Test_String(t *testing.T) {

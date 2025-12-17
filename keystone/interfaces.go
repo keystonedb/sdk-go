@@ -1,8 +1,9 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"reflect"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type Marshaler interface {

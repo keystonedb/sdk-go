@@ -2,10 +2,11 @@ package keystone
 
 import (
 	"context"
-	"github.com/keystonedb/sdk-go/proto"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"strings"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type PiiRegulation string

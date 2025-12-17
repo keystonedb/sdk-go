@@ -2,8 +2,9 @@ package keystone
 
 import (
 	"encoding/json"
-	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"reflect"
+
+	"github.com/keystonedb/sdk-go/keystone/reflector"
 )
 
 func ToByteMap(from any) map[string][]byte {

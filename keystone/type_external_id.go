@@ -2,8 +2,9 @@ package keystone
 
 import (
 	"errors"
-	"github.com/keystonedb/sdk-go/proto"
 	"strings"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 func NewExternalID(vendorID, appID, entityType string, id ID) ExternalID {

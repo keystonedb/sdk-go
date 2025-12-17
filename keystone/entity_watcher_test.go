@@ -1,8 +1,9 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"testing"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type watchedTestEntity struct {

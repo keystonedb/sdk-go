@@ -1,9 +1,10 @@
 package keystone
 
 import (
+	"time"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"time"
 )
 
 // EventProvider is an interface for entities that can have events

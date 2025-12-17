@@ -3,9 +3,10 @@ package keystone
 import (
 	"context"
 	"errors"
+	"reflect"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"reflect"
 )
 
 // ReportTimeSeries writes point in time data

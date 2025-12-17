@@ -2,9 +2,10 @@ package keystone
 
 import (
 	"context"
+	"reflect"
+
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
-	"reflect"
 )
 
 type AKVProperty struct {

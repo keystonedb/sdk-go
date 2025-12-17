@@ -2,10 +2,11 @@ package keystone
 
 import (
 	"bytes"
-	"github.com/keystonedb/sdk-go/proto"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"strconv"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // Mixed is a mixed value

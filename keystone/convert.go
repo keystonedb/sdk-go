@@ -2,8 +2,9 @@ package keystone
 
 import (
 	"fmt"
-	"github.com/keystonedb/sdk-go/proto"
 	"strings"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type entityConverter struct {

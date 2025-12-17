@@ -3,11 +3,12 @@ package labels
 import (
 	"context"
 	"errors"
+	"strconv"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
-	"strconv"
-	"time"
 )
 
 type Requirement struct {

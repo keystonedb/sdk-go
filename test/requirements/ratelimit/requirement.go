@@ -3,13 +3,14 @@ package ratelimit
 import (
 	"context"
 	"errors"
-	"github.com/keystonedb/sdk-go/keystone"
-	"github.com/keystonedb/sdk-go/test/requirements"
-	"github.com/kubex/k4id"
 	"log"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/test/requirements"
+	"github.com/kubex/k4id"
 )
 
 type Requirement struct {

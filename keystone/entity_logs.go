@@ -1,8 +1,9 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

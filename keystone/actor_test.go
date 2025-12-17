@@ -2,9 +2,10 @@ package keystone
 
 import (
 	"context"
+	"testing"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/grpc/metadata"
-	"testing"
 )
 
 func Test_ActorNils(t *testing.T) {

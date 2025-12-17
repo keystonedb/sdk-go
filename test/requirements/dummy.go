@@ -2,6 +2,7 @@ package requirements
 
 import (
 	"errors"
+
 	"github.com/keystonedb/sdk-go/keystone"
 )
 

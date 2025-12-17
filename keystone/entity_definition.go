@@ -2,12 +2,13 @@ package keystone
 
 import (
 	"errors"
+	"reflect"
+	"strings"
+
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
-	"reflect"
-	"strings"
 )
 
 // EntityDefinition is an interface that defines the keystone entity

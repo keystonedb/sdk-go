@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"encoding/json"
+
 	"github.com/keystonedb/sdk-go/proto"
 )
 

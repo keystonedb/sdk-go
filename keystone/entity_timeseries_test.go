@@ -1,9 +1,10 @@
 package keystone
 
 import (
-	"github.com/keystonedb/sdk-go/proto"
 	"testing"
 	"time"
+
+	"github.com/keystonedb/sdk-go/proto"
 )
 
 type testTimeSeriesEntity struct {

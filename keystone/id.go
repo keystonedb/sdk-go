@@ -1,10 +1,11 @@
 package keystone
 
 import (
-	"github.com/kubex/k4id"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/kubex/k4id"
 )
 
 var k7ID = k4id.NewGenerator(k4id.TimeGeneratorNano)

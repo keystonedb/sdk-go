@@ -1,9 +1,10 @@
 package keystone
 
 import (
+	"reflect"
+
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
-	"reflect"
 )
 
 func observeMutation(v interface{}, m *proto.MutateResponse) {

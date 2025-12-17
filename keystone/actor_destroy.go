@@ -3,6 +3,7 @@ package keystone
 import (
 	"context"
 	"errors"
+
 	"github.com/keystonedb/sdk-go/proto"
 )
 

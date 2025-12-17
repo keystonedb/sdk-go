@@ -2,9 +2,10 @@ package keystone
 
 import (
 	"errors"
+	"reflect"
+
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
-	"reflect"
 )
 
 var ErrMustPassPointer = errors.New("you must pass a pointer")

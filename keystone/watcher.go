@@ -1,9 +1,10 @@
 package keystone
 
 import (
+	"reflect"
+
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
-	"reflect"
 )
 
 type Watcher struct {

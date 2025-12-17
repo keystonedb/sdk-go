@@ -2,16 +2,17 @@ package timeseries
 
 import (
 	"context"
+	"math/rand/v2"
+	"net/http"
+	"strconv"
+	"time"
+
 	"github.com/keystonedb/sdk-go/keystone"
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
 	"github.com/packaged/logger/v3/logger"
 	"go.uber.org/zap"
-	"math/rand/v2"
-	"net/http"
-	"strconv"
-	"time"
 )
 
 type Requirement struct {

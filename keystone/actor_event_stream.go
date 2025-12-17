@@ -2,9 +2,10 @@ package keystone
 
 import (
 	"context"
+	"io"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/grpc"
-	"io"
 )
 
 type Key struct {
