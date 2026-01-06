@@ -72,3 +72,53 @@ func Test_Interval_PropertyDefinition_IsZero(t *testing.T) {
 		t.Fatalf("unexpected property datatype: %v", pd.DataType)
 	}
 }
+
+func Test_Interval_NoneAndIndefinite_CountZero(t *testing.T) {
+	tests := []struct {
+		name     string
+		iType    IntervalType
+		inCount  int64
+		outCount int64
+	}{
+		{"None with 10", IntervalNone, 10, 0},
+		{"Indefinite with 5", IntervalIndefinite, 5, 0},
+		{"Second with 10", IntervalSecond, 10, 10},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			i := NewInterval(tt.iType, tt.inCount)
+			if got := i.GetCount(); got != tt.outCount {
+				t.Fatalf("NewInterval(%s, %d) count = %d; want %d", tt.iType, tt.inCount, got, tt.outCount)
+			}
+		})
+	}
+}
+
+func Test_Interval_Unmarshal_None(t *testing.T) {
+	pv := &proto.Value{
+		Text: string(IntervalNone),
+		Int:  123,
+	}
+	var i Interval
+	if err := i.UnmarshalValue(pv); err != nil {
+		t.Fatalf("unmarshal error: %v", err)
+	}
+	if i.Count != 0 {
+		t.Fatalf("UnmarshalValue(None, 123) count = %d; want 0", i.Count)
+	}
+}
+
+func Test_Interval_Unmarshal_Indefinite(t *testing.T) {
+	pv := &proto.Value{
+		Text: string(IntervalIndefinite),
+		Int:  123,
+	}
+	var i Interval
+	if err := i.UnmarshalValue(pv); err != nil {
+		t.Fatalf("unmarshal error: %v", err)
+	}
+	if i.Count != 0 {
+		t.Fatalf("UnmarshalValue(Indefinite, 123) count = %d; want 0", i.Count)
+	}
+}

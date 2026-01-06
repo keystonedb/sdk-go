@@ -9,13 +9,15 @@ import (
 type IntervalType string
 
 const (
-	IntervalSecond IntervalType = "sec"
-	IntervalMinute IntervalType = "min"
-	IntervalHour   IntervalType = "hour"
-	IntervalDay    IntervalType = "day"
-	IntervalWeek   IntervalType = "week"
-	IntervalMonth  IntervalType = "month"
-	IntervalYear   IntervalType = "year"
+	IntervalNone       IntervalType = "none"
+	IntervalSecond     IntervalType = "sec"
+	IntervalMinute     IntervalType = "min"
+	IntervalHour       IntervalType = "hour"
+	IntervalDay        IntervalType = "day"
+	IntervalWeek       IntervalType = "week"
+	IntervalMonth      IntervalType = "month"
+	IntervalYear       IntervalType = "year"
+	IntervalIndefinite IntervalType = "indefinite"
 )
 
 // Interval represents a duration like "1 month", "5 days", etc.
@@ -26,6 +28,9 @@ type Interval struct {
 
 // NewInterval creates a new Interval
 func NewInterval(intervalType IntervalType, count int64) *Interval {
+	if intervalType == IntervalNone || intervalType == IntervalIndefinite {
+		count = 0
+	}
 	return &Interval{
 		Type:  intervalType,
 		Count: count,
@@ -116,8 +121,12 @@ func (i *Interval) MarshalValue() (*proto.Value, error) {
 
 func (i *Interval) UnmarshalValue(value *proto.Value) error {
 	if value != nil {
-		i.Count = value.GetInt()
 		i.Type = IntervalType(value.GetText())
+		if i.Type == IntervalNone || i.Type == IntervalIndefinite {
+			i.Count = 0
+		} else {
+			i.Count = value.GetInt()
+		}
 	}
 	return nil
 }
