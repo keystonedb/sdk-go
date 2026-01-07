@@ -37,6 +37,14 @@ func Unmarshal(from *proto.EntityResponse, v interface{}) error {
 			}
 		}
 	}
+	if e, ok := v.(DocumentObserver); ok {
+		if len(from.GetDocuments()) > 0 {
+			e.addDocuments(from.GetDocuments()...)
+		}
+		if len(from.GetDocumentRevisionIds()) > 0 {
+			e.setRevisions(from.GetDocumentRevisionIds())
+		}
+	}
 
 	if watchable, ok := v.(WatchedEntity); ok && watchable.HasWatcher() {
 		watchable.Watcher().AppendKnownValues(data)

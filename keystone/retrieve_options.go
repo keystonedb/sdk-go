@@ -145,13 +145,49 @@ func WithSummary() RetrieveOption {
 	return summaryLoader{summary: true}
 }
 
-type datumLoader struct{ datum bool }
+type documentLoader struct {
+	doc        *Document
+	revisionID string
+}
 
-func (l datumLoader) Apply(config *proto.EntityView) { config.Datum = l.datum }
+func (l documentLoader) Apply(config *proto.EntityView) {
+	config.LatestDocument = l.revisionID == ""
+	config.DocumentRevision = l.revisionID
+}
 
-// WithDatum is a retrieve option that loads datum
-func WithDatum() RetrieveOption {
-	return datumLoader{datum: true}
+func (l documentLoader) ObserveRetrieve(resp *proto.EntityResponse) {
+	if l.doc == nil {
+		return
+	}
+	for _, doc := range resp.GetDocuments() {
+		if doc.GetRevisionId() != "" && l.revisionID != "" && doc.GetRevisionId() != l.revisionID {
+			continue
+		}
+		l.doc.Data = doc.GetData()
+		l.doc.Meta = doc.GetMeta()
+		l.doc.RevisionID = doc.GetRevisionId()
+	}
+}
+
+// WithDocument is a retrieve option that loads the latest document - passing a document pointer to hydrate
+func WithDocument(hydrate *Document) RetrieveOption {
+	return documentLoader{doc: hydrate}
+}
+
+// WithDocumentRevision loads a specific document revision
+func WithDocumentRevision(revision string, hydrate *Document) RetrieveOption {
+	return documentLoader{revisionID: revision, doc: hydrate}
+}
+
+type documentRevisionsLister struct{ listRevisions bool }
+
+func (l documentRevisionsLister) Apply(config *proto.EntityView) {
+	config.DocumentRevisions = l.listRevisions
+}
+
+// WithDocumentRevisionList lists document revisions
+func WithDocumentRevisionList() RetrieveOption {
+	return documentRevisionsLister{listRevisions: true}
 }
 
 type labelLoader struct{ labels bool }

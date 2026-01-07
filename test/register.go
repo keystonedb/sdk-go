@@ -8,6 +8,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/daily"
 	"github.com/keystonedb/sdk-go/test/requirements/datatypes"
 	"github.com/keystonedb/sdk-go/test/requirements/destroy"
+	"github.com/keystonedb/sdk-go/test/requirements/document"
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_entity"
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
 	"github.com/keystonedb/sdk-go/test/requirements/embedded"
@@ -26,6 +27,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/pii"
 	"github.com/keystonedb/sdk-go/test/requirements/prewrite"
 	"github.com/keystonedb/sdk-go/test/requirements/query"
+	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/keystonedb/sdk-go/test/requirements/remote"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
@@ -51,6 +53,7 @@ func init() {
 	reqs = append(reqs, &cru.Requirement{})
 	reqs = append(reqs, &dynamic_properties.Requirement{})
 	reqs = append(reqs, &dynamic_entity.Requirement{})
+	reqs = append(reqs, &document.Requirement{})
 	reqs = append(reqs, &unique_id.Requirement{})
 	reqs = append(reqs, &sensor.Requirement{})
 	reqs = append(reqs, &labels.Requirement{})
@@ -75,7 +78,7 @@ func init() {
 	reqs = append(reqs, &nested_children.Requirement{})
 	reqs = append(reqs, &embedded.Requirement{})
 	reqs = append(reqs, &pii.Requirement{})
-	//reqs = append(reqs, &ratelimit.Requirement{})
+	reqs = append(reqs, &ratelimit.Requirement{})
 	reqs = append(reqs, &iid.Requirement{})
 	reqs = append(reqs, &watcher.Requirement{})
 	reqs = append(reqs, &exists.Requirement{})
@@ -91,7 +94,7 @@ func init() {
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &child_entities.Requirement{})
+		reqs = append(reqs, &document.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
 	}
 }
