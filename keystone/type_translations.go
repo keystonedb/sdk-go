@@ -42,6 +42,20 @@ func (t *Translations) Replace(translations map[string]*Translation) {
 	}
 }
 
+func (t *Translations) Initial(language string, translation interface{}) {
+	t.prepare()
+	t.values = make(map[string]*Translation)
+	t.toAdd = make(map[string]*Translation)
+	t.toRemove = make(map[string]bool)
+	t.replaceExisting = true
+	switch v := translation.(type) {
+	case string:
+		t.values[language] = &Translation{Singular: v}
+	case *Translation:
+		t.values[language] = v
+	}
+}
+
 // Add adds or updates a translation for the given language
 func (t *Translations) Add(language string, singular string) {
 	t.AddT(language, &Translation{Singular: singular})

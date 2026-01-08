@@ -17,6 +17,7 @@ type Requirement struct {
 type TranslatableItem struct {
 	keystone.BaseEntity
 	Name        string
+	DisplayName keystone.Translations
 	Description keystone.Translations
 }
 
@@ -52,6 +53,8 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Description: keystone.Translations{},
 	}
 
+	item.DisplayName.Initial("en", keystone.NewTranslation("Product"))
+
 	// Set initial translations
 	item.Description.Replace(map[string]*keystone.Translation{
 		"en": keystone.NewTranslation("A great product"),
@@ -75,13 +78,18 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 	}
 
 	item := &TranslatableItem{}
-	getErr := actor.Get(context.Background(), keystone.ByEntityID(item, d.createdID), item, keystone.WithProperties("description"))
+	getErr := actor.Get(context.Background(), keystone.ByEntityID(item, d.createdID), item, keystone.WithProperties("description", "display_name"))
 
 	if getErr != nil {
 		return resp.WithError(getErr)
 	}
 
 	// Verify translations were stored correctly
+	enName, ok := item.DisplayName.Get("en")
+	if !ok || enName.String() != "Product" {
+		return resp.WithError(fmt.Errorf("expected 'Product' for 'en', got '%s' (ok: %v)", enName.String(), ok))
+	}
+
 	enText, ok := item.Description.Get("en")
 	if !ok || enText.String() != "A great product" {
 		return resp.WithError(fmt.Errorf("expected 'A great product' for 'en', got '%s' (ok: %v)", enText.String(), ok))
