@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/keystonedb/sdk-go/proto"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type IntervalType string
@@ -57,6 +59,10 @@ func (i *Interval) String() string {
 	}
 	t := i.Type
 	c := i.Count
+	// none and indefinite are singular and don't need pluralization
+	if t == IntervalNone || t == IntervalIndefinite {
+		return cases.Title(language.English).String(string(t))
+	}
 	// naive pluralization: add 's' when count != 1
 	if c == 1 || c == -1 {
 		return fmt.Sprintf("%d %s", c, t)
