@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/keystonedb/sdk-go/proto"
 	"golang.org/x/text/cases"
@@ -92,14 +93,51 @@ func (i *Interval) GreaterThan(other *Interval) bool {
 	if i == nil {
 		return false
 	}
-	return i.GetCount() > other.GetCount()
+	if other == nil {
+		return true
+	}
+	if i.Type == other.Type {
+		return i.GetCount() > other.GetCount()
+	}
+	return i.approximateSeconds() > other.approximateSeconds()
 }
 
 func (i *Interval) LessThan(other *Interval) bool {
 	if i == nil {
 		return other != nil
 	}
-	return i.GetCount() < other.GetCount()
+	if other == nil {
+		return false
+	}
+	if i.Type == other.Type {
+		return i.GetCount() < other.GetCount()
+	}
+	return i.approximateSeconds() < other.approximateSeconds()
+}
+
+func (i *Interval) approximateSeconds() int64 {
+	if i == nil || i.Type == IntervalNone {
+		return 0
+	}
+	if i.Type == IntervalIndefinite {
+		return math.MaxInt64 // Basically infinite
+	}
+
+	multipliers := map[IntervalType]int64{
+		IntervalSecond: 1,
+		IntervalMinute: 60,
+		IntervalHour:   3600,
+		IntervalDay:    86400,
+		IntervalWeek:   604800,
+		IntervalMonth:  2592000,  // 30 days approx.
+		IntervalYear:   31536000, // 365 days approx.
+	}
+
+	multiplier, ok := multipliers[i.Type]
+	if !ok {
+		return 0
+	}
+	return i.Count * multiplier
 }
 
 func (i *Interval) Diff(with *Interval) *Interval {
