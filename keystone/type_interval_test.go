@@ -122,3 +122,74 @@ func Test_Interval_Unmarshal_Indefinite(t *testing.T) {
 		t.Fatalf("UnmarshalValue(Indefinite, 123) count = %d; want 0", i.Count)
 	}
 }
+
+func Test_Interval_Comparisons_CrossTypes(t *testing.T) {
+	tests := []struct {
+		name        string
+		a           *Interval
+		b           *Interval
+		wantGreater bool
+		wantLess    bool
+	}{
+		{
+			name:        "1 hour vs 30 minutes",
+			a:           NewInterval(IntervalHour, 1),
+			b:           NewInterval(IntervalMinute, 30),
+			wantGreater: true,
+			wantLess:    false,
+		},
+		{
+			name:        "1 hour vs 60 minutes (equal)",
+			a:           NewInterval(IntervalHour, 1),
+			b:           NewInterval(IntervalMinute, 60),
+			wantGreater: false,
+			wantLess:    false,
+		},
+		{
+			name:        "61 seconds vs 1 minute",
+			a:           NewInterval(IntervalSecond, 61),
+			b:           NewInterval(IntervalMinute, 1),
+			wantGreater: true,
+			wantLess:    false,
+		},
+		{
+			name:        "1 day vs 25 hours",
+			a:           NewInterval(IntervalDay, 1),
+			b:           NewInterval(IntervalHour, 25),
+			wantGreater: false,
+			wantLess:    true,
+		},
+		{
+			name:        "Indefinite vs 100 years",
+			a:           NewInterval(IntervalIndefinite, 0),
+			b:           NewInterval(IntervalYear, 100),
+			wantGreater: true,
+			wantLess:    false,
+		},
+		{
+			name:        "None vs 1 second",
+			a:           NewInterval(IntervalNone, 0),
+			b:           NewInterval(IntervalSecond, 1),
+			wantGreater: false,
+			wantLess:    true,
+		},
+		{
+			name:        "1 Month vs 29 Days",
+			a:           NewInterval(IntervalMonth, 1),
+			b:           NewInterval(IntervalDay, 29),
+			wantGreater: true,
+			wantLess:    false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.a.GreaterThan(tt.b); got != tt.wantGreater {
+				t.Errorf("GreaterThan() = %v, want %v", got, tt.wantGreater)
+			}
+			if got := tt.a.LessThan(tt.b); got != tt.wantLess {
+				t.Errorf("LessThan() = %v, want %v", got, tt.wantLess)
+			}
+		})
+	}
+}
