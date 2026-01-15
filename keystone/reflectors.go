@@ -40,6 +40,14 @@ var kindReflector = map[reflect.Kind]Reflector{
 var mapKindReflector = map[reflect.Kind]Reflector{
 	reflect.String: reflector.StringMap{},
 	reflect.Int:    reflector.IntMap{},
+	reflect.Int8:   reflector.IntMap{},
+	reflect.Int16:  reflector.IntMap{},
+	reflect.Int32:  reflector.IntMap{},
+	reflect.Int64:  reflector.IntMap{},
+	reflect.Uint:   reflector.IntMap{},
+	reflect.Uint8:  reflector.IntMap{},
+	reflect.Uint16: reflector.IntMap{},
+	reflect.Uint32: reflector.IntMap{},
 	reflect.Bool:   reflector.BoolMap{},
 }
 
