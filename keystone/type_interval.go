@@ -3,6 +3,7 @@ package keystone
 import (
 	"fmt"
 	"math"
+	"time"
 
 	"github.com/keystonedb/sdk-go/proto"
 	"golang.org/x/text/cases"
@@ -115,12 +116,14 @@ func (i *Interval) LessThan(other *Interval) bool {
 	return i.approximateSeconds() < other.approximateSeconds()
 }
 
-func (i *Interval) approximateSeconds() int64 {
-	if i == nil || i.Type == IntervalNone {
+// secondsPerInterval returns the number of seconds for one unit of the given interval type.
+// Returns 0 for none, math.MaxInt64 for indefinite, or the approximate seconds otherwise.
+func secondsPerInterval(t IntervalType) int64 {
+	if t == IntervalNone {
 		return 0
 	}
-	if i.Type == IntervalIndefinite {
-		return math.MaxInt64 // Basically infinite
+	if t == IntervalIndefinite {
+		return math.MaxInt64
 	}
 
 	multipliers := map[IntervalType]int64{
@@ -133,11 +136,30 @@ func (i *Interval) approximateSeconds() int64 {
 		IntervalYear:   31536000, // 365 days approx.
 	}
 
-	multiplier, ok := multipliers[i.Type]
-	if !ok {
+	return multipliers[t]
+}
+
+func (i *Interval) approximateSeconds() int64 {
+	if i == nil {
 		return 0
 	}
-	return i.Count * multiplier
+	seconds := secondsPerInterval(i.Type)
+	if seconds == math.MaxInt64 {
+		return seconds
+	}
+	return i.Count * seconds
+}
+
+// ToDuration converts the interval into a time.Duration.
+func (i *Interval) ToDuration() time.Duration {
+	if i == nil {
+		return 0
+	}
+	seconds := secondsPerInterval(i.Type)
+	if seconds == math.MaxInt64 {
+		return time.Duration(math.MaxInt64)
+	}
+	return time.Duration(i.Count) * time.Second * time.Duration(seconds)
 }
 
 func (i *Interval) Diff(with *Interval) *Interval {
