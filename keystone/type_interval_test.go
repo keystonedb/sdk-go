@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"testing"
+	"time"
 
 	"github.com/keystonedb/sdk-go/proto"
 )
@@ -191,5 +192,122 @@ func Test_Interval_Comparisons_CrossTypes(t *testing.T) {
 				t.Errorf("LessThan() = %v, want %v", got, tt.wantLess)
 			}
 		})
+	}
+}
+
+func Test_Interval_ToDuration(t *testing.T) {
+	tests := []struct {
+		name     string
+		interval *Interval
+		want     time.Duration
+	}{
+		{
+			name:     "nil interval",
+			interval: nil,
+			want:     0,
+		},
+		{
+			name:     "none interval",
+			interval: NewInterval(IntervalNone, 0),
+			want:     0,
+		},
+		{
+			name:     "1 second",
+			interval: NewInterval(IntervalSecond, 1),
+			want:     time.Second,
+		},
+		{
+			name:     "5 seconds",
+			interval: NewInterval(IntervalSecond, 5),
+			want:     5 * time.Second,
+		},
+		{
+			name:     "1 minute",
+			interval: NewInterval(IntervalMinute, 1),
+			want:     time.Minute,
+		},
+		{
+			name:     "10 minutes",
+			interval: NewInterval(IntervalMinute, 10),
+			want:     10 * time.Minute,
+		},
+		{
+			name:     "1 hour",
+			interval: NewInterval(IntervalHour, 1),
+			want:     time.Hour,
+		},
+		{
+			name:     "24 hours",
+			interval: NewInterval(IntervalHour, 24),
+			want:     24 * time.Hour,
+		},
+		{
+			name:     "1 day",
+			interval: NewInterval(IntervalDay, 1),
+			want:     24 * time.Hour,
+		},
+		{
+			name:     "7 days",
+			interval: NewInterval(IntervalDay, 7),
+			want:     7 * 24 * time.Hour,
+		},
+		{
+			name:     "1 week",
+			interval: NewInterval(IntervalWeek, 1),
+			want:     7 * 24 * time.Hour,
+		},
+		{
+			name:     "2 weeks",
+			interval: NewInterval(IntervalWeek, 2),
+			want:     14 * 24 * time.Hour,
+		},
+		{
+			name:     "1 month (30 days approx)",
+			interval: NewInterval(IntervalMonth, 1),
+			want:     30 * 24 * time.Hour,
+		},
+		{
+			name:     "3 months",
+			interval: NewInterval(IntervalMonth, 3),
+			want:     90 * 24 * time.Hour,
+		},
+		{
+			name:     "1 year (365 days approx)",
+			interval: NewInterval(IntervalYear, 1),
+			want:     365 * 24 * time.Hour,
+		},
+		{
+			name:     "2 years",
+			interval: NewInterval(IntervalYear, 2),
+			want:     730 * 24 * time.Hour,
+		},
+		{
+			name:     "negative seconds",
+			interval: NewInterval(IntervalSecond, -10),
+			want:     -10 * time.Second,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.interval.ToDuration(); got != tt.want {
+				t.Errorf("ToDuration() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_Interval_ToDuration_Indefinite(t *testing.T) {
+	interval := NewInterval(IntervalIndefinite, 0)
+	duration := interval.ToDuration()
+
+	// Indefinite should return a very large duration
+	if duration <= 0 {
+		t.Errorf("indefinite interval should return positive duration, got %v", duration)
+	}
+
+	// Should be max int64 duration
+	if duration != time.Duration(9223372036854775807) {
+		t.Errorf("indefinite interval should return max duration, got %v", duration)
 	}
 }
