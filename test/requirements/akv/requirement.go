@@ -47,6 +47,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.get(actor),
 		d.putRaw(actor),
 		d.getRaw(actor),
+		d.deleteKey(actor),
 	}
 }
 
@@ -154,6 +155,48 @@ func (d *Requirement) getRaw(actor *keystone.Actor) requirements.TestResult {
 	}
 	if len(retRaw.Array.Ints) != len(rawVal.Array.Ints) {
 		return res.WithError(errors.New("rawval has wrong array ints length"))
+	}
+
+	return res
+}
+
+func (d *Requirement) deleteKey(actor *keystone.Actor) requirements.TestResult {
+	res := requirements.TestResult{Name: "Delete"}
+
+	// Put a value to delete
+	putResp, putErr := actor.AKVPut(context.Background(), keystone.AKV("delkey", "to-be-deleted"))
+	if putErr != nil {
+		return res.WithError(fmt.Errorf("put failed: %w", putErr))
+	}
+	if !putResp.Success {
+		return res.WithError(fmt.Errorf("put failed: %d - %s", putResp.GetErrorCode(), putResp.ErrorMessage))
+	}
+
+	// Verify the value exists
+	getResp, getErr := actor.AKVGet(context.Background(), "delkey")
+	if getErr != nil {
+		return res.WithError(fmt.Errorf("get before delete failed: %w", getErr))
+	}
+	if _, hasVal := getResp["delkey"]; !hasVal {
+		return res.WithError(errors.New("delkey not found before delete"))
+	}
+
+	// Delete the value
+	delResp, delErr := actor.AKVDel(context.Background(), "delkey")
+	if delErr != nil {
+		return res.WithError(fmt.Errorf("delete failed: %w", delErr))
+	}
+	if !delResp.Success {
+		return res.WithError(fmt.Errorf("delete failed: %d - %s", delResp.GetErrorCode(), delResp.ErrorMessage))
+	}
+
+	// Verify the value is gone
+	getResp, getErr = actor.AKVGet(context.Background(), "delkey")
+	if getErr != nil {
+		return res.WithError(fmt.Errorf("get after delete failed: %w", getErr))
+	}
+	if _, hasVal := getResp["delkey"]; hasVal {
+		return res.WithError(errors.New("delkey should not be found after delete"))
 	}
 
 	return res
