@@ -372,3 +372,10 @@ func (c *Connection) Status(ctx context.Context, in *proto.Authorization, opts .
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) Lookup(ctx context.Context, in *proto.LookupRequest, opts ...grpc.CallOption) (*proto.LookupResponse, error) {
+	tl := c.timeLogConfig.NewLog("Lookup", zap.String("property", in.GetProperty()))
+	resp, err := c.client.Lookup(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

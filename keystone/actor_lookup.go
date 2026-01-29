@@ -26,7 +26,7 @@ func (a *Actor) Lookup(ctx context.Context, property, value string, opts ...Look
 		Property:      &property,
 	}
 
-	resp, err := a.connection.client.Lookup(ctx, req)
+	resp, err := a.connection.Lookup(ctx, req)
 	if err != nil {
 		return nil, err
 	}
