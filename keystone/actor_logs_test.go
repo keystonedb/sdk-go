@@ -23,6 +23,54 @@ func TestActor_Logs_NilConnection(t *testing.T) {
 	}
 }
 
+func TestActor_Log_NilActor(t *testing.T) {
+	var actor *Actor
+	err := actor.Log(context.Background(), "entity-123", proto.LogLevel_Info, "test message")
+	if err == nil {
+		t.Error("expected error for nil actor, got nil")
+	}
+}
+
+func TestActor_Log_NilConnection(t *testing.T) {
+	actor := &Actor{}
+	err := actor.Log(context.Background(), "entity-123", proto.LogLevel_Info, "test message")
+	if err == nil {
+		t.Error("expected error for nil connection, got nil")
+	}
+}
+
+func TestLogOptions(t *testing.T) {
+	// Test WithLogReference
+	opts := &logOptions{}
+	WithLogReference("test-ref")(opts)
+	if opts.reference != "test-ref" {
+		t.Errorf("WithLogReference: expected 'test-ref', got %s", opts.reference)
+	}
+
+	// Test WithLogTraceID
+	opts = &logOptions{}
+	WithLogTraceID("trace-123")(opts)
+	if opts.traceID != "trace-123" {
+		t.Errorf("WithLogTraceID: expected 'trace-123', got %s", opts.traceID)
+	}
+
+	// Test WithLogData
+	opts = &logOptions{}
+	data := map[string]string{"key": "value"}
+	WithLogData(data)(opts)
+	if opts.data["key"] != "value" {
+		t.Errorf("WithLogData: expected data to be set")
+	}
+
+	// Test WithLogAuditUser
+	opts = &logOptions{}
+	user := &proto.User{UserId: "user-123", Client: "test-client"}
+	WithLogAuditUser(user)(opts)
+	if opts.auditUser == nil || opts.auditUser.UserId != "user-123" {
+		t.Errorf("WithLogAuditUser: expected audit user to be set")
+	}
+}
+
 func TestLogsOptions(t *testing.T) {
 	// Test WithLogsMinLevel
 	opts := &logsOptions{}
