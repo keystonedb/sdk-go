@@ -13,6 +13,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
 	"github.com/keystonedb/sdk-go/test/requirements/embedded"
 	"github.com/keystonedb/sdk-go/test/requirements/events"
+	"github.com/keystonedb/sdk-go/test/requirements/events_actor"
 	"github.com/keystonedb/sdk-go/test/requirements/exists"
 	"github.com/keystonedb/sdk-go/test/requirements/group_count"
 	"github.com/keystonedb/sdk-go/test/requirements/hashed_id"
@@ -21,7 +22,9 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/interval"
 	"github.com/keystonedb/sdk-go/test/requirements/labels"
 	"github.com/keystonedb/sdk-go/test/requirements/logging"
+	"github.com/keystonedb/sdk-go/test/requirements/logs_actor"
 	"github.com/keystonedb/sdk-go/test/requirements/lookup"
+	"github.com/keystonedb/sdk-go/test/requirements/lookup_actor"
 	"github.com/keystonedb/sdk-go/test/requirements/nested_children"
 	"github.com/keystonedb/sdk-go/test/requirements/objects"
 	"github.com/keystonedb/sdk-go/test/requirements/pii"
@@ -58,12 +61,15 @@ func init() {
 	reqs = append(reqs, &sensor.Requirement{})
 	reqs = append(reqs, &labels.Requirement{})
 	reqs = append(reqs, &logging.Requirement{})
+	reqs = append(reqs, &logs_actor.Requirement{})
 	reqs = append(reqs, &child_entities.Requirement{})
 	reqs = append(reqs, &events.Requirement{})
+	reqs = append(reqs, &events_actor.Requirement{})
 	reqs = append(reqs, &daily.Requirement{})
 	reqs = append(reqs, &stats.Requirement{})
 	reqs = append(reqs, &immutable.Requirement{})
 	reqs = append(reqs, &lookup.Requirement{})
+	reqs = append(reqs, &lookup_actor.Requirement{})
 	reqs = append(reqs, &relationships.Requirement{})
 	reqs = append(reqs, &query.Requirement{})
 	reqs = append(reqs, &datatypes.Requirement{})
@@ -94,7 +100,7 @@ func init() {
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &document.Requirement{})
+		reqs = append(reqs, &exists.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
 	}
 }
