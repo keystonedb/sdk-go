@@ -1,6 +1,9 @@
 package models
 
-import "github.com/keystonedb/sdk-go/keystone"
+import (
+	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/proto"
+)
 
 // Role is the deepest level (level 3)
 type Role struct {
@@ -26,4 +29,10 @@ type Business struct {
 	EmployeeCount int64  `keystone:"employee_count"`
 	CEO           CEO    `keystone:"ceo"`
 	AnnualRevenue int64  `keystone:"annual_revenue"`
+}
+
+func (t *Business) GetKeystoneDefinition() keystone.TypeDefinition {
+	return keystone.TypeDefinition{
+		Options: []proto.Schema_Option{proto.Schema_StoreMutations},
+	}
 }
