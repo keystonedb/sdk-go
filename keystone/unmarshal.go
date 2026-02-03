@@ -3,6 +3,7 @@ package keystone
 import (
 	"errors"
 	"reflect"
+	"strings"
 
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
@@ -183,12 +184,25 @@ func UnmarshalProperties(data map[Property]*proto.Value, v interface{}) error {
 	prefixed := make(map[string]map[Property]*proto.Value)
 	for k, reVal := range data {
 		if k.prefix != "" {
-			prefix := k.prefix
-			if _, has := prefixed[prefix]; !has {
-				prefixed[prefix] = make(map[Property]*proto.Value)
+			// Get the top-level prefix for grouping nested structs
+			// e.g., "ceo.current_role" -> "ceo"
+			topPrefix := k.prefix
+			if dotIdx := strings.Index(k.prefix, "."); dotIdx > 0 {
+				topPrefix = k.prefix[:dotIdx]
 			}
-			k.prefix = ""
-			prefixed[prefix][k] = reVal
+
+			if _, has := prefixed[topPrefix]; !has {
+				prefixed[topPrefix] = make(map[Property]*proto.Value)
+			}
+
+			// Strip the top-level prefix for recursive unmarshaling
+			// e.g., "ceo.current_role" -> "current_role"
+			if dotIdx := strings.Index(k.prefix, "."); dotIdx > 0 {
+				k.prefix = k.prefix[dotIdx+1:]
+			} else {
+				k.prefix = ""
+			}
+			prefixed[topPrefix][k] = reVal
 		}
 	}
 
