@@ -244,6 +244,16 @@ func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOp
 
 }
 
+// ArchiveEntity sets the entity state to Archived
+func (a *Actor) ArchiveEntity(ctx context.Context, src interface{}, options ...MutateOption) error {
+	return a.Mutate(ctx, src, append(options, WithState(proto.EntityState_Archived))...)
+}
+
+// CorruptEntity sets the entity state to Corrupt
+func (a *Actor) CorruptEntity(ctx context.Context, src interface{}, options ...MutateOption) error {
+	return a.Mutate(ctx, src, append(options, WithState(proto.EntityState_Corrupt))...)
+}
+
 func mutateToError(resp *proto.MutateResponse, err error) error {
 	if err != nil {
 		return err

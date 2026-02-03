@@ -181,3 +181,21 @@ type backgroundIndex struct {
 func (m backgroundIndex) apply(mutate *proto.MutateRequest) {
 	mutate.Options = append(mutate.Options, proto.MutateRequest_BackgroundIndex)
 }
+
+// WithState sets the entity state for the mutation.
+// Only Active, Offline, Corrupt, and Archived states are allowed.
+// Using Invalid or Removed states will panic.
+func WithState(state proto.EntityState) MutateOption {
+	if state == proto.EntityState_Invalid || state == proto.EntityState_Removed {
+		panic("WithState: EntityState_Invalid and EntityState_Removed are not allowed")
+	}
+	return withState{state: state}
+}
+
+type withState struct {
+	state proto.EntityState
+}
+
+func (m withState) apply(mutate *proto.MutateRequest) {
+	mutate.Mutation.State = m.state
+}

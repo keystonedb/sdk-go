@@ -519,3 +519,86 @@ func TestPrepareObjectsImplementsMutationObserver(t *testing.T) {
 		t.Error("Expected PrepareUploads to implement MutationObserver")
 	}
 }
+
+func TestWithState(t *testing.T) {
+	tests := []struct {
+		name  string
+		state proto.EntityState
+	}{
+		{"Active", proto.EntityState_Active},
+		{"Offline", proto.EntityState_Offline},
+		{"Corrupt", proto.EntityState_Corrupt},
+		{"Archived", proto.EntityState_Archived},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			opt := WithState(tt.state)
+			req := &proto.MutateRequest{
+				Mutation: &proto.Mutation{},
+			}
+
+			opt.apply(req)
+
+			if req.Mutation.State != tt.state {
+				t.Errorf("Expected state %v, got %v", tt.state, req.Mutation.State)
+			}
+		})
+	}
+}
+
+func TestWithStateCanTransitionBetweenStates(t *testing.T) {
+	transitions := []struct {
+		name string
+		from proto.EntityState
+		to   proto.EntityState
+	}{
+		{"Active to Archived", proto.EntityState_Active, proto.EntityState_Archived},
+		{"Archived to Active", proto.EntityState_Archived, proto.EntityState_Active},
+		{"Active to Offline", proto.EntityState_Active, proto.EntityState_Offline},
+		{"Offline to Active", proto.EntityState_Offline, proto.EntityState_Active},
+		{"Active to Corrupt", proto.EntityState_Active, proto.EntityState_Corrupt},
+		{"Corrupt to Active", proto.EntityState_Corrupt, proto.EntityState_Active},
+		{"Archived to Offline", proto.EntityState_Archived, proto.EntityState_Offline},
+		{"Offline to Archived", proto.EntityState_Offline, proto.EntityState_Archived},
+	}
+
+	for _, tt := range transitions {
+		t.Run(tt.name, func(t *testing.T) {
+			req := &proto.MutateRequest{
+				Mutation: &proto.Mutation{State: tt.from},
+			}
+
+			opt := WithState(tt.to)
+			opt.apply(req)
+
+			if req.Mutation.State != tt.to {
+				t.Errorf("Expected state to transition from %v to %v, got %v", tt.from, tt.to, req.Mutation.State)
+			}
+		})
+	}
+}
+
+func TestWithStateForbidsInvalidState(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("Expected WithState to panic for EntityState_Invalid")
+		}
+	}()
+
+	WithState(proto.EntityState_Invalid)
+}
+
+func TestWithStateForbidsRemovedState(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("Expected WithState to panic for EntityState_Removed")
+		}
+	}()
+
+	WithState(proto.EntityState_Removed)
+}
+
+func TestWithStateImplementsInterface(t *testing.T) {
+	var _ MutateOption = WithState(proto.EntityState_Active)
+}
