@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"context"
+	"errors"
 	"reflect"
 
 	"github.com/keystonedb/sdk-go/keystone/reflector"
@@ -58,6 +59,10 @@ func AKV(property string, value any) AKVProperty {
 }
 
 func (a *Actor) AKVPut(ctx context.Context, properties ...AKVProperty) (*proto.GenericResponse, error) {
+	if a == nil || a.connection == nil {
+		return nil, errors.New("actor or connection is nil")
+	}
+
 	putRequest := &proto.AKVPutRequest{
 		Authorization: a.Authorization(),
 	}
@@ -74,6 +79,10 @@ func (a *Actor) AKVPut(ctx context.Context, properties ...AKVProperty) (*proto.G
 }
 
 func (a *Actor) AKVGet(ctx context.Context, properties ...string) (map[string]*proto.Value, error) {
+	if a == nil || a.connection == nil {
+		return nil, errors.New("actor or connection is nil")
+	}
+
 	getRequest := &proto.AKVGetRequest{
 		Authorization: a.Authorization(),
 		Properties:    properties,
@@ -84,4 +93,22 @@ func (a *Actor) AKVGet(ctx context.Context, properties ...string) (map[string]*p
 	}
 
 	return resp.GetProperties(), nil
+}
+
+// AKVDel deletes entries from the application key-value store
+func (a *Actor) AKVDel(ctx context.Context, properties ...string) (*proto.GenericResponse, error) {
+	if a == nil || a.connection == nil {
+		return nil, errors.New("actor or connection is nil")
+	}
+
+	delRequest := &proto.AKVDelRequest{
+		Authorization: a.Authorization(),
+		Properties:    properties,
+	}
+
+	resp, err := a.connection.AKVDel(ctx, delRequest)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
