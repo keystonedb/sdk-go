@@ -36,7 +36,12 @@ func (p *Property) HydrateOnly() bool {
 
 func (p *Property) SetPrefix(prefix string) {
 	if p != nil {
-		p.prefix = prefix
+		if p.prefix != "" {
+			// Prepend to existing prefix for nested structs (e.g., "ceo" + "current_role" = "ceo.current_role")
+			p.prefix = prefix + "." + p.prefix
+		} else {
+			p.prefix = prefix
+		}
 	}
 }
 

@@ -112,12 +112,14 @@ func (e *entityConverter) Properties() map[Property]*proto.Value {
 		return resp
 	}
 	for _, v := range e.protoResponse.Properties {
-		nameP := strings.SplitN(v.GetProperty(), ".", 2)
+		propName := v.GetProperty()
 		var prop Property
-		if len(nameP) == 2 {
-			prop = NewPrefixProperty(nameP[0], nameP[1])
+		// Split from the right to get the last segment as the name
+		// e.g., "ceo.current_role.title" -> prefix="ceo.current_role", name="title"
+		if lastDot := strings.LastIndex(propName, "."); lastDot > 0 {
+			prop = NewPrefixProperty(propName[:lastDot], propName[lastDot+1:])
 		} else {
-			prop = NewProperty(nameP[0])
+			prop = NewProperty(propName)
 		}
 		resp[prop] = v.GetValue()
 	}

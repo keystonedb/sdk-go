@@ -1,6 +1,8 @@
 package keystone
 
 import (
+	"strings"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -64,7 +66,8 @@ func (m mutateProperties) apply(mutate *proto.MutateRequest) {
 
 	for _, prop := range mutate.Mutation.Properties {
 		for _, p := range m.Property {
-			if prop.Property == p {
+			// Exact match or prefix match for nested structs (e.g., "ceo" matches "ceo.name", "ceo.salary")
+			if prop.Property == p || strings.HasPrefix(prop.Property, p+".") {
 				keepProps = append(keepProps, prop)
 				break
 			}
