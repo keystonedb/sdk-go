@@ -14,6 +14,20 @@ func (a *Actor) Find(ctx context.Context, entityType string, retrieve RetrieveOp
 		View:          &proto.EntityView{},
 	}
 
+	hasState := false
+	for _, opt := range options {
+		if fOpt, ok := opt.(propertyFilter); ok {
+			if fOpt.key == statePropertyName {
+				hasState = true
+				break
+			}
+		}
+	}
+	if !hasState {
+		// Default to only active entities if no state filter is provided
+		options = append(options, OnlyActive())
+	}
+
 	if retrieve != nil {
 		retrieve.Apply(findRequest.View)
 	}
