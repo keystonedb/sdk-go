@@ -19,6 +19,20 @@ func (a *Actor) QueryIndex(ctx context.Context, entityType string, retrievePrope
 		Properties:    retrieveProperties,
 	}
 
+	hasState := false
+	for _, opt := range options {
+		if fOpt, ok := opt.(propertyFilter); ok {
+			if fOpt.key == statePropertyName {
+				hasState = true
+				break
+			}
+		}
+	}
+	if !hasState {
+		// Default to only active entities if no state filter is provided
+		options = append(options, OnlyActive())
+	}
+
 	fReq := &filterRequest{}
 	for _, opt := range options {
 		opt.Apply(fReq)
