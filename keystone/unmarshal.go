@@ -27,6 +27,14 @@ func Unmarshal(from *proto.EntityResponse, v interface{}) error {
 		e.SetKeystoneID(ID(from.Entity.GetEntityId()))
 	}
 
+	if e, ok := v.(EntityDetail); ok && from.Entity != nil {
+		e.SetEntityDetail(from.Entity)
+	}
+
+	if e, ok := v.(RetrieveObserver); ok {
+		e.ObserveRetrieve(from)
+	}
+
 	if e, ok := v.(RelationshipProvider); ok && from.Relationships != nil {
 		e.SetRelationships(from.Relationships)
 	}
