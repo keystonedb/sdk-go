@@ -31,3 +31,8 @@ func (e *EmbeddedDetails) SetEntityDetail(entity *proto.Entity) {
 	e.ksState = entity.GetState()
 	e.ksLastUpdate = entity.GetLastUpdate().AsTime()
 }
+
+func (e *EmbeddedDetails) IsStateActive() bool   { return e.ksState == proto.EntityState_Active }
+func (e *EmbeddedDetails) IsStateOffline() bool  { return e.ksState == proto.EntityState_Offline }
+func (e *EmbeddedDetails) IsStateCorrupt() bool  { return e.ksState == proto.EntityState_Corrupt }
+func (e *EmbeddedDetails) IsStateArchived() bool { return e.ksState == proto.EntityState_Archived }
