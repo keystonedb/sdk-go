@@ -5156,6 +5156,7 @@ type QueryIndexRequest struct {
 	Sort           []*PropertySort        `protobuf:"bytes,5,rep,name=sort,proto3" json:"sort,omitempty"`
 	Page           *PageRequest           `protobuf:"bytes,6,opt,name=page,proto3" json:"page,omitempty"`
 	ParentEntityId string                 `protobuf:"bytes,7,opt,name=parent_entity_id,json=parentEntityId,proto3" json:"parent_entity_id,omitempty"` // For querying child entities of a specific parent
+	EntityIds      []string               `protobuf:"bytes,8,rep,name=entity_ids,json=entityIds,proto3" json:"entity_ids,omitempty"`                  // For querying specific entities by ID
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -5237,6 +5238,13 @@ func (x *QueryIndexRequest) GetParentEntityId() string {
 		return x.ParentEntityId
 	}
 	return ""
+}
+
+func (x *QueryIndexRequest) GetEntityIds() []string {
+	if x != nil {
+		return x.EntityIds
+	}
+	return nil
 }
 
 type QueryIndexResponse struct {
@@ -8464,7 +8472,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\bentities\x18\x01 \x03(\v2\x1e.kubex.keystone.EntityResponseR\bentities\x12#\n" +
 	"\rtotal_results\x18\x02 \x01(\x05R\ftotalResults\x12<\n" +
 	"\bextended\x18\x03 \x01(\v2 .kubex.keystone.ExtendedResponseR\bextended\x12\x17\n" +
-	"\alast_id\x18\x04 \x01(\tR\x06lastId:\x02\x18\x01\"\xec\x02\n" +
+	"\alast_id\x18\x04 \x01(\tR\x06lastId:\x02\x18\x01\"\x8b\x03\n" +
 	"\x11QueryIndexRequest\x12C\n" +
 	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
 	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1e\n" +
@@ -8474,7 +8482,9 @@ const file_keystone_proto_rawDesc = "" +
 	"\afilters\x18\x04 \x03(\v2\x1e.kubex.keystone.PropertyFilterR\afilters\x120\n" +
 	"\x04sort\x18\x05 \x03(\v2\x1c.kubex.keystone.PropertySortR\x04sort\x12/\n" +
 	"\x04page\x18\x06 \x01(\v2\x1b.kubex.keystone.PageRequestR\x04page\x12(\n" +
-	"\x10parent_entity_id\x18\a \x01(\tR\x0eparentEntityId\"\xcc\x01\n" +
+	"\x10parent_entity_id\x18\a \x01(\tR\x0eparentEntityId\x12\x1d\n" +
+	"\n" +
+	"entity_ids\x18\b \x03(\tR\tentityIds\"\xcc\x01\n" +
 	"\x12QueryIndexResponse\x12:\n" +
 	"\bentities\x18\x01 \x03(\v2\x1e.kubex.keystone.EntityResponseR\bentities\x12#\n" +
 	"\rtotal_results\x18\x02 \x01(\x05R\ftotalResults\x12<\n" +

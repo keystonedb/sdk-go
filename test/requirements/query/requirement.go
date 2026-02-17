@@ -16,6 +16,7 @@ import (
 type Requirement struct {
 	runID          string
 	subscriptionID keystone.ID
+	renewalIDs     []string
 }
 
 func (d *Requirement) Name() string {
@@ -36,7 +37,8 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.readThree(actor),
 		d.readComplex(actor),
 		d.createChildEntities(actor),
-		d.readByParent(actor),
+		d.readByEntityIDs(actor),
+		d.readByEntityIDsAndParent(actor),
 	}
 }
 
@@ -206,6 +208,7 @@ func (d *Requirement) createChildEntities(actor *keystone.Actor) requirements.Te
 				Error: createErr,
 			}
 		}
+		d.renewalIDs = append(d.renewalIDs, renewal.GetKeystoneID().ChildID())
 	}
 
 	return requirements.TestResult{
@@ -213,9 +216,25 @@ func (d *Requirement) createChildEntities(actor *keystone.Actor) requirements.Te
 	}
 }
 
-func (d *Requirement) readByParent(actor *keystone.Actor) requirements.TestResult {
+func (d *Requirement) readByEntityIDs(actor *keystone.Actor) requirements.TestResult {
 	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Renewal{}),
 		[]string{}, keystone.Limit(10, 0),
+		keystone.WithEntityIDs(d.renewalIDs))
+
+	if err == nil && len(entities) != 3 {
+		err = errors.New("expected 3 renewals, got " + strconv.Itoa(len(entities)))
+	}
+
+	return requirements.TestResult{
+		Name:  "readByEntityIDs",
+		Error: err,
+	}
+}
+
+func (d *Requirement) readByEntityIDsAndParent(actor *keystone.Actor) requirements.TestResult {
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Renewal{}),
+		[]string{}, keystone.Limit(10, 0),
+		keystone.WithEntityIDs(d.renewalIDs),
 		keystone.ChildOf(d.subscriptionID.String()))
 
 	if err == nil && len(entities) != 3 {
@@ -223,7 +242,7 @@ func (d *Requirement) readByParent(actor *keystone.Actor) requirements.TestResul
 	}
 
 	return requirements.TestResult{
-		Name:  "readByParent",
+		Name:  "readByEntityIDsAndParent",
 		Error: err,
 	}
 }
