@@ -3,6 +3,7 @@ package query
 import (
 	"context"
 	"errors"
+	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,7 +14,8 @@ import (
 )
 
 type Requirement struct {
-	runID string
+	runID          string
+	subscriptionID keystone.ID
 }
 
 func (d *Requirement) Name() string {
@@ -22,7 +24,7 @@ func (d *Requirement) Name() string {
 
 func (d *Requirement) Register(conn *keystone.Connection) error {
 	d.runID = k4id.New().String()
-	conn.RegisterTypes(models.FileData{})
+	conn.RegisterTypes(models.FileData{}, models.Subscription{}, models.Renewal{})
 	return nil
 }
 
@@ -33,6 +35,8 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.readOneTwo(actor),
 		d.readThree(actor),
 		d.readComplex(actor),
+		d.createChildEntities(actor),
+		d.readByParent(actor),
 	}
 }
 
@@ -172,6 +176,58 @@ func (d *Requirement) readPending(actor *keystone.Actor) requirements.TestResult
 		Error: err,
 	}
 }
+func (d *Requirement) createChildEntities(actor *keystone.Actor) requirements.TestResult {
+	sub := &models.Subscription{
+		StartDate: time.Now(),
+	}
+
+	createErr := actor.Mutate(context.Background(), sub, keystone.WithMutationComment("Create parent subscription for query test"))
+	if createErr != nil {
+		return requirements.TestResult{
+			Name:  "createChildEntities",
+			Error: createErr,
+		}
+	}
+	d.subscriptionID = sub.GetKeystoneID()
+
+	for i := 0; i < 3; i++ {
+		renewal := &models.Renewal{
+			StartDate:    time.Now(),
+			EndDate:      time.Now().AddDate(0, 1, 0),
+			CreationDate: time.Now(),
+			PaymentDate:  time.Now(),
+		}
+		renewal.SetKeystoneID(d.subscriptionID)
+
+		createErr = actor.Mutate(context.Background(), renewal, keystone.WithMutationComment("Create renewal "+strconv.Itoa(i)))
+		if createErr != nil {
+			return requirements.TestResult{
+				Name:  "createChildEntities",
+				Error: createErr,
+			}
+		}
+	}
+
+	return requirements.TestResult{
+		Name: "createChildEntities",
+	}
+}
+
+func (d *Requirement) readByParent(actor *keystone.Actor) requirements.TestResult {
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Renewal{}),
+		[]string{}, keystone.Limit(10, 0),
+		keystone.ChildOf(d.subscriptionID.String()))
+
+	if err == nil && len(entities) != 3 {
+		err = errors.New("expected 3 renewals, got " + strconv.Itoa(len(entities)))
+	}
+
+	return requirements.TestResult{
+		Name:  "readByParent",
+		Error: err,
+	}
+}
+
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	files := []*models.FileData{
 		{

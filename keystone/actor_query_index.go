@@ -38,6 +38,7 @@ func (a *Actor) QueryIndex(ctx context.Context, entityType string, retrievePrope
 		opt.Apply(fReq)
 	}
 
+	listRequest.ParentEntityId = fReq.ParentEntityID
 	listRequest.Filters = fReq.Filters
 	listRequest.Sort = fReq.sortBy
 	listRequest.Page = &proto.PageRequest{
