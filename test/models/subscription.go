@@ -17,5 +17,5 @@ type Renewal struct {
 	StartDate    time.Time
 	EndDate      time.Time
 	CreationDate time.Time
-	PaymentDate  time.Time
+	PaymentDate  time.Time `keystone:",indexed"`
 }
