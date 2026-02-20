@@ -7,8 +7,8 @@ import (
 
 type IntervalEntity struct {
 	keystone.BaseEntity
-	Name      string
-	Period    keystone.Interval
+	Name      string            `keystone:",indexed"`
+	Period    keystone.Interval `keystone:",indexed"`
 	PeriodPtr *keystone.Interval
 }
 

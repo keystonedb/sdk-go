@@ -102,7 +102,7 @@ func init() {
 	reqs = append(reqs, &status.Requirement{})
 	reqs = append(reqs, &entity_state.Requirement{})
 
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
 		reqs = append(reqs, &query.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
