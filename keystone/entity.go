@@ -62,6 +62,10 @@ func (e *EmbeddedEntity) SetHashID(id string) error {
 	if !hashCheck.MatchString(id) {
 		return errors.New("the provided ID is not compatible with the hashed ID format (a-Z0-9:_-)")
 	}
-	e.SetKeystoneID(HashID(id))
+	hashID, err := HashID(id)
+	if err != nil {
+		return err
+	}
+	e.SetKeystoneID(hashID)
 	return nil
 }

@@ -1,6 +1,7 @@
 package keystone
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/keystonedb/sdk-go/proto"
@@ -182,12 +183,24 @@ func (m backgroundIndex) apply(mutate *proto.MutateRequest) {
 	mutate.Options = append(mutate.Options, proto.MutateRequest_BackgroundIndex)
 }
 
+var ErrInvalidEntityState = errors.New("EntityState_Invalid and EntityState_Removed are not allowed")
+
+// ValidateEntityState checks if the given state is valid for mutation.
+// Returns an error if the state is Invalid or Removed.
+func ValidateEntityState(state proto.EntityState) error {
+	if state == proto.EntityState_Invalid || state == proto.EntityState_Removed {
+		return ErrInvalidEntityState
+	}
+	return nil
+}
+
 // WithState sets the entity state for the mutation.
 // Only Active, Offline, Corrupt, and Archived states are allowed.
-// Using Invalid or Removed states will panic.
+// Using Invalid or Removed states will panic. Consider using ValidateEntityState
+// to check the state before calling this function if the state comes from untrusted input.
 func WithState(state proto.EntityState) MutateOption {
-	if state == proto.EntityState_Invalid || state == proto.EntityState_Removed {
-		panic("WithState: EntityState_Invalid and EntityState_Removed are not allowed")
+	if err := ValidateEntityState(state); err != nil {
+		panic("WithState: " + err.Error())
 	}
 	return withState{state: state}
 }

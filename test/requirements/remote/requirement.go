@@ -3,6 +3,7 @@ package remote
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -85,7 +86,13 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 
 	psn := keystone.RemoteEntity(d.entityID)
 
-	file1 := keystone.NewUpload("abc", proto.ObjectType_Standard)
+	file1, err := keystone.NewUpload("abc", proto.ObjectType_Standard)
+	if err != nil {
+		return requirements.TestResult{
+			Name:  "Upload Remote Entity File",
+			Error: fmt.Errorf("failed to create upload: %w", err),
+		}
+	}
 	file1.SetData([]byte("Hello World"))
 
 	remoteMutateErr := psn.Mutate(context.Background(), d.secondActor, keystone.PrepareUploads(file1))

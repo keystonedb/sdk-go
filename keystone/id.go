@@ -1,6 +1,7 @@
 package keystone
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 	"time"
@@ -55,21 +56,32 @@ func NewID(parent, child string) ID {
 	return ID(parent + "-" + child)
 }
 
-func assertHashID(input string) {
+var ErrHashIDContainsInvalidChar = errors.New("keystone HashID input cannot contain #")
+
+func validateHashID(input string) error {
 	if strings.Contains(input, "#") {
-		panic("keystone HashID input cannot contain #")
+		return ErrHashIDContainsInvalidChar
 	}
+	return nil
 }
 
-func HashID(input string) ID {
-	assertHashID(input)
-	return ID("#" + input + "#")
+// HashID creates a hash-based ID from the input string.
+// Returns an error if the input contains the '#' character.
+func HashID(input string) (ID, error) {
+	if err := validateHashID(input); err != nil {
+		return "", err
+	}
+	return ID("#" + input + "#"), nil
 }
 
-func HashCID(input, child string) ID {
+// HashCID creates a hash-based ID with a child component.
+// Returns an error if the input contains the '#' character.
+func HashCID(input, child string) (ID, error) {
 	if child == "" {
 		return HashID(input)
 	}
-	assertHashID(input)
-	return ID("#" + input + "#-" + child)
+	if err := validateHashID(input); err != nil {
+		return "", err
+	}
+	return ID("#" + input + "#-" + child), nil
 }

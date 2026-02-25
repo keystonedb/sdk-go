@@ -42,10 +42,28 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 		Name:       "Upload",
 	}
 
-	fileOne := keystone.NewUpload("profile.png", proto.ObjectType_Standard)
+	fileOne, err := keystone.NewUpload("profile.png", proto.ObjectType_Standard)
+	if err != nil {
+		return requirements.TestResult{
+			Name:  "Upload",
+			Error: fmt.Errorf("failed to create upload: %w", err),
+		}
+	}
 	fileOne.SetExpiry(time.Now().Add(time.Second * 60))
-	fileTwo := keystone.NewUpload("policy.txt", proto.ObjectType_NearLine)
-	fileThree := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
+	fileTwo, err := keystone.NewUpload("policy.txt", proto.ObjectType_NearLine)
+	if err != nil {
+		return requirements.TestResult{
+			Name:  "Upload",
+			Error: fmt.Errorf("failed to create upload: %w", err),
+		}
+	}
+	fileThree, err := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
+	if err != nil {
+		return requirements.TestResult{
+			Name:  "Upload",
+			Error: fmt.Errorf("failed to create upload: %w", err),
+		}
+	}
 	fileThree.SetData([]byte("file contents here"))
 	fileRemote, err := keystone.NewUploadFromURL("README.md", "https://raw.githubusercontent.com/keystonedb/sdk-go/refs/heads/main/README.md", proto.ObjectType_Standard)
 	if err != nil {
