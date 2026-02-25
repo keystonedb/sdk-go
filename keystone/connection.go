@@ -2,7 +2,7 @@ package keystone
 
 import (
 	"context"
-	"log"
+	"crypto/tls"
 	"reflect"
 	"sync"
 	"time"
@@ -11,6 +11,7 @@ import (
 	"github.com/packaged/logger/v3/logger"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
@@ -26,14 +27,36 @@ type Connection struct {
 	registerQueue map[reflect.Type]bool // true if the type is processing registration
 }
 
-func DefaultConnection(host, port, vendorID, appID, accessToken string) *Connection {
+// SecureConnection creates a new connection to a keystone server using TLS encryption.
+// This is the recommended way to create a connection for production use.
+func SecureConnection(host, port, vendorID, appID, accessToken string) (*Connection, error) {
+	tlsConfig := &tls.Config{
+		MinVersion: tls.VersionTLS12,
+	}
+	creds := credentials.NewTLS(tlsConfig)
+	
+	ksGrpcConn, err := grpc.Dial(host+":"+port, 
+		grpc.WithTransportCredentials(creds),
+		grpc.WithIdleTimeout(time.Minute*5), 
+		grpc.WithConnectParams(grpc.ConnectParams{MinConnectTimeout: time.Second * 5}))
+	if err != nil {
+		return nil, err
+	}
+
+	return NewConnection(proto.NewKeystoneClient(ksGrpcConn), vendorID, appID, accessToken), nil
+}
+
+// DefaultConnection creates a new connection to a keystone server.
+// DEPRECATED: This function uses insecure credentials and should only be used for testing.
+// For production use, use SecureConnection instead which enables TLS encryption.
+func DefaultConnection(host, port, vendorID, appID, accessToken string) (*Connection, error) {
 	ksGrpcConn, err := grpc.Dial(host+":"+port, grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithIdleTimeout(time.Minute*5), grpc.WithConnectParams(grpc.ConnectParams{MinConnectTimeout: time.Second * 5}))
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		return nil, err
 	}
 
-	return NewConnection(proto.NewKeystoneClient(ksGrpcConn), vendorID, appID, accessToken)
+	return NewConnection(proto.NewKeystoneClient(ksGrpcConn), vendorID, appID, accessToken), nil
 }
 
 // NewConnection creates a new connection to a keystone server

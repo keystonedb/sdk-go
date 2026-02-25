@@ -4,8 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/keystonedb/sdk-go/proto"
@@ -26,11 +30,55 @@ type EntityObject struct {
 	data               []byte
 }
 
-func NewUpload(path string, storageClass proto.ObjectType) *EntityObject {
-	return &EntityObject{path: path, metadata: make(map[string]string), storageClass: storageClass}
+var (
+	ErrInvalidURL       = errors.New("invalid URL")
+	ErrUnsupportedScheme = errors.New("only http and https schemes are supported")
+	ErrInvalidPath       = errors.New("invalid file path")
+)
+
+// validateURL checks if a URL is valid and uses a safe scheme
+func validateURL(urlStr string) error {
+	parsedURL, err := url.Parse(urlStr)
+	if err != nil {
+		return fmt.Errorf("%w: %v", ErrInvalidURL, err)
+	}
+	
+	// Only allow http and https schemes to prevent SSRF attacks
+	if parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
+		return ErrUnsupportedScheme
+	}
+	
+	return nil
+}
+
+// validatePath checks if a file path is safe and doesn't contain directory traversal
+func validatePath(path string) error {
+	// Clean the path to resolve any .. or . components
+	cleaned := filepath.Clean(path)
+	
+	// Check for directory traversal attempts
+	if strings.Contains(cleaned, "..") {
+		return ErrInvalidPath
+	}
+	
+	return nil
+}
+
+func NewUpload(path string, storageClass proto.ObjectType) (*EntityObject, error) {
+	if err := validatePath(path); err != nil {
+		return nil, err
+	}
+	return &EntityObject{path: path, metadata: make(map[string]string), storageClass: storageClass}, nil
 }
 
 func NewUploadFromURL(path, remoteUrl string, storageClass proto.ObjectType) (*EntityObject, error) {
+	if err := validatePath(path); err != nil {
+		return nil, err
+	}
+	if err := validateURL(remoteUrl); err != nil {
+		return nil, err
+	}
+	
 	eo := &EntityObject{path: path, metadata: make(map[string]string), storageClass: storageClass}
 	data, err := getRemoteFile(remoteUrl)
 	if err != nil {
@@ -89,6 +137,18 @@ func (e *EntityObject) ReadyForUpload() bool {
 	return e.uploadURL != ""
 }
 
+// secureHTTPClient returns an HTTP client with secure default settings
+func secureHTTPClient() *http.Client {
+	return &http.Client{
+		Timeout: 30 * time.Second,
+		Transport: &http.Transport{
+			MaxIdleConns:       10,
+			IdleConnTimeout:    30 * time.Second,
+			DisableCompression: false,
+		},
+	}
+}
+
 func (e *EntityObject) Upload(content io.Reader) (*http.Response, error) {
 	req, err := http.NewRequest(http.MethodPut, e.GetUploadURL(), content)
 	if err != nil {
@@ -99,12 +159,17 @@ func (e *EntityObject) Upload(content io.Reader) (*http.Response, error) {
 			req.Header.Set(k, v)
 		}
 	}
-	return http.DefaultClient.Do(req)
+	client := secureHTTPClient()
+	return client.Do(req)
 }
 
 func (e *EntityObject) CopyFromURL(source string) (*http.Response, error) {
 	if e.GetUploadURL() == "" {
 		return nil, errors.New("upload URL is empty; call the API to initialize upload first")
+	}
+	
+	if err := validateURL(source); err != nil {
+		return nil, err
 	}
 
 	src, err := getRemoteFile(source)
@@ -124,12 +189,18 @@ func (e *EntityObject) CopyFromURL(source string) (*http.Response, error) {
 		}
 	}
 
-	return http.DefaultClient.Do(req)
+	client := secureHTTPClient()
+	return client.Do(req)
 }
 
-func getRemoteFile(url string) (io.Reader, error) {
+func getRemoteFile(urlStr string) (io.Reader, error) {
+	if err := validateURL(urlStr); err != nil {
+		return nil, err
+	}
+	
 	// Fetch the source content
-	srcResp, err := http.Get(url)
+	client := secureHTTPClient()
+	srcResp, err := client.Get(urlStr)
 	if err != nil {
 		return nil, err
 	}
@@ -138,8 +209,11 @@ func getRemoteFile(url string) (io.Reader, error) {
 	defer srcResp.Body.Close()
 
 	if srcResp.StatusCode < 200 || srcResp.StatusCode >= 300 {
-		b, _ := io.ReadAll(srcResp.Body)
-		return nil, errors.New("failed to download source: status " + srcResp.Status + " body: " + string(b))
+		b, err := io.ReadAll(srcResp.Body)
+		if err != nil {
+			return nil, fmt.Errorf("failed to download source: status %s (could not read body: %v)", srcResp.Status, err)
+		}
+		return nil, fmt.Errorf("failed to download source: status %s body: %s", srcResp.Status, string(b))
 	}
 
 	buf := bytes.NewBuffer(nil)
