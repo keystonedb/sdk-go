@@ -130,7 +130,7 @@ func (d *Requirement) list(actor *keystone.Actor) requirements.TestResult {
 		o := psn.GetObject("README.md")
 		log.Println(o.GetUrl())
 		if len(psn.GetObjects()) != 4 {
-			listErr = errors.New("object count is not 3, got " + string(len(psn.GetObjects())))
+			listErr = fmt.Errorf("object count is not 4, got %d", len(psn.GetObjects()))
 		} else if obj := psn.GetObject("profile.png"); obj == nil {
 			listErr = errors.New("object not found")
 		} else {
