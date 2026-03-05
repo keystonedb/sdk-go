@@ -39,3 +39,62 @@ func TestDynamicPropertiesFromStruct(t *testing.T) {
 		t.Fatalf("Expected property value true, got %v", props[2].GetValue().GetBool())
 	}
 }
+
+// TestDynamicPropertiesFromStructWithoutDefaults_SetNull tests that a forced property
+// set to its zero/null value is included in the output. This simulates clearing a
+// previously-set field via RemoteMutate with MutateProperties.
+func TestDynamicPropertiesFromStructWithoutDefaults_SetNull(t *testing.T) {
+	type Config struct {
+		DynamicRemoteEntity
+		Name        string
+		DefaultTerm *Interval
+	}
+
+	t.Run("forced null interval is included", func(t *testing.T) {
+		config := &Config{}
+		// DefaultTerm is nil - simulates clearing a previously-set interval
+		forceProperties := map[string]bool{
+			"default_term": true,
+		}
+
+		props, err := DynamicPropertiesFromStructWithoutDefaults(config, forceProperties)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		found := false
+		for _, p := range props {
+			if p.GetProperty() == "default_term" {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Error("expected 'default_term' to be included when forced, even at zero value")
+		}
+	})
+
+	t.Run("forced empty string is included", func(t *testing.T) {
+		config := &Config{}
+		// Name is "" (default) - simulates clearing a name field
+		forceProperties := map[string]bool{
+			"name": true,
+		}
+
+		props, err := DynamicPropertiesFromStructWithoutDefaults(config, forceProperties)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		found := false
+		for _, p := range props {
+			if p.GetProperty() == "name" {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Error("expected 'name' to be included when forced, even at empty value")
+		}
+	})
+}

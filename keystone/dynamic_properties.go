@@ -160,7 +160,9 @@ func DynamicPropertiesFromStructWithoutDefaults(s interface{}, forceProperties m
 		return nil, err
 	}
 	properties := make([]*proto.EntityProperty, 0, len(res))
+	covered := make(map[string]bool, len(res))
 	for key, value := range res {
+		covered[key.Name()] = true
 		if force, ok := forceProperties[key.Name()]; ok && !force {
 			continue
 		} else if !ok {
@@ -176,5 +178,16 @@ func DynamicPropertiesFromStructWithoutDefaults(s interface{}, forceProperties m
 			Value:    value,
 		})
 	}
+
+	// Include forced properties that Marshal skipped (e.g. zero-value ValueMarshalers)
+	for propName, force := range forceProperties {
+		if force && !covered[propName] {
+			properties = append(properties, &proto.EntityProperty{
+				Property: propName,
+				Value:    &proto.Value{},
+			})
+		}
+	}
+
 	return properties, nil
 }
