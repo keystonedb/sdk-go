@@ -67,6 +67,8 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.readPostAppend(actor),
 		d.reduce(actor),
 		d.readPostReduce(actor),
+		d.clearSlice(actor),
+		d.readPostClear(actor),
 	}
 }
 
@@ -239,6 +241,32 @@ func (d *Requirement) readPostReduce(actor *keystone.Actor) requirements.TestRes
 
 	return requirements.TestResult{
 		Name:  "Read After Reduce",
+		Error: getErr,
+	}
+}
+
+func (d *Requirement) clearSlice(actor *keystone.Actor) requirements.TestResult {
+	psn := &models.DynamicRemote{}
+	clearErr := actor.RemoteMutate(context.Background(), d.createdID, psn,
+		keystone.WithMutationComment("Clear string slice"),
+		keystone.MutateProperties("string_slice"),
+	)
+	return requirements.TestResult{
+		Name:  "Clear Slice",
+		Error: clearErr,
+	}
+}
+
+func (d *Requirement) readPostClear(actor *keystone.Actor) requirements.TestResult {
+	dt := &models.DynamicRemote{}
+	getErr := actor.RemoteGetProperties(context.Background(), d.createdID, dt, "string_slice")
+	if getErr == nil {
+		if len(dt.StringSlice) != 0 {
+			getErr = errors.New("StringSlice was not cleared, got " + strings.Join(dt.StringSlice, ","))
+		}
+	}
+	return requirements.TestResult{
+		Name:  "Read After Clear Slice",
 		Error: getErr,
 	}
 }

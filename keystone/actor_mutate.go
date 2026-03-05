@@ -36,9 +36,10 @@ func (a *Actor) RemoteMutate(ctx context.Context, entityID ID, src interface{}, 
 			}
 		}
 
-		props, err := DynamicPropertiesFromStructWithoutDefaults(src, withProps)
+		props, removeProps, err := DynamicPropertiesFromStructWithoutDefaults(src, withProps)
 		if err == nil {
 			mutation.DynamicProperties = props
+			mutation.RemoveDynamicProperties = removeProps
 		} else {
 			return err
 		}

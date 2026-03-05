@@ -104,7 +104,7 @@ func init() {
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &query.Requirement{})
+		reqs = append(reqs, &dynamic_entity.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
 	}
 }

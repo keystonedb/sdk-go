@@ -147,32 +147,44 @@ func DynamicPropertiesFromStruct(s interface{}) ([]*proto.EntityProperty, error)
 	return properties, nil
 }
 
-func DynamicPropertiesFromStructWithoutDefaults(s interface{}, forceProperties map[string]bool) ([]*proto.EntityProperty, error) {
+func DynamicPropertiesFromStructWithoutDefaults(s interface{}, forceProperties map[string]bool) ([]*proto.EntityProperty, []string, error) {
 
 	val := reflect.ValueOf(s)
 	defaultValues := reflect.New(reflector.Deref(val).Type()).Interface()
 	defMarshal, err := Marshal(defaultValues)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	res, err := Marshal(s)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	properties := make([]*proto.EntityProperty, 0, len(res))
+	var removeProperties []string
 	covered := make(map[string]bool, len(res))
 	for key, value := range res {
 		covered[key.Name()] = true
-		if force, ok := forceProperties[key.Name()]; ok && !force {
+		force, inForce := forceProperties[key.Name()]
+		if inForce && !force {
 			continue
-		} else if !ok {
-			if defVal, defaultOk := defMarshal[key]; defaultOk {
-				if proto.MatchValue(defVal, key.Name(), value) == nil {
-					// If the value matches the default value, skip it
-					continue
-				}
-			}
 		}
+
+		matchesDefault := false
+		if defVal, defaultOk := defMarshal[key]; defaultOk {
+			matchesDefault = proto.MatchValue(defVal, key.Name(), value) == nil
+		}
+
+		if !inForce && matchesDefault {
+			// Not forced and matches default, skip it
+			continue
+		}
+
+		if force && matchesDefault {
+			// Forced but matches default - remove the property to clear it
+			removeProperties = append(removeProperties, key.Name())
+			continue
+		}
+
 		properties = append(properties, &proto.EntityProperty{
 			Property: key.Name(),
 			Value:    value,
@@ -182,12 +194,9 @@ func DynamicPropertiesFromStructWithoutDefaults(s interface{}, forceProperties m
 	// Include forced properties that Marshal skipped (e.g. zero-value ValueMarshalers)
 	for propName, force := range forceProperties {
 		if force && !covered[propName] {
-			properties = append(properties, &proto.EntityProperty{
-				Property: propName,
-				Value:    &proto.Value{},
-			})
+			removeProperties = append(removeProperties, propName)
 		}
 	}
 
-	return properties, nil
+	return properties, removeProperties, nil
 }

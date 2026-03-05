@@ -50,51 +50,51 @@ func TestDynamicPropertiesFromStructWithoutDefaults_SetNull(t *testing.T) {
 		DefaultTerm *Interval
 	}
 
-	t.Run("forced null interval is included", func(t *testing.T) {
+	t.Run("forced null interval is removed", func(t *testing.T) {
 		config := &Config{}
 		// DefaultTerm is nil - simulates clearing a previously-set interval
 		forceProperties := map[string]bool{
 			"default_term": true,
 		}
 
-		props, err := DynamicPropertiesFromStructWithoutDefaults(config, forceProperties)
+		_, removeProps, err := DynamicPropertiesFromStructWithoutDefaults(config, forceProperties)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
 
 		found := false
-		for _, p := range props {
-			if p.GetProperty() == "default_term" {
+		for _, p := range removeProps {
+			if p == "default_term" {
 				found = true
 				break
 			}
 		}
 		if !found {
-			t.Error("expected 'default_term' to be included when forced, even at zero value")
+			t.Error("expected 'default_term' to be in removal list when forced at zero value")
 		}
 	})
 
-	t.Run("forced empty string is included", func(t *testing.T) {
+	t.Run("forced empty string is removed", func(t *testing.T) {
 		config := &Config{}
 		// Name is "" (default) - simulates clearing a name field
 		forceProperties := map[string]bool{
 			"name": true,
 		}
 
-		props, err := DynamicPropertiesFromStructWithoutDefaults(config, forceProperties)
+		_, removeProps, err := DynamicPropertiesFromStructWithoutDefaults(config, forceProperties)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
 
 		found := false
-		for _, p := range props {
-			if p.GetProperty() == "name" {
+		for _, p := range removeProps {
+			if p == "name" {
 				found = true
 				break
 			}
 		}
 		if !found {
-			t.Error("expected 'name' to be included when forced, even at empty value")
+			t.Error("expected 'name' to be in removal list when forced at empty value")
 		}
 	})
 }
