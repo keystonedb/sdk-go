@@ -13,6 +13,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
 	"github.com/keystonedb/sdk-go/test/requirements/embedded"
 	"github.com/keystonedb/sdk-go/test/requirements/entity_state"
+	"github.com/keystonedb/sdk-go/test/requirements/enums"
 	"github.com/keystonedb/sdk-go/test/requirements/events"
 	"github.com/keystonedb/sdk-go/test/requirements/events_actor"
 	"github.com/keystonedb/sdk-go/test/requirements/exists"
@@ -101,10 +102,11 @@ func init() {
 	reqs = append(reqs, &snapshot.Requirement{})
 	reqs = append(reqs, &status.Requirement{})
 	reqs = append(reqs, &entity_state.Requirement{})
+	reqs = append(reqs, &enums.Requirement{})
 
 	if false {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &dynamic_entity.Requirement{})
+		reqs = append(reqs, &enums.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
 	}
 }
