@@ -46,6 +46,11 @@ type MockServer struct {
 	AKVPutFunc           func(context.Context, *proto.AKVPutRequest) (*proto.GenericResponse, error)
 	AKVDelFunc           func(context.Context, *proto.AKVDelRequest) (*proto.GenericResponse, error)
 	PushTaskFunc         func(context.Context, *proto.PushTaskRequest) (*proto.GenericResponse, error)
+	EnumPutFunc          func(context.Context, *proto.EnumPutRequest) (*proto.GenericResponse, error)
+	EnumGetFunc          func(context.Context, *proto.EnumGetRequest) (*proto.EnumGetResponse, error)
+	EnumDeleteFunc       func(context.Context, *proto.EnumDeleteRequest) (*proto.GenericResponse, error)
+	EnumListFunc         func(context.Context, *proto.EnumListRequest) (*proto.EnumListResponse, error)
+	EnumReplaceFunc      func(context.Context, *proto.EnumReplaceRequest) (*proto.GenericResponse, error)
 }
 
 func bufDialer(context.Context, string) (net.Conn, error) {
@@ -279,4 +284,39 @@ func (m *MockServer) PushTask(ctx context.Context, req *proto.PushTaskRequest) (
 		return m.UnimplementedKeystoneServer.PushTask(ctx, req)
 	}
 	return m.PushTaskFunc(ctx, req)
+}
+
+func (m *MockServer) EnumPut(ctx context.Context, req *proto.EnumPutRequest) (*proto.GenericResponse, error) {
+	if m.EnumPutFunc == nil {
+		return m.UnimplementedKeystoneServer.EnumPut(ctx, req)
+	}
+	return m.EnumPutFunc(ctx, req)
+}
+
+func (m *MockServer) EnumGet(ctx context.Context, req *proto.EnumGetRequest) (*proto.EnumGetResponse, error) {
+	if m.EnumGetFunc == nil {
+		return m.UnimplementedKeystoneServer.EnumGet(ctx, req)
+	}
+	return m.EnumGetFunc(ctx, req)
+}
+
+func (m *MockServer) EnumDelete(ctx context.Context, req *proto.EnumDeleteRequest) (*proto.GenericResponse, error) {
+	if m.EnumDeleteFunc == nil {
+		return m.UnimplementedKeystoneServer.EnumDelete(ctx, req)
+	}
+	return m.EnumDeleteFunc(ctx, req)
+}
+
+func (m *MockServer) EnumList(ctx context.Context, req *proto.EnumListRequest) (*proto.EnumListResponse, error) {
+	if m.EnumListFunc == nil {
+		return m.UnimplementedKeystoneServer.EnumList(ctx, req)
+	}
+	return m.EnumListFunc(ctx, req)
+}
+
+func (m *MockServer) EnumReplace(ctx context.Context, req *proto.EnumReplaceRequest) (*proto.GenericResponse, error) {
+	if m.EnumReplaceFunc == nil {
+		return m.UnimplementedKeystoneServer.EnumReplace(ctx, req)
+	}
+	return m.EnumReplaceFunc(ctx, req)
 }

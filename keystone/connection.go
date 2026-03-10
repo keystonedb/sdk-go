@@ -282,6 +282,37 @@ func (c *Connection) AKVDel(ctx context.Context, in *proto.AKVDelRequest, opts .
 	return resp, err
 }
 
+func (c *Connection) EnumPut(ctx context.Context, in *proto.EnumPutRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("EnumPut")
+	resp, err := c.client.EnumPut(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+func (c *Connection) EnumGet(ctx context.Context, in *proto.EnumGetRequest, opts ...grpc.CallOption) (*proto.EnumGetResponse, error) {
+	tl := c.timeLogConfig.NewLog("EnumGet")
+	resp, err := c.client.EnumGet(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+func (c *Connection) EnumDelete(ctx context.Context, in *proto.EnumDeleteRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("EnumDelete")
+	resp, err := c.client.EnumDelete(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+func (c *Connection) EnumList(ctx context.Context, in *proto.EnumListRequest, opts ...grpc.CallOption) (*proto.EnumListResponse, error) {
+	tl := c.timeLogConfig.NewLog("EnumList")
+	resp, err := c.client.EnumList(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+func (c *Connection) EnumReplace(ctx context.Context, in *proto.EnumReplaceRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("EnumReplace")
+	resp, err := c.client.EnumReplace(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
 func (c *Connection) PiiToken(ctx context.Context, in *proto.PiiTokenRequest, opts ...grpc.CallOption) (*proto.PiiTokenResponse, error) {
 	tl := c.timeLogConfig.NewLog("PiiToken", zap.String("App", in.GetAuthorization().GetSource().String()))
 	resp, err := c.client.PiiToken(ctx, in, opts...)
