@@ -282,6 +282,25 @@ func (c *Connection) AKVDel(ctx context.Context, in *proto.AKVDelRequest, opts .
 	return resp, err
 }
 
+func (c *Connection) AKVTimePut(ctx context.Context, in *proto.AKVTimePutRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVTimePut", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVTimePut(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+func (c *Connection) AKVTimeGet(ctx context.Context, in *proto.AKVTimeGetRequest, opts ...grpc.CallOption) (*proto.AKVTimeGetResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVTimeGet", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVTimeGet(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+func (c *Connection) AKVTimeDel(ctx context.Context, in *proto.AKVTimeDelRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVTimeDel", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVTimeDel(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
 func (c *Connection) EnumPut(ctx context.Context, in *proto.EnumPutRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
 	tl := c.timeLogConfig.NewLog("EnumPut")
 	resp, err := c.client.EnumPut(ctx, in, opts...)

@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/keystonedb/sdk-go/test/requirements"
 	"github.com/keystonedb/sdk-go/test/requirements/akv"
+	"github.com/keystonedb/sdk-go/test/requirements/akv_timeline"
 	"github.com/keystonedb/sdk-go/test/requirements/child_entities"
 	"github.com/keystonedb/sdk-go/test/requirements/cru"
 	"github.com/keystonedb/sdk-go/test/requirements/daily"
@@ -103,10 +104,11 @@ func init() {
 	reqs = append(reqs, &status.Requirement{})
 	reqs = append(reqs, &entity_state.Requirement{})
 	reqs = append(reqs, &enums.Requirement{})
+	reqs = append(reqs, &akv_timeline.Requirement{})
 
-	if false {
+	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &enums.Requirement{})
+		reqs = append(reqs, &akv_timeline.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
 	}
 }

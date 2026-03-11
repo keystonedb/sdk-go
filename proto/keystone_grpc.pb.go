@@ -50,6 +50,9 @@ const (
 	Keystone_AKVGet_FullMethodName           = "/kubex.keystone.Keystone/AKVGet"
 	Keystone_AKVPut_FullMethodName           = "/kubex.keystone.Keystone/AKVPut"
 	Keystone_AKVDel_FullMethodName           = "/kubex.keystone.Keystone/AKVDel"
+	Keystone_AKVTimePut_FullMethodName       = "/kubex.keystone.Keystone/AKVTimePut"
+	Keystone_AKVTimeGet_FullMethodName       = "/kubex.keystone.Keystone/AKVTimeGet"
+	Keystone_AKVTimeDel_FullMethodName       = "/kubex.keystone.Keystone/AKVTimeDel"
 	Keystone_EnumPut_FullMethodName          = "/kubex.keystone.Keystone/EnumPut"
 	Keystone_EnumGet_FullMethodName          = "/kubex.keystone.Keystone/EnumGet"
 	Keystone_EnumDelete_FullMethodName       = "/kubex.keystone.Keystone/EnumDelete"
@@ -104,6 +107,10 @@ type KeystoneClient interface {
 	AKVGet(ctx context.Context, in *AKVGetRequest, opts ...grpc.CallOption) (*AKVGetResponse, error)
 	AKVPut(ctx context.Context, in *AKVPutRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	AKVDel(ctx context.Context, in *AKVDelRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	// App Key Value Time Track
+	AKVTimePut(ctx context.Context, in *AKVTimePutRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	AKVTimeGet(ctx context.Context, in *AKVTimeGetRequest, opts ...grpc.CallOption) (*AKVTimeGetResponse, error)
+	AKVTimeDel(ctx context.Context, in *AKVTimeDelRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	// Custom Enums
 	EnumPut(ctx context.Context, in *EnumPutRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	EnumGet(ctx context.Context, in *EnumGetRequest, opts ...grpc.CallOption) (*EnumGetResponse, error)
@@ -442,6 +449,36 @@ func (c *keystoneClient) AKVDel(ctx context.Context, in *AKVDelRequest, opts ...
 	return out, nil
 }
 
+func (c *keystoneClient) AKVTimePut(ctx context.Context, in *AKVTimePutRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVTimePut_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) AKVTimeGet(ctx context.Context, in *AKVTimeGetRequest, opts ...grpc.CallOption) (*AKVTimeGetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AKVTimeGetResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVTimeGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) AKVTimeDel(ctx context.Context, in *AKVTimeDelRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVTimeDel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *keystoneClient) EnumPut(ctx context.Context, in *EnumPutRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GenericResponse)
@@ -560,6 +597,10 @@ type KeystoneServer interface {
 	AKVGet(context.Context, *AKVGetRequest) (*AKVGetResponse, error)
 	AKVPut(context.Context, *AKVPutRequest) (*GenericResponse, error)
 	AKVDel(context.Context, *AKVDelRequest) (*GenericResponse, error)
+	// App Key Value Time Track
+	AKVTimePut(context.Context, *AKVTimePutRequest) (*GenericResponse, error)
+	AKVTimeGet(context.Context, *AKVTimeGetRequest) (*AKVTimeGetResponse, error)
+	AKVTimeDel(context.Context, *AKVTimeDelRequest) (*GenericResponse, error)
 	// Custom Enums
 	EnumPut(context.Context, *EnumPutRequest) (*GenericResponse, error)
 	EnumGet(context.Context, *EnumGetRequest) (*EnumGetResponse, error)
@@ -670,6 +711,15 @@ func (UnimplementedKeystoneServer) AKVPut(context.Context, *AKVPutRequest) (*Gen
 }
 func (UnimplementedKeystoneServer) AKVDel(context.Context, *AKVDelRequest) (*GenericResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AKVDel not implemented")
+}
+func (UnimplementedKeystoneServer) AKVTimePut(context.Context, *AKVTimePutRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AKVTimePut not implemented")
+}
+func (UnimplementedKeystoneServer) AKVTimeGet(context.Context, *AKVTimeGetRequest) (*AKVTimeGetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AKVTimeGet not implemented")
+}
+func (UnimplementedKeystoneServer) AKVTimeDel(context.Context, *AKVTimeDelRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AKVTimeDel not implemented")
 }
 func (UnimplementedKeystoneServer) EnumPut(context.Context, *EnumPutRequest) (*GenericResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method EnumPut not implemented")
@@ -1264,6 +1314,60 @@ func _Keystone_AKVDel_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Keystone_AKVTimePut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVTimePutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVTimePut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVTimePut_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVTimePut(ctx, req.(*AKVTimePutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_AKVTimeGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVTimeGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVTimeGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVTimeGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVTimeGet(ctx, req.(*AKVTimeGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_AKVTimeDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVTimeDelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVTimeDel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVTimeDel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVTimeDel(ctx, req.(*AKVTimeDelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Keystone_EnumPut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EnumPutRequest)
 	if err := dec(in); err != nil {
@@ -1505,6 +1609,18 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AKVDel",
 			Handler:    _Keystone_AKVDel_Handler,
+		},
+		{
+			MethodName: "AKVTimePut",
+			Handler:    _Keystone_AKVTimePut_Handler,
+		},
+		{
+			MethodName: "AKVTimeGet",
+			Handler:    _Keystone_AKVTimeGet_Handler,
+		},
+		{
+			MethodName: "AKVTimeDel",
+			Handler:    _Keystone_AKVTimeDel_Handler,
 		},
 		{
 			MethodName: "EnumPut",
