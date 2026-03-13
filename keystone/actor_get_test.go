@@ -40,7 +40,10 @@ func TestRetrieveByHashID(t *testing.T) {
 	}
 
 	req := retrieveBy.BaseRequest()
-	expectedHashID := HashID("my-unique-string")
+	expectedHashID, err := HashID("my-unique-string")
+	if err != nil {
+		t.Fatalf("Failed to create hash ID: %v", err)
+	}
 	if req.GetEntityId() != string(expectedHashID) {
 		t.Errorf("ByHashID().BaseRequest().EntityId = %s; want %s", req.GetEntityId(), string(expectedHashID))
 	}

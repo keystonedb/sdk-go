@@ -200,8 +200,14 @@ func TestMatchExistingMultipleFilters(t *testing.T) {
 }
 
 func TestPrepareUploads(t *testing.T) {
-	obj1 := NewUpload("path/to/file1.txt", proto.ObjectType_Standard)
-	obj2 := NewUpload("path/to/file2.txt", proto.ObjectType_NearLine)
+	obj1, err := NewUpload("path/to/file1.txt", proto.ObjectType_Standard)
+	if err != nil {
+		t.Fatalf("Failed to create upload: %v", err)
+	}
+	obj2, err := NewUpload("path/to/file2.txt", proto.ObjectType_NearLine)
+	if err != nil {
+		t.Fatalf("Failed to create upload: %v", err)
+	}
 	obj2.SetPublic(true)
 
 	opt := PrepareUploads(obj1, obj2)
@@ -237,7 +243,10 @@ func TestPrepareUploads(t *testing.T) {
 }
 
 func TestPrepareUploadsWithExpiry(t *testing.T) {
-	obj := NewUpload("path/to/file.txt", proto.ObjectType_Standard)
+	obj, err := NewUpload("path/to/file.txt", proto.ObjectType_Standard)
+	if err != nil {
+		t.Fatalf("Failed to create upload: %v", err)
+	}
 	expiry := time.Now().Add(24 * time.Hour)
 	obj.SetExpiry(expiry)
 
@@ -261,7 +270,10 @@ func TestPrepareUploadsWithExpiry(t *testing.T) {
 }
 
 func TestPrepareUploadsWithData(t *testing.T) {
-	obj := NewUpload("path/to/file.txt", proto.ObjectType_Standard)
+	obj, err := NewUpload("path/to/file.txt", proto.ObjectType_Standard)
+	if err != nil {
+		t.Fatalf("Failed to create upload: %v", err)
+	}
 	data := []byte("test data content")
 	obj.SetData(data)
 
@@ -282,7 +294,10 @@ func TestPrepareUploadsWithData(t *testing.T) {
 }
 
 func TestPrepareUploadsObserveMutation(t *testing.T) {
-	obj := NewUpload("path/to/file.txt", proto.ObjectType_Standard)
+	obj, err := NewUpload("path/to/file.txt", proto.ObjectType_Standard)
+	if err != nil {
+		t.Fatalf("Failed to create upload: %v", err)
+	}
 	opt := PrepareUploads(obj)
 	po := opt.(prepareObjects)
 
@@ -309,7 +324,10 @@ func TestPrepareUploadsObserveMutation(t *testing.T) {
 }
 
 func TestPrepareUploadsObserveMutationFailure(t *testing.T) {
-	obj := NewUpload("path/to/file.txt", proto.ObjectType_Standard)
+	obj, err := NewUpload("path/to/file.txt", proto.ObjectType_Standard)
+	if err != nil {
+		t.Fatalf("Failed to create upload: %v", err)
+	}
 	opt := PrepareUploads(obj)
 	po := opt.(prepareObjects)
 

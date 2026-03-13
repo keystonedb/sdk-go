@@ -20,8 +20,17 @@ func ByEntityID(entityType interface{}, entityID ID) RetrieveBy {
 	return byEntityID{EntityID: entityID, Type: Type(entityType)}
 }
 
+// ByHashID creates a retriever that retrieves an entity by its hash ID.
+// Note: This function will panic if the entityID contains invalid characters.
+// The entityID must not contain the '#' character.
 func ByHashID(entityType interface{}, entityID string) RetrieveBy {
-	return byEntityID{EntityID: HashID(entityID), Type: Type(entityType)}
+	hashID, err := HashID(entityID)
+	if err != nil {
+		// Panic here to maintain backward compatibility with the original function signature
+		// Users should validate input before calling this function, or use HashID directly
+		panic("ByHashID: " + err.Error())
+	}
+	return byEntityID{EntityID: hashID, Type: Type(entityType)}
 }
 
 // BaseRequest returns the base byEntityID request

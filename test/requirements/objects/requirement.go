@@ -42,10 +42,28 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 		Name:       "Upload",
 	}
 
-	fileOne := keystone.NewUpload("profile.png", proto.ObjectType_Standard)
+	fileOne, err := keystone.NewUpload("profile.png", proto.ObjectType_Standard)
+	if err != nil {
+		return requirements.TestResult{
+			Name:  "Upload",
+			Error: fmt.Errorf("failed to create upload: %w", err),
+		}
+	}
 	fileOne.SetExpiry(time.Now().Add(time.Second * 60))
-	fileTwo := keystone.NewUpload("policy.txt", proto.ObjectType_NearLine)
-	fileThree := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
+	fileTwo, err := keystone.NewUpload("policy.txt", proto.ObjectType_NearLine)
+	if err != nil {
+		return requirements.TestResult{
+			Name:  "Upload",
+			Error: fmt.Errorf("failed to create upload: %w", err),
+		}
+	}
+	fileThree, err := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
+	if err != nil {
+		return requirements.TestResult{
+			Name:  "Upload",
+			Error: fmt.Errorf("failed to create upload: %w", err),
+		}
+	}
 	fileThree.SetData([]byte("file contents here"))
 	fileRemote, err := keystone.NewUploadFromURL("README.md", "https://raw.githubusercontent.com/keystonedb/sdk-go/refs/heads/main/README.md", proto.ObjectType_Standard)
 	if err != nil {
@@ -112,7 +130,7 @@ func (d *Requirement) list(actor *keystone.Actor) requirements.TestResult {
 		o := psn.GetObject("README.md")
 		log.Println(o.GetUrl())
 		if len(psn.GetObjects()) != 4 {
-			listErr = errors.New("object count is not 3, got " + string(len(psn.GetObjects())))
+			listErr = fmt.Errorf("object count is not 4, got %d", len(psn.GetObjects()))
 		} else if obj := psn.GetObject("profile.png"); obj == nil {
 			listErr = errors.New("object not found")
 		} else {

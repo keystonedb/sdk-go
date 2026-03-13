@@ -1,7 +1,7 @@
 package models
 
 import (
-	"crypto/sha1"
+	"crypto/sha256"
 	"fmt"
 
 	"github.com/keystonedb/sdk-go/keystone"
@@ -17,7 +17,8 @@ type WithPrimary struct {
 
 func (w *WithPrimary) SetHash() {
 	toHash := w.FirstName + " " + w.LastName
-	w.NameHash = fmt.Sprintf("%x", sha1.Sum([]byte(toHash)))[:12]
+	hash := sha256.Sum256([]byte(toHash))
+	w.NameHash = fmt.Sprintf("%x", hash)[:12]
 }
 
 func (w *WithPrimary) GetKeystoneDefinition() keystone.TypeDefinition {
