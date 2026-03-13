@@ -311,3 +311,44 @@ func Test_Interval_ToDuration_Indefinite(t *testing.T) {
 		t.Errorf("indefinite interval should return max duration, got %v", duration)
 	}
 }
+
+func Test_Interval_UnmarshalAbbreviated(t *testing.T) {
+	// QueryIndex returns abbreviated uppercase types like "MON", "YEA"
+	// while Find returns full types like "month", "year".
+	// UnmarshalValue should normalize both to canonical IntervalType values.
+	tests := []struct {
+		name     string
+		raw      string
+		count    int64
+		expected IntervalType
+		str      string
+	}{
+		{"abbreviated month", "MON", 1, IntervalMonth, "1 month"},
+		{"abbreviated year", "YEA", 1, IntervalYear, "1 year"},
+		{"abbreviated second", "SEC", 30, IntervalSecond, "30 secs"},
+		{"abbreviated minute", "MIN", 5, IntervalMinute, "5 mins"},
+		{"abbreviated hour", "HOU", 2, IntervalHour, "2 hours"},
+		{"abbreviated week", "WEE", 3, IntervalWeek, "3 weeks"},
+		{"abbreviated indefinite", "IND", 0, IntervalIndefinite, "Indefinite"},
+		{"full lowercase month", "month", 6, IntervalMonth, "6 months"},
+		{"full lowercase year", "year", 1, IntervalYear, "1 year"},
+		{"plural months", "months", 6, IntervalMonth, "6 months"},
+		{"mixed case MON", "Mon", 1, IntervalMonth, "1 month"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var i Interval
+			err := i.UnmarshalValue(&proto.Value{Text: tt.raw, Int: tt.count})
+			if err != nil {
+				t.Fatalf("unmarshal err: %v", err)
+			}
+			if i.Type != tt.expected {
+				t.Errorf("type: got %q, want %q", i.Type, tt.expected)
+			}
+			if i.String() != tt.str {
+				t.Errorf("string: got %q, want %q", i.String(), tt.str)
+			}
+		})
+	}
+}

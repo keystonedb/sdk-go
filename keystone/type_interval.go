@@ -3,6 +3,7 @@ package keystone
 import (
 	"fmt"
 	"math"
+	"strings"
 	"time"
 
 	"github.com/keystonedb/sdk-go/proto"
@@ -187,7 +188,7 @@ func (i *Interval) MarshalValue() (*proto.Value, error) {
 
 func (i *Interval) UnmarshalValue(value *proto.Value) error {
 	if value != nil {
-		i.Type = IntervalType(value.GetText())
+		i.Type = normalizeIntervalType(value.GetText())
 		if i.Type == IntervalNone || i.Type == IntervalIndefinite {
 			i.Count = 0
 		} else {
@@ -195,6 +196,33 @@ func (i *Interval) UnmarshalValue(value *proto.Value) error {
 		}
 	}
 	return nil
+}
+
+// normalizeIntervalType maps abbreviated or uppercase interval type strings
+// (e.g. "MON", "YEA", "SEC") returned by QueryIndex to canonical IntervalType values.
+func normalizeIntervalType(raw string) IntervalType {
+	switch strings.ToLower(strings.TrimSpace(raw)) {
+	case "sec", "second", "seconds":
+		return IntervalSecond
+	case "min", "minute", "minutes":
+		return IntervalMinute
+	case "hour", "hours", "hou":
+		return IntervalHour
+	case "day", "days":
+		return IntervalDay
+	case "week", "weeks", "wee":
+		return IntervalWeek
+	case "mon", "month", "months":
+		return IntervalMonth
+	case "yea", "year", "years":
+		return IntervalYear
+	case "none", "":
+		return IntervalNone
+	case "indefinite", "ind":
+		return IntervalIndefinite
+	default:
+		return IntervalType(raw)
+	}
 }
 
 // PropertyDefinition returns a generic definition; we store as Text with auxiliary Int count.
