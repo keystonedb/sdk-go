@@ -216,7 +216,7 @@ func normalizeIntervalType(raw string) IntervalType {
 		return IntervalMonth
 	case "yea", "year", "years":
 		return IntervalYear
-	case "none", "":
+	case "non", "none", "":
 		return IntervalNone
 	case "indefinite", "ind":
 		return IntervalIndefinite
