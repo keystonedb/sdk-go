@@ -1,6 +1,10 @@
 package keystone
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/keystonedb/sdk-go/proto"
+)
 
 func TestDynamicPropertiesFromStruct(t *testing.T) {
 	type TestingStruct struct {
@@ -20,23 +24,27 @@ func TestDynamicPropertiesFromStruct(t *testing.T) {
 	if len(props) != 3 {
 		t.Fatalf("Expected 3 properties, got %d", len(props))
 	}
-	if props[0].GetProperty() != "property_name" {
-		t.Fatalf("Expected property name 'property_name', got '%s'", props[0].GetProperty())
+	propMap := make(map[string]*proto.Value, len(props))
+	for _, p := range props {
+		propMap[p.GetProperty()] = p.GetValue()
 	}
-	if props[1].GetProperty() != "int_val" {
-		t.Fatalf("Expected property name 'int_val', got '%s'", props[1].GetProperty())
+	if _, ok := propMap["property_name"]; !ok {
+		t.Fatal("Expected property 'property_name' to exist")
 	}
-	if props[2].GetProperty() != "is_configured" {
-		t.Fatalf("Expected property name 'is_configured', got '%s'", props[2].GetProperty())
+	if _, ok := propMap["int_val"]; !ok {
+		t.Fatal("Expected property 'int_val' to exist")
 	}
-	if props[0].GetValue().GetText() != "random-prop" {
-		t.Fatalf("Expected property value 'random-prop', got '%s'", props[0].GetValue().GetText())
+	if _, ok := propMap["is_configured"]; !ok {
+		t.Fatal("Expected property 'is_configured' to exist")
 	}
-	if props[1].GetValue().GetInt() != 135 {
-		t.Fatalf("Expected property value 135, got %d", props[1].GetValue().GetInt())
+	if propMap["property_name"].GetText() != "random-prop" {
+		t.Fatalf("Expected property value 'random-prop', got '%s'", propMap["property_name"].GetText())
 	}
-	if props[2].GetValue().GetBool() != true {
-		t.Fatalf("Expected property value true, got %v", props[2].GetValue().GetBool())
+	if propMap["int_val"].GetInt() != 135 {
+		t.Fatalf("Expected property value 135, got %d", propMap["int_val"].GetInt())
+	}
+	if propMap["is_configured"].GetBool() != true {
+		t.Fatalf("Expected property value true, got %v", propMap["is_configured"].GetBool())
 	}
 }
 
