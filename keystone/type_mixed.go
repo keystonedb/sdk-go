@@ -2,6 +2,7 @@ package keystone
 
 import (
 	"bytes"
+	"encoding/json"
 	"strconv"
 	"time"
 
@@ -24,6 +25,10 @@ func NewMixed(mixedInput any) Mixed {
 	m := Mixed{}
 	m.SetValue(mixedInput)
 	return m
+}
+
+func (m *Mixed) CastRaw(to any) error {
+	return json.Unmarshal(m.raw, to)
 }
 
 func (m *Mixed) ToString() string {
@@ -164,6 +169,8 @@ func (m *Mixed) SetValue(value any) {
 		m.time = v.AsTime()
 	case []byte:
 		m.raw = v
+	default:
+		m.raw, _ = json.Marshal(value)
 	}
 }
 
