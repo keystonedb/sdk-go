@@ -31,6 +31,15 @@ func (m *Mixed) CastRaw(to any) error {
 	return json.Unmarshal(m.raw, to)
 }
 
+func MixedTo[T any](m *Mixed) T {
+	var v T
+	err := json.Unmarshal(m.raw, &v)
+	if err == nil {
+		return v
+	}
+	return *new(T)
+}
+
 func (m *Mixed) ToString() string {
 	if m == nil {
 		return ""

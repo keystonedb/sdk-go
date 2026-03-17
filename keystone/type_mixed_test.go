@@ -58,7 +58,28 @@ func TestCastRaw_FromStructPointer(t *testing.T) {
 	}
 }
 
-func TestCastRaw_EmptyRaw(t *testing.T) {
+func TestMixedToGeneric_FromStruct(t *testing.T) {
+	type Address struct {
+		Street string `json:"street"`
+		City   string `json:"city"`
+		Zip    string `json:"zip"`
+	}
+
+	input := Address{
+		Street: "123 Main St",
+		City:   "Springfield",
+		Zip:    "62701",
+	}
+
+	m := NewMixed(input)
+
+	got := MixedTo[Address](&m)
+	if got != input {
+		t.Errorf("CastRaw[Address] result = %+v, want %+v", got, input)
+	}
+}
+
+func TestMixedTo_EmptyRaw(t *testing.T) {
 	m := NewMixed("hello")
 
 	var got struct{}
