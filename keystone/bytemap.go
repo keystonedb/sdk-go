@@ -16,7 +16,14 @@ func ToByteMap(from any) map[string][]byte {
 			continue
 		}
 
-		if jsnVal, err := json.Marshal(val.FieldByIndex(field.Index).Interface()); err == nil {
+		fieldVal := val.FieldByIndex(field.Index)
+		var marshalVal any
+		if fieldVal.CanAddr() {
+			marshalVal = fieldVal.Addr().Interface()
+		} else {
+			marshalVal = fieldVal.Interface()
+		}
+		if jsnVal, err := json.Marshal(marshalVal); err == nil {
 			final[field.Name] = jsnVal
 		}
 	}
