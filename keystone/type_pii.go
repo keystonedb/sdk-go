@@ -119,6 +119,27 @@ func NewSecureIPV4(ip string) SecureIP {
 	return SecureIP{}
 }
 
+func NewSecureIPV6(ip string) SecureIP {
+	if parsed := net.ParseIP(ip); parsed != nil {
+		mask := net.CIDRMask(48, 128)
+		if maskedIP := parsed.Mask(mask); maskedIP != nil {
+			return SecureIP{NewSecureString(ip, maskedIP.String())}
+		}
+	}
+	return SecureIP{}
+}
+
+func NewSecureIP(ip string) SecureIP {
+	parsed := net.ParseIP(ip)
+	if parsed == nil {
+		return SecureIP{}
+	}
+	if parsed.To4() != nil {
+		return NewSecureIPV4(ip)
+	}
+	return NewSecureIPV6(ip)
+}
+
 func BasicMask(unmasked string) string {
 	if unmasked == "" {
 		return ""
