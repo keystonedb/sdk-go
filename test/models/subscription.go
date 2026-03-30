@@ -16,6 +16,6 @@ type Renewal struct {
 	keystone.BaseChildEntity
 	StartDate    time.Time
 	EndDate      time.Time
-	CreationDate time.Time
+	CreationDate time.Time `keystone:"_created"`
 	PaymentDate  time.Time `keystone:",indexed"`
 }
