@@ -18,6 +18,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/events"
 	"github.com/keystonedb/sdk-go/test/requirements/events_actor"
 	"github.com/keystonedb/sdk-go/test/requirements/exists"
+	"github.com/keystonedb/sdk-go/test/requirements/find"
 	"github.com/keystonedb/sdk-go/test/requirements/group_count"
 	"github.com/keystonedb/sdk-go/test/requirements/hashed_id"
 	"github.com/keystonedb/sdk-go/test/requirements/iid"
@@ -103,10 +104,11 @@ func init() {
 	reqs = append(reqs, &snapshot.Requirement{})
 	reqs = append(reqs, &status.Requirement{})
 	reqs = append(reqs, &entity_state.Requirement{})
+	reqs = append(reqs, &find.Requirement{})
 	reqs = append(reqs, &enums.Requirement{})
 	reqs = append(reqs, &akv_timeline.Requirement{})
 
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
 		reqs = append(reqs, &akv_timeline.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
