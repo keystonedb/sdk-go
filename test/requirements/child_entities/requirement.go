@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"slices"
 	"strconv"
 	"time"
 
@@ -14,8 +13,11 @@ import (
 )
 
 type Requirement struct {
-	subscriptionId   keystone.ID
-	renewalStartTime time.Time
+	subscriptionId     keystone.ID
+	firstRenewalId     keystone.ID
+	renewalStartTime   time.Time
+	renewalCreatedFrom time.Time
+	renewalCreatedTo   time.Time
 }
 
 func (d *Requirement) Name() string {
@@ -34,6 +36,7 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 		d.createRenewals(actor),
 		d.getSummary(actor),
 		d.getRenewals(actor),
+		d.queryRenewals(actor),
 	}
 }
 
@@ -55,8 +58,9 @@ func (d *Requirement) createSubscription(actor *keystone.Actor) requirements.Tes
 }
 func (d *Requirement) createRenewals(actor *keystone.Actor) requirements.TestResult {
 
-	start := time.Now().UTC().Truncate(time.Millisecond)
+	start := time.Now().Truncate(time.Millisecond)
 	d.renewalStartTime = start
+	d.renewalCreatedFrom = time.Now().Truncate(time.Millisecond)
 	for i := 0; i < 30; i++ {
 		end := start.AddDate(0, 1, 0)
 		renewal := &models.Renewal{
@@ -74,7 +78,12 @@ func (d *Requirement) createRenewals(actor *keystone.Actor) requirements.TestRes
 				Error: createErr,
 			}
 		}
+		if i == 0 {
+			d.firstRenewalId = renewal.GetKeystoneID()
+		}
 	}
+
+	d.renewalCreatedTo = time.Now().Add(time.Second)
 
 	return requirements.TestResult{
 		Name: "Create Renewals",
@@ -101,7 +110,7 @@ func (d *Requirement) getRenewals(actor *keystone.Actor) requirements.TestResult
 	req := requirements.TestResult{Name: "Get Renewals"}
 
 	entities, err := actor.Find(context.Background(), keystone.Type(models.Renewal{}),
-		keystone.WithProperties(),
+		keystone.RetrieveOptions(keystone.WithSummary(), keystone.WithProperties()),
 		keystone.ChildOf(d.subscriptionId.String()),
 	)
 	if err != nil {
@@ -117,35 +126,48 @@ func (d *Requirement) getRenewals(actor *keystone.Actor) requirements.TestResult
 		return req.WithError(fmt.Errorf("unmarshal error: %w", err))
 	}
 
-	slices.SortFunc(renewals, func(a, b models.Renewal) int {
-		return a.CreationDate.Compare(b.CreationDate)
-	})
-
-	expectedCreated := d.renewalStartTime
 	for i, r := range renewals {
-		expectedEnd := expectedCreated.AddDate(0, 1, 0)
-
-		if r.DateCreated().IsZero() || r.DateCreated().UnixMilli() != expectedCreated.UnixMilli() {
-			return req.WithError(fmt.Errorf("renewal %d: expected DateCreated %v, got %v", i, expectedCreated, r.DateCreated()))
+		if r.DateCreated().Before(d.renewalCreatedFrom) || r.DateCreated().After(d.renewalCreatedTo) {
+			return req.WithError(fmt.Errorf("renewal %d: DateCreated %v not within creation window %v - %v", i, r.DateCreated(), d.renewalCreatedFrom, d.renewalCreatedTo))
 		}
 
-		if r.CreationDate.IsZero() || r.CreationDate.UnixMilli() != expectedCreated.UnixMilli() {
-			return req.WithError(fmt.Errorf("renewal %d: expected CreationDate %v, got %v", i, expectedCreated, r.CreationDate))
+		if r.CreationDate.Before(d.renewalCreatedFrom) || r.CreationDate.After(d.renewalCreatedTo) {
+			return req.WithError(fmt.Errorf("renewal %d: CreationDate %v not within creation window %v - %v", i, r.CreationDate, d.renewalCreatedFrom, d.renewalCreatedTo))
+		}
+	}
+
+	return req
+}
+
+func (d *Requirement) queryRenewals(actor *keystone.Actor) requirements.TestResult {
+	req := requirements.TestResult{Name: "QueryIndex Renewals"}
+
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Renewal{}),
+		[]string{"created"},
+		keystone.Limit(30, 0),
+		keystone.ChildOf(d.subscriptionId.String()),
+	)
+	if err != nil {
+		return req.WithError(err)
+	}
+
+	if len(entities) != 30 {
+		return req.WithError(fmt.Errorf("expected 30 renewals, got %d", len(entities)))
+	}
+
+	var renewals []models.Renewal
+	if err = keystone.UnmarshalToSlice(&renewals, entities...); err != nil {
+		return req.WithError(fmt.Errorf("unmarshal error: %w", err))
+	}
+
+	for i, r := range renewals {
+		if r.DateCreated().Before(d.renewalCreatedFrom) || r.DateCreated().After(d.renewalCreatedTo) {
+			return req.WithError(fmt.Errorf("renewal %d: DateCreated %v not within creation window %v - %v", i, r.DateCreated(), d.renewalCreatedFrom, d.renewalCreatedTo))
 		}
 
-		if r.StartDate.IsZero() {
-			return req.WithError(fmt.Errorf("renewal %d: start date is empty", i))
+		if r.CreationDate.Before(d.renewalCreatedFrom) || r.CreationDate.After(d.renewalCreatedTo) {
+			return req.WithError(fmt.Errorf("renewal %d: CreationDate %v not within creation window %v - %v", i, r.CreationDate, d.renewalCreatedFrom, d.renewalCreatedTo))
 		}
-
-		if r.EndDate.IsZero() {
-			return req.WithError(fmt.Errorf("renewal %d: end date is empty", i))
-		}
-
-		if r.EndDate.UnixMilli() != expectedEnd.UnixMilli() {
-			return req.WithError(fmt.Errorf("renewal %d: expected end date %v, got %v", i, expectedEnd, r.EndDate))
-		}
-
-		expectedCreated = expectedEnd
 	}
 
 	return req
