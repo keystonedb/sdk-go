@@ -18,6 +18,12 @@ type Requirement struct {
 	renewalStartTime   time.Time
 	renewalCreatedFrom time.Time
 	renewalCreatedTo   time.Time
+	createdMap         map[keystone.ID]timeRange
+}
+
+type timeRange struct {
+	start time.Time
+	end   time.Time
 }
 
 func (d *Requirement) Name() string {
@@ -31,6 +37,7 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 }
 
 func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+	d.createdMap = make(map[keystone.ID]timeRange)
 	return []requirements.TestResult{
 		d.createSubscription(actor),
 		d.createRenewals(actor),
@@ -64,14 +71,17 @@ func (d *Requirement) createRenewals(actor *keystone.Actor) requirements.TestRes
 	for i := 0; i < 30; i++ {
 		end := start.AddDate(0, 1, 0)
 		renewal := &models.Renewal{
-			StartDate:    start,
-			EndDate:      end,
-			CreationDate: start,
+			StartDate: start,
+			EndDate:   end,
 		}
 		renewal.SetKeystoneID(d.subscriptionId)
 		start = end
 
+		r := timeRange{start: time.Now().Truncate(time.Millisecond)}
 		createErr := actor.Mutate(context.Background(), renewal, keystone.WithMutationComment("Create renewal "+strconv.Itoa(i)))
+		r.end = time.Now().Truncate(time.Millisecond)
+		d.createdMap[renewal.GetKeystoneID()] = r
+		time.Sleep(time.Millisecond)
 		if createErr != nil {
 			return requirements.TestResult{
 				Name:  "Create Renewal",
@@ -127,12 +137,16 @@ func (d *Requirement) getRenewals(actor *keystone.Actor) requirements.TestResult
 	}
 
 	for i, r := range renewals {
-		if r.DateCreated().Before(d.renewalCreatedFrom) || r.DateCreated().After(d.renewalCreatedTo) {
-			return req.WithError(fmt.Errorf("renewal %d: DateCreated %v not within creation window %v - %v", i, r.DateCreated(), d.renewalCreatedFrom, d.renewalCreatedTo))
+		tRange, ok := d.createdMap[r.GetKeystoneID()]
+		if !ok {
+			return req.WithError(fmt.Errorf("renewal %d not found", i))
+		}
+		if r.DateCreated().Before(tRange.start) || r.DateCreated().After(tRange.end) {
+			return req.WithError(fmt.Errorf("renewal %d: DateCreated %v not within creation window %v - %v", i, r.DateCreated(), tRange.start, tRange.end))
 		}
 
-		if r.CreationDate.Before(d.renewalCreatedFrom) || r.CreationDate.After(d.renewalCreatedTo) {
-			return req.WithError(fmt.Errorf("renewal %d: CreationDate %v not within creation window %v - %v", i, r.CreationDate, d.renewalCreatedFrom, d.renewalCreatedTo))
+		if r.CreationDate.Before(tRange.start) || r.CreationDate.After(tRange.end) {
+			return req.WithError(fmt.Errorf("renewal %d: CreationDate %v not within creation window %v - %v", i, r.CreationDate, tRange.start, tRange.end))
 		}
 	}
 
