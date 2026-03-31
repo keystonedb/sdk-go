@@ -77,9 +77,9 @@ func (d *Requirement) createRenewals(actor *keystone.Actor) requirements.TestRes
 		renewal.SetKeystoneID(d.subscriptionId)
 		start = end
 
-		r := timeRange{start: time.Now().Truncate(time.Millisecond)}
+		r := timeRange{start: time.Now().Truncate(time.Millisecond).Add(-time.Second)}
 		createErr := actor.Mutate(context.Background(), renewal, keystone.WithMutationComment("Create renewal "+strconv.Itoa(i)))
-		r.end = time.Now().Truncate(time.Millisecond)
+		r.end = time.Now().Truncate(time.Millisecond).Add(time.Second)
 		d.createdMap[renewal.GetKeystoneID()] = r
 		time.Sleep(time.Millisecond)
 		if createErr != nil {
