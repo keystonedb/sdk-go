@@ -6,6 +6,7 @@ import (
 
 	"github.com/keystonedb/sdk-go/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/test/bufconn"
 )
 
@@ -64,7 +65,7 @@ func MockConnection() (*Connection, *MockServer, *bufconn.Listener, *grpc.Server
 	s := grpc.NewServer()
 	m := &MockServer{}
 	proto.RegisterKeystoneServer(s, m)
-	conn, err := grpc.DialContext(context.Background(), "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
+	conn, err := grpc.NewClient("passthrough:///bufnet", grpc.WithContextDialer(bufDialer), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
 	}
