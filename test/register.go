@@ -19,6 +19,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/events_actor"
 	"github.com/keystonedb/sdk-go/test/requirements/exists"
 	"github.com/keystonedb/sdk-go/test/requirements/find"
+	"github.com/keystonedb/sdk-go/test/requirements/grandchildren"
 	"github.com/keystonedb/sdk-go/test/requirements/group_count"
 	"github.com/keystonedb/sdk-go/test/requirements/hashed_id"
 	"github.com/keystonedb/sdk-go/test/requirements/iid"
@@ -68,6 +69,7 @@ func init() {
 	reqs = append(reqs, &logging.Requirement{})
 	reqs = append(reqs, &logs_actor.Requirement{})
 	reqs = append(reqs, &child_entities.Requirement{})
+	reqs = append(reqs, &grandchildren.Requirement{})
 	reqs = append(reqs, &events.Requirement{})
 	reqs = append(reqs, &events_actor.Requirement{})
 	reqs = append(reqs, &daily.Requirement{})
