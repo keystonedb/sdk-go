@@ -170,7 +170,7 @@ func (d *Requirement) loadChildren(actor *keystone.Actor) requirements.TestResul
 
 	renewal := &models.Renewal{}
 	notes := keystone.WithChildren(keystone.Type(models.RenewalNote{}))
-	getErr := actor.Get(context.Background(), keystone.ByEntityID(renewal, d.firstRenewalId), renewal, &notes)
+	getErr := actor.GetByID(context.Background(), d.firstRenewalId, renewal, keystone.WithProperties(), keystone.WithSummary(), &notes)
 	renewal.Notes = keystone.ChildrenFromLoader[models.RenewalNote](notes)
 
 	if getErr != nil {
@@ -280,13 +280,14 @@ func (d *Requirement) truncateChildren(actor *keystone.Actor) requirements.TestR
 		return res.WithError(removeErr)
 	}
 
-	notes = keystone.WithChildren(keystone.Type(models.RenewalNote{}))
-	getErr = actor.Get(context.Background(), keystone.ByEntityID(renewal, d.firstRenewalId), renewal, &notes)
+	renewal = &models.Renewal{}
+	loadNotes := keystone.WithChildren(keystone.Type(models.RenewalNote{}))
+	getErr = actor.Get(context.Background(), keystone.ByEntityID(renewal, d.firstRenewalId), renewal, &loadNotes)
 	if getErr != nil {
 		return res.WithError(getErr)
 	}
 
-	renewal.Notes = keystone.ChildrenFromLoader[models.RenewalNote](notes)
+	renewal.Notes = keystone.ChildrenFromLoader[models.RenewalNote](loadNotes)
 	if len(renewal.Notes) != 0 {
 		return res.WithError(fmt.Errorf("expected 0 notes, got %d", len(renewal.Notes)))
 	}
