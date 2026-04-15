@@ -19,47 +19,55 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Keystone_Status_FullMethodName           = "/kubex.keystone.Keystone/Status"
-	Keystone_Define_FullMethodName           = "/kubex.keystone.Keystone/Define"
-	Keystone_IID_FullMethodName              = "/kubex.keystone.Keystone/IID"
-	Keystone_IIDLookup_FullMethodName        = "/kubex.keystone.Keystone/IIDLookup"
-	Keystone_PiiToken_FullMethodName         = "/kubex.keystone.Keystone/PiiToken"
-	Keystone_PiiAnonymize_FullMethodName     = "/kubex.keystone.Keystone/PiiAnonymize"
-	Keystone_Mutate_FullMethodName           = "/kubex.keystone.Keystone/Mutate"
-	Keystone_Destroy_FullMethodName          = "/kubex.keystone.Keystone/Destroy"
-	Keystone_Log_FullMethodName              = "/kubex.keystone.Keystone/Log"
-	Keystone_SQUID_FullMethodName            = "/kubex.keystone.Keystone/SQUID"
-	Keystone_SQUIDRecover_FullMethodName     = "/kubex.keystone.Keystone/SQUIDRecover"
-	Keystone_SnapshotReport_FullMethodName   = "/kubex.keystone.Keystone/SnapshotReport"
-	Keystone_ReportTimeSeries_FullMethodName = "/kubex.keystone.Keystone/ReportTimeSeries"
-	Keystone_ChartTimeSeries_FullMethodName  = "/kubex.keystone.Keystone/ChartTimeSeries"
-	Keystone_Retrieve_FullMethodName         = "/kubex.keystone.Keystone/Retrieve"
-	Keystone_Find_FullMethodName             = "/kubex.keystone.Keystone/Find"
-	Keystone_List_FullMethodName             = "/kubex.keystone.Keystone/List"
-	Keystone_QueryIndex_FullMethodName       = "/kubex.keystone.Keystone/QueryIndex"
-	Keystone_Lookup_FullMethodName           = "/kubex.keystone.Keystone/Lookup"
-	Keystone_GroupCount_FullMethodName       = "/kubex.keystone.Keystone/GroupCount"
-	Keystone_Logs_FullMethodName             = "/kubex.keystone.Keystone/Logs"
-	Keystone_Events_FullMethodName           = "/kubex.keystone.Keystone/Events"
-	Keystone_EventStream_FullMethodName      = "/kubex.keystone.Keystone/EventStream"
-	Keystone_ShareView_FullMethodName        = "/kubex.keystone.Keystone/ShareView"
-	Keystone_SharedViews_FullMethodName      = "/kubex.keystone.Keystone/SharedViews"
-	Keystone_RateLimit_FullMethodName        = "/kubex.keystone.Keystone/RateLimit"
-	Keystone_DailyEntities_FullMethodName    = "/kubex.keystone.Keystone/DailyEntities"
-	Keystone_SchemaStatistics_FullMethodName = "/kubex.keystone.Keystone/SchemaStatistics"
-	Keystone_AKVGet_FullMethodName           = "/kubex.keystone.Keystone/AKVGet"
-	Keystone_AKVPut_FullMethodName           = "/kubex.keystone.Keystone/AKVPut"
-	Keystone_AKVDel_FullMethodName           = "/kubex.keystone.Keystone/AKVDel"
-	Keystone_AKVTimePut_FullMethodName       = "/kubex.keystone.Keystone/AKVTimePut"
-	Keystone_AKVTimeGet_FullMethodName       = "/kubex.keystone.Keystone/AKVTimeGet"
-	Keystone_AKVTimeDel_FullMethodName       = "/kubex.keystone.Keystone/AKVTimeDel"
-	Keystone_EnumPut_FullMethodName          = "/kubex.keystone.Keystone/EnumPut"
-	Keystone_EnumGet_FullMethodName          = "/kubex.keystone.Keystone/EnumGet"
-	Keystone_EnumDelete_FullMethodName       = "/kubex.keystone.Keystone/EnumDelete"
-	Keystone_EnumList_FullMethodName         = "/kubex.keystone.Keystone/EnumList"
-	Keystone_EnumReplace_FullMethodName      = "/kubex.keystone.Keystone/EnumReplace"
-	Keystone_PushTask_FullMethodName         = "/kubex.keystone.Keystone/PushTask"
-	Keystone_TaskStream_FullMethodName       = "/kubex.keystone.Keystone/TaskStream"
+	Keystone_Status_FullMethodName                = "/kubex.keystone.Keystone/Status"
+	Keystone_Define_FullMethodName                = "/kubex.keystone.Keystone/Define"
+	Keystone_IID_FullMethodName                   = "/kubex.keystone.Keystone/IID"
+	Keystone_IIDLookup_FullMethodName             = "/kubex.keystone.Keystone/IIDLookup"
+	Keystone_PiiToken_FullMethodName              = "/kubex.keystone.Keystone/PiiToken"
+	Keystone_PiiAnonymize_FullMethodName          = "/kubex.keystone.Keystone/PiiAnonymize"
+	Keystone_Mutate_FullMethodName                = "/kubex.keystone.Keystone/Mutate"
+	Keystone_Destroy_FullMethodName               = "/kubex.keystone.Keystone/Destroy"
+	Keystone_Log_FullMethodName                   = "/kubex.keystone.Keystone/Log"
+	Keystone_SQUID_FullMethodName                 = "/kubex.keystone.Keystone/SQUID"
+	Keystone_SQUIDRecover_FullMethodName          = "/kubex.keystone.Keystone/SQUIDRecover"
+	Keystone_SnapshotReport_FullMethodName        = "/kubex.keystone.Keystone/SnapshotReport"
+	Keystone_ReportTimeSeries_FullMethodName      = "/kubex.keystone.Keystone/ReportTimeSeries"
+	Keystone_ChartTimeSeries_FullMethodName       = "/kubex.keystone.Keystone/ChartTimeSeries"
+	Keystone_Retrieve_FullMethodName              = "/kubex.keystone.Keystone/Retrieve"
+	Keystone_Find_FullMethodName                  = "/kubex.keystone.Keystone/Find"
+	Keystone_List_FullMethodName                  = "/kubex.keystone.Keystone/List"
+	Keystone_QueryIndex_FullMethodName            = "/kubex.keystone.Keystone/QueryIndex"
+	Keystone_Lookup_FullMethodName                = "/kubex.keystone.Keystone/Lookup"
+	Keystone_GroupCount_FullMethodName            = "/kubex.keystone.Keystone/GroupCount"
+	Keystone_Logs_FullMethodName                  = "/kubex.keystone.Keystone/Logs"
+	Keystone_Events_FullMethodName                = "/kubex.keystone.Keystone/Events"
+	Keystone_EventStream_FullMethodName           = "/kubex.keystone.Keystone/EventStream"
+	Keystone_ShareView_FullMethodName             = "/kubex.keystone.Keystone/ShareView"
+	Keystone_SharedViews_FullMethodName           = "/kubex.keystone.Keystone/SharedViews"
+	Keystone_RateLimit_FullMethodName             = "/kubex.keystone.Keystone/RateLimit"
+	Keystone_DailyEntities_FullMethodName         = "/kubex.keystone.Keystone/DailyEntities"
+	Keystone_SchemaStatistics_FullMethodName      = "/kubex.keystone.Keystone/SchemaStatistics"
+	Keystone_AKVGet_FullMethodName                = "/kubex.keystone.Keystone/AKVGet"
+	Keystone_AKVPut_FullMethodName                = "/kubex.keystone.Keystone/AKVPut"
+	Keystone_AKVDel_FullMethodName                = "/kubex.keystone.Keystone/AKVDel"
+	Keystone_AKVTimePut_FullMethodName            = "/kubex.keystone.Keystone/AKVTimePut"
+	Keystone_AKVTimeGet_FullMethodName            = "/kubex.keystone.Keystone/AKVTimeGet"
+	Keystone_AKVTimeDel_FullMethodName            = "/kubex.keystone.Keystone/AKVTimeDel"
+	Keystone_EnumPut_FullMethodName               = "/kubex.keystone.Keystone/EnumPut"
+	Keystone_EnumGet_FullMethodName               = "/kubex.keystone.Keystone/EnumGet"
+	Keystone_EnumDelete_FullMethodName            = "/kubex.keystone.Keystone/EnumDelete"
+	Keystone_EnumList_FullMethodName              = "/kubex.keystone.Keystone/EnumList"
+	Keystone_EnumReplace_FullMethodName           = "/kubex.keystone.Keystone/EnumReplace"
+	Keystone_PushTask_FullMethodName              = "/kubex.keystone.Keystone/PushTask"
+	Keystone_TaskStream_FullMethodName            = "/kubex.keystone.Keystone/TaskStream"
+	Keystone_RelayCreateSession_FullMethodName    = "/kubex.keystone.Keystone/RelayCreateSession"
+	Keystone_RelayExtendSession_FullMethodName    = "/kubex.keystone.Keystone/RelayExtendSession"
+	Keystone_RelayDestroySession_FullMethodName   = "/kubex.keystone.Keystone/RelayDestroySession"
+	Keystone_RelayCreateShortCode_FullMethodName  = "/kubex.keystone.Keystone/RelayCreateShortCode"
+	Keystone_RelayResolveShortCode_FullMethodName = "/kubex.keystone.Keystone/RelayResolveShortCode"
+	Keystone_RelayDeleteShortCode_FullMethodName  = "/kubex.keystone.Keystone/RelayDeleteShortCode"
+	Keystone_RelayPublish_FullMethodName          = "/kubex.keystone.Keystone/RelayPublish"
+	Keystone_RelayGetPresence_FullMethodName      = "/kubex.keystone.Keystone/RelayGetPresence"
 )
 
 // KeystoneClient is the client API for Keystone service.
@@ -119,6 +127,15 @@ type KeystoneClient interface {
 	EnumReplace(ctx context.Context, in *EnumReplaceRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	PushTask(ctx context.Context, in *PushTaskRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	TaskStream(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[TaskAckRequest, TaskResponse], error)
+	// Relay - WebSocket Session Management
+	RelayCreateSession(ctx context.Context, in *RelayCreateSessionRequest, opts ...grpc.CallOption) (*RelayCreateSessionResponse, error)
+	RelayExtendSession(ctx context.Context, in *RelayExtendSessionRequest, opts ...grpc.CallOption) (*RelayExtendSessionResponse, error)
+	RelayDestroySession(ctx context.Context, in *RelayDestroySessionRequest, opts ...grpc.CallOption) (*RelayDestroySessionResponse, error)
+	RelayCreateShortCode(ctx context.Context, in *RelayCreateShortCodeRequest, opts ...grpc.CallOption) (*RelayCreateShortCodeResponse, error)
+	RelayResolveShortCode(ctx context.Context, in *RelayResolveShortCodeRequest, opts ...grpc.CallOption) (*RelayResolveShortCodeResponse, error)
+	RelayDeleteShortCode(ctx context.Context, in *RelayDeleteShortCodeRequest, opts ...grpc.CallOption) (*RelayDeleteShortCodeResponse, error)
+	RelayPublish(ctx context.Context, in *RelayPublishRequest, opts ...grpc.CallOption) (*RelayPublishResponse, error)
+	RelayGetPresence(ctx context.Context, in *RelayGetPresenceRequest, opts ...grpc.CallOption) (*RelayGetPresenceResponse, error)
 }
 
 type keystoneClient struct {
@@ -552,6 +569,86 @@ func (c *keystoneClient) TaskStream(ctx context.Context, opts ...grpc.CallOption
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Keystone_TaskStreamClient = grpc.BidiStreamingClient[TaskAckRequest, TaskResponse]
 
+func (c *keystoneClient) RelayCreateSession(ctx context.Context, in *RelayCreateSessionRequest, opts ...grpc.CallOption) (*RelayCreateSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayCreateSessionResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayCreateSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RelayExtendSession(ctx context.Context, in *RelayExtendSessionRequest, opts ...grpc.CallOption) (*RelayExtendSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayExtendSessionResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayExtendSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RelayDestroySession(ctx context.Context, in *RelayDestroySessionRequest, opts ...grpc.CallOption) (*RelayDestroySessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayDestroySessionResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayDestroySession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RelayCreateShortCode(ctx context.Context, in *RelayCreateShortCodeRequest, opts ...grpc.CallOption) (*RelayCreateShortCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayCreateShortCodeResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayCreateShortCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RelayResolveShortCode(ctx context.Context, in *RelayResolveShortCodeRequest, opts ...grpc.CallOption) (*RelayResolveShortCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayResolveShortCodeResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayResolveShortCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RelayDeleteShortCode(ctx context.Context, in *RelayDeleteShortCodeRequest, opts ...grpc.CallOption) (*RelayDeleteShortCodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayDeleteShortCodeResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayDeleteShortCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RelayPublish(ctx context.Context, in *RelayPublishRequest, opts ...grpc.CallOption) (*RelayPublishResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayPublishResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayPublish_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RelayGetPresence(ctx context.Context, in *RelayGetPresenceRequest, opts ...grpc.CallOption) (*RelayGetPresenceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayGetPresenceResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayGetPresence_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KeystoneServer is the server API for Keystone service.
 // All implementations must embed UnimplementedKeystoneServer
 // for forward compatibility.
@@ -609,6 +706,15 @@ type KeystoneServer interface {
 	EnumReplace(context.Context, *EnumReplaceRequest) (*GenericResponse, error)
 	PushTask(context.Context, *PushTaskRequest) (*GenericResponse, error)
 	TaskStream(grpc.BidiStreamingServer[TaskAckRequest, TaskResponse]) error
+	// Relay - WebSocket Session Management
+	RelayCreateSession(context.Context, *RelayCreateSessionRequest) (*RelayCreateSessionResponse, error)
+	RelayExtendSession(context.Context, *RelayExtendSessionRequest) (*RelayExtendSessionResponse, error)
+	RelayDestroySession(context.Context, *RelayDestroySessionRequest) (*RelayDestroySessionResponse, error)
+	RelayCreateShortCode(context.Context, *RelayCreateShortCodeRequest) (*RelayCreateShortCodeResponse, error)
+	RelayResolveShortCode(context.Context, *RelayResolveShortCodeRequest) (*RelayResolveShortCodeResponse, error)
+	RelayDeleteShortCode(context.Context, *RelayDeleteShortCodeRequest) (*RelayDeleteShortCodeResponse, error)
+	RelayPublish(context.Context, *RelayPublishRequest) (*RelayPublishResponse, error)
+	RelayGetPresence(context.Context, *RelayGetPresenceRequest) (*RelayGetPresenceResponse, error)
 	mustEmbedUnimplementedKeystoneServer()
 }
 
@@ -741,6 +847,30 @@ func (UnimplementedKeystoneServer) PushTask(context.Context, *PushTaskRequest) (
 }
 func (UnimplementedKeystoneServer) TaskStream(grpc.BidiStreamingServer[TaskAckRequest, TaskResponse]) error {
 	return status.Error(codes.Unimplemented, "method TaskStream not implemented")
+}
+func (UnimplementedKeystoneServer) RelayCreateSession(context.Context, *RelayCreateSessionRequest) (*RelayCreateSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayCreateSession not implemented")
+}
+func (UnimplementedKeystoneServer) RelayExtendSession(context.Context, *RelayExtendSessionRequest) (*RelayExtendSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayExtendSession not implemented")
+}
+func (UnimplementedKeystoneServer) RelayDestroySession(context.Context, *RelayDestroySessionRequest) (*RelayDestroySessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayDestroySession not implemented")
+}
+func (UnimplementedKeystoneServer) RelayCreateShortCode(context.Context, *RelayCreateShortCodeRequest) (*RelayCreateShortCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayCreateShortCode not implemented")
+}
+func (UnimplementedKeystoneServer) RelayResolveShortCode(context.Context, *RelayResolveShortCodeRequest) (*RelayResolveShortCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayResolveShortCode not implemented")
+}
+func (UnimplementedKeystoneServer) RelayDeleteShortCode(context.Context, *RelayDeleteShortCodeRequest) (*RelayDeleteShortCodeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayDeleteShortCode not implemented")
+}
+func (UnimplementedKeystoneServer) RelayPublish(context.Context, *RelayPublishRequest) (*RelayPublishResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayPublish not implemented")
+}
+func (UnimplementedKeystoneServer) RelayGetPresence(context.Context, *RelayGetPresenceRequest) (*RelayGetPresenceResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayGetPresence not implemented")
 }
 func (UnimplementedKeystoneServer) mustEmbedUnimplementedKeystoneServer() {}
 func (UnimplementedKeystoneServer) testEmbeddedByValue()                  {}
@@ -1483,6 +1613,150 @@ func _Keystone_TaskStream_Handler(srv interface{}, stream grpc.ServerStream) err
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Keystone_TaskStreamServer = grpc.BidiStreamingServer[TaskAckRequest, TaskResponse]
 
+func _Keystone_RelayCreateSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayCreateSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayCreateSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayCreateSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayCreateSession(ctx, req.(*RelayCreateSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RelayExtendSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayExtendSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayExtendSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayExtendSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayExtendSession(ctx, req.(*RelayExtendSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RelayDestroySession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayDestroySessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayDestroySession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayDestroySession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayDestroySession(ctx, req.(*RelayDestroySessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RelayCreateShortCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayCreateShortCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayCreateShortCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayCreateShortCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayCreateShortCode(ctx, req.(*RelayCreateShortCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RelayResolveShortCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayResolveShortCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayResolveShortCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayResolveShortCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayResolveShortCode(ctx, req.(*RelayResolveShortCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RelayDeleteShortCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayDeleteShortCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayDeleteShortCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayDeleteShortCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayDeleteShortCode(ctx, req.(*RelayDeleteShortCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RelayPublish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayPublishRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayPublish(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayPublish_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayPublish(ctx, req.(*RelayPublishRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RelayGetPresence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayGetPresenceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayGetPresence(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayGetPresence_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayGetPresence(ctx, req.(*RelayGetPresenceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Keystone_ServiceDesc is the grpc.ServiceDesc for Keystone service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1645,6 +1919,38 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PushTask",
 			Handler:    _Keystone_PushTask_Handler,
+		},
+		{
+			MethodName: "RelayCreateSession",
+			Handler:    _Keystone_RelayCreateSession_Handler,
+		},
+		{
+			MethodName: "RelayExtendSession",
+			Handler:    _Keystone_RelayExtendSession_Handler,
+		},
+		{
+			MethodName: "RelayDestroySession",
+			Handler:    _Keystone_RelayDestroySession_Handler,
+		},
+		{
+			MethodName: "RelayCreateShortCode",
+			Handler:    _Keystone_RelayCreateShortCode_Handler,
+		},
+		{
+			MethodName: "RelayResolveShortCode",
+			Handler:    _Keystone_RelayResolveShortCode_Handler,
+		},
+		{
+			MethodName: "RelayDeleteShortCode",
+			Handler:    _Keystone_RelayDeleteShortCode_Handler,
+		},
+		{
+			MethodName: "RelayPublish",
+			Handler:    _Keystone_RelayPublish_Handler,
+		},
+		{
+			MethodName: "RelayGetPresence",
+			Handler:    _Keystone_RelayGetPresence_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

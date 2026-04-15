@@ -52,6 +52,15 @@ type MockServer struct {
 	EnumDeleteFunc       func(context.Context, *proto.EnumDeleteRequest) (*proto.GenericResponse, error)
 	EnumListFunc         func(context.Context, *proto.EnumListRequest) (*proto.EnumListResponse, error)
 	EnumReplaceFunc      func(context.Context, *proto.EnumReplaceRequest) (*proto.GenericResponse, error)
+
+	RelayCreateSessionFunc    func(context.Context, *proto.RelayCreateSessionRequest) (*proto.RelayCreateSessionResponse, error)
+	RelayExtendSessionFunc    func(context.Context, *proto.RelayExtendSessionRequest) (*proto.RelayExtendSessionResponse, error)
+	RelayDestroySessionFunc   func(context.Context, *proto.RelayDestroySessionRequest) (*proto.RelayDestroySessionResponse, error)
+	RelayCreateShortCodeFunc  func(context.Context, *proto.RelayCreateShortCodeRequest) (*proto.RelayCreateShortCodeResponse, error)
+	RelayResolveShortCodeFunc func(context.Context, *proto.RelayResolveShortCodeRequest) (*proto.RelayResolveShortCodeResponse, error)
+	RelayDeleteShortCodeFunc  func(context.Context, *proto.RelayDeleteShortCodeRequest) (*proto.RelayDeleteShortCodeResponse, error)
+	RelayPublishFunc          func(context.Context, *proto.RelayPublishRequest) (*proto.RelayPublishResponse, error)
+	RelayGetPresenceFunc      func(context.Context, *proto.RelayGetPresenceRequest) (*proto.RelayGetPresenceResponse, error)
 }
 
 func bufDialer(context.Context, string) (net.Conn, error) {
@@ -320,4 +329,60 @@ func (m *MockServer) EnumReplace(ctx context.Context, req *proto.EnumReplaceRequ
 		return m.UnimplementedKeystoneServer.EnumReplace(ctx, req)
 	}
 	return m.EnumReplaceFunc(ctx, req)
+}
+
+func (m *MockServer) RelayCreateSession(ctx context.Context, req *proto.RelayCreateSessionRequest) (*proto.RelayCreateSessionResponse, error) {
+	if m.RelayCreateSessionFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayCreateSession(ctx, req)
+	}
+	return m.RelayCreateSessionFunc(ctx, req)
+}
+
+func (m *MockServer) RelayExtendSession(ctx context.Context, req *proto.RelayExtendSessionRequest) (*proto.RelayExtendSessionResponse, error) {
+	if m.RelayExtendSessionFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayExtendSession(ctx, req)
+	}
+	return m.RelayExtendSessionFunc(ctx, req)
+}
+
+func (m *MockServer) RelayDestroySession(ctx context.Context, req *proto.RelayDestroySessionRequest) (*proto.RelayDestroySessionResponse, error) {
+	if m.RelayDestroySessionFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayDestroySession(ctx, req)
+	}
+	return m.RelayDestroySessionFunc(ctx, req)
+}
+
+func (m *MockServer) RelayCreateShortCode(ctx context.Context, req *proto.RelayCreateShortCodeRequest) (*proto.RelayCreateShortCodeResponse, error) {
+	if m.RelayCreateShortCodeFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayCreateShortCode(ctx, req)
+	}
+	return m.RelayCreateShortCodeFunc(ctx, req)
+}
+
+func (m *MockServer) RelayResolveShortCode(ctx context.Context, req *proto.RelayResolveShortCodeRequest) (*proto.RelayResolveShortCodeResponse, error) {
+	if m.RelayResolveShortCodeFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayResolveShortCode(ctx, req)
+	}
+	return m.RelayResolveShortCodeFunc(ctx, req)
+}
+
+func (m *MockServer) RelayDeleteShortCode(ctx context.Context, req *proto.RelayDeleteShortCodeRequest) (*proto.RelayDeleteShortCodeResponse, error) {
+	if m.RelayDeleteShortCodeFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayDeleteShortCode(ctx, req)
+	}
+	return m.RelayDeleteShortCodeFunc(ctx, req)
+}
+
+func (m *MockServer) RelayPublish(ctx context.Context, req *proto.RelayPublishRequest) (*proto.RelayPublishResponse, error) {
+	if m.RelayPublishFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayPublish(ctx, req)
+	}
+	return m.RelayPublishFunc(ctx, req)
+}
+
+func (m *MockServer) RelayGetPresence(ctx context.Context, req *proto.RelayGetPresenceRequest) (*proto.RelayGetPresenceResponse, error) {
+	if m.RelayGetPresenceFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayGetPresence(ctx, req)
+	}
+	return m.RelayGetPresenceFunc(ctx, req)
 }

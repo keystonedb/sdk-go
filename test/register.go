@@ -38,6 +38,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/query"
 	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
+	"github.com/keystonedb/sdk-go/test/requirements/relay"
 	"github.com/keystonedb/sdk-go/test/requirements/remote"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
 	"github.com/keystonedb/sdk-go/test/requirements/setfalse"
@@ -109,10 +110,12 @@ func init() {
 	reqs = append(reqs, &find.Requirement{})
 	reqs = append(reqs, &enums.Requirement{})
 	reqs = append(reqs, &akv_timeline.Requirement{})
+	reqs = append(reqs, &relay.Requirement{})
 
-	if false {
+	if true {
 		reqs = []requirements.Requirement{}
-		reqs = append(reqs, &akv_timeline.Requirement{})
+		reqs = append(reqs, &relay.Requirement{})
+		//reqs = append(reqs, &akv_timeline.Requirement{})
 		//reqs = append(reqs, &tasks.Requirement{})
 	}
 }

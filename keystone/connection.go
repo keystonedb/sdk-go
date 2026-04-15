@@ -460,3 +460,59 @@ func (c *Connection) Lookup(ctx context.Context, in *proto.LookupRequest, opts .
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) RelayCreateSession(ctx context.Context, in *proto.RelayCreateSessionRequest, opts ...grpc.CallOption) (*proto.RelayCreateSessionResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayCreateSession", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.RelayCreateSession(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) RelayExtendSession(ctx context.Context, in *proto.RelayExtendSessionRequest, opts ...grpc.CallOption) (*proto.RelayExtendSessionResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayExtendSession", zap.String("SessionId", in.GetSessionId()))
+	resp, err := c.client.RelayExtendSession(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) RelayDestroySession(ctx context.Context, in *proto.RelayDestroySessionRequest, opts ...grpc.CallOption) (*proto.RelayDestroySessionResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayDestroySession", zap.String("SessionId", in.GetSessionId()))
+	resp, err := c.client.RelayDestroySession(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) RelayCreateShortCode(ctx context.Context, in *proto.RelayCreateShortCodeRequest, opts ...grpc.CallOption) (*proto.RelayCreateShortCodeResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayCreateShortCode", zap.String("SessionId", in.GetSessionId()))
+	resp, err := c.client.RelayCreateShortCode(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) RelayResolveShortCode(ctx context.Context, in *proto.RelayResolveShortCodeRequest, opts ...grpc.CallOption) (*proto.RelayResolveShortCodeResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayResolveShortCode", zap.String("Code", in.GetCode()))
+	resp, err := c.client.RelayResolveShortCode(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) RelayDeleteShortCode(ctx context.Context, in *proto.RelayDeleteShortCodeRequest, opts ...grpc.CallOption) (*proto.RelayDeleteShortCodeResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayDeleteShortCode", zap.String("Code", in.GetCode()))
+	resp, err := c.client.RelayDeleteShortCode(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) RelayPublish(ctx context.Context, in *proto.RelayPublishRequest, opts ...grpc.CallOption) (*proto.RelayPublishResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayPublish", zap.String("SessionId", in.GetSessionId()), zap.String("Type", in.GetType()))
+	resp, err := c.client.RelayPublish(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) RelayGetPresence(ctx context.Context, in *proto.RelayGetPresenceRequest, opts ...grpc.CallOption) (*proto.RelayGetPresenceResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayGetPresence", zap.String("SessionId", in.GetSessionId()))
+	resp, err := c.client.RelayGetPresence(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
