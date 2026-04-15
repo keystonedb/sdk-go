@@ -26,18 +26,16 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	d.lastName = "Doe-" + time.Now().Format(time.DateTime)
-	return []requirements.TestResult{
-		d.storeNoPrimary(actor),
-		d.store(actor),
-		d.retrieve(actor),
-		d.mustNotChange(actor),
-		d.retrieve(actor),
-		d.overwriteNoOp(actor),
-		d.retrieve(actor),
-		d.bench(actor),
-	}
+	report(d.storeNoPrimary(actor))
+	report(d.store(actor))
+	report(d.retrieve(actor))
+	report(d.mustNotChange(actor))
+	report(d.retrieve(actor))
+	report(d.overwriteNoOp(actor))
+	report(d.retrieve(actor))
+	report(d.bench(actor))
 }
 
 func (d *Requirement) storeNoPrimary(actor *keystone.Actor) requirements.TestResult {

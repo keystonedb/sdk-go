@@ -34,28 +34,26 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	gen := k4id.DefaultGenerator()
 	d.referenceID = gen.New().UUID()
-	return []requirements.TestResult{
-		d.updateWithoutPii(actor),
-		d.createToken(actor),
-		d.createReuseToken(actor),
-		d.create(actor),
-		d.createReference(actor),
-		d.read(actor, true, "After Create"),
-		d.read(actor, false, "After Create - Ref"),
-		d.updateWithoutPiiWrite(actor),
-		d.update(actor),
-		d.read(actor, true, "After Update"),
-		d.read(actor, false, "After Update - Ref"),
-		d.createWithoutToken(actor),
-		d.anonymize(actor),
-		d.readAnonymized(actor),
-		d.restore(actor),
-		d.read(actor, true, "After Restore"),
-		d.read(actor, false, "After Restore - Ref"),
-	}
+	report(d.updateWithoutPii(actor))
+	report(d.createToken(actor))
+	report(d.createReuseToken(actor))
+	report(d.create(actor))
+	report(d.createReference(actor))
+	report(d.read(actor, true, "After Create"))
+	report(d.read(actor, false, "After Create - Ref"))
+	report(d.updateWithoutPiiWrite(actor))
+	report(d.update(actor))
+	report(d.read(actor, true, "After Update"))
+	report(d.read(actor, false, "After Update - Ref"))
+	report(d.createWithoutToken(actor))
+	report(d.anonymize(actor))
+	report(d.readAnonymized(actor))
+	report(d.restore(actor))
+	report(d.read(actor, true, "After Restore"))
+	report(d.read(actor, false, "After Restore - Ref"))
 }
 
 func (d *Requirement) createWithoutToken(actor *keystone.Actor) requirements.TestResult {

@@ -22,11 +22,9 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.store(actor),
-		d.retrieve(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.store(actor))
+	report(d.retrieve(actor))
 }
 
 func (d *Requirement) store(actor *keystone.Actor) requirements.TestResult {

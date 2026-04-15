@@ -30,17 +30,15 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.create(actor),
-		d.read(actor),
-		d.addTranslations(actor),
-		d.readAfterAdd(actor),
-		d.removeTranslation(actor),
-		d.readAfterRemove(actor),
-		d.replaceTranslations(actor),
-		d.readAfterReplace(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.create(actor))
+	report(d.read(actor))
+	report(d.addTranslations(actor))
+	report(d.readAfterAdd(actor))
+	report(d.removeTranslation(actor))
+	report(d.readAfterRemove(actor))
+	report(d.replaceTranslations(actor))
+	report(d.readAfterReplace(actor))
 }
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {

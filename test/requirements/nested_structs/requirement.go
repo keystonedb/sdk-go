@@ -48,15 +48,13 @@ func (r *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (r *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		r.create(actor),
-		r.read(actor),
-		r.updateLevel1(actor),
-		r.updateLevel2(actor),
-		r.updateLevel3(actor),
-		r.updateMultipleLevels(actor),
-	}
+func (r *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(r.create(actor))
+	report(r.read(actor))
+	report(r.updateLevel1(actor))
+	report(r.updateLevel2(actor))
+	report(r.updateLevel3(actor))
+	report(r.updateMultipleLevels(actor))
 }
 
 func (r *Requirement) create(actor *keystone.Actor) requirements.TestResult {

@@ -27,12 +27,10 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.upload(actor),
-		d.list(actor),
-		d.byPath(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.upload(actor))
+	report(d.list(actor))
+	report(d.byPath(actor))
 }
 
 func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {

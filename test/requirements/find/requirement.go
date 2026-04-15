@@ -25,16 +25,14 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	d.controlValue = "controlled"
 	d.secretValue = keystone.NewSecureString("secretval", "secre***")
 
-	return []requirements.TestResult{
-		d.create(actor),
-		d.findWithoutDecryption(actor),
-		d.findWithDecryption(actor),
-		d.findWithDecryptionNamed(actor),
-	}
+	report(d.create(actor))
+	report(d.findWithoutDecryption(actor))
+	report(d.findWithDecryption(actor))
+	report(d.findWithDecryptionNamed(actor))
 }
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {

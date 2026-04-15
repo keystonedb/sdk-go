@@ -39,18 +39,16 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	d.createdMap = make(map[keystone.ID]timeRange)
-	return []requirements.TestResult{
-		d.createSubscription(actor),
-		d.createRenewals(actor),
-		d.summaryChildren(actor),
-		d.removeChild(actor),
-		d.loadChildren(actor),
-		d.updateChildren(actor),
-		d.verifyChildren(actor),
-		d.truncateChildren(actor),
-	}
+	report(d.createSubscription(actor))
+	report(d.createRenewals(actor))
+	report(d.summaryChildren(actor))
+	report(d.removeChild(actor))
+	report(d.loadChildren(actor))
+	report(d.updateChildren(actor))
+	report(d.verifyChildren(actor))
+	report(d.truncateChildren(actor))
 }
 
 func (d *Requirement) createSubscription(actor *keystone.Actor) requirements.TestResult {

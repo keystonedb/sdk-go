@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/keystonedb/sdk-go/test/requirements"
 	"github.com/packaged/environment/environment"
 	"github.com/packaged/logger/v3/logger"
 )
@@ -46,16 +47,16 @@ func main() {
 		}
 		keystoneConnection.SyncSchema().Wait()
 
-		results := req.Verify(actor)
-		for _, result := range results {
+		reqName := req.Name()
+		req.Verify(actor, func(result requirements.TestResult) {
 			if result.Error != nil {
 				log.Println(Cross, result.Name, "-", result.Error.Error())
-				failedRequirements = append(failedRequirements, req.Name()+" - "+result.Name)
+				failedRequirements = append(failedRequirements, reqName+" - "+result.Name)
 				totalFailures++
 			} else {
 				log.Println(Check, result.Name)
 			}
-		}
+		})
 	}
 
 	log.Println("")

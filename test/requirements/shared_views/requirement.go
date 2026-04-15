@@ -30,15 +30,13 @@ func (d *Requirement) Name() string {
 
 func (d *Requirement) Register(conn *keystone.Connection) error { return nil }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	d.secondConnection = keystone.NewConnection(actor.Connection().DirectClient(), vendor2ID, app2ID, "test-access-token")
 	act2 := d.secondConnection.Actor("tt", "127.0.0.2", "random-userid", "UserAgent")
 	d.secondActor = &act2
-	return []requirements.TestResult{
-		d.share(actor),
-		d.read(actor),
-		d.verify(actor),
-	}
+	report(d.share(actor))
+	report(d.read(actor))
+	report(d.verify(actor))
 }
 
 func (d *Requirement) share(actor *keystone.Actor) requirements.TestResult {

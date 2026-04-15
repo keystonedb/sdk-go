@@ -25,17 +25,15 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.createEntity(actor),
-		d.checkNoDocuments(actor),
-		d.createDocument(actor),
-		d.checkInitialDocument(actor),
-		d.newRevision(actor),
-		d.checkRevision(actor),
-		d.updateRevision(actor),
-		d.loadRevision(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.createEntity(actor))
+	report(d.checkNoDocuments(actor))
+	report(d.createDocument(actor))
+	report(d.checkInitialDocument(actor))
+	report(d.newRevision(actor))
+	report(d.checkRevision(actor))
+	report(d.updateRevision(actor))
+	report(d.loadRevision(actor))
 }
 
 func (d *Requirement) createEntity(actor *keystone.Actor) requirements.TestResult {

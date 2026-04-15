@@ -41,14 +41,12 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.put(actor),
-		d.get(actor),
-		d.putRaw(actor),
-		d.getRaw(actor),
-		d.deleteKey(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.put(actor))
+	report(d.get(actor))
+	report(d.putRaw(actor))
+	report(d.getRaw(actor))
+	report(d.deleteKey(actor))
 }
 
 func (d *Requirement) put(actor *keystone.Actor) requirements.TestResult {

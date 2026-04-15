@@ -22,11 +22,9 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.createEntity(actor),
-		d.destroyEntity(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.createEntity(actor))
+	report(d.destroyEntity(actor))
 }
 
 func (d *Requirement) createEntity(actor *keystone.Actor) requirements.TestResult {

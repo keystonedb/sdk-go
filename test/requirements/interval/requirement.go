@@ -24,20 +24,18 @@ func (r *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (r *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		r.create(actor),
-		r.read(actor),
-		r.update(actor),
-		r.readUpdated(actor),
-		r.createQueryEntities(actor),
-		r.queryEqual(actor),
-		r.queryNotEqual(actor),
-		r.queryGreaterThan(actor),
-		r.queryGreaterThanOrEqual(actor),
-		r.queryLessThan(actor),
-		r.queryLessThanOrEqual(actor),
-	}
+func (r *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(r.create(actor))
+	report(r.read(actor))
+	report(r.update(actor))
+	report(r.readUpdated(actor))
+	report(r.createQueryEntities(actor))
+	report(r.queryEqual(actor))
+	report(r.queryNotEqual(actor))
+	report(r.queryGreaterThan(actor))
+	report(r.queryGreaterThanOrEqual(actor))
+	report(r.queryLessThan(actor))
+	report(r.queryLessThanOrEqual(actor))
 }
 
 func (r *Requirement) create(actor *keystone.Actor) requirements.TestResult {

@@ -31,12 +31,10 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	d.testID = uuid.NewString()
-	return []requirements.TestResult{
-		d.create(actor),
-		d.groupCount(actor),
-	}
+	report(d.create(actor))
+	report(d.groupCount(actor))
 }
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {

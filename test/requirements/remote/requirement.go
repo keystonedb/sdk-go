@@ -34,16 +34,14 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	d.secondConnection = keystone.NewConnection(actor.Connection().DirectClient(), vendor2ID, app2ID, "test-access-token")
 	act2 := d.secondConnection.Actor("tt", "127.0.0.2", "random-userid", "UserAgent")
 	d.secondActor = &act2
-	return []requirements.TestResult{
-		d.prepare(actor),
-		d.log(actor),
-		d.upload(actor),
-		d.uploadList(actor),
-	}
+	report(d.prepare(actor))
+	report(d.log(actor))
+	report(d.upload(actor))
+	report(d.uploadList(actor))
 }
 
 func (d *Requirement) prepare(actor *keystone.Actor) requirements.TestResult {

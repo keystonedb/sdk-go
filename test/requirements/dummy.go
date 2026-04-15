@@ -14,9 +14,7 @@ func (d DummyRequirement) Register(conn *keystone.Connection) error {
 }
 func (d DummyRequirement) Name() string { return "Dummy" }
 
-func (d DummyRequirement) Verify(actor *keystone.Actor) []TestResult {
-	return []TestResult{
-		NewResult("Failure", errors.New("fail")),
-		NewResult("Success", nil),
-	}
+func (d DummyRequirement) Verify(actor *keystone.Actor, report Reporter) {
+	report(NewResult("Failure", errors.New("fail")))
+	report(NewResult("Success", nil))
 }

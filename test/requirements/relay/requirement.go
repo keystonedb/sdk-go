@@ -29,41 +29,36 @@ func (d *Requirement) Name() string { return "Relay / WebSocket Sessions" }
 
 func (d *Requirement) Register(_ *keystone.Connection) error { return nil }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	results := []requirements.TestResult{
-		d.createSession(actor),
-		d.extendSession(actor),
-		d.createShortCode(actor),
-		d.resolveShortCode(actor),
-		d.publishWithoutListeners(actor),
-		d.getPresenceEmpty(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.createSession(actor))
+	report(d.extendSession(actor))
+	report(d.createShortCode(actor))
+	report(d.resolveShortCode(actor))
+	report(d.publishWithoutListeners(actor))
+	report(d.getPresenceEmpty(actor))
 
 	// WebSocket tests depend on a session existing; skip them if CreateSession failed.
 	if d.sessionID == "" {
-		results = append(results, requirements.TestResult{
+		report(requirements.TestResult{
 			Name:  "WebSocket Tests",
 			Error: errors.New("skipped: session not created"),
 		})
-		return results
+		return
 	}
 
-	results = append(results,
-		d.wsHandshakeWelcome(actor),
-		d.wsReceiveAppPublish(actor),
-		d.wsPublishFromDevice(actor),
-		d.wsPingPong(actor),
-		d.wsPresenceQuery(actor),
-		d.getPresenceAfterConnect(actor),
-		d.wsHighThroughput(actor),
-		d.wsMultiListenerFanOut(actor),
-		d.wsBadSlugRejected(),
-		d.wsUnknownSessionRejected(),
-		d.deleteShortCode(actor),
-		d.destroySession(actor),
-		d.destroyedSessionRejectsWS(),
-	)
-	return results
+	report(d.wsHandshakeWelcome(actor))
+	report(d.wsReceiveAppPublish(actor))
+	report(d.wsPublishFromDevice(actor))
+	report(d.wsPingPong(actor))
+	report(d.wsPresenceQuery(actor))
+	report(d.getPresenceAfterConnect(actor))
+	report(d.wsHighThroughput(actor))
+	report(d.wsMultiListenerFanOut(actor))
+	report(d.wsBadSlugRejected())
+	report(d.wsUnknownSessionRejected())
+	report(d.deleteShortCode(actor))
+	report(d.destroySession(actor))
+	report(d.destroyedSessionRejectsWS())
 }
 
 // --- gRPC-only checks ---

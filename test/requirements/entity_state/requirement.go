@@ -39,25 +39,23 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.createEntity(actor),
-		d.verifyDefaultState(actor),
-		d.setArchivedState(actor),
-		d.setOfflineState(actor),
-		d.setCorruptState(actor),
-		d.restoreToActiveState(actor),
-		d.archiveEntityMethod(actor),
-		d.corruptEntityMethod(actor),
-		d.restoreFromCorrupt(actor),
-		// State filtering tests
-		d.createEntitiesForFiltering(actor),
-		d.findOnlyActive(actor),
-		d.findIncludeArchived(actor),
-		d.findOnlyArchived(actor),
-		d.findWithStates(actor),
-		d.findAllStates(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.createEntity(actor))
+	report(d.verifyDefaultState(actor))
+	report(d.setArchivedState(actor))
+	report(d.setOfflineState(actor))
+	report(d.setCorruptState(actor))
+	report(d.restoreToActiveState(actor))
+	report(d.archiveEntityMethod(actor))
+	report(d.corruptEntityMethod(actor))
+	report(d.restoreFromCorrupt(actor))
+	// State filtering tests
+	report(d.createEntitiesForFiltering(actor))
+	report(d.findOnlyActive(actor))
+	report(d.findIncludeArchived(actor))
+	report(d.findOnlyArchived(actor))
+	report(d.findWithStates(actor))
+	report(d.findAllStates(actor))
 }
 
 func (d *Requirement) createEntity(actor *keystone.Actor) requirements.TestResult {

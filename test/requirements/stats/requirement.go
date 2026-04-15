@@ -27,13 +27,11 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.create(actor),
-		d.allTimeCount(actor),
-		d.todayCount(actor),
-		d.lastWeekBreakdown(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.create(actor))
+	report(d.allTimeCount(actor))
+	report(d.todayCount(actor))
+	report(d.lastWeekBreakdown(actor))
 }
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {

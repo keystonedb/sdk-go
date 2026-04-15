@@ -22,11 +22,9 @@ func (d *Requirement) Name() string {
 
 func (d *Requirement) Register(conn *keystone.Connection) error { return nil }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.push(actor),
-		d.quantity(actor, false),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.push(actor))
+	report(d.quantity(actor, false))
 }
 
 func (d *Requirement) push(actor *keystone.Actor) requirements.TestResult {

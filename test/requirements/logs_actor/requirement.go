@@ -24,14 +24,12 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.createEntity(actor),
-		d.writeLog(actor),
-		d.writeLogWithOptions(actor),
-		d.readLogs(actor),
-		d.readLogsWithMinLevel(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.createEntity(actor))
+	report(d.writeLog(actor))
+	report(d.writeLogWithOptions(actor))
+	report(d.readLogs(actor))
+	report(d.readLogsWithMinLevel(actor))
 }
 
 func (d *Requirement) createEntity(actor *keystone.Actor) requirements.TestResult {

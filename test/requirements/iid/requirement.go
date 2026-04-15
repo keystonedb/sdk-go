@@ -22,13 +22,11 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.prepare(actor),
-		d.firstID(actor),
-		d.secondID(actor),
-		d.thirdID(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.prepare(actor))
+	report(d.firstID(actor))
+	report(d.secondID(actor))
+	report(d.thirdID(actor))
 }
 
 func (d *Requirement) prepare(actor *keystone.Actor) requirements.TestResult {

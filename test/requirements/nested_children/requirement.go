@@ -27,16 +27,14 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.writeChildren(actor),
-		d.summaryChildren(actor),
-		d.removeChild(actor),
-		d.loadChildren(actor),
-		d.updateChildren(actor),
-		d.verifyChildren(actor),
-		d.truncateChildren(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.writeChildren(actor))
+	report(d.summaryChildren(actor))
+	report(d.removeChild(actor))
+	report(d.loadChildren(actor))
+	report(d.updateChildren(actor))
+	report(d.verifyChildren(actor))
+	report(d.truncateChildren(actor))
 }
 
 func (d *Requirement) writeChildren(actor *keystone.Actor) requirements.TestResult {

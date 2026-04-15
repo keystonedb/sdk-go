@@ -22,25 +22,23 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.putAndGetLatest(actor),
-		d.getAt(actor),
-		d.earliestAfter(actor),
-		d.rangeQuery(actor),
-		d.rangeWithLimit(actor),
-		d.rangeGroupedHourly(actor),
-		d.rangeGroupedDaily(actor),
-		d.rangeGroupedPickFirst(actor),
-		d.batchPut(actor),
-		d.deleteAll(actor),
-		d.deleteExact(actor),
-		d.deleteExactMultiple(actor),
-		d.deleteRange(actor),
-		d.globalVsWorkspace(actor),
-		d.multipleKeys(actor),
-		d.ttlPut(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.putAndGetLatest(actor))
+	report(d.getAt(actor))
+	report(d.earliestAfter(actor))
+	report(d.rangeQuery(actor))
+	report(d.rangeWithLimit(actor))
+	report(d.rangeGroupedHourly(actor))
+	report(d.rangeGroupedDaily(actor))
+	report(d.rangeGroupedPickFirst(actor))
+	report(d.batchPut(actor))
+	report(d.deleteAll(actor))
+	report(d.deleteExact(actor))
+	report(d.deleteExactMultiple(actor))
+	report(d.deleteRange(actor))
+	report(d.globalVsWorkspace(actor))
+	report(d.multipleKeys(actor))
+	report(d.ttlPut(actor))
 }
 
 // seedRates writes 24 hourly exchange rate entries for the past 24 hours under the given key.

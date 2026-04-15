@@ -27,41 +27,39 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	// Clean up any leftover data from previous runs
 	d.cleanup(actor)
 
-	return []requirements.TestResult{
-		// Basic CRUD on a single type
-		d.putAndGet(actor),
-		d.putWithMetadata(actor),
-		d.getNotFound(actor),
-		d.update(actor),
-		d.list(actor),
+	// Basic CRUD on a single type
+	report(d.putAndGet(actor))
+	report(d.putWithMetadata(actor))
+	report(d.getNotFound(actor))
+	report(d.update(actor))
+	report(d.list(actor))
 
-		// Multiple types coexist independently
-		d.multipleTypes(actor),
+	// Multiple types coexist independently
+	report(d.multipleTypes(actor))
 
-		// Cross-type isolation: operations on one type must not affect another
-		d.typeIsolationList(actor),
-		d.typeIsolationDelete(actor),
-		d.typeIsolationReplace(actor),
+	// Cross-type isolation: operations on one type must not affect another
+	report(d.typeIsolationList(actor))
+	report(d.typeIsolationDelete(actor))
+	report(d.typeIsolationReplace(actor))
 
-		// Same key in different types must be independent
-		d.sameKeyDifferentTypes(actor),
+	// Same key in different types must be independent
+	report(d.sameKeyDifferentTypes(actor))
 
-		// Replace within a type
-		d.replace(actor),
+	// Replace within a type
+	report(d.replace(actor))
 
-		// Delete single key leaves others intact
-		d.deleteKey(actor),
+	// Delete single key leaves others intact
+	report(d.deleteKey(actor))
 
-		// Delete entire type
-		d.deleteType(actor),
+	// Delete entire type
+	report(d.deleteType(actor))
 
-		// Verify empty list for unknown type
-		d.listEmptyType(actor),
-	}
+	// Verify empty list for unknown type
+	report(d.listEmptyType(actor))
 }
 
 func (d *Requirement) cleanup(actor *keystone.Actor) {

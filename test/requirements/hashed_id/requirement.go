@@ -29,13 +29,11 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	d.hashedID = "userid123"
-	return []requirements.TestResult{
-		d.create(actor),
-		d.read(actor),
-		d.update(actor),
-	}
+	report(d.create(actor))
+	report(d.read(actor))
+	report(d.update(actor))
 }
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {

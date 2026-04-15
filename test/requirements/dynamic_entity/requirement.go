@@ -49,7 +49,7 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 	MixedVal.SetInt(12)
 	MixedVal.SetString("stringval")
 	MixedVal.SetBool(true)
@@ -60,16 +60,14 @@ func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
 	MixedKey.Set("first", MixedVal)
 	MixedKey.Set("second", keystone.NewMixed("text"))
 
-	return []requirements.TestResult{
-		d.create(actor),
-		d.read(actor),
-		d.append(actor),
-		d.readPostAppend(actor),
-		d.reduce(actor),
-		d.readPostReduce(actor),
-		d.clearSlice(actor),
-		d.readPostClear(actor),
-	}
+	report(d.create(actor))
+	report(d.read(actor))
+	report(d.append(actor))
+	report(d.readPostAppend(actor))
+	report(d.reduce(actor))
+	report(d.readPostReduce(actor))
+	report(d.clearSlice(actor))
+	report(d.readPostClear(actor))
 }
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {

@@ -22,12 +22,10 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
-	return []requirements.TestResult{
-		d.write(actor),
-		d.exists(actor),
-		d.notExists(actor),
-	}
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	report(d.write(actor))
+	report(d.exists(actor))
+	report(d.notExists(actor))
 }
 
 func (d *Requirement) write(actor *keystone.Actor) requirements.TestResult {

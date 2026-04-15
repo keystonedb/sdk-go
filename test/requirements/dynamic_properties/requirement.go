@@ -42,23 +42,22 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 	return nil
 }
 
-func (d *Requirement) Verify(actor *keystone.Actor) []requirements.TestResult {
+func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
 
 	usr := &models.User{
 		ExternalID: k4id.New().String(),
 	}
 	mutateErr := actor.Mutate(context.Background(), usr)
 	if mutateErr != nil {
-		return []requirements.TestResult{requirements.NewResult("Unable to prepare test", mutateErr)}
+		report(requirements.NewResult("Unable to prepare test", mutateErr))
+		return
 	}
 	d.createdID = usr.GetKeystoneID().String()
 
-	return []requirements.TestResult{
-		d.apply(actor),
-		d.read(actor),
-		d.readRange(actor),
-		d.delete(actor),
-	}
+	report(d.apply(actor))
+	report(d.read(actor))
+	report(d.readRange(actor))
+	report(d.delete(actor))
 }
 
 func (d *Requirement) apply(actor *keystone.Actor) requirements.TestResult {
