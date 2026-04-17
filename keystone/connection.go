@@ -516,3 +516,17 @@ func (c *Connection) RelayGetPresence(ctx context.Context, in *proto.RelayGetPre
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+func (c *Connection) RelayGetSessionMetadata(ctx context.Context, in *proto.RelayGetSessionMetadataRequest, opts ...grpc.CallOption) (*proto.RelayGetSessionMetadataResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelayGetSessionMetadata", zap.String("SessionId", in.GetSessionId()))
+	resp, err := c.client.RelayGetSessionMetadata(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) RelaySetSessionMetadata(ctx context.Context, in *proto.RelaySetSessionMetadataRequest, opts ...grpc.CallOption) (*proto.RelaySetSessionMetadataResponse, error) {
+	tl := c.timeLogConfig.NewLog("RelaySetSessionMetadata", zap.String("SessionId", in.GetSessionId()))
+	resp, err := c.client.RelaySetSessionMetadata(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

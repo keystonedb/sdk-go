@@ -61,6 +61,9 @@ type MockServer struct {
 	RelayDeleteShortCodeFunc  func(context.Context, *proto.RelayDeleteShortCodeRequest) (*proto.RelayDeleteShortCodeResponse, error)
 	RelayPublishFunc          func(context.Context, *proto.RelayPublishRequest) (*proto.RelayPublishResponse, error)
 	RelayGetPresenceFunc      func(context.Context, *proto.RelayGetPresenceRequest) (*proto.RelayGetPresenceResponse, error)
+
+	RelayGetSessionMetadataFunc func(context.Context, *proto.RelayGetSessionMetadataRequest) (*proto.RelayGetSessionMetadataResponse, error)
+	RelaySetSessionMetadataFunc func(context.Context, *proto.RelaySetSessionMetadataRequest) (*proto.RelaySetSessionMetadataResponse, error)
 }
 
 func bufDialer(context.Context, string) (net.Conn, error) {
@@ -385,4 +388,18 @@ func (m *MockServer) RelayGetPresence(ctx context.Context, req *proto.RelayGetPr
 		return m.UnimplementedKeystoneServer.RelayGetPresence(ctx, req)
 	}
 	return m.RelayGetPresenceFunc(ctx, req)
+}
+
+func (m *MockServer) RelayGetSessionMetadata(ctx context.Context, req *proto.RelayGetSessionMetadataRequest) (*proto.RelayGetSessionMetadataResponse, error) {
+	if m.RelayGetSessionMetadataFunc == nil {
+		return m.UnimplementedKeystoneServer.RelayGetSessionMetadata(ctx, req)
+	}
+	return m.RelayGetSessionMetadataFunc(ctx, req)
+}
+
+func (m *MockServer) RelaySetSessionMetadata(ctx context.Context, req *proto.RelaySetSessionMetadataRequest) (*proto.RelaySetSessionMetadataResponse, error) {
+	if m.RelaySetSessionMetadataFunc == nil {
+		return m.UnimplementedKeystoneServer.RelaySetSessionMetadata(ctx, req)
+	}
+	return m.RelaySetSessionMetadataFunc(ctx, req)
 }

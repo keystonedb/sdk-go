@@ -117,3 +117,30 @@ func (a *Actor) RelayGetPresence(ctx context.Context, sessionID string) ([]*prot
 	}
 	return resp.GetDevices(), nil
 }
+
+// RelayGetSessionMetadata reads the opaque metadata blob currently stored
+// against the session. Returns the full response so callers can see
+// updated_at_ms / server_ts_ms alongside the bytes.
+func (a *Actor) RelayGetSessionMetadata(ctx context.Context, sessionID string) (*proto.RelayGetSessionMetadataResponse, error) {
+	if a == nil || a.connection == nil {
+		return nil, errors.New("actor or connection is nil")
+	}
+	return a.connection.RelayGetSessionMetadata(ctx, &proto.RelayGetSessionMetadataRequest{
+		Authorization: a.Authorization(),
+		SessionId:     sessionID,
+	})
+}
+
+// RelaySetSessionMetadata fully replaces the metadata blob stored against the
+// session. metadata must be valid JSON <=1 KB; passing an empty slice clears
+// the stored value.
+func (a *Actor) RelaySetSessionMetadata(ctx context.Context, sessionID string, metadata []byte) (*proto.RelaySetSessionMetadataResponse, error) {
+	if a == nil || a.connection == nil {
+		return nil, errors.New("actor or connection is nil")
+	}
+	return a.connection.RelaySetSessionMetadata(ctx, &proto.RelaySetSessionMetadataRequest{
+		Authorization: a.Authorization(),
+		SessionId:     sessionID,
+		Metadata:      metadata,
+	})
+}
