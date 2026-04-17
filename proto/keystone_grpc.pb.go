@@ -19,55 +19,57 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Keystone_Status_FullMethodName                = "/kubex.keystone.Keystone/Status"
-	Keystone_Define_FullMethodName                = "/kubex.keystone.Keystone/Define"
-	Keystone_IID_FullMethodName                   = "/kubex.keystone.Keystone/IID"
-	Keystone_IIDLookup_FullMethodName             = "/kubex.keystone.Keystone/IIDLookup"
-	Keystone_PiiToken_FullMethodName              = "/kubex.keystone.Keystone/PiiToken"
-	Keystone_PiiAnonymize_FullMethodName          = "/kubex.keystone.Keystone/PiiAnonymize"
-	Keystone_Mutate_FullMethodName                = "/kubex.keystone.Keystone/Mutate"
-	Keystone_Destroy_FullMethodName               = "/kubex.keystone.Keystone/Destroy"
-	Keystone_Log_FullMethodName                   = "/kubex.keystone.Keystone/Log"
-	Keystone_SQUID_FullMethodName                 = "/kubex.keystone.Keystone/SQUID"
-	Keystone_SQUIDRecover_FullMethodName          = "/kubex.keystone.Keystone/SQUIDRecover"
-	Keystone_SnapshotReport_FullMethodName        = "/kubex.keystone.Keystone/SnapshotReport"
-	Keystone_ReportTimeSeries_FullMethodName      = "/kubex.keystone.Keystone/ReportTimeSeries"
-	Keystone_ChartTimeSeries_FullMethodName       = "/kubex.keystone.Keystone/ChartTimeSeries"
-	Keystone_Retrieve_FullMethodName              = "/kubex.keystone.Keystone/Retrieve"
-	Keystone_Find_FullMethodName                  = "/kubex.keystone.Keystone/Find"
-	Keystone_List_FullMethodName                  = "/kubex.keystone.Keystone/List"
-	Keystone_QueryIndex_FullMethodName            = "/kubex.keystone.Keystone/QueryIndex"
-	Keystone_Lookup_FullMethodName                = "/kubex.keystone.Keystone/Lookup"
-	Keystone_GroupCount_FullMethodName            = "/kubex.keystone.Keystone/GroupCount"
-	Keystone_Logs_FullMethodName                  = "/kubex.keystone.Keystone/Logs"
-	Keystone_Events_FullMethodName                = "/kubex.keystone.Keystone/Events"
-	Keystone_EventStream_FullMethodName           = "/kubex.keystone.Keystone/EventStream"
-	Keystone_ShareView_FullMethodName             = "/kubex.keystone.Keystone/ShareView"
-	Keystone_SharedViews_FullMethodName           = "/kubex.keystone.Keystone/SharedViews"
-	Keystone_RateLimit_FullMethodName             = "/kubex.keystone.Keystone/RateLimit"
-	Keystone_DailyEntities_FullMethodName         = "/kubex.keystone.Keystone/DailyEntities"
-	Keystone_SchemaStatistics_FullMethodName      = "/kubex.keystone.Keystone/SchemaStatistics"
-	Keystone_AKVGet_FullMethodName                = "/kubex.keystone.Keystone/AKVGet"
-	Keystone_AKVPut_FullMethodName                = "/kubex.keystone.Keystone/AKVPut"
-	Keystone_AKVDel_FullMethodName                = "/kubex.keystone.Keystone/AKVDel"
-	Keystone_AKVTimePut_FullMethodName            = "/kubex.keystone.Keystone/AKVTimePut"
-	Keystone_AKVTimeGet_FullMethodName            = "/kubex.keystone.Keystone/AKVTimeGet"
-	Keystone_AKVTimeDel_FullMethodName            = "/kubex.keystone.Keystone/AKVTimeDel"
-	Keystone_EnumPut_FullMethodName               = "/kubex.keystone.Keystone/EnumPut"
-	Keystone_EnumGet_FullMethodName               = "/kubex.keystone.Keystone/EnumGet"
-	Keystone_EnumDelete_FullMethodName            = "/kubex.keystone.Keystone/EnumDelete"
-	Keystone_EnumList_FullMethodName              = "/kubex.keystone.Keystone/EnumList"
-	Keystone_EnumReplace_FullMethodName           = "/kubex.keystone.Keystone/EnumReplace"
-	Keystone_PushTask_FullMethodName              = "/kubex.keystone.Keystone/PushTask"
-	Keystone_TaskStream_FullMethodName            = "/kubex.keystone.Keystone/TaskStream"
-	Keystone_RelayCreateSession_FullMethodName    = "/kubex.keystone.Keystone/RelayCreateSession"
-	Keystone_RelayExtendSession_FullMethodName    = "/kubex.keystone.Keystone/RelayExtendSession"
-	Keystone_RelayDestroySession_FullMethodName   = "/kubex.keystone.Keystone/RelayDestroySession"
-	Keystone_RelayCreateShortCode_FullMethodName  = "/kubex.keystone.Keystone/RelayCreateShortCode"
-	Keystone_RelayResolveShortCode_FullMethodName = "/kubex.keystone.Keystone/RelayResolveShortCode"
-	Keystone_RelayDeleteShortCode_FullMethodName  = "/kubex.keystone.Keystone/RelayDeleteShortCode"
-	Keystone_RelayPublish_FullMethodName          = "/kubex.keystone.Keystone/RelayPublish"
-	Keystone_RelayGetPresence_FullMethodName      = "/kubex.keystone.Keystone/RelayGetPresence"
+	Keystone_Status_FullMethodName                  = "/kubex.keystone.Keystone/Status"
+	Keystone_Define_FullMethodName                  = "/kubex.keystone.Keystone/Define"
+	Keystone_IID_FullMethodName                     = "/kubex.keystone.Keystone/IID"
+	Keystone_IIDLookup_FullMethodName               = "/kubex.keystone.Keystone/IIDLookup"
+	Keystone_PiiToken_FullMethodName                = "/kubex.keystone.Keystone/PiiToken"
+	Keystone_PiiAnonymize_FullMethodName            = "/kubex.keystone.Keystone/PiiAnonymize"
+	Keystone_Mutate_FullMethodName                  = "/kubex.keystone.Keystone/Mutate"
+	Keystone_Destroy_FullMethodName                 = "/kubex.keystone.Keystone/Destroy"
+	Keystone_Log_FullMethodName                     = "/kubex.keystone.Keystone/Log"
+	Keystone_SQUID_FullMethodName                   = "/kubex.keystone.Keystone/SQUID"
+	Keystone_SQUIDRecover_FullMethodName            = "/kubex.keystone.Keystone/SQUIDRecover"
+	Keystone_SnapshotReport_FullMethodName          = "/kubex.keystone.Keystone/SnapshotReport"
+	Keystone_ReportTimeSeries_FullMethodName        = "/kubex.keystone.Keystone/ReportTimeSeries"
+	Keystone_ChartTimeSeries_FullMethodName         = "/kubex.keystone.Keystone/ChartTimeSeries"
+	Keystone_Retrieve_FullMethodName                = "/kubex.keystone.Keystone/Retrieve"
+	Keystone_Find_FullMethodName                    = "/kubex.keystone.Keystone/Find"
+	Keystone_List_FullMethodName                    = "/kubex.keystone.Keystone/List"
+	Keystone_QueryIndex_FullMethodName              = "/kubex.keystone.Keystone/QueryIndex"
+	Keystone_Lookup_FullMethodName                  = "/kubex.keystone.Keystone/Lookup"
+	Keystone_GroupCount_FullMethodName              = "/kubex.keystone.Keystone/GroupCount"
+	Keystone_Logs_FullMethodName                    = "/kubex.keystone.Keystone/Logs"
+	Keystone_Events_FullMethodName                  = "/kubex.keystone.Keystone/Events"
+	Keystone_EventStream_FullMethodName             = "/kubex.keystone.Keystone/EventStream"
+	Keystone_ShareView_FullMethodName               = "/kubex.keystone.Keystone/ShareView"
+	Keystone_SharedViews_FullMethodName             = "/kubex.keystone.Keystone/SharedViews"
+	Keystone_RateLimit_FullMethodName               = "/kubex.keystone.Keystone/RateLimit"
+	Keystone_DailyEntities_FullMethodName           = "/kubex.keystone.Keystone/DailyEntities"
+	Keystone_SchemaStatistics_FullMethodName        = "/kubex.keystone.Keystone/SchemaStatistics"
+	Keystone_AKVGet_FullMethodName                  = "/kubex.keystone.Keystone/AKVGet"
+	Keystone_AKVPut_FullMethodName                  = "/kubex.keystone.Keystone/AKVPut"
+	Keystone_AKVDel_FullMethodName                  = "/kubex.keystone.Keystone/AKVDel"
+	Keystone_AKVTimePut_FullMethodName              = "/kubex.keystone.Keystone/AKVTimePut"
+	Keystone_AKVTimeGet_FullMethodName              = "/kubex.keystone.Keystone/AKVTimeGet"
+	Keystone_AKVTimeDel_FullMethodName              = "/kubex.keystone.Keystone/AKVTimeDel"
+	Keystone_EnumPut_FullMethodName                 = "/kubex.keystone.Keystone/EnumPut"
+	Keystone_EnumGet_FullMethodName                 = "/kubex.keystone.Keystone/EnumGet"
+	Keystone_EnumDelete_FullMethodName              = "/kubex.keystone.Keystone/EnumDelete"
+	Keystone_EnumList_FullMethodName                = "/kubex.keystone.Keystone/EnumList"
+	Keystone_EnumReplace_FullMethodName             = "/kubex.keystone.Keystone/EnumReplace"
+	Keystone_PushTask_FullMethodName                = "/kubex.keystone.Keystone/PushTask"
+	Keystone_TaskStream_FullMethodName              = "/kubex.keystone.Keystone/TaskStream"
+	Keystone_RelayCreateSession_FullMethodName      = "/kubex.keystone.Keystone/RelayCreateSession"
+	Keystone_RelayExtendSession_FullMethodName      = "/kubex.keystone.Keystone/RelayExtendSession"
+	Keystone_RelayDestroySession_FullMethodName     = "/kubex.keystone.Keystone/RelayDestroySession"
+	Keystone_RelayCreateShortCode_FullMethodName    = "/kubex.keystone.Keystone/RelayCreateShortCode"
+	Keystone_RelayResolveShortCode_FullMethodName   = "/kubex.keystone.Keystone/RelayResolveShortCode"
+	Keystone_RelayDeleteShortCode_FullMethodName    = "/kubex.keystone.Keystone/RelayDeleteShortCode"
+	Keystone_RelayPublish_FullMethodName            = "/kubex.keystone.Keystone/RelayPublish"
+	Keystone_RelayGetPresence_FullMethodName        = "/kubex.keystone.Keystone/RelayGetPresence"
+	Keystone_RelayGetSessionMetadata_FullMethodName = "/kubex.keystone.Keystone/RelayGetSessionMetadata"
+	Keystone_RelaySetSessionMetadata_FullMethodName = "/kubex.keystone.Keystone/RelaySetSessionMetadata"
 )
 
 // KeystoneClient is the client API for Keystone service.
@@ -136,6 +138,8 @@ type KeystoneClient interface {
 	RelayDeleteShortCode(ctx context.Context, in *RelayDeleteShortCodeRequest, opts ...grpc.CallOption) (*RelayDeleteShortCodeResponse, error)
 	RelayPublish(ctx context.Context, in *RelayPublishRequest, opts ...grpc.CallOption) (*RelayPublishResponse, error)
 	RelayGetPresence(ctx context.Context, in *RelayGetPresenceRequest, opts ...grpc.CallOption) (*RelayGetPresenceResponse, error)
+	RelayGetSessionMetadata(ctx context.Context, in *RelayGetSessionMetadataRequest, opts ...grpc.CallOption) (*RelayGetSessionMetadataResponse, error)
+	RelaySetSessionMetadata(ctx context.Context, in *RelaySetSessionMetadataRequest, opts ...grpc.CallOption) (*RelaySetSessionMetadataResponse, error)
 }
 
 type keystoneClient struct {
@@ -649,6 +653,26 @@ func (c *keystoneClient) RelayGetPresence(ctx context.Context, in *RelayGetPrese
 	return out, nil
 }
 
+func (c *keystoneClient) RelayGetSessionMetadata(ctx context.Context, in *RelayGetSessionMetadataRequest, opts ...grpc.CallOption) (*RelayGetSessionMetadataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelayGetSessionMetadataResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelayGetSessionMetadata_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RelaySetSessionMetadata(ctx context.Context, in *RelaySetSessionMetadataRequest, opts ...grpc.CallOption) (*RelaySetSessionMetadataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RelaySetSessionMetadataResponse)
+	err := c.cc.Invoke(ctx, Keystone_RelaySetSessionMetadata_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KeystoneServer is the server API for Keystone service.
 // All implementations must embed UnimplementedKeystoneServer
 // for forward compatibility.
@@ -715,6 +739,8 @@ type KeystoneServer interface {
 	RelayDeleteShortCode(context.Context, *RelayDeleteShortCodeRequest) (*RelayDeleteShortCodeResponse, error)
 	RelayPublish(context.Context, *RelayPublishRequest) (*RelayPublishResponse, error)
 	RelayGetPresence(context.Context, *RelayGetPresenceRequest) (*RelayGetPresenceResponse, error)
+	RelayGetSessionMetadata(context.Context, *RelayGetSessionMetadataRequest) (*RelayGetSessionMetadataResponse, error)
+	RelaySetSessionMetadata(context.Context, *RelaySetSessionMetadataRequest) (*RelaySetSessionMetadataResponse, error)
 	mustEmbedUnimplementedKeystoneServer()
 }
 
@@ -871,6 +897,12 @@ func (UnimplementedKeystoneServer) RelayPublish(context.Context, *RelayPublishRe
 }
 func (UnimplementedKeystoneServer) RelayGetPresence(context.Context, *RelayGetPresenceRequest) (*RelayGetPresenceResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RelayGetPresence not implemented")
+}
+func (UnimplementedKeystoneServer) RelayGetSessionMetadata(context.Context, *RelayGetSessionMetadataRequest) (*RelayGetSessionMetadataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelayGetSessionMetadata not implemented")
+}
+func (UnimplementedKeystoneServer) RelaySetSessionMetadata(context.Context, *RelaySetSessionMetadataRequest) (*RelaySetSessionMetadataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RelaySetSessionMetadata not implemented")
 }
 func (UnimplementedKeystoneServer) mustEmbedUnimplementedKeystoneServer() {}
 func (UnimplementedKeystoneServer) testEmbeddedByValue()                  {}
@@ -1757,6 +1789,42 @@ func _Keystone_RelayGetPresence_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Keystone_RelayGetSessionMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelayGetSessionMetadataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelayGetSessionMetadata(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelayGetSessionMetadata_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelayGetSessionMetadata(ctx, req.(*RelayGetSessionMetadataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RelaySetSessionMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RelaySetSessionMetadataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RelaySetSessionMetadata(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RelaySetSessionMetadata_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RelaySetSessionMetadata(ctx, req.(*RelaySetSessionMetadataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Keystone_ServiceDesc is the grpc.ServiceDesc for Keystone service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1951,6 +2019,14 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RelayGetPresence",
 			Handler:    _Keystone_RelayGetPresence_Handler,
+		},
+		{
+			MethodName: "RelayGetSessionMetadata",
+			Handler:    _Keystone_RelayGetSessionMetadata_Handler,
+		},
+		{
+			MethodName: "RelaySetSessionMetadata",
+			Handler:    _Keystone_RelaySetSessionMetadata_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
