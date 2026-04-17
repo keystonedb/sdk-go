@@ -9011,6 +9011,7 @@ type RelayCreateSessionResponse struct {
 	WorkspaceSlug string                 `protobuf:"bytes,2,opt,name=workspace_slug,json=workspaceSlug,proto3" json:"workspace_slug,omitempty"`
 	ExpiresAtMs   int64                  `protobuf:"varint,3,opt,name=expires_at_ms,json=expiresAtMs,proto3" json:"expires_at_ms,omitempty"`
 	ServerTsMs    int64                  `protobuf:"varint,4,opt,name=server_ts_ms,json=serverTsMs,proto3" json:"server_ts_ms,omitempty"`
+	Url           string                 `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"` // fully qualified wss:// endpoint for this session
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -9071,6 +9072,13 @@ func (x *RelayCreateSessionResponse) GetServerTsMs() int64 {
 		return x.ServerTsMs
 	}
 	return 0
+}
+
+func (x *RelayCreateSessionResponse) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
 }
 
 type RelayExtendSessionRequest struct {
@@ -9442,6 +9450,7 @@ type RelayResolveShortCodeResponse struct {
 	SessionId          string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	WorkspaceSlug      string                 `protobuf:"bytes,2,opt,name=workspace_slug,json=workspaceSlug,proto3" json:"workspace_slug,omitempty"`
 	SessionExpiresAtMs int64                  `protobuf:"varint,3,opt,name=session_expires_at_ms,json=sessionExpiresAtMs,proto3" json:"session_expires_at_ms,omitempty"`
+	Url                string                 `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"` // fully qualified wss:// endpoint for this session
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -9495,6 +9504,13 @@ func (x *RelayResolveShortCodeResponse) GetSessionExpiresAtMs() int64 {
 		return x.SessionExpiresAtMs
 	}
 	return 0
+}
+
+func (x *RelayResolveShortCodeResponse) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
 }
 
 type RelayDeleteShortCodeRequest struct {
@@ -10861,14 +10877,15 @@ const file_keystone_proto_rawDesc = "" +
 	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12\x15\n" +
 	"\x06ttl_ms\x18\x02 \x01(\x03R\x05ttlMs\x12\x1a\n" +
 	"\bmetadata\x18\x03 \x01(\fR\bmetadata\x12'\n" +
-	"\x0fidempotency_key\x18\x04 \x01(\tR\x0eidempotencyKey\"\xa8\x01\n" +
+	"\x0fidempotency_key\x18\x04 \x01(\tR\x0eidempotencyKey\"\xba\x01\n" +
 	"\x1aRelayCreateSessionResponse\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12%\n" +
 	"\x0eworkspace_slug\x18\x02 \x01(\tR\rworkspaceSlug\x12\"\n" +
 	"\rexpires_at_ms\x18\x03 \x01(\x03R\vexpiresAtMs\x12 \n" +
 	"\fserver_ts_ms\x18\x04 \x01(\x03R\n" +
-	"serverTsMs\"\xa1\x01\n" +
+	"serverTsMs\x12\x10\n" +
+	"\x03url\x18\x05 \x01(\tR\x03url\"\xa1\x01\n" +
 	"\x19RelayExtendSessionRequest\x12C\n" +
 	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12\x1d\n" +
 	"\n" +
@@ -10893,12 +10910,13 @@ const file_keystone_proto_rawDesc = "" +
 	"\rexpires_at_ms\x18\x02 \x01(\x03R\vexpiresAtMs\"w\n" +
 	"\x1cRelayResolveShortCodeRequest\x12C\n" +
 	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12\x12\n" +
-	"\x04code\x18\x02 \x01(\tR\x04code\"\x98\x01\n" +
+	"\x04code\x18\x02 \x01(\tR\x04code\"\xaa\x01\n" +
 	"\x1dRelayResolveShortCodeResponse\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12%\n" +
 	"\x0eworkspace_slug\x18\x02 \x01(\tR\rworkspaceSlug\x121\n" +
-	"\x15session_expires_at_ms\x18\x03 \x01(\x03R\x12sessionExpiresAtMs\"v\n" +
+	"\x15session_expires_at_ms\x18\x03 \x01(\x03R\x12sessionExpiresAtMs\x12\x10\n" +
+	"\x03url\x18\x04 \x01(\tR\x03url\"v\n" +
 	"\x1bRelayDeleteShortCodeRequest\x12C\n" +
 	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\"\x1e\n" +
