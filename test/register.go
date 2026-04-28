@@ -110,9 +110,9 @@ func init() {
 	reqs = append(reqs, &find.Requirement{})
 	reqs = append(reqs, &enums.Requirement{})
 	reqs = append(reqs, &akv_timeline.Requirement{})
-	reqs = append(reqs, &relay.Requirement{})
+	//reqs = append(reqs, &relay.Requirement{})
 
-	if true {
+	if false {
 		reqs = []requirements.Requirement{}
 		reqs = append(reqs, &relay.Requirement{})
 		//reqs = append(reqs, &akv_timeline.Requirement{})

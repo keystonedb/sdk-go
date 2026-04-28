@@ -7,11 +7,16 @@ import (
 	"sync"
 	"time"
 
+	"strings"
+
+	"crypto/tls"
+
 	"github.com/keystonedb/sdk-go/proto"
 	"github.com/packaged/logger/v3/logger"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/backoff"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
 )
@@ -28,9 +33,19 @@ type Connection struct {
 	registerQueue map[reflect.Type]bool // true if the type is processing registration
 }
 
+func transportCredentials(endpoint string) grpc.DialOption {
+	if strings.HasSuffix(endpoint, ":443") || strings.HasPrefix(endpoint, "https://") {
+		return grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{
+			ServerName: endpoint,
+			MinVersion: tls.VersionTLS12,
+		}))
+	}
+	return grpc.WithTransportCredentials(insecure.NewCredentials())
+}
+
 func DefaultConnection(host, port, vendorID, appID, accessToken string) *Connection {
 	ksGrpcConn, err := grpc.NewClient(host+":"+port,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		transportCredentials(host+":"+port),
 		grpc.WithIdleTimeout(time.Minute*5),
 		grpc.WithConnectParams(grpc.ConnectParams{
 			Backoff: backoff.Config{
