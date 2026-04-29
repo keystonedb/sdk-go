@@ -3,6 +3,7 @@ package query
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -25,7 +26,7 @@ func (d *Requirement) Name() string {
 
 func (d *Requirement) Register(conn *keystone.Connection) error {
 	d.runID = k4id.New().String()
-	conn.RegisterTypes(models.FileData{}, models.Subscription{}, models.Renewal{})
+	conn.RegisterTypes(models.FileData{}, models.Subscription{}, models.Renewal{}, models.Offer{})
 	return nil
 }
 
@@ -35,6 +36,9 @@ func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter
 	report(d.readOneTwo(actor))
 	report(d.readThree(actor))
 	report(d.readComplex(actor))
+	report(d.createOffers(actor))
+	report(d.readOfferByProduct(actor))
+	report(d.readOfferByGlobalOrProduct(actor))
 	report(d.createChildEntities(actor))
 	report(d.readByEntityIDs(actor))
 	report(d.readByEntityIDsAndParent(actor))
@@ -245,6 +249,123 @@ func (d *Requirement) readByEntityIDsAndParent(actor *keystone.Actor) requiremen
 	}
 }
 
+func (d *Requirement) createOffers(actor *keystone.Actor) requirements.TestResult {
+	offers := []*models.Offer{
+		{
+			DisplayName: "offer-simple-" + d.runID,
+			TestRun:     d.runID,
+			ProductIDs:  []string{d.offerProductID("101")},
+		},
+		{
+			DisplayName: "offer-global-" + d.runID,
+			TestRun:     d.runID,
+			IsGlobal:    true,
+		},
+		{
+			DisplayName: "offer-targeted-" + d.runID,
+			TestRun:     d.runID,
+			ProductIDs:  []string{d.offerProductID("102")},
+		},
+		{
+			DisplayName: "offer-unrelated-" + d.runID,
+			TestRun:     d.runID,
+			ProductIDs:  []string{d.offerProductID("999")},
+		},
+	}
+
+	for _, offer := range offers {
+		if err := actor.Mutate(context.Background(), offer, keystone.WithMutationComment("Create offer for query contains test")); err != nil {
+			return requirements.TestResult{
+				Name:  "createOffers",
+				Error: err,
+			}
+		}
+	}
+
+	return requirements.TestResult{Name: "createOffers"}
+}
+
+func (d *Requirement) readOfferByProduct(actor *keystone.Actor) requirements.TestResult {
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Offer{}),
+		[]string{"display_name", "test_run", "is_global", "product_ids"},
+		keystone.WhereEquals("test_run", d.runID),
+		keystone.WhereContains("product_ids", d.offerProductID("101")))
+	if err == nil && len(entities) != 1 {
+		err = fmt.Errorf("expected 1 offer, got %d", len(entities))
+	}
+
+	if err == nil {
+		offer := &models.Offer{}
+		if unmarshalErr := keystone.Unmarshal(entities[0], offer); unmarshalErr != nil {
+			err = unmarshalErr
+		} else if offer.DisplayName != "offer-simple-"+d.runID {
+			err = fmt.Errorf("unexpected offer returned: %s", offer.DisplayName)
+		} else if offer.IsGlobal {
+			err = errors.New("expected non-global offer for product contains query")
+		} else if !containsString(offer.ProductIDs, d.offerProductID("101")) {
+			err = fmt.Errorf("expected product id %s in result", d.offerProductID("101"))
+		}
+	}
+
+	return requirements.TestResult{
+		Name:  "readOfferByProduct",
+		Error: err,
+	}
+}
+
+func (d *Requirement) readOfferByGlobalOrProduct(actor *keystone.Actor) requirements.TestResult {
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Offer{}),
+		[]string{"display_name", "test_run", "is_global", "product_ids"},
+		keystone.WhereEquals("test_run", d.runID),
+		keystone.Or(
+			keystone.WhereEquals("is_global", true),
+			keystone.WhereContains("product_ids", d.offerProductID("102")),
+		))
+	if err == nil && len(entities) != 2 {
+		err = fmt.Errorf("expected 2 offers, got %d", len(entities))
+	}
+
+	expected := map[string]bool{
+		"offer-global-" + d.runID:   false,
+		"offer-targeted-" + d.runID: false,
+	}
+
+	if err == nil {
+		for _, entity := range entities {
+			offer := &models.Offer{}
+			if unmarshalErr := keystone.Unmarshal(entity, offer); unmarshalErr != nil {
+				err = unmarshalErr
+				break
+			}
+
+			matched, ok := expected[offer.DisplayName]
+			if !ok {
+				err = fmt.Errorf("unexpected offer returned: %s", offer.DisplayName)
+				break
+			}
+			if matched {
+				err = fmt.Errorf("duplicate offer returned: %s", offer.DisplayName)
+				break
+			}
+			expected[offer.DisplayName] = true
+		}
+	}
+
+	if err == nil {
+		for name, found := range expected {
+			if !found {
+				err = fmt.Errorf("expected offer not returned: %s", name)
+				break
+			}
+		}
+	}
+
+	return requirements.TestResult{
+		Name:  "readOfferByGlobalOrProduct",
+		Error: err,
+	}
+}
+
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 	files := []*models.FileData{
 		{
@@ -324,4 +445,17 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		Name:  "Create",
 		Error: createErr,
 	}
+}
+
+func (d *Requirement) offerProductID(suffix string) string {
+	return "prod-" + suffix + "-" + d.runID
+}
+
+func containsString(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
 }
