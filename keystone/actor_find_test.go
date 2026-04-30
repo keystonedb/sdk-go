@@ -244,9 +244,11 @@ func TestFindWhereNotIn(t *testing.T) {
 	if filter.Property != "type" {
 		t.Errorf("expected property 'type', got '%s'", filter.Property)
 	}
-	// WhereNotIn uses NotEqual operator internally
-	if filter.Operator != proto.Operator_NotEqual {
-		t.Errorf("expected Operator_NotEqual, got %v", filter.Operator)
+	if filter.Operator != proto.Operator_NotIn {
+		t.Errorf("expected Operator_NotIn, got %v", filter.Operator)
+	}
+	if len(filter.Values) != 2 {
+		t.Errorf("expected 2 values, got %d", len(filter.Values))
 	}
 }
 
@@ -342,7 +344,7 @@ func TestFindWhere(t *testing.T) {
 		{"endswith", "endswith", proto.Operator_EndsWith, []any{"suffix"}},
 		{"ew", "ew", proto.Operator_EndsWith, []any{"suffix"}},
 		{"in", "in", proto.Operator_In, []any{"a", "b", "c"}},
-		{"notin", "notin", proto.Operator_NotEqual, []any{"a", "b"}},
+		{"notin", "notin", proto.Operator_NotIn, []any{"a", "b"}},
 		{"between", "between", proto.Operator_Between, []any{1, 100}},
 		{"btw", "btw", proto.Operator_Between, []any{1, 100}},
 		{"><", "><", proto.Operator_Between, []any{1, 100}},

@@ -39,6 +39,8 @@ func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter
 	report(d.createOffers(actor))
 	report(d.readOfferByProduct(actor))
 	report(d.readOfferByGlobalOrProduct(actor))
+	report(d.readOfferByProductsIn(actor))
+	report(d.readOfferByProductsNotIn(actor))
 	report(d.createChildEntities(actor))
 	report(d.readByEntityIDs(actor))
 	report(d.readByEntityIDsAndParent(actor))
@@ -362,6 +364,74 @@ func (d *Requirement) readOfferByGlobalOrProduct(actor *keystone.Actor) requirem
 
 	return requirements.TestResult{
 		Name:  "readOfferByGlobalOrProduct",
+		Error: err,
+	}
+}
+
+func (d *Requirement) readOfferByProductsIn(actor *keystone.Actor) requirements.TestResult {
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Offer{}),
+		[]string{"display_name", "test_run", "is_global", "product_ids"},
+		keystone.WhereEquals("test_run", d.runID),
+		keystone.WhereIn("product_ids", d.offerProductID("102"), d.offerProductID("201")))
+
+	if err == nil && len(entities) != 1 {
+		err = fmt.Errorf("expected 1 offer overlapping product_ids, got %d", len(entities))
+	}
+
+	if err == nil {
+		offer := &models.Offer{}
+		if unmarshalErr := keystone.Unmarshal(entities[0], offer); unmarshalErr != nil {
+			err = unmarshalErr
+		} else if offer.DisplayName != "offer-targeted-"+d.runID {
+			err = fmt.Errorf("unexpected offer returned: %s", offer.DisplayName)
+		} else if !containsString(offer.ProductIDs, d.offerProductID("102")) {
+			err = fmt.Errorf("expected product id %s in result", d.offerProductID("102"))
+		}
+	}
+
+	return requirements.TestResult{
+		Name:  "readOfferByProductsIn",
+		Error: err,
+	}
+}
+
+func (d *Requirement) readOfferByProductsNotIn(actor *keystone.Actor) requirements.TestResult {
+	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Offer{}),
+		[]string{"display_name", "test_run", "is_global", "product_ids"},
+		keystone.WhereEquals("test_run", d.runID),
+		keystone.WhereNotIn("product_ids", d.offerProductID("101"), d.offerProductID("999")))
+
+	excluded := map[string]bool{
+		"offer-simple-" + d.runID:    true,
+		"offer-unrelated-" + d.runID: true,
+	}
+	requiredFound := false
+
+	if err == nil {
+		for _, entity := range entities {
+			offer := &models.Offer{}
+			if unmarshalErr := keystone.Unmarshal(entity, offer); unmarshalErr != nil {
+				err = unmarshalErr
+				break
+			}
+
+			if excluded[offer.DisplayName] {
+				err = fmt.Errorf("offer %s should have been excluded by NOT IN overlap", offer.DisplayName)
+				break
+			}
+
+			if offer.DisplayName == "offer-targeted-"+d.runID {
+				requiredFound = true
+			}
+		}
+	}
+
+	if err == nil && !requiredFound {
+		err = errors.New("expected offer-targeted in NOT IN overlap result")
+	}
+
+	return requirements.TestResult{
+		Name:  "readOfferByProductsNotIn",
 		Error: err,
 	}
 }
