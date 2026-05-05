@@ -35,6 +35,7 @@ var (
 	EnumVal      = models.ENUM_VALUE1
 	EnumVals     = []models.EnumValue{models.ENUM_VALUE0, models.ENUM_VALUE1}
 	ExternalID   = keystone.NewExternalID("ven", "app", "etype", "external_id")
+	LinkVal      = keystone.NewLink("https://example.com/docs", "Documentation", true)
 	MixedVal     = keystone.NewMixed(nil)
 	MixedKey     = keystone.NewKeyMixed(nil)
 )
@@ -102,6 +103,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 		EnumValue:    EnumVal,
 		Flags:        EnumVals,
 		ExternalID:   ExternalID,
+		Link:         *LinkVal,
 		Mixed:        MixedVal,
 		MixedKey:     MixedKey,
 	}
@@ -185,6 +187,8 @@ func (d *Requirement) read(actor *keystone.Actor) requirements.TestResult {
 			getErr = errors.New("flags mismatch")
 		} else if dt.ExternalID.String() != ExternalID.String() {
 			getErr = errors.New("ExternalID mismatch")
+		} else if dt.Link.Href != LinkVal.Href || dt.Link.Title != LinkVal.Title || dt.Link.NewWindow != LinkVal.NewWindow {
+			getErr = errors.New("Link mismatch")
 		} else if !dt.Mixed.Matches(&MixedVal) {
 			getErr = errors.New("MixedVal mismatch")
 		} else if len(dt.MixedKey.Diff(MixedKey.Values())) != 0 {

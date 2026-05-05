@@ -42,6 +42,7 @@ type DataTypes struct {
 	Flags        []EnumValue
 	EnumValue    EnumValue
 	ExternalID   keystone.ExternalID
+	Link         keystone.Link
 	Mixed        keystone.Mixed
 	MixedKey     keystone.KeyMixed
 	IDSlice      []keystone.ID

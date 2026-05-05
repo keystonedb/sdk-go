@@ -109,6 +109,17 @@ func (m *Mixed) Raw() []byte {
 	return m.raw
 }
 
+func (m *Mixed) Link() *Link {
+	if m == nil {
+		return nil
+	}
+	return &Link{
+		Href:      string(m.raw),
+		Title:     m.text,
+		NewWindow: m.bool,
+	}
+}
+
 func (m *Mixed) SetString(text string) {
 	if m == nil {
 		return
@@ -178,6 +189,16 @@ func (m *Mixed) SetValue(value any) {
 		m.time = v.AsTime()
 	case []byte:
 		m.raw = v
+	case Link:
+		m.text = v.Title
+		m.bool = v.NewWindow
+		m.raw = []byte(v.Href)
+	case *Link:
+		if v != nil {
+			m.text = v.Title
+			m.bool = v.NewWindow
+			m.raw = []byte(v.Href)
+		}
 	default:
 		m.raw, _ = json.Marshal(value)
 	}
