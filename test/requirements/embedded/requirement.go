@@ -32,6 +32,8 @@ func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter
 	report(d.find(actor))
 	report(d.update(actor))
 	report(d.reFind(actor))
+	report(d.loadOwnNestedProperties(actor))
+	report(d.loadPrefixProperties(actor))
 }
 
 func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
@@ -144,6 +146,54 @@ func (d *Requirement) reFind(actor *keystone.Actor) requirements.TestResult {
 		return ret.WithError(errors.New("incorrect string value"))
 	} else if mdl.Extended.BoolValue != false {
 		return ret.WithError(errors.New("incorrect boolean value"))
+	}
+
+	return ret
+}
+
+func (d *Requirement) loadOwnNestedProperties(actor *keystone.Actor) requirements.TestResult {
+	ret := requirements.TestResult{Name: "Load Own Nested Properties"}
+
+	mdl := &models.Embedded{}
+	getErr := actor.GetByID(context.Background(), d.createdID, mdl, keystone.WithProperties("extended."))
+	if getErr != nil {
+		return ret.WithError(getErr)
+	}
+
+	if mdl.GetKeystoneID() != d.createdID {
+		return ret.WithError(errors.New("did not find the correct entity"))
+	} else if mdl.Extended.UniqueID != d.uid {
+		return ret.WithError(errors.New("did not load nested unique id"))
+	} else if mdl.Extended.StringValue != "abc" {
+		return ret.WithError(errors.New("did not load nested string value"))
+	} else if mdl.Extended.MapValue["aaa"] != true || mdl.Extended.MapValue["bbb"] != false {
+		return ret.WithError(errors.New("did not load nested map value"))
+	} else if mdl.ExtendedRef != nil {
+		return ret.WithError(errors.New("loaded extended_ref when only extended own properties were requested"))
+	}
+
+	return ret
+}
+
+func (d *Requirement) loadPrefixProperties(actor *keystone.Actor) requirements.TestResult {
+	ret := requirements.TestResult{Name: "Load Prefix Properties"}
+
+	mdl := &models.Embedded{}
+	getErr := actor.GetByID(context.Background(), d.createdID, mdl, keystone.WithProperties("extended~"))
+	if getErr != nil {
+		return ret.WithError(getErr)
+	}
+
+	if mdl.GetKeystoneID() != d.createdID {
+		return ret.WithError(errors.New("did not find the correct entity"))
+	} else if mdl.Extended.UniqueID != d.uid {
+		return ret.WithError(errors.New("did not load extended properties"))
+	} else if mdl.ExtendedRef == nil {
+		return ret.WithError(errors.New("did not load extended_ref properties"))
+	} else if mdl.ExtendedRef.UniqueID != d.uid {
+		return ret.WithError(errors.New("did not load extended_ref unique id"))
+	} else if mdl.Name != "" {
+		return ret.WithError(errors.New("loaded non-prefix property"))
 	}
 
 	return ret
