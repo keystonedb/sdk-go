@@ -110,10 +110,15 @@ type prepareObjects struct {
 func (m prepareObjects) apply(mutate *proto.MutateRequest) {
 	for _, obj := range m.objects {
 		pObj := &proto.EntityObject{
-			Path:   obj.GetPath(),
-			Type:   obj.storageClass,
-			Public: obj.public,
-			Data:   obj.data,
+			Path:               obj.GetPath(),
+			Type:               obj.storageClass,
+			Public:             obj.public,
+			Data:               obj.data,
+			ContentType:        obj.contentType,
+			ContentDisposition: obj.contentDisposition,
+			ContentEncoding:    obj.contentEncoding,
+			ContentLanguage:    obj.contentLanguage,
+			Metadata:           obj.metadata,
 		}
 		if !obj.expiry.IsZero() {
 			pObj.Expiry = timestamppb.New(obj.expiry)

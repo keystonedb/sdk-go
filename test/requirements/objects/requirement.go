@@ -42,6 +42,7 @@ func (d *Requirement) upload(actor *keystone.Actor) requirements.TestResult {
 
 	fileOne := keystone.NewUpload("profile.png", proto.ObjectType_Standard)
 	fileOne.SetExpiry(time.Now().Add(time.Second * 60))
+	fileOne.SetContentType("image/png")
 	fileTwo := keystone.NewUpload("policy.txt", proto.ObjectType_NearLine)
 	fileThree := keystone.NewUpload("public.pdf", proto.ObjectType_Standard)
 	fileThree.SetData([]byte("file contents here"))
@@ -116,6 +117,8 @@ func (d *Requirement) list(actor *keystone.Actor) requirements.TestResult {
 		} else {
 			if obj.GetUrl() == "" {
 				listErr = errors.New("object url is empty")
+			} else if obj.GetContentType() != "image/png" {
+				listErr = fmt.Errorf("content type not set, expected image/png, got %q", obj.GetContentType())
 			}
 		}
 	}
@@ -135,6 +138,8 @@ func (d *Requirement) byPath(actor *keystone.Actor) requirements.TestResult {
 		} else {
 			if obj.GetUrl() == "" {
 				byPathErr = errors.New("object url is empty")
+			} else if obj.GetContentType() != "image/png" {
+				byPathErr = fmt.Errorf("content type not set, expected image/png, got %q", obj.GetContentType())
 			}
 		}
 	}
