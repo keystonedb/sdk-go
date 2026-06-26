@@ -37,3 +37,12 @@ func (e *EmbeddedEvents) AddEvent(eventType string, properties map[string]string
 		Data: properties,
 	})
 }
+
+// AddEventWithTime adds an event with a specific time
+func (e *EmbeddedEvents) AddEventWithTime(eventType string, properties map[string]string, time time.Time) {
+	e.ksEntityEvents = append(e.ksEntityEvents, &proto.EntityEvent{
+		Type: &proto.Key{Key: eventType},
+		Time: timestamppb.New(time),
+		Data: properties,
+	})
+}
