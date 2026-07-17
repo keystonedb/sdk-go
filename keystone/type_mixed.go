@@ -41,6 +41,17 @@ func MixedTo[T any](m *Mixed) T {
 }
 
 func (m *Mixed) ToString() string {
+	v := m.ToStringWithoutRaw()
+	if v != "" {
+		return v
+	}
+	if len(m.raw) != 0 {
+		return string(m.raw)
+	}
+	return ""
+}
+
+func (m *Mixed) ToStringWithoutRaw() string {
 	if m == nil {
 		return ""
 	}
@@ -58,9 +69,6 @@ func (m *Mixed) ToString() string {
 	}
 	if !m.time.IsZero() {
 		return m.time.Format(time.RFC3339)
-	}
-	if len(m.raw) != 0 {
-		return string(m.raw)
 	}
 	return ""
 }
