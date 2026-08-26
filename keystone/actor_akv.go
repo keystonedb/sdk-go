@@ -112,3 +112,66 @@ func (a *Actor) AKVDel(ctx context.Context, properties ...string) (*proto.Generi
 	}
 	return resp, nil
 }
+
+// AKVWorkspacePut stores entries in the application key-value store scoped to
+// the actor's workspace.
+func (a *Actor) AKVWorkspacePut(ctx context.Context, properties ...AKVProperty) (*proto.GenericResponse, error) {
+	if a == nil || a.connection == nil {
+		return nil, errors.New("actor or connection is nil")
+	}
+
+	putRequest := &proto.AKVPutRequest{
+		Authorization: a.Authorization(),
+	}
+	for _, prop := range properties {
+		putRequest.Properties = append(putRequest.Properties, prop.toProto())
+	}
+
+	return a.connection.AKVWorkspacePut(ctx, putRequest)
+}
+
+// AKVWorkspaceGet loads entries from the application key-value store scoped
+// to the actor's workspace.
+func (a *Actor) AKVWorkspaceGet(ctx context.Context, properties ...string) (map[string]*proto.Value, error) {
+	if a == nil || a.connection == nil {
+		return nil, errors.New("actor or connection is nil")
+	}
+
+	resp, err := a.connection.AKVWorkspaceGet(ctx, &proto.AKVGetRequest{
+		Authorization: a.Authorization(),
+		Properties:    properties,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.GetProperties(), nil
+}
+
+// AKVWorkspaceDel deletes entries from the application key-value store scoped
+// to the actor's workspace.
+func (a *Actor) AKVWorkspaceDel(ctx context.Context, properties ...string) (*proto.GenericResponse, error) {
+	if a == nil || a.connection == nil {
+		return nil, errors.New("actor or connection is nil")
+	}
+
+	return a.connection.AKVWorkspaceDel(ctx, &proto.AKVDelRequest{
+		Authorization: a.Authorization(),
+		Properties:    properties,
+	})
+}
+
+// AKVWPut is shorthand for AKVWorkspacePut.
+func (a *Actor) AKVWPut(ctx context.Context, properties ...AKVProperty) (*proto.GenericResponse, error) {
+	return a.AKVWorkspacePut(ctx, properties...)
+}
+
+// AKVWGet is shorthand for AKVWorkspaceGet.
+func (a *Actor) AKVWGet(ctx context.Context, properties ...string) (map[string]*proto.Value, error) {
+	return a.AKVWorkspaceGet(ctx, properties...)
+}
+
+// AKVWDel is shorthand for AKVWorkspaceDel.
+func (a *Actor) AKVWDel(ctx context.Context, properties ...string) (*proto.GenericResponse, error) {
+	return a.AKVWorkspaceDel(ctx, properties...)
+}

@@ -328,6 +328,27 @@ func (c *Connection) AKVDel(ctx context.Context, in *proto.AKVDelRequest, opts .
 	return resp, err
 }
 
+func (c *Connection) AKVWorkspaceGet(ctx context.Context, in *proto.AKVGetRequest, opts ...grpc.CallOption) (*proto.AKVGetResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVWorkspaceGet", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVWorkspaceGet(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) AKVWorkspacePut(ctx context.Context, in *proto.AKVPutRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVWorkspacePut", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVWorkspacePut(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
+func (c *Connection) AKVWorkspaceDel(ctx context.Context, in *proto.AKVDelRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
+	tl := c.timeLogConfig.NewLog("AKVWorkspaceDel", zap.String("App", in.GetAuthorization().GetSource().String()))
+	resp, err := c.client.AKVWorkspaceDel(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}
+
 func (c *Connection) AKVTimePut(ctx context.Context, in *proto.AKVTimePutRequest, opts ...grpc.CallOption) (*proto.GenericResponse, error) {
 	tl := c.timeLogConfig.NewLog("AKVTimePut", zap.String("App", in.GetAuthorization().GetSource().String()))
 	resp, err := c.client.AKVTimePut(ctx, in, opts...)

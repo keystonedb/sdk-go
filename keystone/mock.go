@@ -46,6 +46,9 @@ type MockServer struct {
 	AKVGetFunc           func(context.Context, *proto.AKVGetRequest) (*proto.AKVGetResponse, error)
 	AKVPutFunc           func(context.Context, *proto.AKVPutRequest) (*proto.GenericResponse, error)
 	AKVDelFunc           func(context.Context, *proto.AKVDelRequest) (*proto.GenericResponse, error)
+	AKVWorkspaceGetFunc  func(context.Context, *proto.AKVGetRequest) (*proto.AKVGetResponse, error)
+	AKVWorkspacePutFunc  func(context.Context, *proto.AKVPutRequest) (*proto.GenericResponse, error)
+	AKVWorkspaceDelFunc  func(context.Context, *proto.AKVDelRequest) (*proto.GenericResponse, error)
 	PushTaskFunc         func(context.Context, *proto.PushTaskRequest) (*proto.GenericResponse, error)
 	EnumPutFunc          func(context.Context, *proto.EnumPutRequest) (*proto.GenericResponse, error)
 	EnumGetFunc          func(context.Context, *proto.EnumGetRequest) (*proto.EnumGetResponse, error)
@@ -290,6 +293,27 @@ func (m *MockServer) AKVDel(ctx context.Context, req *proto.AKVDelRequest) (*pro
 		return m.UnimplementedKeystoneServer.AKVDel(ctx, req)
 	}
 	return m.AKVDelFunc(ctx, req)
+}
+
+func (m *MockServer) AKVWorkspaceGet(ctx context.Context, req *proto.AKVGetRequest) (*proto.AKVGetResponse, error) {
+	if m.AKVWorkspaceGetFunc == nil {
+		return m.UnimplementedKeystoneServer.AKVWorkspaceGet(ctx, req)
+	}
+	return m.AKVWorkspaceGetFunc(ctx, req)
+}
+
+func (m *MockServer) AKVWorkspacePut(ctx context.Context, req *proto.AKVPutRequest) (*proto.GenericResponse, error) {
+	if m.AKVWorkspacePutFunc == nil {
+		return m.UnimplementedKeystoneServer.AKVWorkspacePut(ctx, req)
+	}
+	return m.AKVWorkspacePutFunc(ctx, req)
+}
+
+func (m *MockServer) AKVWorkspaceDel(ctx context.Context, req *proto.AKVDelRequest) (*proto.GenericResponse, error) {
+	if m.AKVWorkspaceDelFunc == nil {
+		return m.UnimplementedKeystoneServer.AKVWorkspaceDel(ctx, req)
+	}
+	return m.AKVWorkspaceDelFunc(ctx, req)
 }
 
 func (m *MockServer) PushTask(ctx context.Context, req *proto.PushTaskRequest) (*proto.GenericResponse, error) {

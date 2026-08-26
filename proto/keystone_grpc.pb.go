@@ -50,6 +50,9 @@ const (
 	Keystone_AKVGet_FullMethodName                  = "/kubex.keystone.Keystone/AKVGet"
 	Keystone_AKVPut_FullMethodName                  = "/kubex.keystone.Keystone/AKVPut"
 	Keystone_AKVDel_FullMethodName                  = "/kubex.keystone.Keystone/AKVDel"
+	Keystone_AKVWorkspaceGet_FullMethodName         = "/kubex.keystone.Keystone/AKVWorkspaceGet"
+	Keystone_AKVWorkspacePut_FullMethodName         = "/kubex.keystone.Keystone/AKVWorkspacePut"
+	Keystone_AKVWorkspaceDel_FullMethodName         = "/kubex.keystone.Keystone/AKVWorkspaceDel"
 	Keystone_AKVTimePut_FullMethodName              = "/kubex.keystone.Keystone/AKVTimePut"
 	Keystone_AKVTimeGet_FullMethodName              = "/kubex.keystone.Keystone/AKVTimeGet"
 	Keystone_AKVTimeDel_FullMethodName              = "/kubex.keystone.Keystone/AKVTimeDel"
@@ -117,6 +120,10 @@ type KeystoneClient interface {
 	AKVGet(ctx context.Context, in *AKVGetRequest, opts ...grpc.CallOption) (*AKVGetResponse, error)
 	AKVPut(ctx context.Context, in *AKVPutRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	AKVDel(ctx context.Context, in *AKVDelRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	// Workspace-scoped App Key Value Store
+	AKVWorkspaceGet(ctx context.Context, in *AKVGetRequest, opts ...grpc.CallOption) (*AKVGetResponse, error)
+	AKVWorkspacePut(ctx context.Context, in *AKVPutRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	AKVWorkspaceDel(ctx context.Context, in *AKVDelRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	// App Key Value Time Track
 	AKVTimePut(ctx context.Context, in *AKVTimePutRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	AKVTimeGet(ctx context.Context, in *AKVTimeGetRequest, opts ...grpc.CallOption) (*AKVTimeGetResponse, error)
@@ -470,6 +477,36 @@ func (c *keystoneClient) AKVDel(ctx context.Context, in *AKVDelRequest, opts ...
 	return out, nil
 }
 
+func (c *keystoneClient) AKVWorkspaceGet(ctx context.Context, in *AKVGetRequest, opts ...grpc.CallOption) (*AKVGetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AKVGetResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVWorkspaceGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) AKVWorkspacePut(ctx context.Context, in *AKVPutRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVWorkspacePut_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) AKVWorkspaceDel(ctx context.Context, in *AKVDelRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_AKVWorkspaceDel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *keystoneClient) AKVTimePut(ctx context.Context, in *AKVTimePutRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GenericResponse)
@@ -718,6 +755,10 @@ type KeystoneServer interface {
 	AKVGet(context.Context, *AKVGetRequest) (*AKVGetResponse, error)
 	AKVPut(context.Context, *AKVPutRequest) (*GenericResponse, error)
 	AKVDel(context.Context, *AKVDelRequest) (*GenericResponse, error)
+	// Workspace-scoped App Key Value Store
+	AKVWorkspaceGet(context.Context, *AKVGetRequest) (*AKVGetResponse, error)
+	AKVWorkspacePut(context.Context, *AKVPutRequest) (*GenericResponse, error)
+	AKVWorkspaceDel(context.Context, *AKVDelRequest) (*GenericResponse, error)
 	// App Key Value Time Track
 	AKVTimePut(context.Context, *AKVTimePutRequest) (*GenericResponse, error)
 	AKVTimeGet(context.Context, *AKVTimeGetRequest) (*AKVTimeGetResponse, error)
@@ -843,6 +884,15 @@ func (UnimplementedKeystoneServer) AKVPut(context.Context, *AKVPutRequest) (*Gen
 }
 func (UnimplementedKeystoneServer) AKVDel(context.Context, *AKVDelRequest) (*GenericResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AKVDel not implemented")
+}
+func (UnimplementedKeystoneServer) AKVWorkspaceGet(context.Context, *AKVGetRequest) (*AKVGetResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AKVWorkspaceGet not implemented")
+}
+func (UnimplementedKeystoneServer) AKVWorkspacePut(context.Context, *AKVPutRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AKVWorkspacePut not implemented")
+}
+func (UnimplementedKeystoneServer) AKVWorkspaceDel(context.Context, *AKVDelRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AKVWorkspaceDel not implemented")
 }
 func (UnimplementedKeystoneServer) AKVTimePut(context.Context, *AKVTimePutRequest) (*GenericResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AKVTimePut not implemented")
@@ -1476,6 +1526,60 @@ func _Keystone_AKVDel_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Keystone_AKVWorkspaceGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVWorkspaceGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVWorkspaceGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVWorkspaceGet(ctx, req.(*AKVGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_AKVWorkspacePut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVPutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVWorkspacePut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVWorkspacePut_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVWorkspacePut(ctx, req.(*AKVPutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_AKVWorkspaceDel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AKVDelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AKVWorkspaceDel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AKVWorkspaceDel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AKVWorkspaceDel(ctx, req.(*AKVDelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Keystone_AKVTimePut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AKVTimePutRequest)
 	if err := dec(in); err != nil {
@@ -1951,6 +2055,18 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AKVDel",
 			Handler:    _Keystone_AKVDel_Handler,
+		},
+		{
+			MethodName: "AKVWorkspaceGet",
+			Handler:    _Keystone_AKVWorkspaceGet_Handler,
+		},
+		{
+			MethodName: "AKVWorkspacePut",
+			Handler:    _Keystone_AKVWorkspacePut_Handler,
+		},
+		{
+			MethodName: "AKVWorkspaceDel",
+			Handler:    _Keystone_AKVWorkspaceDel_Handler,
 		},
 		{
 			MethodName: "AKVTimePut",
