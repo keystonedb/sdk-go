@@ -108,7 +108,7 @@ type KeystoneClient interface {
 	GroupCount(ctx context.Context, in *GroupCountRequest, opts ...grpc.CallOption) (*GroupCountResponse, error)
 	Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsResponse, error)
 	Events(ctx context.Context, in *EventRequest, opts ...grpc.CallOption) (*EventsResponse, error)
-	EventStream(ctx context.Context, in *EventStreamRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[EventStreamResponse], error)
+	EventStream(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[EventStreamRequest, EventStreamResponse], error)
 	// Shared Views
 	ShareView(ctx context.Context, in *ShareViewRequest, opts ...grpc.CallOption) (*SharedViewResponse, error)
 	SharedViews(ctx context.Context, in *SharedViewsRequest, opts ...grpc.CallOption) (*SharedViewsResponse, error)
@@ -378,24 +378,18 @@ func (c *keystoneClient) Events(ctx context.Context, in *EventRequest, opts ...g
 	return out, nil
 }
 
-func (c *keystoneClient) EventStream(ctx context.Context, in *EventStreamRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[EventStreamResponse], error) {
+func (c *keystoneClient) EventStream(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[EventStreamRequest, EventStreamResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &Keystone_ServiceDesc.Streams[0], Keystone_EventStream_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	x := &grpc.GenericClientStream[EventStreamRequest, EventStreamResponse]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
 	return x, nil
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type Keystone_EventStreamClient = grpc.ServerStreamingClient[EventStreamResponse]
+type Keystone_EventStreamClient = grpc.BidiStreamingClient[EventStreamRequest, EventStreamResponse]
 
 func (c *keystoneClient) ShareView(ctx context.Context, in *ShareViewRequest, opts ...grpc.CallOption) (*SharedViewResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -743,7 +737,7 @@ type KeystoneServer interface {
 	GroupCount(context.Context, *GroupCountRequest) (*GroupCountResponse, error)
 	Logs(context.Context, *LogsRequest) (*LogsResponse, error)
 	Events(context.Context, *EventRequest) (*EventsResponse, error)
-	EventStream(*EventStreamRequest, grpc.ServerStreamingServer[EventStreamResponse]) error
+	EventStream(grpc.BidiStreamingServer[EventStreamRequest, EventStreamResponse]) error
 	// Shared Views
 	ShareView(context.Context, *ShareViewRequest) (*SharedViewResponse, error)
 	SharedViews(context.Context, *SharedViewsRequest) (*SharedViewsResponse, error)
@@ -858,7 +852,7 @@ func (UnimplementedKeystoneServer) Logs(context.Context, *LogsRequest) (*LogsRes
 func (UnimplementedKeystoneServer) Events(context.Context, *EventRequest) (*EventsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Events not implemented")
 }
-func (UnimplementedKeystoneServer) EventStream(*EventStreamRequest, grpc.ServerStreamingServer[EventStreamResponse]) error {
+func (UnimplementedKeystoneServer) EventStream(grpc.BidiStreamingServer[EventStreamRequest, EventStreamResponse]) error {
 	return status.Error(codes.Unimplemented, "method EventStream not implemented")
 }
 func (UnimplementedKeystoneServer) ShareView(context.Context, *ShareViewRequest) (*SharedViewResponse, error) {
@@ -1372,15 +1366,11 @@ func _Keystone_Events_Handler(srv interface{}, ctx context.Context, dec func(int
 }
 
 func _Keystone_EventStream_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(EventStreamRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(KeystoneServer).EventStream(m, &grpc.GenericServerStream[EventStreamRequest, EventStreamResponse]{ServerStream: stream})
+	return srv.(KeystoneServer).EventStream(&grpc.GenericServerStream[EventStreamRequest, EventStreamResponse]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type Keystone_EventStreamServer = grpc.ServerStreamingServer[EventStreamResponse]
+type Keystone_EventStreamServer = grpc.BidiStreamingServer[EventStreamRequest, EventStreamResponse]
 
 func _Keystone_ShareView_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ShareViewRequest)
@@ -2150,6 +2140,7 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "EventStream",
 			Handler:       _Keystone_EventStream_Handler,
 			ServerStreams: true,
+			ClientStreams: true,
 		},
 		{
 			StreamName:    "TaskStream",

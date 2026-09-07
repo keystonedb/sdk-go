@@ -427,9 +427,12 @@ func (c *Connection) IIDLookup(ctx context.Context, in *proto.IIDRequest, opts .
 	return resp, err
 }
 
-func (c *Connection) EventStream(ctx context.Context, in *proto.EventStreamRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[proto.EventStreamResponse], error) {
+func (c *Connection) EventStream(ctx context.Context, in *proto.EventStreamRequest, opts ...grpc.CallOption) (grpc.BidiStreamingClient[proto.EventStreamRequest, proto.EventStreamResponse], error) {
 	tl := c.timeLogConfig.NewLog("EventStream", zap.String("App", in.GetAuthorization().GetSource().String()))
-	resp, err := c.client.EventStream(ctx, in, opts...)
+	resp, err := c.client.EventStream(ctx, opts...)
+	if err == nil {
+		err = resp.Send(in)
+	}
 	c.logger.TimedLog(tl)
 	return resp, err
 }
