@@ -53,7 +53,7 @@ func (d *Requirement) createEvent(actor *keystone.Actor) requirements.TestResult
 }
 
 func (d *Requirement) acknowledgementLifecycle(actor *keystone.Actor) requirements.TestResult {
-	result := requirements.TestResult{Name: "ACK, NAK, Delayed NAK, and In Progress"}
+	result := requirements.TestResult{Name: "ACK, NAK, Delayed NAK, In Progress, and Delivery Attempts"}
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
@@ -71,6 +71,9 @@ func (d *Requirement) acknowledgementLifecycle(actor *keystone.Actor) requiremen
 		}
 
 		deliveries++
+		if want := uint64(deliveries); message.GetDeliveryAttempts() != want {
+			return fmt.Errorf("delivery %d reported %d delivery attempts, expected %d", deliveries, message.GetDeliveryAttempts(), want)
+		}
 		switch deliveries {
 		case 1:
 			if err := message.InProgress(); err != nil {

@@ -81,6 +81,7 @@ func TestActorEventStreamAcknowledgements(t *testing.T) {
 			defer cleanup()
 
 			var initial *proto.EventStreamRequest
+			var gotDeliveryAttempts uint64
 			callbacks := make(chan *proto.EventStreamAck, len(tt.wantActions))
 			mock.EventStreamFunc = func(stream grpc.BidiStreamingServer[proto.EventStreamRequest, proto.EventStreamResponse]) error {
 				var err error
@@ -88,7 +89,7 @@ func TestActorEventStreamAcknowledgements(t *testing.T) {
 				if err != nil {
 					return err
 				}
-				if err = stream.Send(&proto.EventStreamResponse{MessageId: "message-42", Eid: "entity-1"}); err != nil {
+				if err = stream.Send(&proto.EventStreamResponse{MessageId: "message-42", Eid: "entity-1", DeliveryAttempts: 3}); err != nil {
 					return err
 				}
 				for range tt.wantActions {
@@ -101,7 +102,10 @@ func TestActorEventStreamAcknowledgements(t *testing.T) {
 				return nil
 			}
 
-			err := actor.EventStreamWithAck(context.Background(), tt.handler, "orders", OwnKey("updated"))
+			err := actor.EventStreamWithAck(context.Background(), func(message *EventStreamMessage) error {
+				gotDeliveryAttempts = message.GetDeliveryAttempts()
+				return tt.handler(message)
+			}, "orders", OwnKey("updated"))
 			if !errors.Is(err, tt.wantErr) {
 				t.Fatalf("EventStreamWithAck() error = %v, want %v", err, tt.wantErr)
 			}
@@ -110,6 +114,9 @@ func TestActorEventStreamAcknowledgements(t *testing.T) {
 			}
 			if initial.GetEventType().GetKey() != "updated" {
 				t.Fatalf("event type = %q, want updated", initial.GetEventType().GetKey())
+			}
+			if gotDeliveryAttempts != 3 {
+				t.Fatalf("delivery attempts = %d, want 3", gotDeliveryAttempts)
 			}
 			got := make([]*proto.EventStreamAck, 0, len(tt.wantActions))
 			for range tt.wantActions {
@@ -140,7 +147,7 @@ func TestActorEventStreamLegacyHandlerAcknowledges(t *testing.T) {
 		if _, err := stream.Recv(); err != nil {
 			return err
 		}
-		if err := stream.Send(&proto.EventStreamResponse{MessageId: "legacy-message"}); err != nil {
+		if err := stream.Send(&proto.EventStreamResponse{MessageId: "legacy-message", DeliveryAttempts: 4}); err != nil {
 			return err
 		}
 		req, err := stream.Recv()
@@ -153,8 +160,15 @@ func TestActorEventStreamLegacyHandlerAcknowledges(t *testing.T) {
 		return nil
 	}
 
-	if err := actor.EventStream(context.Background(), func(*proto.EventStreamResponse) error { return nil }, "legacy", nil); err != nil {
+	var gotDeliveryAttempts uint64
+	if err := actor.EventStream(context.Background(), func(response *proto.EventStreamResponse) error {
+		gotDeliveryAttempts = response.GetDeliveryAttempts()
+		return nil
+	}, "legacy", nil); err != nil {
 		t.Fatalf("EventStream() error = %v", err)
+	}
+	if gotDeliveryAttempts != 4 {
+		t.Fatalf("delivery attempts = %d, want 4", gotDeliveryAttempts)
 	}
 }
 

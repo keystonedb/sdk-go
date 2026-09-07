@@ -7587,9 +7587,11 @@ type EventStreamResponse struct {
 	Eid   string                 `protobuf:"bytes,2,opt,name=eid,proto3" json:"eid,omitempty"`
 	Event *EntityEvent           `protobuf:"bytes,3,opt,name=event,proto3" json:"event,omitempty"`
 	// Use this ID in EventStreamAck while the event is being processed.
-	MessageId     string `protobuf:"bytes,4,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	MessageId string `protobuf:"bytes,4,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
+	// Number of times JetStream has delivered this message, including this attempt.
+	DeliveryAttempts uint64 `protobuf:"varint,5,opt,name=delivery_attempts,json=deliveryAttempts,proto3" json:"delivery_attempts,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *EventStreamResponse) Reset() {
@@ -7648,6 +7650,13 @@ func (x *EventStreamResponse) GetMessageId() string {
 		return x.MessageId
 	}
 	return ""
+}
+
+func (x *EventStreamResponse) GetDeliveryAttempts() uint64 {
+	if x != nil {
+		return x.DeliveryAttempts
+	}
+	return 0
 }
 
 type PushTaskRequest struct {
@@ -11120,13 +11129,14 @@ const file_keystone_proto_rawDesc = "" +
 	"\n" +
 	"event_type\x18\x05 \x01(\v2\x13.kubex.keystone.KeyH\x00R\teventType\x88\x01\x01\x120\n" +
 	"\x03ack\x18\x06 \x01(\v2\x1e.kubex.keystone.EventStreamAckR\x03ackB\r\n" +
-	"\v_event_type\"\x89\x01\n" +
+	"\v_event_type\"\xb6\x01\n" +
 	"\x13EventStreamResponse\x12\x0e\n" +
 	"\x02ws\x18\x01 \x01(\tR\x02ws\x12\x10\n" +
 	"\x03eid\x18\x02 \x01(\tR\x03eid\x121\n" +
 	"\x05event\x18\x03 \x01(\v2\x1b.kubex.keystone.EntityEventR\x05event\x12\x1d\n" +
 	"\n" +
-	"message_id\x18\x04 \x01(\tR\tmessageId\"\x84\x02\n" +
+	"message_id\x18\x04 \x01(\tR\tmessageId\x12+\n" +
+	"\x11delivery_attempts\x18\x05 \x01(\x04R\x10deliveryAttempts\"\x84\x02\n" +
 	"\x0fPushTaskRequest\x12C\n" +
 	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12\x1b\n" +
 	"\ttask_name\x18\x02 \x01(\tR\btaskName\x12\x17\n" +

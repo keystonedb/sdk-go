@@ -53,8 +53,9 @@ func (k *Key) toProto(a *Actor) *proto.Key {
 }
 
 // EventStreamMessage is an event-stream response with acknowledgement controls.
-// InProgress may be called any number of times before one terminal call to Ack,
-// Nak, or NakWithDelay.
+// DeliveryAttempts and GetDeliveryAttempts expose how many times the server has
+// delivered the message. InProgress may be called any number of times before one
+// terminal call to Ack, Nak, or NakWithDelay.
 type EventStreamMessage struct {
 	*proto.EventStreamResponse
 
