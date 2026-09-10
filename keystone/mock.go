@@ -67,6 +67,7 @@ type MockServer struct {
 
 	RelayGetSessionMetadataFunc func(context.Context, *proto.RelayGetSessionMetadataRequest) (*proto.RelayGetSessionMetadataResponse, error)
 	RelaySetSessionMetadataFunc func(context.Context, *proto.RelaySetSessionMetadataRequest) (*proto.RelaySetSessionMetadataResponse, error)
+	EventStreamFunc             func(grpc.BidiStreamingServer[proto.EventStreamRequest, proto.EventStreamResponse]) error
 }
 
 func bufDialer(context.Context, string) (net.Conn, error) {
@@ -155,6 +156,13 @@ func (m *MockServer) Events(ctx context.Context, req *proto.EventRequest) (*prot
 		return m.UnimplementedKeystoneServer.Events(ctx, req)
 	}
 	return m.EventsFunc(ctx, req)
+}
+
+func (m *MockServer) EventStream(stream grpc.BidiStreamingServer[proto.EventStreamRequest, proto.EventStreamResponse]) error {
+	if m.EventStreamFunc == nil {
+		return m.UnimplementedKeystoneServer.EventStream(stream)
+	}
+	return m.EventStreamFunc(stream)
 }
 func (m *MockServer) DailyEntities(ctx context.Context, req *proto.DailyEntityRequest) (*proto.DailyEntityResponse, error) {
 	if m.DailyEntitiesFunc == nil {
