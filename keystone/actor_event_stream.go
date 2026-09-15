@@ -131,21 +131,29 @@ func (m *EventStreamMessage) isSettled() bool {
 	return m.settled
 }
 
+type EventStreamOption func(*proto.EventStreamRequest)
+
+func WithAckWait(wait time.Duration) EventStreamOption {
+	return func(req *proto.EventStreamRequest) {
+		req.AckWait = durationpb.New(wait)
+	}
+}
+
 // EventStream consumes events and automatically ACKs successful handler calls.
 // When the handler returns an error, the event is NAKed before that error is returned.
-func (a *Actor) EventStream(ctx context.Context, handler func(response *proto.EventStreamResponse) error, name string, eventType *Key) error {
+func (a *Actor) EventStream(ctx context.Context, handler func(response *proto.EventStreamResponse) error, name string, eventType *Key, opts ...EventStreamOption) error {
 	if handler == nil {
 		return errors.New("event stream handler is nil")
 	}
 	return a.EventStreamWithAck(ctx, func(message *EventStreamMessage) error {
 		return handler(message.EventStreamResponse)
-	}, name, eventType)
+	}, name, eventType, opts...)
 }
 
 // EventStreamWithAck consumes events and gives the handler explicit control of
 // acknowledgements. A handler that does not settle a message is automatically
 // ACKed on nil error or NAKed on non-nil error.
-func (a *Actor) EventStreamWithAck(ctx context.Context, handler func(message *EventStreamMessage) error, name string, eventType *Key) error {
+func (a *Actor) EventStreamWithAck(ctx context.Context, handler func(message *EventStreamMessage) error, name string, eventType *Key, opts ...EventStreamOption) error {
 	if a == nil || a.Connection() == nil {
 		return errors.New("actor connection is nil")
 	}
@@ -158,6 +166,11 @@ func (a *Actor) EventStreamWithAck(ctx context.Context, handler func(message *Ev
 		StreamName:    name,
 		AllWorkspaces: a.WorkspaceID() == noWorkspace,
 		EventType:     eventType.toProto(a),
+	}
+	for _, opt := range opts {
+		if opt != nil {
+			opt(req)
+		}
 	}
 
 	stream, err := a.Connection().EventStream(ctx, req)
