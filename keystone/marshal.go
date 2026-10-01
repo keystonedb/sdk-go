@@ -2,7 +2,10 @@ package keystone
 
 import (
 	"errors"
+	"fmt"
+	"math"
 	"reflect"
+	"slices"
 
 	"github.com/keystonedb/sdk-go/keystone/reflector"
 	"github.com/keystonedb/sdk-go/proto"
@@ -10,6 +13,11 @@ import (
 
 var CannotMarshalPrimitives = errors.New("cannot marshal primitive type")
 var CannotMarshalNil = errors.New("cannot marshal nil")
+
+// IndexedNumberOutOfRange is returned for an indexed number outside int32, the
+// widest integer the SQL index column holds; the index write would otherwise
+// fail on every attempt.
+var IndexedNumberOutOfRange = errors.New("indexed number out of range")
 
 func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 
@@ -61,7 +69,12 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 			if err != nil {
 				return nil, err
 			}
-			protoVal.KnownType = mergeDefinitions(propDef, ref.PropertyDefinition()).DataType
+			def := mergeDefinitions(propDef, ref.PropertyDefinition())
+			protoVal.KnownType = def.DataType
+			if def.DataType == proto.Property_Number && slices.Contains(def.Options, proto.Property_Indexed) &&
+				(protoVal.Int > math.MaxInt32 || protoVal.Int < math.MinInt32) {
+				return nil, fmt.Errorf("%w: %s = %d", IndexedNumberOutOfRange, currentProp.Name(), protoVal.Int)
+			}
 			properties[currentProp] = protoVal
 		} else if !(currentVal.Type().Kind() == reflect.Ptr && currentVal.IsNil()) {
 			var subProps map[Property]*proto.Value

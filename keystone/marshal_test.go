@@ -328,3 +328,25 @@ func Test_Hydration(t *testing.T) {
 		t.Errorf("Expected 1 Property, got: %d", len(props))
 	}
 }
+
+func TestMarshal_IndexedNumberRange(t *testing.T) {
+	type entity struct {
+		Priority int   `keystone:",query"`
+		Total    int64 // not indexed, so never reaches the SQL index
+	}
+
+	if _, err := Marshal(entity{Priority: 1000000000000000000}); !errors.Is(err, IndexedNumberOutOfRange) {
+		t.Errorf("expected IndexedNumberOutOfRange, got %v", err)
+	}
+	if _, err := Marshal(entity{Priority: -2147483649}); !errors.Is(err, IndexedNumberOutOfRange) {
+		t.Errorf("expected IndexedNumberOutOfRange, got %v", err)
+	}
+
+	props, err := Marshal(entity{Priority: 2147483647, Total: 1000000000000000000})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if props[NewProperty("priority")].GetInt() != 2147483647 || props[NewProperty("total")].GetInt() != 1000000000000000000 {
+		t.Errorf("unexpected values %v", props)
+	}
+}
