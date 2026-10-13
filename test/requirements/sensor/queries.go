@@ -46,9 +46,9 @@ func (d *Requirement) storeQueryMeasurements(actor *keystone.Actor) requirements
 		until:    from.Add(15 * time.Minute),
 		forecast: now.Truncate(time.Hour).Add(time.Hour),
 	}
-	person := &models.Person{Name: "Sensor Query Integration"}
+	var measurements []*proto.EntitySensorMeasurement
 	add := func(sensor string, at time.Time, value float64, backfill bool) {
-		person.AddSensorMeasurement(d.sensorName(sensor), value, keystone.WithSensorTimestamp(timestamppb.New(at)), keystone.WithSensorBackfill(backfill), keystone.WithSensorMeasurementID(uuid.NewString()))
+		measurements = append(measurements, keystone.NewSensorMeasurement(d.sensorName(sensor), value, keystone.WithSensorTimestamp(timestamppb.New(at)), keystone.WithSensorBackfill(backfill), keystone.WithSensorMeasurementID(uuid.NewString())))
 	}
 	// Use one completed UTC quarter-hour so weekly heatmap aggregation
 	// does not clip a partial boundary interval.
@@ -63,7 +63,7 @@ func (d *Requirement) storeQueryMeasurements(actor *keystone.Actor) requirements
 	var err error
 	if !d.fixture.appScope {
 		// Direct writes require a registered schema and stable ID, but do not mutate the entity.
-		entity := &models.Person{Name: person.Name}
+		entity := &models.Person{Name: "Sensor Query Integration"}
 		err = actor.Mutate(ctx, entity, keystone.WithMutationComment("Sensor query integration fixture"))
 		if err != nil {
 			return requirements.NewResult("Create Sensor Entity", err)
@@ -75,7 +75,7 @@ func (d *Requirement) storeQueryMeasurements(actor *keystone.Actor) requirements
 	}
 	request := &proto.WriteSensorsRequest{
 		Schema: d.schema(), EntityId: d.fixture.entityID, AppScope: d.fixture.appScope,
-		Measurements: person.GetSensorMeasurements(),
+		Measurements: measurements,
 	}
 	response, err := actor.WriteSensors(ctx, request)
 	if err == nil && !response.GetSuccess() {

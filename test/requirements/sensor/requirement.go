@@ -2,6 +2,7 @@ package sensor
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"time"
 
@@ -53,21 +54,16 @@ func (d *Requirement) verifyQueries(actor *keystone.Actor, report requirements.R
 }
 
 func (d *Requirement) measure(actor *keystone.Actor) requirements.TestResult {
-	psn := &models.Person{}
-	psn.Name = "John Smith"
-	psn.AddSensorMeasurement("page.view", 1)
+	ctx, cancel := context.WithTimeout(context.Background(), queryTimeout)
+	defer cancel()
+	measurements := []*proto.EntitySensorMeasurement{keystone.NewSensorMeasurement("page.view", 1)}
 	for range 100 {
-		psn.AddSensorMeasurement("mouse.move", float64(time.Now().Second()))
-		time.Sleep(time.Millisecond)
-
+		measurements = append(measurements, keystone.NewSensorMeasurement("mouse.move", float64(time.Now().Second())))
 	}
-	psn.AddSensorMeasurementWithData("order", 100.12, map[string]string{
-		"currency": "GBP",
-	})
-	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Write Measurement"))
-
-	return requirements.TestResult{
-		Name:  "Store Measurement",
-		Error: updateErr,
+	measurements = append(measurements, keystone.NewSensorMeasurement("order", 100.12, keystone.WithSensorData(map[string]string{"currency": "GBP"})))
+	response, err := actor.WriteSensors(ctx, &proto.WriteSensorsRequest{AppScope: true, Measurements: measurements})
+	if err == nil && !response.GetSuccess() {
+		err = fmt.Errorf("WriteSensors did not succeed")
 	}
+	return requirements.NewResult("Store Measurements through WriteSensors", err)
 }

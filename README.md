@@ -23,17 +23,21 @@ caller’s request.
 TTL starts at server receipt and removes measurements from raw history,
 summaries, and activity profiles. A measurement TTL overrides the request TTL;
 zero uses the request default, or normal retention when both are zero. Negative
-TTLs are rejected by the server. Existing embedded measurements also accept
-options:
+TTLs are rejected by the server. Build standalone measurements with options:
 
 ```go
-entity.AddSensorMeasurement("requests", 1,
+measurement := keystone.NewSensorMeasurement("requests", 1,
     keystone.WithSensorTTL(300),
     keystone.WithSensorMeasurementID("stable-event-id"),
 )
 ```
 
 `WithSensorTimestamp` and `WithSensorBackfill` set event time and backfill status.
+Pass these measurements in `WriteSensorsRequest.Measurements`. Entity mutations
+no longer collect or write sensors: `SensorProvider`, `EmbeddedSensors`, and the
+entity `AddSensorMeasurement` methods have been removed. Migrate callers to
+`NewSensorMeasurement` and `actor.WriteSensors`.
+
 Reuse an event's measurement ID, timestamp, and payload when retrying a write.
 
 Run SDK tests with `go test ./...`. Run server requirement tests with

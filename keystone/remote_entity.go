@@ -9,7 +9,6 @@ func RemoteEntity(entityID ID) *Remote {
 
 type Remote struct {
 	_entityID ID
-	EmbeddedSensors
 	EmbeddedLogs
 	EmbeddedEvents
 	EmbeddedObjects

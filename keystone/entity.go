@@ -17,7 +17,6 @@ type BaseEntity struct {
 	EmbeddedLock
 	EmbeddedLogs
 	EmbeddedRelationships
-	EmbeddedSensors
 	EmbeddedObjects
 	EmbeddedDocuments
 }
