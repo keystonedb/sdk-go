@@ -2978,6 +2978,7 @@ type WriteSensorsRequest struct {
 	Measurements  []*EntitySensorMeasurement `protobuf:"bytes,4,rep,name=measurements,proto3" json:"measurements,omitempty"`
 	AppScope      bool                       `protobuf:"varint,5,opt,name=app_scope,json=appScope,proto3" json:"app_scope,omitempty"`       // Leave schema and entity_id unset when true.
 	TtlSeconds    int32                      `protobuf:"varint,6,opt,name=ttl_seconds,json=ttlSeconds,proto3" json:"ttl_seconds,omitempty"` // Default TTL for measurements with ttl_seconds=0; zero uses normal retention.
+	Background    bool                       `protobuf:"varint,7,opt,name=background,proto3" json:"background,omitempty"`                   // Success means durably queued after validation; sensor writes complete asynchronously.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3052,6 +3053,13 @@ func (x *WriteSensorsRequest) GetTtlSeconds() int32 {
 		return x.TtlSeconds
 	}
 	return 0
+}
+
+func (x *WriteSensorsRequest) GetBackground() bool {
+	if x != nil {
+		return x.Background
+	}
+	return false
 }
 
 type ListAppSensorsResponse struct {
@@ -12530,7 +12538,7 @@ const file_keystone_proto_rawDesc = "" +
 	"ttlSeconds\x1a7\n" +
 	"\tDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xaf\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xcf\x02\n" +
 	"\x13WriteSensorsRequest\x12C\n" +
 	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
 	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
@@ -12538,7 +12546,10 @@ const file_keystone_proto_rawDesc = "" +
 	"\fmeasurements\x18\x04 \x03(\v2'.kubex.keystone.EntitySensorMeasurementR\fmeasurements\x12\x1b\n" +
 	"\tapp_scope\x18\x05 \x01(\bR\bappScope\x12\x1f\n" +
 	"\vttl_seconds\x18\x06 \x01(\x05R\n" +
-	"ttlSeconds\"2\n" +
+	"ttlSeconds\x12\x1e\n" +
+	"\n" +
+	"background\x18\a \x01(\bR\n" +
+	"background\"2\n" +
 	"\x16ListAppSensorsResponse\x12\x18\n" +
 	"\asensors\x18\x01 \x03(\tR\asensors\"\xc2\x05\n" +
 	"\x14PredictSensorRequest\x12C\n" +

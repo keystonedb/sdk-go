@@ -2,10 +2,12 @@ package keystone
 
 import (
 	"context"
+	"errors"
 
 	"github.com/keystonedb/sdk-go/proto"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	protobuf "google.golang.org/protobuf/proto"
 )
 
 // ChartSensor reads native entity sensor measurements.
@@ -42,8 +44,25 @@ func (c *Connection) PredictSensor(ctx context.Context, request *proto.PredictSe
 
 // WriteSensors writes measurements independently of entity mutations.
 func (c *Connection) WriteSensors(ctx context.Context, request *proto.WriteSensorsRequest, options ...grpc.CallOption) (*proto.GenericResponse, error) {
+	if request == nil {
+		return nil, errors.New("sensor request is nil")
+	}
+	var callOptions []grpc.CallOption
+	var background *bool
+	for _, option := range options {
+		if sensorOption, ok := option.(sensorBackgroundOption); ok {
+			value := sensorOption.background
+			background = &value
+		} else {
+			callOptions = append(callOptions, option)
+		}
+	}
+	if background != nil {
+		request = protobuf.Clone(request).(*proto.WriteSensorsRequest)
+		request.Background = *background
+	}
 	tl := c.timeLogConfig.NewLog("WriteSensors", zap.String("schema", request.GetSchema().GetKey()), zap.String("EntityId", request.GetEntityId()))
-	response, err := c.client.WriteSensors(ctx, request, options...)
+	response, err := c.client.WriteSensors(ctx, request, callOptions...)
 	c.logger.TimedLog(tl)
 	return response, err
 }

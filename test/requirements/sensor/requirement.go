@@ -32,6 +32,7 @@ func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter
 	app := &Requirement{fixture: sensorFixture{appScope: true}}
 	app.verifyQueries(actor, func(result requirements.TestResult) { result.Name = "App " + result.Name; report(result) })
 	d.verifyTTL(actor, report)
+	d.verifyBackground(actor, report)
 }
 
 func (d *Requirement) verifyQueries(actor *keystone.Actor, report requirements.Reporter) {

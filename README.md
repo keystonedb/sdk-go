@@ -20,6 +20,13 @@ and `CreateSensorStream` also accept app scope. `ListAppSensors` discovers the
 actor's app sensor names. Actor methods supply authorization and preserve the
 caller’s request.
 
+Pass `keystone.WithSensorBackground(true)` as a call option to either
+`actor.WriteSensors(ctx, request, ...)` or `conn.WriteSensors(ctx, request, ...)`
+to enable background ingestion. Success then means the measurements were
+validated and durably queued; poll reads when you need to observe completion.
+`WithSensorBackground(false)` overrides a request that enables background mode.
+The option preserves the caller's request and can be mixed with gRPC call options.
+
 TTL starts at server receipt and removes measurements from raw history,
 summaries, and activity profiles. A measurement TTL overrides the request TTL;
 zero uses the request default, or normal retention when both are zero. Negative
