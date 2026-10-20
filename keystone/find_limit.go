@@ -10,6 +10,12 @@ func (f withLimit) Apply(config *filterRequest) {
 	config.PageNumber = f.pageNumber
 }
 
-func Limit(perPage, pageNumber int32) FindOption {
-	return withLimit{perPage: perPage, pageNumber: pageNumber}
+// Limit sets the result size and an optional page number for Find-style APIs.
+// Query supports only page zero; use Cursor to fetch subsequent pages.
+func Limit(perPage int32, pageNumber ...int32) FindOption {
+	var page int32
+	if len(pageNumber) > 0 {
+		page = pageNumber[0]
+	}
+	return withLimit{perPage: perPage, pageNumber: page}
 }

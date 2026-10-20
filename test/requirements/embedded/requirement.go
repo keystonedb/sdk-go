@@ -12,6 +12,7 @@ import (
 )
 
 type Requirement struct {
+	requirements.QueryCoverage
 	createdID keystone.ID
 	uid       string
 	lookup    string
@@ -84,7 +85,7 @@ func (d *Requirement) unique(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) find(actor *keystone.Actor) requirements.TestResult {
 
 	mdl := &models.Embedded{}
-	entities, getErr := actor.Find(context.Background(), keystone.Type(mdl), keystone.WithProperties("extended.unique_id", "extended_ref.unique_id", "extended.bool_value"), keystone.WhereEquals("extended.lookup_value", d.lookup))
+	entities, getErr := d.Find(actor, context.Background(), keystone.Type(mdl), keystone.WithProperties("extended.unique_id", "extended_ref.unique_id", "extended.bool_value"), keystone.WhereEquals("extended.lookup_value", d.lookup))
 
 	if getErr == nil {
 		switch len(entities) {

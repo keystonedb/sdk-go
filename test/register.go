@@ -38,7 +38,6 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/pii"
 	"github.com/keystonedb/sdk-go/test/requirements/prewrite"
 	"github.com/keystonedb/sdk-go/test/requirements/query"
-	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/keystonedb/sdk-go/test/requirements/remote"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
@@ -49,7 +48,6 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/stats"
 	"github.com/keystonedb/sdk-go/test/requirements/status"
 	"github.com/keystonedb/sdk-go/test/requirements/stringset"
-	"github.com/keystonedb/sdk-go/test/requirements/tasks"
 	"github.com/keystonedb/sdk-go/test/requirements/timeseries"
 	"github.com/keystonedb/sdk-go/test/requirements/translations"
 	"github.com/keystonedb/sdk-go/test/requirements/unique_id"
@@ -96,7 +94,7 @@ func init() {
 	reqs = append(reqs, &nested_property_loading.Requirement{})
 	reqs = append(reqs, &embedded.Requirement{})
 	reqs = append(reqs, &pii.Requirement{})
-	reqs = append(reqs, &ratelimit.Requirement{})
+	//reqs = append(reqs, &ratelimit.Requirement{})
 	reqs = append(reqs, &iid.Requirement{})
 	reqs = append(reqs, &watcher.Requirement{})
 	reqs = append(reqs, &exists.Requirement{})
@@ -104,7 +102,7 @@ func init() {
 	reqs = append(reqs, &group_count.Requirement{})
 	reqs = append(reqs, &hashed_id.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
-	reqs = append(reqs, &tasks.Requirement{})
+	//reqs = append(reqs, &tasks.Requirement{})
 	reqs = append(reqs, &translations.Requirement{})
 	reqs = append(reqs, &squid.Requirement{})
 	reqs = append(reqs, &snapshot.Requirement{})

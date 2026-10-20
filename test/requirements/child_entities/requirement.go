@@ -13,6 +13,7 @@ import (
 )
 
 type Requirement struct {
+	requirements.QueryCoverage
 	subscriptionId     keystone.ID
 	firstRenewalId     keystone.ID
 	renewalStartTime   time.Time
@@ -117,7 +118,7 @@ func (d *Requirement) getSummary(actor *keystone.Actor) requirements.TestResult 
 func (d *Requirement) getRenewals(actor *keystone.Actor) requirements.TestResult {
 	req := requirements.TestResult{Name: "Get Renewals"}
 
-	entities, err := actor.Find(context.Background(), keystone.Type(models.Renewal{}),
+	entities, err := d.Find(actor, context.Background(), keystone.Type(models.Renewal{}),
 		keystone.RetrieveOptions(keystone.WithSummary(), keystone.WithProperties()),
 		keystone.ChildOf(d.subscriptionId.String()),
 	)
@@ -154,7 +155,7 @@ func (d *Requirement) getRenewals(actor *keystone.Actor) requirements.TestResult
 func (d *Requirement) queryRenewals(actor *keystone.Actor) requirements.TestResult {
 	req := requirements.TestResult{Name: "QueryIndex Renewals"}
 
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Renewal{}),
+	entities, err := d.QueryIndex(actor, context.Background(), keystone.Type(models.Renewal{}),
 		[]string{"created"},
 		keystone.Limit(30, 0),
 		keystone.ChildOf(d.subscriptionId.String()),

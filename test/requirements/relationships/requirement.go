@@ -13,6 +13,7 @@ import (
 )
 
 type Requirement struct {
+	requirements.QueryCoverage
 	PersonID       keystone.ID
 	TransactionID  keystone.ID
 	Transaction2ID keystone.ID
@@ -121,7 +122,7 @@ func (d *Requirement) lookup(actor *keystone.Actor) requirements.TestResult {
 		Name: "Lookup By Relationship",
 	}
 
-	transactions, getErr := actor.Find(context.Background(), keystone.Type(&models.Transaction{}), keystone.WithProperties(), keystone.RelationToSibling(d.PersonID, "payee"))
+	transactions, getErr := d.Find(actor, context.Background(), keystone.Type(&models.Transaction{}), keystone.WithProperties(), keystone.RelationToSibling(d.PersonID, "payee"))
 	if getErr != nil {
 		res.Error = getErr
 		return res
