@@ -66,7 +66,8 @@ func (d *Requirement) createRenewals(actor *keystone.Actor) requirements.TestRes
 
 	start := time.Now().Truncate(time.Millisecond)
 	d.renewalStartTime = start
-	d.renewalCreatedFrom = time.Now().Truncate(time.Millisecond)
+	// DateCreated comes from the server's clock; allow the same skew as the per-renewal windows.
+	d.renewalCreatedFrom = time.Now().Truncate(time.Millisecond).Add(-time.Second)
 	for i := 0; i < 30; i++ {
 		end := start.AddDate(0, 1, 0)
 		renewal := &models.Renewal{

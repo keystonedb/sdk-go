@@ -2,10 +2,9 @@ package keystone
 
 import (
 	"reflect"
-	"time"
 
+	"github.com/google/uuid"
 	"github.com/keystonedb/sdk-go/proto"
-	"github.com/kubex/k4id"
 )
 
 // ChildProvider is an interface for entities that can have Children
@@ -153,7 +152,13 @@ func (e *EmbeddedChildren) AddChild(child NestedChild) {
 	if child.ChildID() != "" {
 		e.ksEntityChildren[child.ChildID()] = child
 	} else {
-		e.ksEntityChildren[k4id.TimeGeneratorNano.Generate(time.Now())] = child
-		time.Sleep(time.Nanosecond)
+		// Write references identify pending children, independently of clock resolution.
+		for {
+			ref := uuid.NewString()
+			if _, exists := e.ksEntityChildren[ref]; !exists {
+				e.ksEntityChildren[ref] = child
+				break
+			}
+		}
 	}
 }
