@@ -14,9 +14,9 @@ type Person struct {
 	DOB          time.Time
 	BankBalance  keystone.Amount       `json:",omitempty"`
 	PaymentCount int64                 `keystone:"_count_relation:payment"`
-	FullName     keystone.SecureString `keystone:",indexed" json:",omitempty"`
+	FullName     keystone.SecureString `json:",omitempty"`
 	AccountPin   keystone.VerifyString `keystone:",verify"`
-	SecretAnswer keystone.SecureString `keystone:",indexed,secure" json:",omitempty"`
+	SecretAnswer keystone.SecureString `keystone:",secure" json:",omitempty"`
 }
 
 type Transaction struct {

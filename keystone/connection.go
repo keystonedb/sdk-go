@@ -569,3 +569,11 @@ func (c *Connection) RelaySetSessionMetadata(ctx context.Context, in *proto.Rela
 	c.logger.TimedLog(tl)
 	return resp, err
 }
+
+// Query executes a query and preserves entities, aggregate rows and pagination metadata.
+func (c *Connection) Query(ctx context.Context, in *proto.QueryRequest, opts ...grpc.CallOption) (*proto.QueryResponse, error) {
+	tl := c.timeLogConfig.NewLog("Query", zap.String("schema", in.GetFrom().GetKey()))
+	resp, err := c.client.Query(ctx, in, opts...)
+	c.logger.TimedLog(tl)
+	return resp, err
+}

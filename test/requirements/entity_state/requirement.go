@@ -24,6 +24,7 @@ func (s *StateTestEntity) ObserveRetrieve(resp *proto.EntityResponse) {
 }
 
 type Requirement struct {
+	requirements.QueryCoverage
 	entityID         keystone.ID
 	activeEntityID   keystone.ID
 	archivedEntityID keystone.ID
@@ -273,7 +274,7 @@ func (d *Requirement) createEntitiesForFiltering(actor *keystone.Actor) requirem
 func (d *Requirement) findOnlyActive(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Find OnlyActive"}
 
-	entities, err := actor.Find(
+	entities, err := d.Find(actor,
 		context.Background(),
 		keystone.Type(StateTestEntity{}),
 		keystone.WithSummary(),
@@ -297,7 +298,7 @@ func (d *Requirement) findOnlyActive(actor *keystone.Actor) requirements.TestRes
 func (d *Requirement) findIncludeArchived(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Find IncludeArchived"}
 
-	entities, err := actor.Find(
+	entities, err := d.Find(actor,
 		context.Background(),
 		keystone.Type(StateTestEntity{}),
 		keystone.WithSummary(),
@@ -332,7 +333,7 @@ func (d *Requirement) findIncludeArchived(actor *keystone.Actor) requirements.Te
 func (d *Requirement) findOnlyArchived(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Find OnlyArchived"}
 
-	entities, err := actor.Find(
+	entities, err := d.Find(actor,
 		context.Background(),
 		keystone.Type(StateTestEntity{}),
 		keystone.WithSummary(),
@@ -356,7 +357,7 @@ func (d *Requirement) findOnlyArchived(actor *keystone.Actor) requirements.TestR
 func (d *Requirement) findWithStates(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Find WithStates (Active, Offline)"}
 
-	entities, err := actor.Find(
+	entities, err := d.Find(actor,
 		context.Background(),
 		keystone.Type(StateTestEntity{}),
 		keystone.WithSummary(),
@@ -391,7 +392,7 @@ func (d *Requirement) findWithStates(actor *keystone.Actor) requirements.TestRes
 func (d *Requirement) findAllStates(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Find AllStates"}
 
-	entities, err := actor.Find(
+	entities, err := d.Find(actor,
 		context.Background(),
 		keystone.Type(StateTestEntity{}),
 		keystone.WithSummary(),

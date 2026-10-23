@@ -12,6 +12,7 @@ import (
 )
 
 type Requirement struct {
+	requirements.QueryCoverage
 	createdID keystone.ID
 	lookupID  string
 }
@@ -56,7 +57,7 @@ func (d *Requirement) lookup(actor *keystone.Actor) requirements.TestResult {
 	}
 
 	trans := &models.Transaction{}
-	results, findErr := actor.Find(context.Background(), keystone.Type(trans), keystone.WithProperties("ID", "PaymentType"), keystone.WhereEquals("id", d.lookupID))
+	results, findErr := d.Find(actor, context.Background(), keystone.Type(trans), keystone.WithProperties("ID", "PaymentType"), keystone.WhereEquals("id", d.lookupID))
 	if findErr != nil {
 		res.Error = findErr
 		return res

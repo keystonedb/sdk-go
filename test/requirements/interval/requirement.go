@@ -12,6 +12,7 @@ import (
 )
 
 type Requirement struct {
+	requirements.QueryCoverage
 	runID     string
 	createdID keystone.ID
 }
@@ -123,7 +124,7 @@ func (r *Requirement) createQueryEntities(actor *keystone.Actor) requirements.Te
 // queryEqual: period == Month/3 should return exactly 1 entity (the one created in createQueryEntities)
 func (r *Requirement) queryEqual(actor *keystone.Actor) requirements.TestResult {
 	target := *keystone.NewInterval(keystone.IntervalMonth, 3)
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.IntervalEntity{}),
+	entities, err := r.QueryIndex(actor, context.Background(), keystone.Type(models.IntervalEntity{}),
 		[]string{"name", "period"}, keystone.Limit(10, 0),
 		keystone.WhereEquals("period", target),
 		keystone.WhereContains("name", r.runID),
@@ -146,7 +147,7 @@ func (r *Requirement) queryEqual(actor *keystone.Actor) requirements.TestResult 
 // queryNotEqual: period != Month/3 should return 3 entities (day-1, month-6, year-1)
 func (r *Requirement) queryNotEqual(actor *keystone.Actor) requirements.TestResult {
 	target := *keystone.NewInterval(keystone.IntervalMonth, 3)
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.IntervalEntity{}),
+	entities, err := r.QueryIndex(actor, context.Background(), keystone.Type(models.IntervalEntity{}),
 		[]string{"name"}, keystone.Limit(10, 0),
 		keystone.WhereNotEquals("period", target),
 		keystone.WhereContains("name", r.runID),
@@ -162,7 +163,7 @@ func (r *Requirement) queryNotEqual(actor *keystone.Actor) requirements.TestResu
 // queryGreaterThan: period > Month/3 should return month-6 and year-1
 func (r *Requirement) queryGreaterThan(actor *keystone.Actor) requirements.TestResult {
 	target := *keystone.NewInterval(keystone.IntervalMonth, 3)
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.IntervalEntity{}),
+	entities, err := r.QueryIndex(actor, context.Background(), keystone.Type(models.IntervalEntity{}),
 		[]string{"name"}, keystone.Limit(10, 0),
 		keystone.WhereGreaterThan("period", target),
 		keystone.WhereContains("name", r.runID),
@@ -178,7 +179,7 @@ func (r *Requirement) queryGreaterThan(actor *keystone.Actor) requirements.TestR
 // queryGreaterThanOrEqual: period >= Month/3 should return month-3, month-6, and year-1
 func (r *Requirement) queryGreaterThanOrEqual(actor *keystone.Actor) requirements.TestResult {
 	target := *keystone.NewInterval(keystone.IntervalMonth, 3)
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.IntervalEntity{}),
+	entities, err := r.QueryIndex(actor, context.Background(), keystone.Type(models.IntervalEntity{}),
 		[]string{"name"}, keystone.Limit(10, 0),
 		keystone.WhereGreaterThanOrEquals("period", target),
 		keystone.WhereContains("name", r.runID),
@@ -194,7 +195,7 @@ func (r *Requirement) queryGreaterThanOrEqual(actor *keystone.Actor) requirement
 // queryLessThan: period < Month/3 should return day-1
 func (r *Requirement) queryLessThan(actor *keystone.Actor) requirements.TestResult {
 	target := *keystone.NewInterval(keystone.IntervalMonth, 3)
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.IntervalEntity{}),
+	entities, err := r.QueryIndex(actor, context.Background(), keystone.Type(models.IntervalEntity{}),
 		[]string{"name"}, keystone.Limit(10, 0),
 		keystone.WhereLessThan("period", target),
 		keystone.WhereContains("name", r.runID),
@@ -210,7 +211,7 @@ func (r *Requirement) queryLessThan(actor *keystone.Actor) requirements.TestResu
 // queryLessThanOrEqual: period <= Month/3 should return day-1 and month-3
 func (r *Requirement) queryLessThanOrEqual(actor *keystone.Actor) requirements.TestResult {
 	target := *keystone.NewInterval(keystone.IntervalMonth, 3)
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.IntervalEntity{}),
+	entities, err := r.QueryIndex(actor, context.Background(), keystone.Type(models.IntervalEntity{}),
 		[]string{"name"}, keystone.Limit(10, 0),
 		keystone.WhereLessThanOrEquals("period", target),
 		keystone.WhereContains("name", r.runID),

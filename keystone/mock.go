@@ -24,6 +24,7 @@ type MockServer struct {
 	RetrieveFunc         func(context.Context, *proto.EntityRequest) (*proto.EntityResponse, error)
 	FindFunc             func(context.Context, *proto.FindRequest) (*proto.FindResponse, error)
 	ListFunc             func(context.Context, *proto.ListRequest) (*proto.ListResponse, error)
+	QueryFunc            func(context.Context, *proto.QueryRequest) (*proto.QueryResponse, error)
 	QueryIndexFunc       func(context.Context, *proto.QueryIndexRequest) (*proto.QueryIndexResponse, error)
 	LookupFunc           func(context.Context, *proto.LookupRequest) (*proto.LookupResponse, error)
 	GroupCountFunc       func(context.Context, *proto.GroupCountRequest) (*proto.GroupCountResponse, error)
@@ -434,4 +435,11 @@ func (m *MockServer) RelaySetSessionMetadata(ctx context.Context, req *proto.Rel
 		return m.UnimplementedKeystoneServer.RelaySetSessionMetadata(ctx, req)
 	}
 	return m.RelaySetSessionMetadataFunc(ctx, req)
+}
+
+func (m *MockServer) Query(ctx context.Context, req *proto.QueryRequest) (*proto.QueryResponse, error) {
+	if m.QueryFunc == nil {
+		return m.UnimplementedKeystoneServer.Query(ctx, req)
+	}
+	return m.QueryFunc(ctx, req)
 }

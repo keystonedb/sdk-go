@@ -6,11 +6,14 @@ import (
 	"fmt"
 
 	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
 )
 
 type Requirement struct {
+	// UseQuery runs the same secure-property assertions against Query.
+	UseQuery     bool
 	createdID    keystone.ID
 	controlValue string
 	secretValue  keystone.SecureString
@@ -53,7 +56,7 @@ func (d *Requirement) create(actor *keystone.Actor) requirements.TestResult {
 func (d *Requirement) findWithDecryption(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Find with Decrypted SecureString"}
 
-	results, err := actor.Find(
+	results, err := d.find(actor,
 		context.Background(),
 		keystone.Type(models.DataTypes{}),
 		keystone.WithDecryptedProperties(),
@@ -93,7 +96,7 @@ func (d *Requirement) findWithDecryption(actor *keystone.Actor) requirements.Tes
 func (d *Requirement) findWithDecryptionNamed(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Find with Named Decrypted SecureString"}
 
-	results, err := actor.Find(
+	results, err := d.find(actor,
 		context.Background(),
 		keystone.Type(models.DataTypes{}),
 		keystone.RetrieveOptions(
@@ -136,7 +139,7 @@ func (d *Requirement) findWithDecryptionNamed(actor *keystone.Actor) requirement
 func (d *Requirement) findWithoutDecryption(actor *keystone.Actor) requirements.TestResult {
 	res := requirements.TestResult{Name: "Find without Decryption has no Original"}
 
-	results, err := actor.Find(
+	results, err := d.find(actor,
 		context.Background(),
 		keystone.Type(models.DataTypes{}),
 		keystone.WithProperties(),
@@ -171,4 +174,24 @@ func (d *Requirement) findWithoutDecryption(actor *keystone.Actor) requirements.
 	}
 
 	return res.WithError(errors.New("created entity not found in results"))
+}
+
+func (d *Requirement) find(actor *keystone.Actor, ctx context.Context, entityType string, retrieve keystone.RetrieveOption, options ...keystone.FindOption) ([]*proto.EntityResponse, error) {
+	if !d.UseQuery {
+		return actor.Find(ctx, entityType, retrieve, options...)
+	}
+	view := &proto.EntityView{}
+	retrieve.Apply(view)
+	req := &proto.QueryRequest{Select: []string{"string", "secret"}}
+	for _, property := range view.Properties {
+		if property.Decrypt {
+			if len(property.Properties) == 0 {
+				req.Decrypt = []string{"secret"}
+			} else {
+				req.Decrypt = append(req.Decrypt, property.Properties...)
+			}
+		}
+	}
+	resp, err := actor.QueryWithRequest(ctx, entityType, req, options...)
+	return resp.GetEntities(), err
 }
