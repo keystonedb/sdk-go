@@ -58,11 +58,15 @@ func TestAggregateCollectionPages(t *testing.T) {
 			require.True(t, rows.HasMore())
 			require.Equal(t, "next", rows.NextCursor())
 			require.Len(t, rows.Items(), 1)
+			require.Equal(t, int64(2), rows.Value("count").GetInt())
+			require.True(t, rows.Value("sum").IsNull)
+			require.Nil(t, rows.Value("missing"))
 			require.Equal(t, int64(2), rows.Items()[0].Value("count").GetInt())
 			require.True(t, rows.Items()[0].Value("sum").IsNull)
 			require.Nil(t, rows.Items()[0].Value("missing"))
 			require.NoError(t, rows.Next(context.Background()))
 			require.Len(t, rows.Items(), 2)
+			require.Equal(t, int64(2), rows.Value("count").GetInt())
 			require.ErrorIs(t, rows.Next(context.Background()), io.EOF)
 			var categories []string
 			for row := range rows.All() {
@@ -87,6 +91,9 @@ func TestAggregateCollectionPreservesStateAndResets(t *testing.T) {
 	ctx := context.Background()
 	rows := AggregateCollection("customer", actor)
 	require.Nil(t, rows.Response())
+	require.Nil(t, rows.Value("count"))
+	require.Zero(t, rows.Value("count").GetInt())
+	require.Nil(t, (*AggregateResults)(nil).Value("count"))
 	require.ErrorIs(t, rows.Next(ctx), io.EOF)
 	for range rows.All() {
 		t.Fatal("empty collection yielded a row")
@@ -123,6 +130,7 @@ func TestAggregateCollectionPreservesStateAndResets(t *testing.T) {
 	}
 	require.NoError(t, rows.Query(ctx, Count("count")))
 	require.Empty(t, rows.Items())
+	require.Nil(t, rows.Value("count"))
 	require.False(t, rows.HasMore())
 }
 
@@ -152,4 +160,23 @@ func TestAggregateCollectionValidation(t *testing.T) {
 	rows := AggregateCollection("customer", actor)
 	require.NoError(t, rows.Query(ctx, ResultSet("saved")))
 	require.Len(t, rows.Items(), 1)
+}
+
+func TestAggregateCollectionTypedAccessors(t *testing.T) {
+	rows := &AggregateResults{items: []AggregateRow{
+		{"count": {Int: 42}, "average": {Float: 2.5}, "flag": {Bool: true}, "category": {Text: "first"}},
+		{"count": {Int: 99}, "average": {Float: 8.5}, "flag": {Bool: false}, "category": {Text: "second"}},
+	}}
+	require.Equal(t, int64(42), rows.IntValue("count"))
+	require.Equal(t, 2.5, rows.FloatValue("average"))
+	require.True(t, rows.BoolValue("flag"))
+	require.Equal(t, "first", rows.TextValue("category"))
+	require.Equal(t, "first", rows.StringValue("category"))
+	for _, collection := range []*AggregateResults{nil, {}, rows, {items: []AggregateRow{{"missing": {IsNull: true}}}}} {
+		require.Zero(t, collection.IntValue("missing"))
+		require.Zero(t, collection.FloatValue("missing"))
+		require.False(t, collection.BoolValue("missing"))
+		require.Empty(t, collection.TextValue("missing"))
+		require.Empty(t, collection.StringValue("missing"))
+	}
 }

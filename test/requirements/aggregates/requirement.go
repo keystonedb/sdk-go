@@ -155,7 +155,7 @@ func (d *Requirement) groups(actor *keystone.Actor, saved bool) requirements.Tes
 		if err != nil {
 			return result.WithError(err)
 		}
-		if len(live.Items()) != 1 || live.Items()[0].Value("sum").GetInt() != 210 {
+		if len(live.Items()) != 1 || live.IntValue("sum") != 210 {
 			return result.WithError(fmt.Errorf("live aggregate did not reflect mutation: %v", live.Items()))
 		}
 		// A fresh collection can reopen the same snapshot without result structs.
@@ -179,11 +179,11 @@ func (d *Requirement) empty(actor *keystone.Actor) requirements.TestResult {
 	if err != nil {
 		return result.WithError(err)
 	}
-	if len(rows.Items()) != 1 || rows.Items()[0].Value("count") == nil || rows.Items()[0].Value("count").GetInt() != 0 {
+	if len(rows.Items()) != 1 || rows.Value("count") == nil || rows.IntValue("count") != 0 {
 		return result.WithError(fmt.Errorf("expected one empty aggregate with zero count: %v", rows.Items()))
 	}
 	for _, alias := range []string{"sum", "avg", "min", "max"} {
-		if value := rows.Items()[0].Value(alias); value == nil || !value.IsNull {
+		if value := rows.Value(alias); value == nil || !value.IsNull {
 			return result.WithError(fmt.Errorf("empty %s must remain SQL NULL: %v", alias, value))
 		}
 	}
@@ -227,7 +227,7 @@ func (d *Requirement) reset(actor *keystone.Actor) requirements.TestResult {
 	if err := rows.Query(ctx, keystone.WhereEquals("run", d.runID+"reset"), keystone.Count("count")); err != nil {
 		return result.WithError(err)
 	}
-	if len(rows.Items()) != 1 || rows.Items()[0].Value("count").GetInt() != 6 || rows.HasMore() {
+	if len(rows.Items()) != 1 || rows.IntValue("count") != 6 || rows.HasMore() {
 		return result.WithError(fmt.Errorf("new query did not replace prior rows: %v", rows.Items()))
 	}
 	return result

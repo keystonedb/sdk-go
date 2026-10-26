@@ -136,6 +136,12 @@ retain previous rows and cursor state. Both live and saved result pagination are
 supported. `Response()` provides the latest page's totals and execution details.
 
 Each row is a map of group keys and aggregate aliases to protobuf values.
+For single-row results, use `summary.IntValue("count")`,
+`summary.FloatValue("average")`, `summary.BoolValue("flag")`, or
+`summary.TextValue("category")` directly. `StringValue` is an alias for `TextValue`.
+These accessors read the first loaded row and return zero values for missing
+rows or aliases. They read the corresponding protobuf field without conversion.
+`Value(alias)` reads the first loaded row and returns nil if no row or alias exists.
 `row.Value(alias)` returns nil for a missing alias; `value.IsNull` distinguishes
 SQL NULL from zero. Protobuf getters such as `GetInt`, `GetFloat`, and `GetText`
 are safe on missing values. Rows and response metadata should be treated as

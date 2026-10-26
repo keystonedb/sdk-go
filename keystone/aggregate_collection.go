@@ -57,6 +57,31 @@ func (c *AggregateResults) Response() *proto.QueryResponse { return c.response }
 func (c *AggregateResults) HasMore() bool                  { return c.response.GetHasMore() }
 func (c *AggregateResults) NextCursor() string             { return c.response.GetNextCursor() }
 
+// Value returns the named value from the first loaded row. It returns nil for
+// an empty collection or missing alias. SQL NULL retains its IsNull flag.
+// Next appends rows, so it does not change which row Value reads.
+func (c *AggregateResults) Value(alias string) *proto.Value {
+	if c == nil || len(c.items) == 0 {
+		return nil
+	}
+	return c.items[0].Value(alias)
+}
+
+// IntValue returns the first row's integer value, or zero if absent.
+func (c *AggregateResults) IntValue(alias string) int64 { return c.Value(alias).GetInt() }
+
+// FloatValue returns the first row's floating-point value, or zero if absent.
+func (c *AggregateResults) FloatValue(alias string) float64 { return c.Value(alias).GetFloat() }
+
+// BoolValue returns the first row's boolean value, or false if absent.
+func (c *AggregateResults) BoolValue(alias string) bool { return c.Value(alias).GetBool() }
+
+// TextValue returns the first row's text value, or an empty string if absent.
+func (c *AggregateResults) TextValue(alias string) string { return c.Value(alias).GetText() }
+
+// StringValue is an alias for TextValue.
+func (c *AggregateResults) StringValue(alias string) string { return c.TextValue(alias) }
+
 // All iterates over loaded rows without fetching more pages. Do not call Query
 // or Next during iteration.
 func (c *AggregateResults) All() iter.Seq[AggregateRow] {
