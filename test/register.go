@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/keystonedb/sdk-go/test/requirements"
+	"github.com/keystonedb/sdk-go/test/requirements/aggregates"
 	"github.com/keystonedb/sdk-go/test/requirements/akv"
 	"github.com/keystonedb/sdk-go/test/requirements/akv_timeline"
 	"github.com/keystonedb/sdk-go/test/requirements/akvw"
@@ -80,6 +81,7 @@ func init() {
 	reqs = append(reqs, &lookup_actor.Requirement{})
 	reqs = append(reqs, &relationships.Requirement{})
 	reqs = append(reqs, &query.Requirement{})
+	reqs = append(reqs, &aggregates.Requirement{})
 	reqs = append(reqs, &datatypes.Requirement{})
 	reqs = append(reqs, &interval.Requirement{})
 	reqs = append(reqs, &timeseries.Requirement{})

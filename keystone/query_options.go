@@ -1,10 +1,12 @@
 package keystone
 
-import "slices"
+import (
+	"slices"
 
-import "github.com/keystonedb/sdk-go/proto"
+	"github.com/keystonedb/sdk-go/proto"
+)
 
-// QueryOption configures an entity query. Existing FindOptions can also be used.
+// QueryOption configures an entity or aggregate query. Existing FindOptions can also be used.
 type QueryOption = FindOption
 
 type queryOption func(*proto.QueryRequest)
@@ -77,4 +79,26 @@ func Cursor(cursor string) QueryOption {
 // IncludeTotal requests an exact count before the cursor and limit are applied.
 func IncludeTotal() QueryOption {
 	return queryOption(func(req *proto.QueryRequest) { req.IncludeTotal = true })
+}
+
+// SaveResultSet materializes ordered membership (or aggregate rows) on the
+// current server node for ten minutes, with a maximum of 20,000 results.
+// Entity projections are loaded afresh when each saved page is read.
+func SaveResultSet() QueryOption {
+	return queryOption(func(req *proto.QueryRequest) { req.SaveResultSet = true })
+}
+
+// ResultSet reads a saved query token. The entityType argument to Query is
+// ignored. Only Cursor, Limit, IncludeTotal and Explain may accompany this option.
+// Tokens are authorization-bound, node-local, expire, and are lost on restart.
+func ResultSet(token string) QueryOption {
+	if token == "" {
+		return invalidQueryOption("query: result set token must not be empty")
+	}
+	return queryOption(func(req *proto.QueryRequest) { req.ResultSet = token })
+}
+
+// Explain requests the query execution strategy and measurements.
+func Explain() QueryOption {
+	return queryOption(func(req *proto.QueryRequest) { req.Explain = true })
 }

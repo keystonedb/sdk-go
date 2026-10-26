@@ -52,6 +52,7 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 		}
 	}
 	conn.RegisterTypes(models.FileData{}, models.Subscription{}, models.Renewal{}, models.Offer{}, models.DataTypes{}, models.Config{})
+	conn.RegisterTypes(querySample{})
 	return nil
 }
 
@@ -79,6 +80,10 @@ func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter
 	report(d.readByEntityIDsAndParent(actor))
 	report(d.readCursorPages(actor))
 	report(d.readEmptyEntityIDs(actor))
+	report(d.readSavedEntityPages(actor))
+	report(d.readSavedCollection(actor))
+	report(d.readEmptyResults(actor))
+	report(d.readInvalidResultSets(actor))
 }
 
 func (d *Requirement) readOneTwo(actor *keystone.Actor) requirements.TestResult {

@@ -15,4 +15,5 @@ type filterRequest struct {
 	ObjectPaths    []string
 	ListObjects    bool
 	queryOptions   []func(*proto.QueryRequest)
+	queryError     string
 }

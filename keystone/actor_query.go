@@ -11,6 +11,8 @@ import (
 // Query queries entities using filters, projections and cursor pagination options.
 // Without Select or SelectSecure it returns entity metadata only.
 // Use Limit(size) and Cursor(nextCursor) to paginate results.
+// Aggregate options return Rows instead of Entities. For ResultSet reads the
+// entity type is ignored and only paging, total and explain controls are allowed.
 func (a *Actor) Query(ctx context.Context, entityType string, options ...QueryOption) (*proto.QueryResponse, error) {
 	return a.QueryWithRequest(ctx, entityType, nil, options...)
 }
@@ -19,12 +21,19 @@ func (a *Actor) Query(ctx context.Context, entityType string, options ...QueryOp
 // The request is copied before options, actor authorization and source schema are
 // applied. Options extend projections and filters and override scalar settings.
 func (a *Actor) QueryWithRequest(ctx context.Context, entityType string, request *proto.QueryRequest, options ...QueryOption) (*proto.QueryResponse, error) {
+	req, err := a.queryRequest(entityType, request, options...)
+	if err != nil {
+		return nil, err
+	}
+	return a.connection.Query(ctx, req)
+}
+
+func (a *Actor) queryRequest(entityType string, request *proto.QueryRequest, options ...QueryOption) (*proto.QueryRequest, error) {
 	req := &proto.QueryRequest{}
 	if request != nil {
 		req = gproto.Clone(request).(*proto.QueryRequest)
 	}
 	req.Authorization = a.Authorization()
-	req.From = &proto.Key{Key: entityType, Source: req.Authorization.Source}
 	filters := &filterRequest{}
 	idsSet := false
 	for _, opt := range options {
@@ -38,6 +47,9 @@ func (a *Actor) QueryWithRequest(ctx context.Context, entityType string, request
 	}
 	if filters.PageNumber != 0 {
 		return nil, fmt.Errorf("query: page numbers are unsupported; use a cursor")
+	}
+	if filters.queryError != "" {
+		return nil, fmt.Errorf("%s", filters.queryError)
 	}
 	if filters.ListObjects || len(filters.ObjectPaths) > 0 {
 		return nil, fmt.Errorf("query: object loading is unsupported")
@@ -79,5 +91,8 @@ func (a *Actor) QueryWithRequest(ctx context.Context, entityType string, request
 	} else if len(predicates) > 1 {
 		req.Predicate = &proto.QueryPredicate{Condition: &proto.QueryPredicate_All{All: &proto.QueryPredicateGroup{Predicates: predicates}}}
 	}
-	return a.connection.Query(ctx, req)
+	if req.ResultSet == "" {
+		req.From = &proto.Key{Key: entityType, Source: req.Authorization.Source}
+	}
+	return gproto.Clone(req).(*proto.QueryRequest), nil
 }
