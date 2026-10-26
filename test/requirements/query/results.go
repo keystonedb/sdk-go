@@ -49,7 +49,8 @@ func (d *Requirement) readSavedEntityPages(actor *keystone.Actor) requirements.T
 		return result.WithError(err)
 	}
 	first := pages.Response()
-	if first.ResultSet == "" || first.ResultSetExpires == nil || first.ResultSetExpires.CheckValid() != nil || !first.ResultSetExpires.AsTime().After(time.Now()) || first.ResultSetExpires.AsTime().After(time.Now().Add(11*time.Minute)) {
+	expectedExpiry := time.Now().Add(24 * time.Hour)
+	if first.ResultSet == "" || first.ResultSetExpires == nil || first.ResultSetExpires.CheckValid() != nil || first.ResultSetExpires.AsTime().Before(expectedExpiry.Add(-time.Minute)) || first.ResultSetExpires.AsTime().After(expectedExpiry.Add(time.Minute)) {
 		return result.WithError(fmt.Errorf("missing or invalid saved token expiry: %v", first))
 	}
 	samples[5].Label = "updated-after-save"

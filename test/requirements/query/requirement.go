@@ -79,6 +79,7 @@ func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter
 	report(d.readByEntityIDs(actor))
 	report(d.readByEntityIDsAndParent(actor))
 	report(d.readCursorPages(actor))
+	report(d.readSavedQueryPages(actor))
 	report(d.readEmptyEntityIDs(actor))
 	report(d.readSavedEntityPages(actor))
 	report(d.readSavedCollection(actor))
