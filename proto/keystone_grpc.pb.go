@@ -38,6 +38,10 @@ const (
 	Keystone_List_FullMethodName                    = "/kubex.keystone.Keystone/List"
 	Keystone_QueryIndex_FullMethodName              = "/kubex.keystone.Keystone/QueryIndex"
 	Keystone_Query_FullMethodName                   = "/kubex.keystone.Keystone/Query"
+	Keystone_FeedPut_FullMethodName                 = "/kubex.keystone.Keystone/FeedPut"
+	Keystone_FeedRead_FullMethodName                = "/kubex.keystone.Keystone/FeedRead"
+	Keystone_FeedRemove_FullMethodName              = "/kubex.keystone.Keystone/FeedRemove"
+	Keystone_FeedSummary_FullMethodName             = "/kubex.keystone.Keystone/FeedSummary"
 	Keystone_Lookup_FullMethodName                  = "/kubex.keystone.Keystone/Lookup"
 	Keystone_GroupCount_FullMethodName              = "/kubex.keystone.Keystone/GroupCount"
 	Keystone_Logs_FullMethodName                    = "/kubex.keystone.Keystone/Logs"
@@ -106,6 +110,11 @@ type KeystoneClient interface {
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	QueryIndex(ctx context.Context, in *QueryIndexRequest, opts ...grpc.CallOption) (*QueryIndexResponse, error)
 	Query(ctx context.Context, in *QueryRequest, opts ...grpc.CallOption) (*QueryResponse, error)
+	// Ordered, Cassandra-backed feeds, independent of SQL indexing.
+	FeedPut(ctx context.Context, in *FeedPutRequest, opts ...grpc.CallOption) (*FeedPutResponse, error)
+	FeedRead(ctx context.Context, in *FeedReadRequest, opts ...grpc.CallOption) (*FeedReadResponse, error)
+	FeedRemove(ctx context.Context, in *FeedRemoveRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	FeedSummary(ctx context.Context, in *FeedSummaryRequest, opts ...grpc.CallOption) (*FeedSummaryResponse, error)
 	Lookup(ctx context.Context, in *LookupRequest, opts ...grpc.CallOption) (*LookupResponse, error)
 	GroupCount(ctx context.Context, in *GroupCountRequest, opts ...grpc.CallOption) (*GroupCountResponse, error)
 	Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsResponse, error)
@@ -344,6 +353,46 @@ func (c *keystoneClient) Query(ctx context.Context, in *QueryRequest, opts ...gr
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryResponse)
 	err := c.cc.Invoke(ctx, Keystone_Query_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) FeedPut(ctx context.Context, in *FeedPutRequest, opts ...grpc.CallOption) (*FeedPutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FeedPutResponse)
+	err := c.cc.Invoke(ctx, Keystone_FeedPut_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) FeedRead(ctx context.Context, in *FeedReadRequest, opts ...grpc.CallOption) (*FeedReadResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FeedReadResponse)
+	err := c.cc.Invoke(ctx, Keystone_FeedRead_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) FeedRemove(ctx context.Context, in *FeedRemoveRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_FeedRemove_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) FeedSummary(ctx context.Context, in *FeedSummaryRequest, opts ...grpc.CallOption) (*FeedSummaryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FeedSummaryResponse)
+	err := c.cc.Invoke(ctx, Keystone_FeedSummary_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -746,6 +795,11 @@ type KeystoneServer interface {
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	QueryIndex(context.Context, *QueryIndexRequest) (*QueryIndexResponse, error)
 	Query(context.Context, *QueryRequest) (*QueryResponse, error)
+	// Ordered, Cassandra-backed feeds, independent of SQL indexing.
+	FeedPut(context.Context, *FeedPutRequest) (*FeedPutResponse, error)
+	FeedRead(context.Context, *FeedReadRequest) (*FeedReadResponse, error)
+	FeedRemove(context.Context, *FeedRemoveRequest) (*GenericResponse, error)
+	FeedSummary(context.Context, *FeedSummaryRequest) (*FeedSummaryResponse, error)
 	Lookup(context.Context, *LookupRequest) (*LookupResponse, error)
 	GroupCount(context.Context, *GroupCountRequest) (*GroupCountResponse, error)
 	Logs(context.Context, *LogsRequest) (*LogsResponse, error)
@@ -855,6 +909,18 @@ func (UnimplementedKeystoneServer) QueryIndex(context.Context, *QueryIndexReques
 }
 func (UnimplementedKeystoneServer) Query(context.Context, *QueryRequest) (*QueryResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Query not implemented")
+}
+func (UnimplementedKeystoneServer) FeedPut(context.Context, *FeedPutRequest) (*FeedPutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method FeedPut not implemented")
+}
+func (UnimplementedKeystoneServer) FeedRead(context.Context, *FeedReadRequest) (*FeedReadResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method FeedRead not implemented")
+}
+func (UnimplementedKeystoneServer) FeedRemove(context.Context, *FeedRemoveRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method FeedRemove not implemented")
+}
+func (UnimplementedKeystoneServer) FeedSummary(context.Context, *FeedSummaryRequest) (*FeedSummaryResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method FeedSummary not implemented")
 }
 func (UnimplementedKeystoneServer) Lookup(context.Context, *LookupRequest) (*LookupResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Lookup not implemented")
@@ -1323,6 +1389,78 @@ func _Keystone_Query_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeystoneServer).Query(ctx, req.(*QueryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_FeedPut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FeedPutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).FeedPut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_FeedPut_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).FeedPut(ctx, req.(*FeedPutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_FeedRead_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FeedReadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).FeedRead(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_FeedRead_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).FeedRead(ctx, req.(*FeedReadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_FeedRemove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FeedRemoveRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).FeedRemove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_FeedRemove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).FeedRemove(ctx, req.(*FeedRemoveRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_FeedSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FeedSummaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).FeedSummary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_FeedSummary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).FeedSummary(ctx, req.(*FeedSummaryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2035,6 +2173,22 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Query",
 			Handler:    _Keystone_Query_Handler,
+		},
+		{
+			MethodName: "FeedPut",
+			Handler:    _Keystone_FeedPut_Handler,
+		},
+		{
+			MethodName: "FeedRead",
+			Handler:    _Keystone_FeedRead_Handler,
+		},
+		{
+			MethodName: "FeedRemove",
+			Handler:    _Keystone_FeedRemove_Handler,
+		},
+		{
+			MethodName: "FeedSummary",
+			Handler:    _Keystone_FeedSummary_Handler,
 		},
 		{
 			MethodName: "Lookup",

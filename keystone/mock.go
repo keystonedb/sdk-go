@@ -12,8 +12,6 @@ import (
 
 const bufSize = 1024 * 1024
 
-var mockListener *bufconn.Listener
-
 type MockServer struct {
 	proto.UnimplementedKeystoneServer
 	DefineFunc           func(context.Context, *proto.SchemaRequest) (*proto.Schema, error)
@@ -25,6 +23,10 @@ type MockServer struct {
 	FindFunc             func(context.Context, *proto.FindRequest) (*proto.FindResponse, error)
 	ListFunc             func(context.Context, *proto.ListRequest) (*proto.ListResponse, error)
 	QueryFunc            func(context.Context, *proto.QueryRequest) (*proto.QueryResponse, error)
+	FeedPutFunc          func(context.Context, *proto.FeedPutRequest) (*proto.FeedPutResponse, error)
+	FeedReadFunc         func(context.Context, *proto.FeedReadRequest) (*proto.FeedReadResponse, error)
+	FeedRemoveFunc       func(context.Context, *proto.FeedRemoveRequest) (*proto.GenericResponse, error)
+	FeedSummaryFunc      func(context.Context, *proto.FeedSummaryRequest) (*proto.FeedSummaryResponse, error)
 	QueryIndexFunc       func(context.Context, *proto.QueryIndexRequest) (*proto.QueryIndexResponse, error)
 	LookupFunc           func(context.Context, *proto.LookupRequest) (*proto.LookupResponse, error)
 	GroupCountFunc       func(context.Context, *proto.GroupCountRequest) (*proto.GroupCountResponse, error)
@@ -71,22 +73,19 @@ type MockServer struct {
 	EventStreamFunc             func(grpc.BidiStreamingServer[proto.EventStreamRequest, proto.EventStreamResponse]) error
 }
 
-func bufDialer(context.Context, string) (net.Conn, error) {
-	return mockListener.Dial()
-}
-
 // server.Serve(listener) / defer close
 
 func MockConnection() (*Connection, *MockServer, *bufconn.Listener, *grpc.Server) {
-	mockListener = bufconn.Listen(bufSize)
+	listener := bufconn.Listen(bufSize)
 	s := grpc.NewServer()
 	m := &MockServer{}
 	proto.RegisterKeystoneServer(s, m)
-	conn, err := grpc.NewClient("passthrough:///bufnet", grpc.WithContextDialer(bufDialer), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	dial := func(ctx context.Context, _ string) (net.Conn, error) { return listener.DialContext(ctx) }
+	conn, err := grpc.NewClient("passthrough:///bufnet", grpc.WithContextDialer(dial), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
 	}
-	return NewConnection(proto.NewKeystoneClient(conn), "", "", ""), m, mockListener, s
+	return NewConnection(proto.NewKeystoneClient(conn), "", "", ""), m, listener, s
 }
 
 func (m *MockServer) Define(ctx context.Context, req *proto.SchemaRequest) (*proto.Schema, error) {
@@ -94,6 +93,34 @@ func (m *MockServer) Define(ctx context.Context, req *proto.SchemaRequest) (*pro
 		return m.UnimplementedKeystoneServer.Define(ctx, req)
 	}
 	return m.DefineFunc(ctx, req)
+}
+
+func (m *MockServer) FeedPut(ctx context.Context, req *proto.FeedPutRequest) (*proto.FeedPutResponse, error) {
+	if m.FeedPutFunc == nil {
+		return m.UnimplementedKeystoneServer.FeedPut(ctx, req)
+	}
+	return m.FeedPutFunc(ctx, req)
+}
+
+func (m *MockServer) FeedRead(ctx context.Context, req *proto.FeedReadRequest) (*proto.FeedReadResponse, error) {
+	if m.FeedReadFunc == nil {
+		return m.UnimplementedKeystoneServer.FeedRead(ctx, req)
+	}
+	return m.FeedReadFunc(ctx, req)
+}
+
+func (m *MockServer) FeedRemove(ctx context.Context, req *proto.FeedRemoveRequest) (*proto.GenericResponse, error) {
+	if m.FeedRemoveFunc == nil {
+		return m.UnimplementedKeystoneServer.FeedRemove(ctx, req)
+	}
+	return m.FeedRemoveFunc(ctx, req)
+}
+
+func (m *MockServer) FeedSummary(ctx context.Context, req *proto.FeedSummaryRequest) (*proto.FeedSummaryResponse, error) {
+	if m.FeedSummaryFunc == nil {
+		return m.UnimplementedKeystoneServer.FeedSummary(ctx, req)
+	}
+	return m.FeedSummaryFunc(ctx, req)
 }
 
 func (m *MockServer) Mutate(ctx context.Context, req *proto.MutateRequest) (*proto.MutateResponse, error) {
