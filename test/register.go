@@ -20,6 +20,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/events"
 	"github.com/keystonedb/sdk-go/test/requirements/events_actor"
 	"github.com/keystonedb/sdk-go/test/requirements/exists"
+	"github.com/keystonedb/sdk-go/test/requirements/feed"
 	"github.com/keystonedb/sdk-go/test/requirements/find"
 	"github.com/keystonedb/sdk-go/test/requirements/grandchildren"
 	"github.com/keystonedb/sdk-go/test/requirements/group_count"
@@ -61,6 +62,8 @@ func init() {
 	//reqs = append(reqs, &requirements.DummyRequirement{})
 	reqs = append(reqs, &akv.Requirement{})
 	reqs = append(reqs, &akvw.Requirement{})
+	reqs = append(reqs, &feed.Requirement{})
+	reqs = append(reqs, &feed.SummaryRequirement{})
 	reqs = append(reqs, &cru.Requirement{})
 	reqs = append(reqs, &dynamic_properties.Requirement{})
 	reqs = append(reqs, &dynamic_entity.Requirement{})

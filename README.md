@@ -1,5 +1,126 @@
 # Keystone Go SDK
 
+## Ordered feeds
+
+Use `actor.Feed(type, key)` for channel messages, replies or user activity.
+Feeds use Cassandra directly and do not require SQL indexing or schema registration.
+Public keys can be existing entity IDs, k4id strings or ordinary names. For
+example, `actor.Feed("channel-messages", k4id.New().String())` selects a new feed.
+The server derives its internal 16-byte ID from the full actor scope, type and
+key, and stores UTC hours in four bytes. The SDK keeps sending the original
+type/key values; positions remain independent UUID v1 ordering keys.
+
+```go
+messages := actor.Feed("channel-messages", channelID)
+entry := &keystone.FeedEntry{
+    EntityID:   message.GetKeystoneID(),
+    EntityType: keystone.Type(message),
+}
+if err := messages.Put(ctx, entry); err != nil {
+    return err
+}
+
+page, err := messages.Read(ctx, keystone.FeedReadOptions{Limit: 50})
+if err != nil {
+    return err
+}
+for {
+    for _, entry := range page.Entries() {
+        fmt.Println(entry.EntityID, entry.Position)
+    }
+    if !page.HasMore() {
+        break
+    }
+    if err := page.Next(ctx); err != nil {
+        return err
+    }
+}
+```
+
+`Put` fills in `entry.Position` before sending. Keep the entry and retry `Put`
+with that same entry on failure: its position is preserved so retries do not
+create duplicate membership rows. To update or remove an existing membership,
+use its full position; `messages.Remove(ctx, entry.Position)` removes the feed
+entry without deleting the referenced entity. Feed writes and entity mutations
+are separate operations.
+
+`FeedReadOptions{}` reads the newest 50 entries. Set `Ascending: true` for oldest
+first. Set `Position` to read strictly before an entry, or strictly after it when
+ascending. Set `Cursor` to resume a saved `page.NextCursor()` with the same feed,
+direction and actor identity; do not combine it with `Position`. Limits cannot
+exceed 1,000 and payload-heavy pages may be shorter. Positions order by UUID v1
+timestamp, rather than commit order; reads are not snapshots.
+
+`Next` replaces the current page, returns `io.EOF` when exhausted and preserves
+the current page and cursor on failure. Always check `HasMore`, even for an empty
+page: sparse feeds can require another bounded read. The pager retains the
+original connection, authorization and options. Use entries and pagers sequentially.
+
+`FeedEntry` holds an entity reference, an opaque `Data []byte` payload (up to
+16 KiB), or both. References are not automatically loaded. Use `actor.GetByID`
+to retrieve the entity through the primary store. For payload-only activity:
+
+```go
+activity := actor.Feed("user-activity", userID)
+err := activity.Put(ctx, &keystone.FeedEntry{Data: []byte(`{"action":"mentioned"}`)})
+```
+
+Thread replies use the same API with `actor.Feed("message-replies", messageID)`.
+For calendar navigation or an activity scrubber, request a summary:
+
+```go
+summary, err := messages.Summary(ctx, keystone.FeedSummaryOptions{
+    From: start, Until: end,
+    Interval: keystone.FeedDaily,
+    Timezone: "Europe/London",
+})
+if err != nil {
+    return err
+}
+for _, day := range summary.Buckets {
+    fmt.Println(day.Start, day.Count)
+}
+// After selecting a bucket, jump into the feed:
+page, err := messages.Read(ctx, keystone.FeedReadOptions{
+    Cursor: summary.Buckets[selected].Cursor,
+    Limit: 50,
+})
+```
+
+Intervals are `FeedHourly`, `FeedDaily` (default) and `FeedMonthly`. Ranges are
+inclusive of `From` and exclusive of `Until`, with both timestamps aligned to a
+minute. Daily/monthly ranges can cover 366 days, hourly ranges 31 days. Timezone
+defaults to UTC; fractional-hour offsets and DST are handled by the server.
+Bucket timestamps are absolute instants: render them in the requested timezone.
+Possible activity is retained; jump boundaries are clipped to the requested range.
+
+`summary.Approximate` is true for conservative activity outlines. Counts estimate
+activity density; retries, updates and removals can overcount. Every period
+overlapping a recorded hour stays visible even if its counter is missing or zero,
+so navigation does not wait for a background projection. Empty periods can remain
+visible after removal, and fractional timezone boundaries can conservatively
+highlight adjacent periods. Do not use these counts as exact row totals.
+
+Use the bucket's `Cursor` to navigate by time:
+set `Ascending: true` in both Summary and Read to start at the period's beginning,
+or omit it to start before the period's end. Jumps include boundary entries where
+applicable and continue through the feed. Normal cursor expiry and scope rules
+apply. Summary reads use the directory and counters, without message scans or SQL.
+
+The old exact-projection fields (`PendingHours`, `FirstPosition`, `LastPosition`,
+`UpdatedAt`) remain deprecated for source compatibility. Current activity
+outlines are checked immediately; applications do not need to poll a projector.
+
+The feed requirements use short k4id keys and exercise scope isolation, ambiguous
+namespace boundaries, Unicode keys, signed hour ordering across the Unix epoch,
+and calendar jumps in both directions. Activity checks permit density drift and
+extra historical markers while failing immediately if an active period is absent.
+
+For advanced wire settings, the generated `Connection.FeedPut`, `FeedRead` and
+`FeedRemove` and `FeedSummary` RPC methods remain available.
+
+## Entity queries
+
 Use a typed collection to keep loaded entities and query pagination together:
 
 ```go

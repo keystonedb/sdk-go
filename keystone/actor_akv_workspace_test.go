@@ -9,12 +9,12 @@ import (
 
 func newAKVWorkspaceTestActor(t *testing.T) (*Actor, *MockServer, func()) {
 	t.Helper()
-	conn, mock, _, server := MockConnection()
-	go func() { _ = server.Serve(mockListener) }()
+	conn, mock, listener, server := MockConnection()
+	go func() { _ = server.Serve(listener) }()
 	actor := conn.Actor("workspace-1", "127.0.0.1", "user-1", "go-test")
 	return &actor, mock, func() {
 		server.Stop()
-		_ = mockListener.Close()
+		_ = listener.Close()
 	}
 }
 
