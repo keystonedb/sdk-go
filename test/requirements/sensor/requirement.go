@@ -20,6 +20,9 @@ func (d *Requirement) Name() string {
 	return "Sensor"
 }
 
+// Parallel fixtures use unique sensor/entity identities or an isolated task queue.
+func (d *Requirement) Parallel() bool { return true }
+
 func (d *Requirement) Register(conn *keystone.Connection) error {
 	os.Setenv("KS_SENSOR_TEST_ORIGIN", "https://l.kscdn.co/r/_sensors")
 	conn.RegisterTypes(models.Person{})
@@ -27,12 +30,20 @@ func (d *Requirement) Register(conn *keystone.Connection) error {
 }
 
 func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
-	report(d.measure(actor))
-	d.verifyQueries(actor, func(result requirements.TestResult) { result.Name = "Entity " + result.Name; report(result) })
-	app := &Requirement{fixture: sensorFixture{appScope: true}}
-	app.verifyQueries(actor, func(result requirements.TestResult) { result.Name = "App " + result.Name; report(result) })
-	d.verifyTTL(actor, report)
-	d.verifyBackground(actor, report)
+	scheduler := requirements.NewScheduler()
+	scheduler.StartEarly(d.Name(), func() { d.VerifyScheduled(actor, report, scheduler) })
+	scheduler.Run()
+}
+
+func (d *Requirement) VerifyScheduled(actor *keystone.Actor, report requirements.Reporter, scheduler *requirements.Scheduler) {
+	d.scheduleTTL(actor, report, scheduler)
+	scheduler.After(0, func() {
+		report(d.measure(actor))
+		d.verifyQueries(actor, func(result requirements.TestResult) { result.Name = "Entity " + result.Name; report(result) })
+		app := &Requirement{fixture: sensorFixture{appScope: true}}
+		app.verifyQueries(actor, func(result requirements.TestResult) { result.Name = "App " + result.Name; report(result) })
+		d.scheduleBackground(actor, report, scheduler)
+	})
 }
 
 func (d *Requirement) verifyQueries(actor *keystone.Actor, report requirements.Reporter) {

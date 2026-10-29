@@ -30,7 +30,9 @@ func (d *Requirement) listAppSensors(actor *keystone.Actor) requirements.TestRes
 	return requirements.NewResult("ListAppSensors", err)
 }
 
-func (d *Requirement) verifyTTL(actor *keystone.Actor, report requirements.Reporter) {
+// scheduleTTL starts retention before ordinary requirements and resumes expiry
+// assertions later. RPCs count as effective time; scheduled delays do not.
+func (d *Requirement) scheduleTTL(actor *keystone.Actor, report requirements.Reporter, scheduler *requirements.Scheduler) {
 	ctx, cancel := context.WithTimeout(context.Background(), queryTimeout)
 	defer cancel()
 	name := "integration.ttl." + uuid.NewString()
@@ -53,11 +55,12 @@ func (d *Requirement) verifyTTL(actor *keystone.Actor, report requirements.Repor
 		err = write(&proto.WriteSensorsRequest{AppScope: true, TtlSeconds: 5,
 			Measurements: []*proto.EntitySensorMeasurement{measurement("default", 1, 0), measurement("override", 3, 60)}})
 	}
+	expires := time.Now().Add(5 * time.Second)
 	report(requirements.NewResult("WriteSensors (TTL default and override)", err))
 	if err != nil {
 		return
 	}
-	read := func() (float64, int64, error) {
+	read := func(ctx context.Context) (float64, int64, error) {
 		response, err := actor.ChartSensor(ctx, &proto.ChartSensorRequest{AppScope: true, Sensor: name,
 			From: timestamppb.New(at), Until: timestamppb.New(at.Add(time.Minute)), IntervalSeconds: 60})
 		var sum float64
@@ -68,7 +71,7 @@ func (d *Requirement) verifyTTL(actor *keystone.Actor, report requirements.Repor
 		}
 		return sum, samples, err
 	}
-	sum, samples, err := read()
+	sum, samples, err := read(ctx)
 	if err == nil && (!closeEnough(sum, 6) || samples != 3) {
 		err = fmt.Errorf("before TTL expiry: got sum=%g samples=%d; want sum=6 samples=3", sum, samples)
 	}
@@ -88,43 +91,35 @@ func (d *Requirement) verifyTTL(actor *keystone.Actor, report requirements.Repor
 		}
 	}
 	report(requirements.NewResult("WriteSensors rejects negative TTLs", nil))
-	// Poll boundedly rather than relying on a fixed sleep or expiry worker timing.
-	ticker := time.NewTicker(250 * time.Millisecond)
-	defer ticker.Stop()
-	deadline := time.NewTimer(20 * time.Second)
-	defer deadline.Stop()
-	for {
-		sum, samples, err = read()
-		if err != nil {
-			break
-		}
-		if closeEnough(sum, 5) && samples == 2 {
-			break
-		}
-		select {
-		case <-ctx.Done():
-			err = ctx.Err()
-		case <-deadline.C:
+	deadline := expires.Add(20 * time.Second)
+	var check func()
+	check = func() {
+		ctx, cancel := context.WithDeadline(context.Background(), deadline)
+		defer cancel()
+		sum, samples, err := read(ctx)
+		if err == nil && (!closeEnough(sum, 5) || samples != 2) {
+			if time.Now().Before(deadline) {
+				scheduler.After(250*time.Millisecond, check)
+				return
+			}
 			err = fmt.Errorf("after TTL expiry: got sum=%g samples=%d; want sum=5 samples=2 (override and retained entries)", sum, samples)
-		case <-ticker.C:
-			continue
 		}
-		break
-	}
-	report(requirements.NewResult("Sensor TTL expires chart contributions and preserves overrides", err))
-	if err != nil {
-		return
-	}
-	activity, err := actor.SensorActivity(ctx, &proto.SensorActivityRequest{AppScope: true, Sensor: name, LookbackDays: 7})
-	if err == nil {
-		sum, samples = 0, 0
-		for _, slot := range activity.GetSlots() {
-			sum += slot.GetSum()
-			samples += slot.GetSamples()
+		report(requirements.NewResult("Sensor TTL expires chart contributions and preserves overrides", err))
+		if err != nil {
+			return
 		}
-		if !closeEnough(sum, 5) || samples != 2 {
-			err = fmt.Errorf("expired or invalid measurements remain in activity: sum=%g samples=%d", sum, samples)
+		activity, err := actor.SensorActivity(ctx, &proto.SensorActivityRequest{AppScope: true, Sensor: name, LookbackDays: 7})
+		if err == nil {
+			sum, samples = 0, 0
+			for _, slot := range activity.GetSlots() {
+				sum += slot.GetSum()
+				samples += slot.GetSamples()
+			}
+			if !closeEnough(sum, 5) || samples != 2 {
+				err = fmt.Errorf("expired or invalid measurements remain in activity: sum=%g samples=%d", sum, samples)
+			}
 		}
+		report(requirements.NewResult("Sensor TTL expires activity contributions", err))
 	}
-	report(requirements.NewResult("Sensor TTL expires activity contributions", err))
+	scheduler.After(time.Until(expires), check)
 }

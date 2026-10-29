@@ -53,6 +53,41 @@ Run SDK tests with `go test ./...`. Run server requirement tests with
 scopes, idempotent writes, charts, heatmaps, activity, prediction baselines,
 discovery, TTL defaults and overrides, validation, and expiry.
 
+The requirement runner reports elapsed time, effective wall time (including
+RPC latency), aggregate active work, idle waiting time, and active time per
+requirement. Effective wall time merges overlapping active intervals; aggregate
+work sums them and may exceed elapsed time when requirements run concurrently.
+Scheduled delays are excluded from active work. Registration and schema sync run
+sequentially before verification and are included in the timing report.
+
+Requirements are exclusive by default. Independent requirements can opt into
+concurrency by implementing:
+
+```go
+func (d *Requirement) Parallel() bool { return true }
+```
+
+Sensor and TaskQ opt in, using unique fixture identities and isolated task queues.
+The runner allows four active parallel requirements by default; use
+`go run ./test -parallel 2` to change the limit, or `-parallel 1` for sequential
+execution. Requirements without the opt-in never overlap active parallel work.
+Report callbacks are serialized, and each requirement gets its own actor.
+
+Requirements implementing `requirements.ScheduledRequirement` start early.
+`VerifyScheduled` uses the scoped `scheduler.After(delay, check)` to resume
+assertions or poll later. Due continuations take priority over ordinary checks.
+Callbacks within one requirement remain sequential, even when it opts into
+parallel execution, and waiting callbacks release their worker slot. Use only
+the scheduler supplied to `VerifyScheduled` for continuations. Callbacks should
+return promptly and schedule another attempt rather than sleeping; blocking RPCs
+still count toward active time. Ordinary exclusive requirements retain their
+registration order.
+
+Sensor TTL and background-ingestion checks use this scheduling. Task queue
+checks no longer add fixed producer/consumer sleeps; their 20-second timeout
+remains a failure bound. The 1ms timestamp-spacing sleeps in the child/grandchild
+fixtures remain part of setup time; these are not expiry tests.
+
 Enable the optional Sensor Live requirement with an origin allowed by the server:
 
 ```sh

@@ -14,52 +14,61 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (d *Requirement) verifyBackground(actor *keystone.Actor, report requirements.Reporter) {
+func (d *Requirement) scheduleBackground(actor *keystone.Actor, report requirements.Reporter, scheduler *requirements.Scheduler) {
 	for _, appScope := range []bool{false, true} {
-		err := d.backgroundWrite(actor, appScope)
-		report(requirements.NewResult(fmt.Sprintf("WriteSensors background ingestion (app scope=%t)", appScope), err))
+		scheduler.After(0, func() { d.backgroundWrite(actor, appScope, report, scheduler) })
 	}
 }
 
-func (d *Requirement) backgroundWrite(actor *keystone.Actor, appScope bool) error {
-	ctx, cancel := context.WithTimeout(context.Background(), queryTimeout)
-	defer cancel()
+func (d *Requirement) backgroundWrite(actor *keystone.Actor, appScope bool, report requirements.Reporter, scheduler *requirements.Scheduler) {
 	name := "integration.background." + uuid.NewString()
 	at := time.Now().UTC().Truncate(time.Minute).Add(-time.Minute)
+	deadline := time.Now().Add(queryTimeout)
+	result := func(err error) {
+		report(requirements.NewResult(fmt.Sprintf("WriteSensors background ingestion (app scope=%t)", appScope), err))
+	}
+	ctx, cancel := context.WithDeadline(context.Background(), deadline)
+	defer cancel()
 	request := &proto.WriteSensorsRequest{AppScope: appScope, Measurements: []*proto.EntitySensorMeasurement{
 		keystone.NewSensorMeasurement(name, 5, keystone.WithSensorTimestamp(timestamppb.New(at)), keystone.WithSensorMeasurementID(uuid.NewString())),
 	}}
 	if !appScope {
 		if d.fixture.entityID == "" {
-			return fmt.Errorf("entity fixture is unavailable")
+			result(fmt.Errorf("entity fixture is unavailable"))
+			return
 		}
 		request.Schema = d.schema()
 		request.EntityId = d.fixture.entityID
 	}
-	// The queue validates before acknowledging: invalid measurements cannot be accepted.
 	request.Measurements[0].TtlSeconds = -1
 	_, err := actor.WriteSensors(ctx, request, keystone.WithSensorBackground(true))
 	if status.Code(err) != codes.InvalidArgument {
-		return fmt.Errorf("background write with negative TTL: want InvalidArgument; got %v", err)
+		result(fmt.Errorf("background write with negative TTL: want InvalidArgument; got %v", err))
+		return
 	}
 	request.Measurements[0].TtlSeconds = 0
 	response, err := actor.WriteSensors(ctx, request, keystone.WithSensorBackground(true))
 	if err != nil {
-		return err
+		result(err)
+		return
 	}
 	if !response.GetSuccess() {
-		return fmt.Errorf("background write was not acknowledged")
+		result(fmt.Errorf("background write was not acknowledged"))
+		return
 	}
-	// Success acknowledges durable queueing, so wait for the measurement to become readable.
-	ticker := time.NewTicker(250 * time.Millisecond)
-	defer ticker.Stop()
-	for {
+	// Queue acknowledgement starts a separate polling phase. Polling yields to
+	// other requirements and each RPC retains the original completion deadline.
+	var check func()
+	check = func() {
+		ctx, cancel := context.WithDeadline(context.Background(), deadline)
+		defer cancel()
 		chart, err := actor.ChartSensor(ctx, &proto.ChartSensorRequest{
 			Schema: request.Schema, EntityId: request.EntityId, AppScope: appScope, Sensor: name,
 			From: timestamppb.New(at), Until: timestamppb.New(at.Add(time.Minute)), IntervalSeconds: 60,
 		})
 		if err != nil {
-			return err
+			result(err)
+			return
 		}
 		var sum float64
 		var samples int64
@@ -69,14 +78,17 @@ func (d *Requirement) backgroundWrite(actor *keystone.Actor, appScope bool) erro
 		}
 		if samples != 0 {
 			if samples != 1 || !closeEnough(sum, 5) {
-				return fmt.Errorf("background ingestion: got sum=%g samples=%d; want sum=5 samples=1", sum, samples)
+				result(fmt.Errorf("background ingestion: got sum=%g samples=%d; want sum=5 samples=1", sum, samples))
+				return
 			}
-			return nil
+			result(nil)
+			return
 		}
-		select {
-		case <-ctx.Done():
-			return fmt.Errorf("background measurement did not become readable: %w", ctx.Err())
-		case <-ticker.C:
+		if !time.Now().Before(deadline) {
+			result(fmt.Errorf("background measurement did not become readable before its deadline"))
+			return
 		}
+		scheduler.After(250*time.Millisecond, check)
 	}
+	scheduler.After(0, check)
 }
