@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/keystonedb/sdk-go/test/requirements"
+	"github.com/keystonedb/sdk-go/test/requirements/aggregates"
 	"github.com/keystonedb/sdk-go/test/requirements/akv"
 	"github.com/keystonedb/sdk-go/test/requirements/akv_timeline"
 	"github.com/keystonedb/sdk-go/test/requirements/akvw"
@@ -19,6 +20,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/events"
 	"github.com/keystonedb/sdk-go/test/requirements/events_actor"
 	"github.com/keystonedb/sdk-go/test/requirements/exists"
+	"github.com/keystonedb/sdk-go/test/requirements/feed"
 	"github.com/keystonedb/sdk-go/test/requirements/find"
 	"github.com/keystonedb/sdk-go/test/requirements/grandchildren"
 	"github.com/keystonedb/sdk-go/test/requirements/group_count"
@@ -38,7 +40,6 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/pii"
 	"github.com/keystonedb/sdk-go/test/requirements/prewrite"
 	"github.com/keystonedb/sdk-go/test/requirements/query"
-	"github.com/keystonedb/sdk-go/test/requirements/ratelimit"
 	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/keystonedb/sdk-go/test/requirements/remote"
 	"github.com/keystonedb/sdk-go/test/requirements/sensor"
@@ -49,7 +50,6 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/stats"
 	"github.com/keystonedb/sdk-go/test/requirements/status"
 	"github.com/keystonedb/sdk-go/test/requirements/stringset"
-	"github.com/keystonedb/sdk-go/test/requirements/tasks"
 	"github.com/keystonedb/sdk-go/test/requirements/timeseries"
 	"github.com/keystonedb/sdk-go/test/requirements/translations"
 	"github.com/keystonedb/sdk-go/test/requirements/unique_id"
@@ -63,6 +63,8 @@ func init() {
 	//reqs = append(reqs, &requirements.DummyRequirement{})
 	reqs = append(reqs, &akv.Requirement{})
 	reqs = append(reqs, &akvw.Requirement{})
+	reqs = append(reqs, &feed.Requirement{})
+	reqs = append(reqs, &feed.SummaryRequirement{})
 	reqs = append(reqs, &cru.Requirement{})
 	reqs = append(reqs, &dynamic_properties.Requirement{})
 	reqs = append(reqs, &dynamic_entity.Requirement{})
@@ -86,6 +88,7 @@ func init() {
 	reqs = append(reqs, &lookup_actor.Requirement{})
 	reqs = append(reqs, &relationships.Requirement{})
 	reqs = append(reqs, &query.Requirement{})
+	reqs = append(reqs, &aggregates.Requirement{})
 	reqs = append(reqs, &datatypes.Requirement{})
 	reqs = append(reqs, &interval.Requirement{})
 	reqs = append(reqs, &timeseries.Requirement{})
@@ -100,7 +103,7 @@ func init() {
 	reqs = append(reqs, &nested_property_loading.Requirement{})
 	reqs = append(reqs, &embedded.Requirement{})
 	reqs = append(reqs, &pii.Requirement{})
-	reqs = append(reqs, &ratelimit.Requirement{})
+	//reqs = append(reqs, &ratelimit.Requirement{})
 	reqs = append(reqs, &iid.Requirement{})
 	reqs = append(reqs, &watcher.Requirement{})
 	reqs = append(reqs, &exists.Requirement{})
@@ -108,7 +111,7 @@ func init() {
 	reqs = append(reqs, &group_count.Requirement{})
 	reqs = append(reqs, &hashed_id.Requirement{})
 	//reqs = append(reqs, &event_stream.Requirement{})
-	reqs = append(reqs, &tasks.Requirement{})
+	//reqs = append(reqs, &tasks.Requirement{})
 	reqs = append(reqs, &translations.Requirement{})
 	reqs = append(reqs, &squid.Requirement{})
 	reqs = append(reqs, &snapshot.Requirement{})

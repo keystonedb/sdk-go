@@ -9,28 +9,62 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
+	"github.com/keystonedb/sdk-go/test/requirements/child_entities"
+	"github.com/keystonedb/sdk-go/test/requirements/embedded"
+	"github.com/keystonedb/sdk-go/test/requirements/entity_state"
+	findreq "github.com/keystonedb/sdk-go/test/requirements/find"
+	groupreq "github.com/keystonedb/sdk-go/test/requirements/group_count"
+	"github.com/keystonedb/sdk-go/test/requirements/interval"
+	"github.com/keystonedb/sdk-go/test/requirements/labels"
+	"github.com/keystonedb/sdk-go/test/requirements/lookup"
+	"github.com/keystonedb/sdk-go/test/requirements/relationships"
 	"github.com/kubex/k4id"
 )
 
 type Requirement struct {
+	coverage       []requirements.Requirement
 	runID          string
 	subscriptionID keystone.ID
 	renewalIDs     []string
 }
 
 func (d *Requirement) Name() string {
-	return "Query Entity Index"
+	return "Query (find, group count and entity index)"
 }
 
 func (d *Requirement) Register(conn *keystone.Connection) error {
 	d.runID = k4id.New().String()
-	conn.RegisterTypes(models.FileData{}, models.Subscription{}, models.Renewal{}, models.Offer{})
+	d.coverage = []requirements.Requirement{
+		&embedded.Requirement{QueryCoverage: requirements.QueryCoverage{UseQuery: true}},
+		&child_entities.Requirement{QueryCoverage: queryCoverage(models.Renewal{})},
+		&relationships.Requirement{QueryCoverage: queryCoverage(models.Transaction{})},
+		&lookup.Requirement{QueryCoverage: requirements.QueryCoverage{UseQuery: true}},
+		&labels.Requirement{QueryCoverage: requirements.QueryCoverage{UseQuery: true}},
+		&entity_state.Requirement{QueryCoverage: requirements.QueryCoverage{UseQuery: true}},
+		&interval.Requirement{QueryCoverage: requirements.QueryCoverage{UseQuery: true}},
+	}
+	for _, suite := range d.coverage {
+		if err := suite.Register(conn); err != nil {
+			return err
+		}
+	}
+	conn.RegisterTypes(models.FileData{}, models.Subscription{}, models.Renewal{}, models.Offer{}, models.DataTypes{}, models.Config{})
+	conn.RegisterTypes(querySample{})
 	return nil
 }
 
 func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
+	for _, suite := range d.coverage {
+		suite.Verify(actor, func(result requirements.TestResult) {
+			result.Name = suite.Name() + ": " + result.Name
+			report(result)
+		})
+	}
+	(&findreq.Requirement{UseQuery: true}).Verify(actor, report)
+	(&groupreq.Requirement{UseQuery: true}).Verify(actor, report)
 	report(d.create(actor))
 	report(d.readPending(actor))
 	report(d.readOneTwo(actor))
@@ -44,11 +78,18 @@ func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter
 	report(d.createChildEntities(actor))
 	report(d.readByEntityIDs(actor))
 	report(d.readByEntityIDsAndParent(actor))
+	report(d.readCursorPages(actor))
+	report(d.readSavedQueryPages(actor))
+	report(d.readEmptyEntityIDs(actor))
+	report(d.readSavedEntityPages(actor))
+	report(d.readSavedCollection(actor))
+	report(d.readEmptyResults(actor))
+	report(d.readInvalidResultSets(actor))
 }
 
 func (d *Requirement) readOneTwo(actor *keystone.Actor) requirements.TestResult {
 
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.FileData{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.FileData{}),
 		[]string{"check_key", "line_information"}, keystone.Limit(2, 0), keystone.SortBy("modified", true),
 		keystone.WhereIn("state", 1, 2))
 
@@ -82,7 +123,7 @@ func (d *Requirement) readOneTwo(actor *keystone.Actor) requirements.TestResult 
 }
 func (d *Requirement) readThree(actor *keystone.Actor) requirements.TestResult {
 
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.FileData{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.FileData{}),
 		[]string{"check_key"}, keystone.Limit(2, 0), keystone.SortBy("modified", true),
 		keystone.WhereEquals("connector_id", "tester"))
 	if err == nil && len(entities) < 2 {
@@ -111,7 +152,7 @@ func (d *Requirement) readThree(actor *keystone.Actor) requirements.TestResult {
 
 func (d *Requirement) readComplex(actor *keystone.Actor) requirements.TestResult {
 
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.FileData{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.FileData{}),
 		[]string{"check_key", "identifier"}, keystone.Limit(2, 0), keystone.SortBy("modified", true),
 		keystone.WhereEquals("user_id", "usr1"),
 		keystone.Or(keystone.WhereEquals("state", 1), keystone.WhereEquals("state", 2)))
@@ -155,7 +196,7 @@ func (d *Requirement) readComplex(actor *keystone.Actor) requirements.TestResult
 
 func (d *Requirement) readPending(actor *keystone.Actor) requirements.TestResult {
 
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.FileData{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.FileData{}),
 		[]string{"check_key"}, keystone.Limit(3, 0), keystone.SortBy("modified", true),
 		keystone.WhereEquals("is_pending", true))
 
@@ -221,9 +262,9 @@ func (d *Requirement) createChildEntities(actor *keystone.Actor) requirements.Te
 }
 
 func (d *Requirement) readByEntityIDs(actor *keystone.Actor) requirements.TestResult {
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Renewal{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.Renewal{}),
 		[]string{}, keystone.Limit(10, 0),
-		keystone.WithEntityIDs(d.renewalIDs))
+		keystone.WithEntityIDs(d.renewalIDs), keystone.ChildOf(d.subscriptionID.String()))
 
 	if err == nil && len(entities) != 3 {
 		err = errors.New("expected 3 renewals, got " + strconv.Itoa(len(entities)))
@@ -236,7 +277,7 @@ func (d *Requirement) readByEntityIDs(actor *keystone.Actor) requirements.TestRe
 }
 
 func (d *Requirement) readByEntityIDsAndParent(actor *keystone.Actor) requirements.TestResult {
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Renewal{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.Renewal{}),
 		[]string{}, keystone.Limit(10, 0),
 		keystone.WithEntityIDs(d.renewalIDs),
 		keystone.ChildOf(d.subscriptionID.String()))
@@ -288,7 +329,7 @@ func (d *Requirement) createOffers(actor *keystone.Actor) requirements.TestResul
 }
 
 func (d *Requirement) readOfferByProduct(actor *keystone.Actor) requirements.TestResult {
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Offer{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.Offer{}),
 		[]string{"display_name", "test_run", "is_global", "product_ids"},
 		keystone.WhereEquals("test_run", d.runID),
 		keystone.WhereContains("product_ids", d.offerProductID("101")))
@@ -316,7 +357,7 @@ func (d *Requirement) readOfferByProduct(actor *keystone.Actor) requirements.Tes
 }
 
 func (d *Requirement) readOfferByGlobalOrProduct(actor *keystone.Actor) requirements.TestResult {
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Offer{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.Offer{}),
 		[]string{"display_name", "test_run", "is_global", "product_ids"},
 		keystone.WhereEquals("test_run", d.runID),
 		keystone.Or(
@@ -369,7 +410,7 @@ func (d *Requirement) readOfferByGlobalOrProduct(actor *keystone.Actor) requirem
 }
 
 func (d *Requirement) readOfferByProductsIn(actor *keystone.Actor) requirements.TestResult {
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Offer{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.Offer{}),
 		[]string{"display_name", "test_run", "is_global", "product_ids"},
 		keystone.WhereEquals("test_run", d.runID),
 		keystone.WhereIn("product_ids", d.offerProductID("102"), d.offerProductID("201")))
@@ -396,7 +437,7 @@ func (d *Requirement) readOfferByProductsIn(actor *keystone.Actor) requirements.
 }
 
 func (d *Requirement) readOfferByProductsNotIn(actor *keystone.Actor) requirements.TestResult {
-	entities, err := actor.QueryIndex(context.Background(), keystone.Type(models.Offer{}),
+	entities, err := d.queryEntities(actor, context.Background(), keystone.Type(models.Offer{}),
 		[]string{"display_name", "test_run", "is_global", "product_ids"},
 		keystone.WhereEquals("test_run", d.runID),
 		keystone.WhereNotIn("product_ids", d.offerProductID("101"), d.offerProductID("999")))
@@ -528,4 +569,21 @@ func containsString(values []string, want string) bool {
 		}
 	}
 	return false
+}
+
+// Reuse every index-query scenario with the same projections, filters and assertions.
+func (d *Requirement) queryEntities(actor *keystone.Actor, ctx context.Context, entityType string, properties []string, options ...keystone.FindOption) ([]*proto.EntityResponse, error) {
+	if entityType == keystone.Type(models.FileData{}) {
+		options = append(options, keystone.WhereEquals("check_key", d.runID))
+	}
+	resp, err := actor.QueryWithRequest(ctx, entityType, &proto.QueryRequest{Select: properties}, options...)
+	return resp.GetEntities(), err
+}
+
+func queryCoverage(model interface{}) requirements.QueryCoverage {
+	coverage := requirements.QueryCoverage{UseQuery: true}
+	for property := range keystone.Define(model).Properties {
+		coverage.AllProperties = append(coverage.AllProperties, property.Name())
+	}
+	return coverage
 }

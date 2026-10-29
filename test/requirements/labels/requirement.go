@@ -12,6 +12,7 @@ import (
 )
 
 type Requirement struct {
+	requirements.QueryCoverage
 	createdID keystone.ID
 	labelKey  string
 }
@@ -51,13 +52,13 @@ func (d *Requirement) store(actor *keystone.Actor) requirements.TestResult {
 
 func (d *Requirement) retrieve(actor *keystone.Actor) requirements.TestResult {
 	usr := &models.User{}
-	located, getErr := actor.Find(context.Background(), keystone.Type(usr), keystone.RetrieveOptions(
+	located, getErr := d.Find(actor, context.Background(), keystone.Type(usr), keystone.RetrieveOptions(
 		keystone.WithProperties("validate"),
 		keystone.WithLabels(),
 	), keystone.WithLabel(d.labelKey, "label-value"))
 
 	if getErr == nil {
-		if len(located) < 0 {
+		if len(located) == 0 {
 			getErr = errors.New("no user found")
 		} else {
 			getErr = keystone.Unmarshal(located[0], usr)

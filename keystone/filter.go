@@ -14,4 +14,6 @@ type filterRequest struct {
 	PageNumber     int32
 	ObjectPaths    []string
 	ListObjects    bool
+	queryOptions   []func(*proto.QueryRequest)
+	queryError     string
 }
