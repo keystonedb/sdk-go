@@ -33,6 +33,14 @@ const (
 	Keystone_SnapshotReport_FullMethodName          = "/kubex.keystone.Keystone/SnapshotReport"
 	Keystone_ReportTimeSeries_FullMethodName        = "/kubex.keystone.Keystone/ReportTimeSeries"
 	Keystone_ChartTimeSeries_FullMethodName         = "/kubex.keystone.Keystone/ChartTimeSeries"
+	Keystone_WriteSensors_FullMethodName            = "/kubex.keystone.Keystone/WriteSensors"
+	Keystone_ListAppSensors_FullMethodName          = "/kubex.keystone.Keystone/ListAppSensors"
+	Keystone_ChartSensor_FullMethodName             = "/kubex.keystone.Keystone/ChartSensor"
+	Keystone_HeatmapSensor_FullMethodName           = "/kubex.keystone.Keystone/HeatmapSensor"
+	Keystone_SensorActivity_FullMethodName          = "/kubex.keystone.Keystone/SensorActivity"
+	Keystone_PredictSensor_FullMethodName           = "/kubex.keystone.Keystone/PredictSensor"
+	Keystone_CreateSensorStream_FullMethodName      = "/kubex.keystone.Keystone/CreateSensorStream"
+	Keystone_RevokeSensorSession_FullMethodName     = "/kubex.keystone.Keystone/RevokeSensorSession"
 	Keystone_Retrieve_FullMethodName                = "/kubex.keystone.Keystone/Retrieve"
 	Keystone_Find_FullMethodName                    = "/kubex.keystone.Keystone/Find"
 	Keystone_List_FullMethodName                    = "/kubex.keystone.Keystone/List"
@@ -103,6 +111,15 @@ type KeystoneClient interface {
 	SnapshotReport(ctx context.Context, in *SnapshotReportRequest, opts ...grpc.CallOption) (*MutateResponse, error)
 	ReportTimeSeries(ctx context.Context, in *ReportTimeSeriesRequest, opts ...grpc.CallOption) (*MutateResponse, error)
 	ChartTimeSeries(ctx context.Context, in *ChartTimeSeriesRequest, opts ...grpc.CallOption) (*ChartTimeSeriesResponse, error)
+	// Sensors store independently of entity mutations and time-series projections.
+	WriteSensors(ctx context.Context, in *WriteSensorsRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	ListAppSensors(ctx context.Context, in *Authorization, opts ...grpc.CallOption) (*ListAppSensorsResponse, error)
+	ChartSensor(ctx context.Context, in *ChartSensorRequest, opts ...grpc.CallOption) (*ChartSensorResponse, error)
+	HeatmapSensor(ctx context.Context, in *HeatmapSensorRequest, opts ...grpc.CallOption) (*HeatmapSensorResponse, error)
+	SensorActivity(ctx context.Context, in *SensorActivityRequest, opts ...grpc.CallOption) (*SensorActivityResponse, error)
+	PredictSensor(ctx context.Context, in *PredictSensorRequest, opts ...grpc.CallOption) (*PredictSensorResponse, error)
+	CreateSensorStream(ctx context.Context, in *CreateSensorStreamRequest, opts ...grpc.CallOption) (*CreateSensorStreamResponse, error)
+	RevokeSensorSession(ctx context.Context, in *RevokeSensorSessionRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	// Load
 	Retrieve(ctx context.Context, in *EntityRequest, opts ...grpc.CallOption) (*EntityResponse, error)
 	Find(ctx context.Context, in *FindRequest, opts ...grpc.CallOption) (*FindResponse, error)
@@ -302,6 +319,86 @@ func (c *keystoneClient) ChartTimeSeries(ctx context.Context, in *ChartTimeSerie
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ChartTimeSeriesResponse)
 	err := c.cc.Invoke(ctx, Keystone_ChartTimeSeries_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) WriteSensors(ctx context.Context, in *WriteSensorsRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_WriteSensors_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) ListAppSensors(ctx context.Context, in *Authorization, opts ...grpc.CallOption) (*ListAppSensorsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListAppSensorsResponse)
+	err := c.cc.Invoke(ctx, Keystone_ListAppSensors_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) ChartSensor(ctx context.Context, in *ChartSensorRequest, opts ...grpc.CallOption) (*ChartSensorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChartSensorResponse)
+	err := c.cc.Invoke(ctx, Keystone_ChartSensor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) HeatmapSensor(ctx context.Context, in *HeatmapSensorRequest, opts ...grpc.CallOption) (*HeatmapSensorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HeatmapSensorResponse)
+	err := c.cc.Invoke(ctx, Keystone_HeatmapSensor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) SensorActivity(ctx context.Context, in *SensorActivityRequest, opts ...grpc.CallOption) (*SensorActivityResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SensorActivityResponse)
+	err := c.cc.Invoke(ctx, Keystone_SensorActivity_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) PredictSensor(ctx context.Context, in *PredictSensorRequest, opts ...grpc.CallOption) (*PredictSensorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PredictSensorResponse)
+	err := c.cc.Invoke(ctx, Keystone_PredictSensor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) CreateSensorStream(ctx context.Context, in *CreateSensorStreamRequest, opts ...grpc.CallOption) (*CreateSensorStreamResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateSensorStreamResponse)
+	err := c.cc.Invoke(ctx, Keystone_CreateSensorStream_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RevokeSensorSession(ctx context.Context, in *RevokeSensorSessionRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_RevokeSensorSession_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -788,6 +885,15 @@ type KeystoneServer interface {
 	SnapshotReport(context.Context, *SnapshotReportRequest) (*MutateResponse, error)
 	ReportTimeSeries(context.Context, *ReportTimeSeriesRequest) (*MutateResponse, error)
 	ChartTimeSeries(context.Context, *ChartTimeSeriesRequest) (*ChartTimeSeriesResponse, error)
+	// Sensors store independently of entity mutations and time-series projections.
+	WriteSensors(context.Context, *WriteSensorsRequest) (*GenericResponse, error)
+	ListAppSensors(context.Context, *Authorization) (*ListAppSensorsResponse, error)
+	ChartSensor(context.Context, *ChartSensorRequest) (*ChartSensorResponse, error)
+	HeatmapSensor(context.Context, *HeatmapSensorRequest) (*HeatmapSensorResponse, error)
+	SensorActivity(context.Context, *SensorActivityRequest) (*SensorActivityResponse, error)
+	PredictSensor(context.Context, *PredictSensorRequest) (*PredictSensorResponse, error)
+	CreateSensorStream(context.Context, *CreateSensorStreamRequest) (*CreateSensorStreamResponse, error)
+	RevokeSensorSession(context.Context, *RevokeSensorSessionRequest) (*GenericResponse, error)
 	// Load
 	Retrieve(context.Context, *EntityRequest) (*EntityResponse, error)
 	Find(context.Context, *FindRequest) (*FindResponse, error)
@@ -894,6 +1000,30 @@ func (UnimplementedKeystoneServer) ReportTimeSeries(context.Context, *ReportTime
 }
 func (UnimplementedKeystoneServer) ChartTimeSeries(context.Context, *ChartTimeSeriesRequest) (*ChartTimeSeriesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ChartTimeSeries not implemented")
+}
+func (UnimplementedKeystoneServer) WriteSensors(context.Context, *WriteSensorsRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method WriteSensors not implemented")
+}
+func (UnimplementedKeystoneServer) ListAppSensors(context.Context, *Authorization) (*ListAppSensorsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListAppSensors not implemented")
+}
+func (UnimplementedKeystoneServer) ChartSensor(context.Context, *ChartSensorRequest) (*ChartSensorResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ChartSensor not implemented")
+}
+func (UnimplementedKeystoneServer) HeatmapSensor(context.Context, *HeatmapSensorRequest) (*HeatmapSensorResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method HeatmapSensor not implemented")
+}
+func (UnimplementedKeystoneServer) SensorActivity(context.Context, *SensorActivityRequest) (*SensorActivityResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SensorActivity not implemented")
+}
+func (UnimplementedKeystoneServer) PredictSensor(context.Context, *PredictSensorRequest) (*PredictSensorResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method PredictSensor not implemented")
+}
+func (UnimplementedKeystoneServer) CreateSensorStream(context.Context, *CreateSensorStreamRequest) (*CreateSensorStreamResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateSensorStream not implemented")
+}
+func (UnimplementedKeystoneServer) RevokeSensorSession(context.Context, *RevokeSensorSessionRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RevokeSensorSession not implemented")
 }
 func (UnimplementedKeystoneServer) Retrieve(context.Context, *EntityRequest) (*EntityResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Retrieve not implemented")
@@ -1299,6 +1429,150 @@ func _Keystone_ChartTimeSeries_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeystoneServer).ChartTimeSeries(ctx, req.(*ChartTimeSeriesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_WriteSensors_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WriteSensorsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).WriteSensors(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_WriteSensors_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).WriteSensors(ctx, req.(*WriteSensorsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_ListAppSensors_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Authorization)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).ListAppSensors(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_ListAppSensors_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).ListAppSensors(ctx, req.(*Authorization))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_ChartSensor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChartSensorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).ChartSensor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_ChartSensor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).ChartSensor(ctx, req.(*ChartSensorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_HeatmapSensor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HeatmapSensorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).HeatmapSensor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_HeatmapSensor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).HeatmapSensor(ctx, req.(*HeatmapSensorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_SensorActivity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SensorActivityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).SensorActivity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_SensorActivity_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).SensorActivity(ctx, req.(*SensorActivityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_PredictSensor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PredictSensorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).PredictSensor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_PredictSensor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).PredictSensor(ctx, req.(*PredictSensorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_CreateSensorStream_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSensorStreamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).CreateSensorStream(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_CreateSensorStream_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).CreateSensorStream(ctx, req.(*CreateSensorStreamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RevokeSensorSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeSensorSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RevokeSensorSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RevokeSensorSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RevokeSensorSession(ctx, req.(*RevokeSensorSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2153,6 +2427,38 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChartTimeSeries",
 			Handler:    _Keystone_ChartTimeSeries_Handler,
+		},
+		{
+			MethodName: "WriteSensors",
+			Handler:    _Keystone_WriteSensors_Handler,
+		},
+		{
+			MethodName: "ListAppSensors",
+			Handler:    _Keystone_ListAppSensors_Handler,
+		},
+		{
+			MethodName: "ChartSensor",
+			Handler:    _Keystone_ChartSensor_Handler,
+		},
+		{
+			MethodName: "HeatmapSensor",
+			Handler:    _Keystone_HeatmapSensor_Handler,
+		},
+		{
+			MethodName: "SensorActivity",
+			Handler:    _Keystone_SensorActivity_Handler,
+		},
+		{
+			MethodName: "PredictSensor",
+			Handler:    _Keystone_PredictSensor_Handler,
+		},
+		{
+			MethodName: "CreateSensorStream",
+			Handler:    _Keystone_CreateSensorStream_Handler,
+		},
+		{
+			MethodName: "RevokeSensorSession",
+			Handler:    _Keystone_RevokeSensorSession_Handler,
 		},
 		{
 			MethodName: "Retrieve",

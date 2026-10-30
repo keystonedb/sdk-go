@@ -14,50 +14,58 @@ const bufSize = 1024 * 1024
 
 type MockServer struct {
 	proto.UnimplementedKeystoneServer
-	DefineFunc           func(context.Context, *proto.SchemaRequest) (*proto.Schema, error)
-	MutateFunc           func(context.Context, *proto.MutateRequest) (*proto.MutateResponse, error)
-	DestroyFunc          func(context.Context, *proto.DestroyRequest) (*proto.DestroyResponse, error)
-	ReportTimeSeriesFunc func(context.Context, *proto.ReportTimeSeriesRequest) (*proto.MutateResponse, error)
-	SnapshotReportFunc   func(context.Context, *proto.SnapshotReportRequest) (*proto.MutateResponse, error)
-	RetrieveFunc         func(context.Context, *proto.EntityRequest) (*proto.EntityResponse, error)
-	FindFunc             func(context.Context, *proto.FindRequest) (*proto.FindResponse, error)
-	ListFunc             func(context.Context, *proto.ListRequest) (*proto.ListResponse, error)
-	QueryFunc            func(context.Context, *proto.QueryRequest) (*proto.QueryResponse, error)
-	FeedPutFunc          func(context.Context, *proto.FeedPutRequest) (*proto.FeedPutResponse, error)
-	FeedReadFunc         func(context.Context, *proto.FeedReadRequest) (*proto.FeedReadResponse, error)
-	FeedRemoveFunc       func(context.Context, *proto.FeedRemoveRequest) (*proto.GenericResponse, error)
-	FeedSummaryFunc      func(context.Context, *proto.FeedSummaryRequest) (*proto.FeedSummaryResponse, error)
-	QueryIndexFunc       func(context.Context, *proto.QueryIndexRequest) (*proto.QueryIndexResponse, error)
-	LookupFunc           func(context.Context, *proto.LookupRequest) (*proto.LookupResponse, error)
-	GroupCountFunc       func(context.Context, *proto.GroupCountRequest) (*proto.GroupCountResponse, error)
-	LogFunc              func(context.Context, *proto.LogRequest) (*proto.LogResponse, error)
-	LogsFunc             func(context.Context, *proto.LogsRequest) (*proto.LogsResponse, error)
-	EventsFunc           func(context.Context, *proto.EventRequest) (*proto.EventsResponse, error)
-	DailyEntitiesFunc    func(context.Context, *proto.DailyEntityRequest) (*proto.DailyEntityResponse, error)
-	SchemaStatisticsFunc func(context.Context, *proto.SchemaStatisticsRequest) (*proto.SchemaStatisticsResponse, error)
-	ChartTimeSeriesFunc  func(context.Context, *proto.ChartTimeSeriesRequest) (*proto.ChartTimeSeriesResponse, error)
-	ShareViewFunc        func(context.Context, *proto.ShareViewRequest) (*proto.SharedViewResponse, error)
-	SharedViewsFunc      func(context.Context, *proto.SharedViewsRequest) (*proto.SharedViewsResponse, error)
-	RateLimitFunc        func(context.Context, *proto.RateLimitRequest) (*proto.RateLimitResponse, error)
-	StatusFunc           func(context.Context, *proto.Authorization) (*proto.StatusResponse, error)
-	IIDFunc              func(context.Context, *proto.IIDCreateRequest) (*proto.IIDResponse, error)
-	IIDLookupFunc        func(context.Context, *proto.IIDRequest) (*proto.IIDsResponse, error)
-	PiiTokenFunc         func(context.Context, *proto.PiiTokenRequest) (*proto.PiiTokenResponse, error)
-	PiiAnonymizeFunc     func(context.Context, *proto.PiiAnonymizeRequest) (*proto.PiiAnonymizeResponse, error)
-	SquidFunc            func(context.Context, *proto.SquidRequest) (*proto.SquidResponse, error)
-	SquidRecoverFunc     func(context.Context, *proto.SquidRecoverRequest) (*proto.SquidResponse, error)
-	AKVGetFunc           func(context.Context, *proto.AKVGetRequest) (*proto.AKVGetResponse, error)
-	AKVPutFunc           func(context.Context, *proto.AKVPutRequest) (*proto.GenericResponse, error)
-	AKVDelFunc           func(context.Context, *proto.AKVDelRequest) (*proto.GenericResponse, error)
-	AKVWorkspaceGetFunc  func(context.Context, *proto.AKVGetRequest) (*proto.AKVGetResponse, error)
-	AKVWorkspacePutFunc  func(context.Context, *proto.AKVPutRequest) (*proto.GenericResponse, error)
-	AKVWorkspaceDelFunc  func(context.Context, *proto.AKVDelRequest) (*proto.GenericResponse, error)
-	PushTaskFunc         func(context.Context, *proto.PushTaskRequest) (*proto.GenericResponse, error)
-	EnumPutFunc          func(context.Context, *proto.EnumPutRequest) (*proto.GenericResponse, error)
-	EnumGetFunc          func(context.Context, *proto.EnumGetRequest) (*proto.EnumGetResponse, error)
-	EnumDeleteFunc       func(context.Context, *proto.EnumDeleteRequest) (*proto.GenericResponse, error)
-	EnumListFunc         func(context.Context, *proto.EnumListRequest) (*proto.EnumListResponse, error)
-	EnumReplaceFunc      func(context.Context, *proto.EnumReplaceRequest) (*proto.GenericResponse, error)
+	ListAppSensorsFunc      func(context.Context, *proto.Authorization) (*proto.ListAppSensorsResponse, error)
+	RevokeSensorSessionFunc func(context.Context, *proto.RevokeSensorSessionRequest) (*proto.GenericResponse, error)
+	CreateSensorStreamFunc  func(context.Context, *proto.CreateSensorStreamRequest) (*proto.CreateSensorStreamResponse, error)
+	WriteSensorsFunc        func(context.Context, *proto.WriteSensorsRequest) (*proto.GenericResponse, error)
+	DefineFunc              func(context.Context, *proto.SchemaRequest) (*proto.Schema, error)
+	MutateFunc              func(context.Context, *proto.MutateRequest) (*proto.MutateResponse, error)
+	DestroyFunc             func(context.Context, *proto.DestroyRequest) (*proto.DestroyResponse, error)
+	ReportTimeSeriesFunc    func(context.Context, *proto.ReportTimeSeriesRequest) (*proto.MutateResponse, error)
+	SnapshotReportFunc      func(context.Context, *proto.SnapshotReportRequest) (*proto.MutateResponse, error)
+	RetrieveFunc            func(context.Context, *proto.EntityRequest) (*proto.EntityResponse, error)
+	FindFunc                func(context.Context, *proto.FindRequest) (*proto.FindResponse, error)
+	ListFunc                func(context.Context, *proto.ListRequest) (*proto.ListResponse, error)
+	QueryIndexFunc          func(context.Context, *proto.QueryIndexRequest) (*proto.QueryIndexResponse, error)
+	LookupFunc              func(context.Context, *proto.LookupRequest) (*proto.LookupResponse, error)
+	GroupCountFunc          func(context.Context, *proto.GroupCountRequest) (*proto.GroupCountResponse, error)
+	LogFunc                 func(context.Context, *proto.LogRequest) (*proto.LogResponse, error)
+	LogsFunc                func(context.Context, *proto.LogsRequest) (*proto.LogsResponse, error)
+	EventsFunc              func(context.Context, *proto.EventRequest) (*proto.EventsResponse, error)
+	DailyEntitiesFunc       func(context.Context, *proto.DailyEntityRequest) (*proto.DailyEntityResponse, error)
+	SchemaStatisticsFunc    func(context.Context, *proto.SchemaStatisticsRequest) (*proto.SchemaStatisticsResponse, error)
+	ChartTimeSeriesFunc     func(context.Context, *proto.ChartTimeSeriesRequest) (*proto.ChartTimeSeriesResponse, error)
+	ChartSensorFunc         func(context.Context, *proto.ChartSensorRequest) (*proto.ChartSensorResponse, error)
+	HeatmapSensorFunc       func(context.Context, *proto.HeatmapSensorRequest) (*proto.HeatmapSensorResponse, error)
+	SensorActivityFunc      func(context.Context, *proto.SensorActivityRequest) (*proto.SensorActivityResponse, error)
+	PredictSensorFunc       func(context.Context, *proto.PredictSensorRequest) (*proto.PredictSensorResponse, error)
+	ShareViewFunc           func(context.Context, *proto.ShareViewRequest) (*proto.SharedViewResponse, error)
+	SharedViewsFunc         func(context.Context, *proto.SharedViewsRequest) (*proto.SharedViewsResponse, error)
+	RateLimitFunc           func(context.Context, *proto.RateLimitRequest) (*proto.RateLimitResponse, error)
+	StatusFunc              func(context.Context, *proto.Authorization) (*proto.StatusResponse, error)
+	IIDFunc                 func(context.Context, *proto.IIDCreateRequest) (*proto.IIDResponse, error)
+	IIDLookupFunc           func(context.Context, *proto.IIDRequest) (*proto.IIDsResponse, error)
+	PiiTokenFunc            func(context.Context, *proto.PiiTokenRequest) (*proto.PiiTokenResponse, error)
+	PiiAnonymizeFunc        func(context.Context, *proto.PiiAnonymizeRequest) (*proto.PiiAnonymizeResponse, error)
+	SquidFunc               func(context.Context, *proto.SquidRequest) (*proto.SquidResponse, error)
+	SquidRecoverFunc        func(context.Context, *proto.SquidRecoverRequest) (*proto.SquidResponse, error)
+	AKVGetFunc              func(context.Context, *proto.AKVGetRequest) (*proto.AKVGetResponse, error)
+	AKVPutFunc              func(context.Context, *proto.AKVPutRequest) (*proto.GenericResponse, error)
+	AKVDelFunc              func(context.Context, *proto.AKVDelRequest) (*proto.GenericResponse, error)
+	AKVWorkspaceGetFunc     func(context.Context, *proto.AKVGetRequest) (*proto.AKVGetResponse, error)
+	AKVWorkspacePutFunc     func(context.Context, *proto.AKVPutRequest) (*proto.GenericResponse, error)
+	AKVWorkspaceDelFunc     func(context.Context, *proto.AKVDelRequest) (*proto.GenericResponse, error)
+	PushTaskFunc            func(context.Context, *proto.PushTaskRequest) (*proto.GenericResponse, error)
+	EnumPutFunc             func(context.Context, *proto.EnumPutRequest) (*proto.GenericResponse, error)
+	EnumGetFunc             func(context.Context, *proto.EnumGetRequest) (*proto.EnumGetResponse, error)
+	EnumDeleteFunc          func(context.Context, *proto.EnumDeleteRequest) (*proto.GenericResponse, error)
+	EnumListFunc            func(context.Context, *proto.EnumListRequest) (*proto.EnumListResponse, error)
+	EnumReplaceFunc         func(context.Context, *proto.EnumReplaceRequest) (*proto.GenericResponse, error)
+	QueryFunc               func(context.Context, *proto.QueryRequest) (*proto.QueryResponse, error)
+	FeedPutFunc             func(context.Context, *proto.FeedPutRequest) (*proto.FeedPutResponse, error)
+	FeedReadFunc            func(context.Context, *proto.FeedReadRequest) (*proto.FeedReadResponse, error)
+	FeedRemoveFunc          func(context.Context, *proto.FeedRemoveRequest) (*proto.GenericResponse, error)
+	FeedSummaryFunc         func(context.Context, *proto.FeedSummaryRequest) (*proto.FeedSummaryResponse, error)
 
 	RelayCreateSessionFunc    func(context.Context, *proto.RelayCreateSessionRequest) (*proto.RelayCreateSessionResponse, error)
 	RelayExtendSessionFunc    func(context.Context, *proto.RelayExtendSessionRequest) (*proto.RelayExtendSessionResponse, error)
@@ -462,6 +470,62 @@ func (m *MockServer) RelaySetSessionMetadata(ctx context.Context, req *proto.Rel
 		return m.UnimplementedKeystoneServer.RelaySetSessionMetadata(ctx, req)
 	}
 	return m.RelaySetSessionMetadataFunc(ctx, req)
+}
+
+func (m *MockServer) ChartSensor(ctx context.Context, req *proto.ChartSensorRequest) (*proto.ChartSensorResponse, error) {
+	if m.ChartSensorFunc == nil {
+		return m.UnimplementedKeystoneServer.ChartSensor(ctx, req)
+	}
+	return m.ChartSensorFunc(ctx, req)
+}
+
+func (m *MockServer) HeatmapSensor(ctx context.Context, req *proto.HeatmapSensorRequest) (*proto.HeatmapSensorResponse, error) {
+	if m.HeatmapSensorFunc == nil {
+		return m.UnimplementedKeystoneServer.HeatmapSensor(ctx, req)
+	}
+	return m.HeatmapSensorFunc(ctx, req)
+}
+
+func (m *MockServer) SensorActivity(ctx context.Context, req *proto.SensorActivityRequest) (*proto.SensorActivityResponse, error) {
+	if m.SensorActivityFunc == nil {
+		return m.UnimplementedKeystoneServer.SensorActivity(ctx, req)
+	}
+	return m.SensorActivityFunc(ctx, req)
+}
+
+func (m *MockServer) PredictSensor(ctx context.Context, req *proto.PredictSensorRequest) (*proto.PredictSensorResponse, error) {
+	if m.PredictSensorFunc == nil {
+		return m.UnimplementedKeystoneServer.PredictSensor(ctx, req)
+	}
+	return m.PredictSensorFunc(ctx, req)
+}
+
+func (m *MockServer) WriteSensors(ctx context.Context, req *proto.WriteSensorsRequest) (*proto.GenericResponse, error) {
+	if m.WriteSensorsFunc == nil {
+		return m.UnimplementedKeystoneServer.WriteSensors(ctx, req)
+	}
+	return m.WriteSensorsFunc(ctx, req)
+}
+
+func (m *MockServer) CreateSensorStream(ctx context.Context, req *proto.CreateSensorStreamRequest) (*proto.CreateSensorStreamResponse, error) {
+	if m.CreateSensorStreamFunc == nil {
+		return m.UnimplementedKeystoneServer.CreateSensorStream(ctx, req)
+	}
+	return m.CreateSensorStreamFunc(ctx, req)
+}
+
+func (m *MockServer) RevokeSensorSession(ctx context.Context, req *proto.RevokeSensorSessionRequest) (*proto.GenericResponse, error) {
+	if m.RevokeSensorSessionFunc == nil {
+		return m.UnimplementedKeystoneServer.RevokeSensorSession(ctx, req)
+	}
+	return m.RevokeSensorSessionFunc(ctx, req)
+}
+
+func (m *MockServer) ListAppSensors(ctx context.Context, req *proto.Authorization) (*proto.ListAppSensorsResponse, error) {
+	if m.ListAppSensorsFunc == nil {
+		return m.UnimplementedKeystoneServer.ListAppSensors(ctx, req)
+	}
+	return m.ListAppSensorsFunc(ctx, req)
 }
 
 func (m *MockServer) Query(ctx context.Context, req *proto.QueryRequest) (*proto.QueryResponse, error) {

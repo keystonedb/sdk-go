@@ -54,6 +54,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/translations"
 	"github.com/keystonedb/sdk-go/test/requirements/unique_id"
 	"github.com/keystonedb/sdk-go/test/requirements/watcher"
+	"os"
 )
 
 var reqs []requirements.Requirement
@@ -70,6 +71,9 @@ func init() {
 	reqs = append(reqs, &document.Requirement{})
 	reqs = append(reqs, &unique_id.Requirement{})
 	reqs = append(reqs, &sensor.Requirement{})
+	if origin := os.Getenv("KS_SENSOR_TEST_ORIGIN"); origin != "" {
+		reqs = append(reqs, &sensor.LiveRequirement{Origin: origin})
+	}
 	reqs = append(reqs, &labels.Requirement{})
 	reqs = append(reqs, &logging.Requirement{})
 	reqs = append(reqs, &logs_actor.Requirement{})

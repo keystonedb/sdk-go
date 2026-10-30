@@ -148,6 +148,149 @@ func (LogLevel) EnumDescriptor() ([]byte, []int) {
 	return file_keystone_proto_rawDescGZIP(), []int{1}
 }
 
+// Sensor ranges are half-open [from, until), with UTC-aligned buckets.
+// Source is restricted to the authenticated app; global workspace is forbidden.
+type SensorPredictionMetric int32
+
+const (
+	SensorPredictionMetric_SensorPredictionSum     SensorPredictionMetric = 0
+	SensorPredictionMetric_SensorPredictionAverage SensorPredictionMetric = 1
+	SensorPredictionMetric_SensorPredictionHits    SensorPredictionMetric = 2
+)
+
+// Enum value maps for SensorPredictionMetric.
+var (
+	SensorPredictionMetric_name = map[int32]string{
+		0: "SensorPredictionSum",
+		1: "SensorPredictionAverage",
+		2: "SensorPredictionHits",
+	}
+	SensorPredictionMetric_value = map[string]int32{
+		"SensorPredictionSum":     0,
+		"SensorPredictionAverage": 1,
+		"SensorPredictionHits":    2,
+	}
+)
+
+func (x SensorPredictionMetric) Enum() *SensorPredictionMetric {
+	p := new(SensorPredictionMetric)
+	*p = x
+	return p
+}
+
+func (x SensorPredictionMetric) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SensorPredictionMetric) Descriptor() protoreflect.EnumDescriptor {
+	return file_keystone_proto_enumTypes[2].Descriptor()
+}
+
+func (SensorPredictionMetric) Type() protoreflect.EnumType {
+	return &file_keystone_proto_enumTypes[2]
+}
+
+func (x SensorPredictionMetric) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SensorPredictionMetric.Descriptor instead.
+func (SensorPredictionMetric) EnumDescriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{2}
+}
+
+type SensorActivityCalendar int32
+
+const (
+	SensorActivityCalendar_SensorActivityWeek  SensorActivityCalendar = 0
+	SensorActivityCalendar_SensorActivityMonth SensorActivityCalendar = 1 // Day of month and hour.
+)
+
+// Enum value maps for SensorActivityCalendar.
+var (
+	SensorActivityCalendar_name = map[int32]string{
+		0: "SensorActivityWeek",
+		1: "SensorActivityMonth",
+	}
+	SensorActivityCalendar_value = map[string]int32{
+		"SensorActivityWeek":  0,
+		"SensorActivityMonth": 1,
+	}
+)
+
+func (x SensorActivityCalendar) Enum() *SensorActivityCalendar {
+	p := new(SensorActivityCalendar)
+	*p = x
+	return p
+}
+
+func (x SensorActivityCalendar) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SensorActivityCalendar) Descriptor() protoreflect.EnumDescriptor {
+	return file_keystone_proto_enumTypes[3].Descriptor()
+}
+
+func (SensorActivityCalendar) Type() protoreflect.EnumType {
+	return &file_keystone_proto_enumTypes[3]
+}
+
+func (x SensorActivityCalendar) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SensorActivityCalendar.Descriptor instead.
+func (SensorActivityCalendar) EnumDescriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{3}
+}
+
+type SensorHeatmapLayout int32
+
+const (
+	SensorHeatmapLayout_SensorHeatmapDay  SensorHeatmapLayout = 0 // 1440 minute-of-day cells.
+	SensorHeatmapLayout_SensorHeatmapWeek SensorHeatmapLayout = 1 // 672 fifteen-minute cells, Monday first.
+)
+
+// Enum value maps for SensorHeatmapLayout.
+var (
+	SensorHeatmapLayout_name = map[int32]string{
+		0: "SensorHeatmapDay",
+		1: "SensorHeatmapWeek",
+	}
+	SensorHeatmapLayout_value = map[string]int32{
+		"SensorHeatmapDay":  0,
+		"SensorHeatmapWeek": 1,
+	}
+)
+
+func (x SensorHeatmapLayout) Enum() *SensorHeatmapLayout {
+	p := new(SensorHeatmapLayout)
+	*p = x
+	return p
+}
+
+func (x SensorHeatmapLayout) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SensorHeatmapLayout) Descriptor() protoreflect.EnumDescriptor {
+	return file_keystone_proto_enumTypes[4].Descriptor()
+}
+
+func (SensorHeatmapLayout) Type() protoreflect.EnumType {
+	return &file_keystone_proto_enumTypes[4]
+}
+
+func (x SensorHeatmapLayout) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SensorHeatmapLayout.Descriptor instead.
+func (SensorHeatmapLayout) EnumDescriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{4}
+}
+
 type ObjectType int32
 
 const (
@@ -187,11 +330,11 @@ func (x ObjectType) String() string {
 }
 
 func (ObjectType) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[2].Descriptor()
+	return file_keystone_proto_enumTypes[5].Descriptor()
 }
 
 func (ObjectType) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[2]
+	return &file_keystone_proto_enumTypes[5]
 }
 
 func (x ObjectType) Number() protoreflect.EnumNumber {
@@ -200,7 +343,7 @@ func (x ObjectType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ObjectType.Descriptor instead.
 func (ObjectType) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{2}
+	return file_keystone_proto_rawDescGZIP(), []int{5}
 }
 
 type Operator int32
@@ -272,11 +415,11 @@ func (x Operator) String() string {
 }
 
 func (Operator) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[3].Descriptor()
+	return file_keystone_proto_enumTypes[6].Descriptor()
 }
 
 func (Operator) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[3]
+	return &file_keystone_proto_enumTypes[6]
 }
 
 func (x Operator) Number() protoreflect.EnumNumber {
@@ -285,7 +428,7 @@ func (x Operator) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Operator.Descriptor instead.
 func (Operator) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{3}
+	return file_keystone_proto_rawDescGZIP(), []int{6}
 }
 
 type AKVTimeQueryMode int32
@@ -324,11 +467,11 @@ func (x AKVTimeQueryMode) String() string {
 }
 
 func (AKVTimeQueryMode) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[4].Descriptor()
+	return file_keystone_proto_enumTypes[7].Descriptor()
 }
 
 func (AKVTimeQueryMode) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[4]
+	return &file_keystone_proto_enumTypes[7]
 }
 
 func (x AKVTimeQueryMode) Number() protoreflect.EnumNumber {
@@ -337,7 +480,7 @@ func (x AKVTimeQueryMode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use AKVTimeQueryMode.Descriptor instead.
 func (AKVTimeQueryMode) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{4}
+	return file_keystone_proto_rawDescGZIP(), []int{7}
 }
 
 type AKVTimeGroupInterval int32
@@ -382,11 +525,11 @@ func (x AKVTimeGroupInterval) String() string {
 }
 
 func (AKVTimeGroupInterval) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[5].Descriptor()
+	return file_keystone_proto_enumTypes[8].Descriptor()
 }
 
 func (AKVTimeGroupInterval) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[5]
+	return &file_keystone_proto_enumTypes[8]
 }
 
 func (x AKVTimeGroupInterval) Number() protoreflect.EnumNumber {
@@ -395,7 +538,7 @@ func (x AKVTimeGroupInterval) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use AKVTimeGroupInterval.Descriptor instead.
 func (AKVTimeGroupInterval) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{5}
+	return file_keystone_proto_rawDescGZIP(), []int{8}
 }
 
 type AKVTimeGroupPick int32
@@ -428,11 +571,11 @@ func (x AKVTimeGroupPick) String() string {
 }
 
 func (AKVTimeGroupPick) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[6].Descriptor()
+	return file_keystone_proto_enumTypes[9].Descriptor()
 }
 
 func (AKVTimeGroupPick) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[6]
+	return &file_keystone_proto_enumTypes[9]
 }
 
 func (x AKVTimeGroupPick) Number() protoreflect.EnumNumber {
@@ -441,7 +584,7 @@ func (x AKVTimeGroupPick) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use AKVTimeGroupPick.Descriptor instead.
 func (AKVTimeGroupPick) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{6}
+	return file_keystone_proto_rawDescGZIP(), []int{9}
 }
 
 type AKVTimeDeleteMode int32
@@ -480,11 +623,11 @@ func (x AKVTimeDeleteMode) String() string {
 }
 
 func (AKVTimeDeleteMode) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[7].Descriptor()
+	return file_keystone_proto_enumTypes[10].Descriptor()
 }
 
 func (AKVTimeDeleteMode) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[7]
+	return &file_keystone_proto_enumTypes[10]
 }
 
 func (x AKVTimeDeleteMode) Number() protoreflect.EnumNumber {
@@ -493,7 +636,7 @@ func (x AKVTimeDeleteMode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use AKVTimeDeleteMode.Descriptor instead.
 func (AKVTimeDeleteMode) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{7}
+	return file_keystone_proto_rawDescGZIP(), []int{10}
 }
 
 type FeedSummaryInterval int32
@@ -529,11 +672,11 @@ func (x FeedSummaryInterval) String() string {
 }
 
 func (FeedSummaryInterval) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[8].Descriptor()
+	return file_keystone_proto_enumTypes[11].Descriptor()
 }
 
 func (FeedSummaryInterval) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[8]
+	return &file_keystone_proto_enumTypes[11]
 }
 
 func (x FeedSummaryInterval) Number() protoreflect.EnumNumber {
@@ -542,7 +685,7 @@ func (x FeedSummaryInterval) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use FeedSummaryInterval.Descriptor instead.
 func (FeedSummaryInterval) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{8}
+	return file_keystone_proto_rawDescGZIP(), []int{11}
 }
 
 type Schema_Option int32
@@ -590,11 +733,11 @@ func (x Schema_Option) String() string {
 }
 
 func (Schema_Option) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[9].Descriptor()
+	return file_keystone_proto_enumTypes[12].Descriptor()
 }
 
 func (Schema_Option) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[9]
+	return &file_keystone_proto_enumTypes[12]
 }
 
 func (x Schema_Option) Number() protoreflect.EnumNumber {
@@ -636,11 +779,11 @@ func (x Schema_Type) String() string {
 }
 
 func (Schema_Type) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[10].Descriptor()
+	return file_keystone_proto_enumTypes[13].Descriptor()
 }
 
 func (Schema_Type) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[10]
+	return &file_keystone_proto_enumTypes[13]
 }
 
 func (x Schema_Type) Number() protoreflect.EnumNumber {
@@ -727,11 +870,11 @@ func (x Property_Type) String() string {
 }
 
 func (Property_Type) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[11].Descriptor()
+	return file_keystone_proto_enumTypes[14].Descriptor()
 }
 
 func (Property_Type) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[11]
+	return &file_keystone_proto_enumTypes[14]
 }
 
 func (x Property_Type) Number() protoreflect.EnumNumber {
@@ -803,11 +946,11 @@ func (x Property_ExtendedType) String() string {
 }
 
 func (Property_ExtendedType) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[12].Descriptor()
+	return file_keystone_proto_enumTypes[15].Descriptor()
 }
 
 func (Property_ExtendedType) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[12]
+	return &file_keystone_proto_enumTypes[15]
 }
 
 func (x Property_ExtendedType) Number() protoreflect.EnumNumber {
@@ -881,11 +1024,11 @@ func (x Property_Option) String() string {
 }
 
 func (Property_Option) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[13].Descriptor()
+	return file_keystone_proto_enumTypes[16].Descriptor()
 }
 
 func (Property_Option) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[13]
+	return &file_keystone_proto_enumTypes[16]
 }
 
 func (x Property_Option) Number() protoreflect.EnumNumber {
@@ -930,11 +1073,11 @@ func (x MutateRequest_MutateOption) String() string {
 }
 
 func (MutateRequest_MutateOption) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[14].Descriptor()
+	return file_keystone_proto_enumTypes[17].Descriptor()
 }
 
 func (MutateRequest_MutateOption) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[14]
+	return &file_keystone_proto_enumTypes[17]
 }
 
 func (x MutateRequest_MutateOption) Number() protoreflect.EnumNumber {
@@ -943,7 +1086,7 @@ func (x MutateRequest_MutateOption) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MutateRequest_MutateOption.Descriptor instead.
 func (MutateRequest_MutateOption) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{32, 0}
+	return file_keystone_proto_rawDescGZIP(), []int{49, 0}
 }
 
 type QueryRelationship_Direction int32
@@ -976,11 +1119,11 @@ func (x QueryRelationship_Direction) String() string {
 }
 
 func (QueryRelationship_Direction) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[15].Descriptor()
+	return file_keystone_proto_enumTypes[18].Descriptor()
 }
 
 func (QueryRelationship_Direction) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[15]
+	return &file_keystone_proto_enumTypes[18]
 }
 
 func (x QueryRelationship_Direction) Number() protoreflect.EnumNumber {
@@ -989,7 +1132,7 @@ func (x QueryRelationship_Direction) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use QueryRelationship_Direction.Descriptor instead.
 func (QueryRelationship_Direction) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{58, 0}
+	return file_keystone_proto_rawDescGZIP(), []int{75, 0}
 }
 
 type QueryAggregate_Function int32
@@ -1031,11 +1174,11 @@ func (x QueryAggregate_Function) String() string {
 }
 
 func (QueryAggregate_Function) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[16].Descriptor()
+	return file_keystone_proto_enumTypes[19].Descriptor()
 }
 
 func (QueryAggregate_Function) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[16]
+	return &file_keystone_proto_enumTypes[19]
 }
 
 func (x QueryAggregate_Function) Number() protoreflect.EnumNumber {
@@ -1044,7 +1187,7 @@ func (x QueryAggregate_Function) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use QueryAggregate_Function.Descriptor instead.
 func (QueryAggregate_Function) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{59, 0}
+	return file_keystone_proto_rawDescGZIP(), []int{76, 0}
 }
 
 type PropertyAggregation_AggregationType int32
@@ -1089,11 +1232,11 @@ func (x PropertyAggregation_AggregationType) String() string {
 }
 
 func (PropertyAggregation_AggregationType) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[17].Descriptor()
+	return file_keystone_proto_enumTypes[20].Descriptor()
 }
 
 func (PropertyAggregation_AggregationType) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[17]
+	return &file_keystone_proto_enumTypes[20]
 }
 
 func (x PropertyAggregation_AggregationType) Number() protoreflect.EnumNumber {
@@ -1102,7 +1245,7 @@ func (x PropertyAggregation_AggregationType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use PropertyAggregation_AggregationType.Descriptor instead.
 func (PropertyAggregation_AggregationType) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{76, 0}
+	return file_keystone_proto_rawDescGZIP(), []int{93, 0}
 }
 
 type EventStreamAck_Action int32
@@ -1144,11 +1287,11 @@ func (x EventStreamAck_Action) String() string {
 }
 
 func (EventStreamAck_Action) Descriptor() protoreflect.EnumDescriptor {
-	return file_keystone_proto_enumTypes[18].Descriptor()
+	return file_keystone_proto_enumTypes[21].Descriptor()
 }
 
 func (EventStreamAck_Action) Type() protoreflect.EnumType {
-	return &file_keystone_proto_enumTypes[18]
+	return &file_keystone_proto_enumTypes[21]
 }
 
 func (x EventStreamAck_Action) Number() protoreflect.EnumNumber {
@@ -1157,7 +1300,7 @@ func (x EventStreamAck_Action) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use EventStreamAck_Action.Descriptor instead.
 func (EventStreamAck_Action) EnumDescriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{141, 0}
+	return file_keystone_proto_rawDescGZIP(), []int{158, 0}
 }
 
 type StatusResponse struct {
@@ -2834,13 +2977,27 @@ func (x *EntityLabel) GetValue() string {
 }
 
 type EntitySensorMeasurement struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Sensor        string                 `protobuf:"bytes,1,opt,name=sensor,proto3" json:"sensor,omitempty"`
-	At            *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=at,proto3" json:"at,omitempty"`
-	Value         float64                `protobuf:"fixed64,3,opt,name=value,proto3" json:"value,omitempty"`
-	Data          map[string]string      `protobuf:"bytes,4,rep,name=data,proto3" json:"data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Sensor string                 `protobuf:"bytes,1,opt,name=sensor,proto3" json:"sensor,omitempty"`
+	At     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=at,proto3" json:"at,omitempty"`
+	Value  float64                `protobuf:"fixed64,3,opt,name=value,proto3" json:"value,omitempty"`
+	// Deprecated: Marked as deprecated in keystone.proto.
+	Data map[string]string `protobuf:"bytes,4,rep,name=data,proto3" json:"data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Ignored; custom sensor metadata is not stored.
+	// Backfilled measurements contribute to history but not live activity.
+	Backfill          bool                   `protobuf:"varint,5,opt,name=backfill,proto3" json:"backfill,omitempty"`
+	MeasurementId     string                 `protobuf:"bytes,6,opt,name=measurement_id,json=measurementId,proto3" json:"measurement_id,omitempty"`              // Reuse with the same event time/payload on retries.
+	ReceivedAt        *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=received_at,json=receivedAt,proto3" json:"received_at,omitempty"`                       // Set by the server; preserved on imports.
+	ResolutionSeconds uint32                 `protobuf:"varint,8,opt,name=resolution_seconds,json=resolutionSeconds,proto3" json:"resolution_seconds,omitempty"` // Native sampling interval, zero for discrete events.
+	ObservedSeconds   float64                `protobuf:"fixed64,9,opt,name=observed_seconds,json=observedSeconds,proto3" json:"observed_seconds,omitempty"`      // Known telemetry coverage, zero means unknown.
+	ActiveSeconds     float64                `protobuf:"fixed64,10,opt,name=active_seconds,json=activeSeconds,proto3" json:"active_seconds,omitempty"`           // Active/online duration within that coverage.
+	Attempts          uint64                 `protobuf:"varint,11,opt,name=attempts,proto3" json:"attempts,omitempty"`                                           // Opportunities, e.g. notification sends/payment attempts.
+	Successes         uint64                 `protobuf:"varint,12,opt,name=successes,proto3" json:"successes,omitempty"`                                         // Outcomes; must not exceed attempts.
+	TtlSeconds        int32                  `protobuf:"varint,13,opt,name=ttl_seconds,json=ttlSeconds,proto3" json:"ttl_seconds,omitempty"`                     // Expire raw entries and their summaries after server receipt; zero uses normal retention.
+	Storage           *SensorStorageOptions  `protobuf:"bytes,14,opt,name=storage,proto3" json:"storage,omitempty"`
+	UniqueTtlSeconds  *int32                 `protobuf:"varint,15,opt,name=unique_ttl_seconds,json=uniqueTtlSeconds,proto3,oneof" json:"unique_ttl_seconds,omitempty"`    // Raw entry/retry receipt retention from server receipt; zero uses normal raw retention.
+	SummaryTtlSeconds *int32                 `protobuf:"varint,16,opt,name=summary_ttl_seconds,json=summaryTtlSeconds,proto3,oneof" json:"summary_ttl_seconds,omitempty"` // Retain each dated summary until bucket end + TTL; zero uses normal summary retention.
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *EntitySensorMeasurement) Reset() {
@@ -2894,11 +3051,1788 @@ func (x *EntitySensorMeasurement) GetValue() float64 {
 	return 0
 }
 
+// Deprecated: Marked as deprecated in keystone.proto.
 func (x *EntitySensorMeasurement) GetData() map[string]string {
 	if x != nil {
 		return x.Data
 	}
 	return nil
+}
+
+func (x *EntitySensorMeasurement) GetBackfill() bool {
+	if x != nil {
+		return x.Backfill
+	}
+	return false
+}
+
+func (x *EntitySensorMeasurement) GetMeasurementId() string {
+	if x != nil {
+		return x.MeasurementId
+	}
+	return ""
+}
+
+func (x *EntitySensorMeasurement) GetReceivedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ReceivedAt
+	}
+	return nil
+}
+
+func (x *EntitySensorMeasurement) GetResolutionSeconds() uint32 {
+	if x != nil {
+		return x.ResolutionSeconds
+	}
+	return 0
+}
+
+func (x *EntitySensorMeasurement) GetObservedSeconds() float64 {
+	if x != nil {
+		return x.ObservedSeconds
+	}
+	return 0
+}
+
+func (x *EntitySensorMeasurement) GetActiveSeconds() float64 {
+	if x != nil {
+		return x.ActiveSeconds
+	}
+	return 0
+}
+
+func (x *EntitySensorMeasurement) GetAttempts() uint64 {
+	if x != nil {
+		return x.Attempts
+	}
+	return 0
+}
+
+func (x *EntitySensorMeasurement) GetSuccesses() uint64 {
+	if x != nil {
+		return x.Successes
+	}
+	return 0
+}
+
+func (x *EntitySensorMeasurement) GetTtlSeconds() int32 {
+	if x != nil {
+		return x.TtlSeconds
+	}
+	return 0
+}
+
+func (x *EntitySensorMeasurement) GetStorage() *SensorStorageOptions {
+	if x != nil {
+		return x.Storage
+	}
+	return nil
+}
+
+func (x *EntitySensorMeasurement) GetUniqueTtlSeconds() int32 {
+	if x != nil && x.UniqueTtlSeconds != nil {
+		return *x.UniqueTtlSeconds
+	}
+	return 0
+}
+
+func (x *EntitySensorMeasurement) GetSummaryTtlSeconds() int32 {
+	if x != nil && x.SummaryTtlSeconds != nil {
+		return *x.SummaryTtlSeconds
+	}
+	return 0
+}
+
+// Direct sensor ingestion. Entity scope needs an existing entity schema and a
+// stable entity ID, but does not create or update an entity. App scope needs
+// neither: identity is the authenticated vendor/app within a real workspace.
+type WriteSensorsRequest struct {
+	state             protoimpl.MessageState     `protogen:"open.v1"`
+	Authorization     *Authorization             `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	Schema            *Key                       `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	EntityId          string                     `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	Measurements      []*EntitySensorMeasurement `protobuf:"bytes,4,rep,name=measurements,proto3" json:"measurements,omitempty"`
+	AppScope          bool                       `protobuf:"varint,5,opt,name=app_scope,json=appScope,proto3" json:"app_scope,omitempty"`       // Leave schema and entity_id unset when true.
+	TtlSeconds        int32                      `protobuf:"varint,6,opt,name=ttl_seconds,json=ttlSeconds,proto3" json:"ttl_seconds,omitempty"` // Default TTL for measurements with ttl_seconds=0; zero uses normal retention.
+	Background        bool                       `protobuf:"varint,7,opt,name=background,proto3" json:"background,omitempty"`                   // Success means durably queued after validation; sensor writes complete asynchronously.
+	Storage           *SensorStorageOptions      `protobuf:"bytes,8,opt,name=storage,proto3" json:"storage,omitempty"`                          // Default for measurements without explicit storage options; fixed on first write.
+	UniqueTtlSeconds  *int32                     `protobuf:"varint,9,opt,name=unique_ttl_seconds,json=uniqueTtlSeconds,proto3,oneof" json:"unique_ttl_seconds,omitempty"`
+	SummaryTtlSeconds *int32                     `protobuf:"varint,10,opt,name=summary_ttl_seconds,json=summaryTtlSeconds,proto3,oneof" json:"summary_ttl_seconds,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *WriteSensorsRequest) Reset() {
+	*x = WriteSensorsRequest{}
+	mi := &file_keystone_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WriteSensorsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WriteSensorsRequest) ProtoMessage() {}
+
+func (x *WriteSensorsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WriteSensorsRequest.ProtoReflect.Descriptor instead.
+func (*WriteSensorsRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *WriteSensorsRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *WriteSensorsRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *WriteSensorsRequest) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+func (x *WriteSensorsRequest) GetMeasurements() []*EntitySensorMeasurement {
+	if x != nil {
+		return x.Measurements
+	}
+	return nil
+}
+
+func (x *WriteSensorsRequest) GetAppScope() bool {
+	if x != nil {
+		return x.AppScope
+	}
+	return false
+}
+
+func (x *WriteSensorsRequest) GetTtlSeconds() int32 {
+	if x != nil {
+		return x.TtlSeconds
+	}
+	return 0
+}
+
+func (x *WriteSensorsRequest) GetBackground() bool {
+	if x != nil {
+		return x.Background
+	}
+	return false
+}
+
+func (x *WriteSensorsRequest) GetStorage() *SensorStorageOptions {
+	if x != nil {
+		return x.Storage
+	}
+	return nil
+}
+
+func (x *WriteSensorsRequest) GetUniqueTtlSeconds() int32 {
+	if x != nil && x.UniqueTtlSeconds != nil {
+		return *x.UniqueTtlSeconds
+	}
+	return 0
+}
+
+func (x *WriteSensorsRequest) GetSummaryTtlSeconds() int32 {
+	if x != nil && x.SummaryTtlSeconds != nil {
+		return *x.SummaryTtlSeconds
+	}
+	return 0
+}
+
+type ListAppSensorsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Sensors       []string               `protobuf:"bytes,1,rep,name=sensors,proto3" json:"sensors,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAppSensorsResponse) Reset() {
+	*x = ListAppSensorsResponse{}
+	mi := &file_keystone_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAppSensorsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAppSensorsResponse) ProtoMessage() {}
+
+func (x *ListAppSensorsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAppSensorsResponse.ProtoReflect.Descriptor instead.
+func (*ListAppSensorsResponse) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *ListAppSensorsResponse) GetSensors() []string {
+	if x != nil {
+		return x.Sensors
+	}
+	return nil
+}
+
+type PredictSensorRequest struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	Authorization       *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	Schema              *Key                   `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	EntityId            string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	Sensor              string                 `protobuf:"bytes,4,opt,name=sensor,proto3" json:"sensor,omitempty"`
+	From                *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=from,proto3" json:"from,omitempty"`
+	Until               *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=until,proto3" json:"until,omitempty"`
+	IntervalSeconds     uint32                 `protobuf:"varint,7,opt,name=interval_seconds,json=intervalSeconds,proto3" json:"interval_seconds,omitempty"`
+	TrainingDays        uint32                 `protobuf:"varint,8,opt,name=training_days,json=trainingDays,proto3" json:"training_days,omitempty"` // Default 56; maximum 366. Seasonal training ends before from.
+	Timezone            string                 `protobuf:"bytes,9,opt,name=timezone,proto3" json:"timezone,omitempty"`                              // IANA name; defaults to UTC.
+	Metric              SensorPredictionMetric `protobuf:"varint,10,opt,name=metric,proto3,enum=kubex.keystone.SensorPredictionMetric" json:"metric,omitempty"`
+	RangeCoverage       float64                `protobuf:"fixed64,11,opt,name=range_coverage,json=rangeCoverage,proto3" json:"range_coverage,omitempty"`                  // Central range; default 0.90, not calibrated confidence.
+	MinimumObservations uint32                 `protobuf:"varint,12,opt,name=minimum_observations,json=minimumObservations,proto3" json:"minimum_observations,omitempty"` // Default 4 weekly/recent intervals, 3 daily fallback intervals.
+	MissingAsZero       bool                   `protobuf:"varint,13,opt,name=missing_as_zero,json=missingAsZero,proto3" json:"missing_as_zero,omitempty"`                 // Opt in for continuously monitored event counters only.
+	DailySeasonality    bool                   `protobuf:"varint,14,opt,name=daily_seasonality,json=dailySeasonality,proto3" json:"daily_seasonality,omitempty"`          // Prefer daily patterns. Otherwise weekly, then daily, then recent.
+	ExcludeBackfill     bool                   `protobuf:"varint,15,opt,name=exclude_backfill,json=excludeBackfill,proto3" json:"exclude_backfill,omitempty"`
+	AppScope            bool                   `protobuf:"varint,16,opt,name=app_scope,json=appScope,proto3" json:"app_scope,omitempty"` // Authenticated app scope; omit schema and entity_id.
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *PredictSensorRequest) Reset() {
+	*x = PredictSensorRequest{}
+	mi := &file_keystone_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PredictSensorRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PredictSensorRequest) ProtoMessage() {}
+
+func (x *PredictSensorRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PredictSensorRequest.ProtoReflect.Descriptor instead.
+func (*PredictSensorRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *PredictSensorRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *PredictSensorRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *PredictSensorRequest) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+func (x *PredictSensorRequest) GetSensor() string {
+	if x != nil {
+		return x.Sensor
+	}
+	return ""
+}
+
+func (x *PredictSensorRequest) GetFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.From
+	}
+	return nil
+}
+
+func (x *PredictSensorRequest) GetUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Until
+	}
+	return nil
+}
+
+func (x *PredictSensorRequest) GetIntervalSeconds() uint32 {
+	if x != nil {
+		return x.IntervalSeconds
+	}
+	return 0
+}
+
+func (x *PredictSensorRequest) GetTrainingDays() uint32 {
+	if x != nil {
+		return x.TrainingDays
+	}
+	return 0
+}
+
+func (x *PredictSensorRequest) GetTimezone() string {
+	if x != nil {
+		return x.Timezone
+	}
+	return ""
+}
+
+func (x *PredictSensorRequest) GetMetric() SensorPredictionMetric {
+	if x != nil {
+		return x.Metric
+	}
+	return SensorPredictionMetric_SensorPredictionSum
+}
+
+func (x *PredictSensorRequest) GetRangeCoverage() float64 {
+	if x != nil {
+		return x.RangeCoverage
+	}
+	return 0
+}
+
+func (x *PredictSensorRequest) GetMinimumObservations() uint32 {
+	if x != nil {
+		return x.MinimumObservations
+	}
+	return 0
+}
+
+func (x *PredictSensorRequest) GetMissingAsZero() bool {
+	if x != nil {
+		return x.MissingAsZero
+	}
+	return false
+}
+
+func (x *PredictSensorRequest) GetDailySeasonality() bool {
+	if x != nil {
+		return x.DailySeasonality
+	}
+	return false
+}
+
+func (x *PredictSensorRequest) GetExcludeBackfill() bool {
+	if x != nil {
+		return x.ExcludeBackfill
+	}
+	return false
+}
+
+func (x *PredictSensorRequest) GetAppScope() bool {
+	if x != nil {
+		return x.AppScope
+	}
+	return false
+}
+
+type SensorPredictionPoint struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	At              *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=at,proto3" json:"at,omitempty"`
+	Expected        float64                `protobuf:"fixed64,2,opt,name=expected,proto3" json:"expected,omitempty"`
+	Lower           float64                `protobuf:"fixed64,3,opt,name=lower,proto3" json:"lower,omitempty"`
+	Upper           float64                `protobuf:"fixed64,4,opt,name=upper,proto3" json:"upper,omitempty"`
+	Observations    uint32                 `protobuf:"varint,5,opt,name=observations,proto3" json:"observations,omitempty"`
+	Available       bool                   `protobuf:"varint,6,opt,name=available,proto3" json:"available,omitempty"`
+	Actual          float64                `protobuf:"fixed64,7,opt,name=actual,proto3" json:"actual,omitempty"`
+	ActualAvailable bool                   `protobuf:"varint,8,opt,name=actual_available,json=actualAvailable,proto3" json:"actual_available,omitempty"`
+	Anomaly         bool                   `protobuf:"varint,9,opt,name=anomaly,proto3" json:"anomaly,omitempty"`                                         // Only evaluated for fully completed intervals.
+	Baseline        string                 `protobuf:"bytes,10,opt,name=baseline,proto3" json:"baseline,omitempty"`                                       // recent, daily or weekly; empty while learning.
+	TrainingSamples uint64                 `protobuf:"varint,11,opt,name=training_samples,json=trainingSamples,proto3" json:"training_samples,omitempty"` // Actual prior measurements supporting readiness or the seasonal baseline.
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SensorPredictionPoint) Reset() {
+	*x = SensorPredictionPoint{}
+	mi := &file_keystone_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SensorPredictionPoint) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SensorPredictionPoint) ProtoMessage() {}
+
+func (x *SensorPredictionPoint) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SensorPredictionPoint.ProtoReflect.Descriptor instead.
+func (*SensorPredictionPoint) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *SensorPredictionPoint) GetAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.At
+	}
+	return nil
+}
+
+func (x *SensorPredictionPoint) GetExpected() float64 {
+	if x != nil {
+		return x.Expected
+	}
+	return 0
+}
+
+func (x *SensorPredictionPoint) GetLower() float64 {
+	if x != nil {
+		return x.Lower
+	}
+	return 0
+}
+
+func (x *SensorPredictionPoint) GetUpper() float64 {
+	if x != nil {
+		return x.Upper
+	}
+	return 0
+}
+
+func (x *SensorPredictionPoint) GetObservations() uint32 {
+	if x != nil {
+		return x.Observations
+	}
+	return 0
+}
+
+func (x *SensorPredictionPoint) GetAvailable() bool {
+	if x != nil {
+		return x.Available
+	}
+	return false
+}
+
+func (x *SensorPredictionPoint) GetActual() float64 {
+	if x != nil {
+		return x.Actual
+	}
+	return 0
+}
+
+func (x *SensorPredictionPoint) GetActualAvailable() bool {
+	if x != nil {
+		return x.ActualAvailable
+	}
+	return false
+}
+
+func (x *SensorPredictionPoint) GetAnomaly() bool {
+	if x != nil {
+		return x.Anomaly
+	}
+	return false
+}
+
+func (x *SensorPredictionPoint) GetBaseline() string {
+	if x != nil {
+		return x.Baseline
+	}
+	return ""
+}
+
+func (x *SensorPredictionPoint) GetTrainingSamples() uint64 {
+	if x != nil {
+		return x.TrainingSamples
+	}
+	return 0
+}
+
+type PredictSensorResponse struct {
+	state             protoimpl.MessageState   `protogen:"open.v1"`
+	Points            []*SensorPredictionPoint `protobuf:"bytes,1,rep,name=points,proto3" json:"points,omitempty"`
+	ResolutionSeconds uint32                   `protobuf:"varint,2,opt,name=resolution_seconds,json=resolutionSeconds,proto3" json:"resolution_seconds,omitempty"`
+	Timezone          string                   `protobuf:"bytes,3,opt,name=timezone,proto3" json:"timezone,omitempty"`
+	RangeCoverage     float64                  `protobuf:"fixed64,4,opt,name=range_coverage,json=rangeCoverage,proto3" json:"range_coverage,omitempty"`
+	TrainingFrom      *timestamppb.Timestamp   `protobuf:"bytes,5,opt,name=training_from,json=trainingFrom,proto3" json:"training_from,omitempty"`
+	TrainingUntil     *timestamppb.Timestamp   `protobuf:"bytes,6,opt,name=training_until,json=trainingUntil,proto3" json:"training_until,omitempty"`
+	Model             string                   `protobuf:"bytes,7,opt,name=model,proto3" json:"model,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *PredictSensorResponse) Reset() {
+	*x = PredictSensorResponse{}
+	mi := &file_keystone_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PredictSensorResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PredictSensorResponse) ProtoMessage() {}
+
+func (x *PredictSensorResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PredictSensorResponse.ProtoReflect.Descriptor instead.
+func (*PredictSensorResponse) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *PredictSensorResponse) GetPoints() []*SensorPredictionPoint {
+	if x != nil {
+		return x.Points
+	}
+	return nil
+}
+
+func (x *PredictSensorResponse) GetResolutionSeconds() uint32 {
+	if x != nil {
+		return x.ResolutionSeconds
+	}
+	return 0
+}
+
+func (x *PredictSensorResponse) GetTimezone() string {
+	if x != nil {
+		return x.Timezone
+	}
+	return ""
+}
+
+func (x *PredictSensorResponse) GetRangeCoverage() float64 {
+	if x != nil {
+		return x.RangeCoverage
+	}
+	return 0
+}
+
+func (x *PredictSensorResponse) GetTrainingFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.TrainingFrom
+	}
+	return nil
+}
+
+func (x *PredictSensorResponse) GetTrainingUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.TrainingUntil
+	}
+	return nil
+}
+
+func (x *PredictSensorResponse) GetModel() string {
+	if x != nil {
+		return x.Model
+	}
+	return ""
+}
+
+// Called by the trusted app backend after checking the end-user's login and
+// entity permissions. Never expose application credentials to the browser.
+type CreateSensorStreamRequest struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Authorization     *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"` // App read permission and end-user user_id required.
+	Schema            *Key                   `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	EntityId          string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	Sensor            string                 `protobuf:"bytes,4,opt,name=sensor,proto3" json:"sensor,omitempty"`
+	SessionId         string                 `protobuf:"bytes,5,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`                        // Stable opaque login ID; use a new ID for a new login.
+	SessionExpiresAt  *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=session_expires_at,json=sessionExpiresAt,proto3" json:"session_expires_at,omitempty"` // App-attested login deadline, at most 24h away; cannot be extended.
+	Origin            string                 `protobuf:"bytes,7,opt,name=origin,proto3" json:"origin,omitempty"`                                               // Exact allowed browser origin.
+	WindowSeconds     uint32                 `protobuf:"varint,8,opt,name=window_seconds,json=windowSeconds,proto3" json:"window_seconds,omitempty"`           // Default 3600; at most 7 days / 10000 points.
+	IntervalSeconds   uint32                 `protobuf:"varint,9,opt,name=interval_seconds,json=intervalSeconds,proto3" json:"interval_seconds,omitempty"`     // Default 1; supported 1,5,10,20,30,60,300,900,3600.
+	Metric            SensorPredictionMetric `protobuf:"varint,10,opt,name=metric,proto3,enum=kubex.keystone.SensorPredictionMetric" json:"metric,omitempty"`
+	ExcludeBackfill   bool                   `protobuf:"varint,11,opt,name=exclude_backfill,json=excludeBackfill,proto3" json:"exclude_backfill,omitempty"`
+	IncludePrediction bool                   `protobuf:"varint,12,opt,name=include_prediction,json=includePrediction,proto3" json:"include_prediction,omitempty"` // Optional expected range on snapshots; refreshes every 30s.
+	AppScope          bool                   `protobuf:"varint,13,opt,name=app_scope,json=appScope,proto3" json:"app_scope,omitempty"`                            // Authenticated app scope; omit schema and entity_id.
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *CreateSensorStreamRequest) Reset() {
+	*x = CreateSensorStreamRequest{}
+	mi := &file_keystone_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSensorStreamRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSensorStreamRequest) ProtoMessage() {}
+
+func (x *CreateSensorStreamRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSensorStreamRequest.ProtoReflect.Descriptor instead.
+func (*CreateSensorStreamRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *CreateSensorStreamRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *CreateSensorStreamRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *CreateSensorStreamRequest) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+func (x *CreateSensorStreamRequest) GetSensor() string {
+	if x != nil {
+		return x.Sensor
+	}
+	return ""
+}
+
+func (x *CreateSensorStreamRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+func (x *CreateSensorStreamRequest) GetSessionExpiresAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.SessionExpiresAt
+	}
+	return nil
+}
+
+func (x *CreateSensorStreamRequest) GetOrigin() string {
+	if x != nil {
+		return x.Origin
+	}
+	return ""
+}
+
+func (x *CreateSensorStreamRequest) GetWindowSeconds() uint32 {
+	if x != nil {
+		return x.WindowSeconds
+	}
+	return 0
+}
+
+func (x *CreateSensorStreamRequest) GetIntervalSeconds() uint32 {
+	if x != nil {
+		return x.IntervalSeconds
+	}
+	return 0
+}
+
+func (x *CreateSensorStreamRequest) GetMetric() SensorPredictionMetric {
+	if x != nil {
+		return x.Metric
+	}
+	return SensorPredictionMetric_SensorPredictionSum
+}
+
+func (x *CreateSensorStreamRequest) GetExcludeBackfill() bool {
+	if x != nil {
+		return x.ExcludeBackfill
+	}
+	return false
+}
+
+func (x *CreateSensorStreamRequest) GetIncludePrediction() bool {
+	if x != nil {
+		return x.IncludePrediction
+	}
+	return false
+}
+
+func (x *CreateSensorStreamRequest) GetAppScope() bool {
+	if x != nil {
+		return x.AppScope
+	}
+	return false
+}
+
+type CreateSensorStreamResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SnapshotUrl   string                 `protobuf:"bytes,1,opt,name=snapshot_url,json=snapshotUrl,proto3" json:"snapshot_url,omitempty"`
+	StreamUrl     string                 `protobuf:"bytes,2,opt,name=stream_url,json=streamUrl,proto3" json:"stream_url,omitempty"`
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"` // At most 60 seconds, capped by login and app-token expiry.
+	ServerTime    *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=server_time,json=serverTime,proto3" json:"server_time,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateSensorStreamResponse) Reset() {
+	*x = CreateSensorStreamResponse{}
+	mi := &file_keystone_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSensorStreamResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSensorStreamResponse) ProtoMessage() {}
+
+func (x *CreateSensorStreamResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSensorStreamResponse.ProtoReflect.Descriptor instead.
+func (*CreateSensorStreamResponse) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *CreateSensorStreamResponse) GetSnapshotUrl() string {
+	if x != nil {
+		return x.SnapshotUrl
+	}
+	return ""
+}
+
+func (x *CreateSensorStreamResponse) GetStreamUrl() string {
+	if x != nil {
+		return x.StreamUrl
+	}
+	return ""
+}
+
+func (x *CreateSensorStreamResponse) GetExpiresAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return nil
+}
+
+func (x *CreateSensorStreamResponse) GetServerTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ServerTime
+	}
+	return nil
+}
+
+type RevokeSensorSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Authorization *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`          // Same app/workspace/user as the creator.
+	SessionId     string                 `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"` // Revokes all grants and live connections for this login.
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokeSensorSessionRequest) Reset() {
+	*x = RevokeSensorSessionRequest{}
+	mi := &file_keystone_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeSensorSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeSensorSessionRequest) ProtoMessage() {}
+
+func (x *RevokeSensorSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeSensorSessionRequest.ProtoReflect.Descriptor instead.
+func (*RevokeSensorSessionRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *RevokeSensorSessionRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *RevokeSensorSessionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type ChartSensorRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Authorization   *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	Schema          *Key                   `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	EntityId        string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	Sensor          string                 `protobuf:"bytes,4,opt,name=sensor,proto3" json:"sensor,omitempty"`
+	From            *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=from,proto3" json:"from,omitempty"`
+	Until           *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=until,proto3" json:"until,omitempty"`
+	IntervalSeconds uint32                 `protobuf:"varint,7,opt,name=interval_seconds,json=intervalSeconds,proto3" json:"interval_seconds,omitempty"` // defaults to 60
+	ExcludeBackfill bool                   `protobuf:"varint,8,opt,name=exclude_backfill,json=excludeBackfill,proto3" json:"exclude_backfill,omitempty"`
+	TargetPoints    uint32                 `protobuf:"varint,9,opt,name=target_points,json=targetPoints,proto3" json:"target_points,omitempty"` // Automatic interval selection when interval_seconds=0.
+	AppScope        bool                   `protobuf:"varint,10,opt,name=app_scope,json=appScope,proto3" json:"app_scope,omitempty"`            // Authenticated app scope; omit schema and entity_id.
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *ChartSensorRequest) Reset() {
+	*x = ChartSensorRequest{}
+	mi := &file_keystone_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChartSensorRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChartSensorRequest) ProtoMessage() {}
+
+func (x *ChartSensorRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChartSensorRequest.ProtoReflect.Descriptor instead.
+func (*ChartSensorRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *ChartSensorRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *ChartSensorRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *ChartSensorRequest) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+func (x *ChartSensorRequest) GetSensor() string {
+	if x != nil {
+		return x.Sensor
+	}
+	return ""
+}
+
+func (x *ChartSensorRequest) GetFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.From
+	}
+	return nil
+}
+
+func (x *ChartSensorRequest) GetUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Until
+	}
+	return nil
+}
+
+func (x *ChartSensorRequest) GetIntervalSeconds() uint32 {
+	if x != nil {
+		return x.IntervalSeconds
+	}
+	return 0
+}
+
+func (x *ChartSensorRequest) GetExcludeBackfill() bool {
+	if x != nil {
+		return x.ExcludeBackfill
+	}
+	return false
+}
+
+func (x *ChartSensorRequest) GetTargetPoints() uint32 {
+	if x != nil {
+		return x.TargetPoints
+	}
+	return 0
+}
+
+func (x *ChartSensorRequest) GetAppScope() bool {
+	if x != nil {
+		return x.AppScope
+	}
+	return false
+}
+
+type SensorBucket struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	At            *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=at,proto3" json:"at,omitempty"`
+	Sum           float64                `protobuf:"fixed64,2,opt,name=sum,proto3" json:"sum,omitempty"`
+	Samples       int64                  `protobuf:"varint,3,opt,name=samples,proto3" json:"samples,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SensorBucket) Reset() {
+	*x = SensorBucket{}
+	mi := &file_keystone_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SensorBucket) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SensorBucket) ProtoMessage() {}
+
+func (x *SensorBucket) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SensorBucket.ProtoReflect.Descriptor instead.
+func (*SensorBucket) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *SensorBucket) GetAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.At
+	}
+	return nil
+}
+
+func (x *SensorBucket) GetSum() float64 {
+	if x != nil {
+		return x.Sum
+	}
+	return 0
+}
+
+func (x *SensorBucket) GetSamples() int64 {
+	if x != nil {
+		return x.Samples
+	}
+	return 0
+}
+
+type ChartSensorResponse struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Buckets           []*SensorBucket        `protobuf:"bytes,1,rep,name=buckets,proto3" json:"buckets,omitempty"`
+	LastReceivedAt    *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=last_received_at,json=lastReceivedAt,proto3" json:"last_received_at,omitempty"`
+	ResolutionSeconds uint32                 `protobuf:"varint,3,opt,name=resolution_seconds,json=resolutionSeconds,proto3" json:"resolution_seconds,omitempty"`
+	Estimated         bool                   `protobuf:"varint,4,opt,name=estimated,proto3" json:"estimated,omitempty"`
+	EffectiveFrom     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty"`
+	EffectiveUntil    *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=effective_until,json=effectiveUntil,proto3" json:"effective_until,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *ChartSensorResponse) Reset() {
+	*x = ChartSensorResponse{}
+	mi := &file_keystone_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChartSensorResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChartSensorResponse) ProtoMessage() {}
+
+func (x *ChartSensorResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChartSensorResponse.ProtoReflect.Descriptor instead.
+func (*ChartSensorResponse) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *ChartSensorResponse) GetBuckets() []*SensorBucket {
+	if x != nil {
+		return x.Buckets
+	}
+	return nil
+}
+
+func (x *ChartSensorResponse) GetLastReceivedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.LastReceivedAt
+	}
+	return nil
+}
+
+func (x *ChartSensorResponse) GetResolutionSeconds() uint32 {
+	if x != nil {
+		return x.ResolutionSeconds
+	}
+	return 0
+}
+
+func (x *ChartSensorResponse) GetEstimated() bool {
+	if x != nil {
+		return x.Estimated
+	}
+	return false
+}
+
+func (x *ChartSensorResponse) GetEffectiveFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EffectiveFrom
+	}
+	return nil
+}
+
+func (x *ChartSensorResponse) GetEffectiveUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EffectiveUntil
+	}
+	return nil
+}
+
+type SensorActivityRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Authorization *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	Schema        *Key                   `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	EntityId      string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	Sensor        string                 `protobuf:"bytes,4,opt,name=sensor,proto3" json:"sensor,omitempty"`
+	LookbackDays  uint32                 `protobuf:"varint,5,opt,name=lookback_days,json=lookbackDays,proto3" json:"lookback_days,omitempty"` // Defaults to 90; zero does not mean all-time.
+	Calendar      SensorActivityCalendar `protobuf:"varint,6,opt,name=calendar,proto3,enum=kubex.keystone.SensorActivityCalendar" json:"calendar,omitempty"`
+	MonthOfYear   uint32                 `protobuf:"varint,7,opt,name=month_of_year,json=monthOfYear,proto3" json:"month_of_year,omitempty"` // Optional 1..12 seasonal filter; zero means all months.
+	AppScope      bool                   `protobuf:"varint,8,opt,name=app_scope,json=appScope,proto3" json:"app_scope,omitempty"`            // Authenticated app scope; omit schema and entity_id.
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SensorActivityRequest) Reset() {
+	*x = SensorActivityRequest{}
+	mi := &file_keystone_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SensorActivityRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SensorActivityRequest) ProtoMessage() {}
+
+func (x *SensorActivityRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SensorActivityRequest.ProtoReflect.Descriptor instead.
+func (*SensorActivityRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *SensorActivityRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *SensorActivityRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *SensorActivityRequest) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+func (x *SensorActivityRequest) GetSensor() string {
+	if x != nil {
+		return x.Sensor
+	}
+	return ""
+}
+
+func (x *SensorActivityRequest) GetLookbackDays() uint32 {
+	if x != nil {
+		return x.LookbackDays
+	}
+	return 0
+}
+
+func (x *SensorActivityRequest) GetCalendar() SensorActivityCalendar {
+	if x != nil {
+		return x.Calendar
+	}
+	return SensorActivityCalendar_SensorActivityWeek
+}
+
+func (x *SensorActivityRequest) GetMonthOfYear() uint32 {
+	if x != nil {
+		return x.MonthOfYear
+	}
+	return 0
+}
+
+func (x *SensorActivityRequest) GetAppScope() bool {
+	if x != nil {
+		return x.AppScope
+	}
+	return false
+}
+
+type SensorActivitySlot struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Weekday            uint32                 `protobuf:"varint,1,opt,name=weekday,proto3" json:"weekday,omitempty"` // Monday=0.
+	Hour               uint32                 `protobuf:"varint,2,opt,name=hour,proto3" json:"hour,omitempty"`
+	Sum                float64                `protobuf:"fixed64,3,opt,name=sum,proto3" json:"sum,omitempty"`
+	Samples            int64                  `protobuf:"varint,4,opt,name=samples,proto3" json:"samples,omitempty"`
+	ObservedSeconds    float64                `protobuf:"fixed64,5,opt,name=observed_seconds,json=observedSeconds,proto3" json:"observed_seconds,omitempty"`
+	ActiveSeconds      float64                `protobuf:"fixed64,6,opt,name=active_seconds,json=activeSeconds,proto3" json:"active_seconds,omitempty"`
+	Attempts           uint64                 `protobuf:"varint,7,opt,name=attempts,proto3" json:"attempts,omitempty"`
+	Successes          uint64                 `protobuf:"varint,8,opt,name=successes,proto3" json:"successes,omitempty"`
+	OnlineProbability  float64                `protobuf:"fixed64,9,opt,name=online_probability,json=onlineProbability,proto3" json:"online_probability,omitempty"`     // Only meaningful with nonzero observed_seconds.
+	SuccessProbability float64                `protobuf:"fixed64,10,opt,name=success_probability,json=successProbability,proto3" json:"success_probability,omitempty"` // Only meaningful with nonzero attempts.
+	ExpectedVolume     float64                `protobuf:"fixed64,11,opt,name=expected_volume,json=expectedVolume,proto3" json:"expected_volume,omitempty"`             // Volume per calendar occurrence, assuming coverage.
+	EvidenceWeight     float64                `protobuf:"fixed64,12,opt,name=evidence_weight,json=evidenceWeight,proto3" json:"evidence_weight,omitempty"`             // Decayed measurement count, not calibrated confidence.
+	DayOfMonth         uint32                 `protobuf:"varint,13,opt,name=day_of_month,json=dayOfMonth,proto3" json:"day_of_month,omitempty"`                        // 1..31 for month calendar; zero for week.
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *SensorActivitySlot) Reset() {
+	*x = SensorActivitySlot{}
+	mi := &file_keystone_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SensorActivitySlot) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SensorActivitySlot) ProtoMessage() {}
+
+func (x *SensorActivitySlot) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SensorActivitySlot.ProtoReflect.Descriptor instead.
+func (*SensorActivitySlot) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *SensorActivitySlot) GetWeekday() uint32 {
+	if x != nil {
+		return x.Weekday
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetHour() uint32 {
+	if x != nil {
+		return x.Hour
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetSum() float64 {
+	if x != nil {
+		return x.Sum
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetSamples() int64 {
+	if x != nil {
+		return x.Samples
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetObservedSeconds() float64 {
+	if x != nil {
+		return x.ObservedSeconds
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetActiveSeconds() float64 {
+	if x != nil {
+		return x.ActiveSeconds
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetAttempts() uint64 {
+	if x != nil {
+		return x.Attempts
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetSuccesses() uint64 {
+	if x != nil {
+		return x.Successes
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetOnlineProbability() float64 {
+	if x != nil {
+		return x.OnlineProbability
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetSuccessProbability() float64 {
+	if x != nil {
+		return x.SuccessProbability
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetExpectedVolume() float64 {
+	if x != nil {
+		return x.ExpectedVolume
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetEvidenceWeight() float64 {
+	if x != nil {
+		return x.EvidenceWeight
+	}
+	return 0
+}
+
+func (x *SensorActivitySlot) GetDayOfMonth() uint32 {
+	if x != nil {
+		return x.DayOfMonth
+	}
+	return 0
+}
+
+type SensorActivityResponse struct {
+	state                     protoimpl.MessageState `protogen:"open.v1"`
+	Slots                     []*SensorActivitySlot  `protobuf:"bytes,1,rep,name=slots,proto3" json:"slots,omitempty"`                                        // Week: 168 cells, Monday first. Month: 744 cells.
+	Timezone                  string                 `protobuf:"bytes,2,opt,name=timezone,proto3" json:"timezone,omitempty"`                                  // UTC; use dated heatmaps for local-time scheduling.
+	RankedSlots               []uint32               `protobuf:"varint,3,rep,packed,name=ranked_slots,json=rankedSlots,proto3" json:"ranked_slots,omitempty"` // Indices ranked by smoothed outcome/activity score.
+	UpdatedAt                 *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	AssumedContinuousCoverage bool                   `protobuf:"varint,5,opt,name=assumed_continuous_coverage,json=assumedContinuousCoverage,proto3" json:"assumed_continuous_coverage,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *SensorActivityResponse) Reset() {
+	*x = SensorActivityResponse{}
+	mi := &file_keystone_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SensorActivityResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SensorActivityResponse) ProtoMessage() {}
+
+func (x *SensorActivityResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SensorActivityResponse.ProtoReflect.Descriptor instead.
+func (*SensorActivityResponse) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *SensorActivityResponse) GetSlots() []*SensorActivitySlot {
+	if x != nil {
+		return x.Slots
+	}
+	return nil
+}
+
+func (x *SensorActivityResponse) GetTimezone() string {
+	if x != nil {
+		return x.Timezone
+	}
+	return ""
+}
+
+func (x *SensorActivityResponse) GetRankedSlots() []uint32 {
+	if x != nil {
+		return x.RankedSlots
+	}
+	return nil
+}
+
+func (x *SensorActivityResponse) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *SensorActivityResponse) GetAssumedContinuousCoverage() bool {
+	if x != nil {
+		return x.AssumedContinuousCoverage
+	}
+	return false
+}
+
+// Fold observations in [from, until) into a recurring local day or week.
+type HeatmapSensorRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Authorization   *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	Schema          *Key                   `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	EntityId        string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	Sensor          string                 `protobuf:"bytes,4,opt,name=sensor,proto3" json:"sensor,omitempty"`
+	From            *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=from,proto3" json:"from,omitempty"`
+	Until           *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=until,proto3" json:"until,omitempty"`
+	Layout          SensorHeatmapLayout    `protobuf:"varint,7,opt,name=layout,proto3,enum=kubex.keystone.SensorHeatmapLayout" json:"layout,omitempty"`
+	Timezone        string                 `protobuf:"bytes,8,opt,name=timezone,proto3" json:"timezone,omitempty"` // IANA name; defaults to UTC.
+	ExcludeBackfill bool                   `protobuf:"varint,9,opt,name=exclude_backfill,json=excludeBackfill,proto3" json:"exclude_backfill,omitempty"`
+	AppScope        bool                   `protobuf:"varint,10,opt,name=app_scope,json=appScope,proto3" json:"app_scope,omitempty"` // Authenticated app scope; omit schema and entity_id.
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *HeatmapSensorRequest) Reset() {
+	*x = HeatmapSensorRequest{}
+	mi := &file_keystone_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HeatmapSensorRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HeatmapSensorRequest) ProtoMessage() {}
+
+func (x *HeatmapSensorRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HeatmapSensorRequest.ProtoReflect.Descriptor instead.
+func (*HeatmapSensorRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *HeatmapSensorRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *HeatmapSensorRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *HeatmapSensorRequest) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+func (x *HeatmapSensorRequest) GetSensor() string {
+	if x != nil {
+		return x.Sensor
+	}
+	return ""
+}
+
+func (x *HeatmapSensorRequest) GetFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.From
+	}
+	return nil
+}
+
+func (x *HeatmapSensorRequest) GetUntil() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Until
+	}
+	return nil
+}
+
+func (x *HeatmapSensorRequest) GetLayout() SensorHeatmapLayout {
+	if x != nil {
+		return x.Layout
+	}
+	return SensorHeatmapLayout_SensorHeatmapDay
+}
+
+func (x *HeatmapSensorRequest) GetTimezone() string {
+	if x != nil {
+		return x.Timezone
+	}
+	return ""
+}
+
+func (x *HeatmapSensorRequest) GetExcludeBackfill() bool {
+	if x != nil {
+		return x.ExcludeBackfill
+	}
+	return false
+}
+
+func (x *HeatmapSensorRequest) GetAppScope() bool {
+	if x != nil {
+		return x.AppScope
+	}
+	return false
+}
+
+type SensorHeatmapCell struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Index             uint32                 `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"`
+	Weekday           uint32                 `protobuf:"varint,2,opt,name=weekday,proto3" json:"weekday,omitempty"` // Monday=0; zero in day layout.
+	MinuteOfDay       uint32                 `protobuf:"varint,3,opt,name=minute_of_day,json=minuteOfDay,proto3" json:"minute_of_day,omitempty"`
+	Sum               float64                `protobuf:"fixed64,4,opt,name=sum,proto3" json:"sum,omitempty"`                                                      // Coarse interval totals are distributed evenly across cells.
+	Samples           float64                `protobuf:"fixed64,5,opt,name=samples,proto3" json:"samples,omitempty"`                                              // May be fractional when distributed.
+	ObservedIntervals float64                `protobuf:"fixed64,6,opt,name=observed_intervals,json=observedIntervals,proto3" json:"observed_intervals,omitempty"` // Elapsed coverage / display interval duration.
+	SumPerInterval    float64                `protobuf:"fixed64,7,opt,name=sum_per_interval,json=sumPerInterval,proto3" json:"sum_per_interval,omitempty"`        // sum / observed_intervals; useful for staffing.
+	Average           float64                `protobuf:"fixed64,8,opt,name=average,proto3" json:"average,omitempty"`                                              // sum / samples; zero when there are no samples.
+	Estimated         bool                   `protobuf:"varint,9,opt,name=estimated,proto3" json:"estimated,omitempty"`                                           // Within-interval timing was lost through coarsening.
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *SensorHeatmapCell) Reset() {
+	*x = SensorHeatmapCell{}
+	mi := &file_keystone_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SensorHeatmapCell) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SensorHeatmapCell) ProtoMessage() {}
+
+func (x *SensorHeatmapCell) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SensorHeatmapCell.ProtoReflect.Descriptor instead.
+func (*SensorHeatmapCell) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *SensorHeatmapCell) GetIndex() uint32 {
+	if x != nil {
+		return x.Index
+	}
+	return 0
+}
+
+func (x *SensorHeatmapCell) GetWeekday() uint32 {
+	if x != nil {
+		return x.Weekday
+	}
+	return 0
+}
+
+func (x *SensorHeatmapCell) GetMinuteOfDay() uint32 {
+	if x != nil {
+		return x.MinuteOfDay
+	}
+	return 0
+}
+
+func (x *SensorHeatmapCell) GetSum() float64 {
+	if x != nil {
+		return x.Sum
+	}
+	return 0
+}
+
+func (x *SensorHeatmapCell) GetSamples() float64 {
+	if x != nil {
+		return x.Samples
+	}
+	return 0
+}
+
+func (x *SensorHeatmapCell) GetObservedIntervals() float64 {
+	if x != nil {
+		return x.ObservedIntervals
+	}
+	return 0
+}
+
+func (x *SensorHeatmapCell) GetSumPerInterval() float64 {
+	if x != nil {
+		return x.SumPerInterval
+	}
+	return 0
+}
+
+func (x *SensorHeatmapCell) GetAverage() float64 {
+	if x != nil {
+		return x.Average
+	}
+	return 0
+}
+
+func (x *SensorHeatmapCell) GetEstimated() bool {
+	if x != nil {
+		return x.Estimated
+	}
+	return false
+}
+
+type HeatmapSensorResponse struct {
+	state                      protoimpl.MessageState `protogen:"open.v1"`
+	Cells                      []*SensorHeatmapCell   `protobuf:"bytes,1,rep,name=cells,proto3" json:"cells,omitempty"`
+	DisplayIntervalSeconds     uint32                 `protobuf:"varint,2,opt,name=display_interval_seconds,json=displayIntervalSeconds,proto3" json:"display_interval_seconds,omitempty"`
+	AggregationIntervalSeconds uint32                 `protobuf:"varint,3,opt,name=aggregation_interval_seconds,json=aggregationIntervalSeconds,proto3" json:"aggregation_interval_seconds,omitempty"`
+	Timezone                   string                 `protobuf:"bytes,4,opt,name=timezone,proto3" json:"timezone,omitempty"`
+	LastReceivedAt             *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=last_received_at,json=lastReceivedAt,proto3" json:"last_received_at,omitempty"`
+	// Coverage assumes event telemetry was collecting throughout the range.
+	// It does not establish uptime or distinguish telemetry outages from zero events.
+	AssumedContinuousCoverage bool `protobuf:"varint,6,opt,name=assumed_continuous_coverage,json=assumedContinuousCoverage,proto3" json:"assumed_continuous_coverage,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *HeatmapSensorResponse) Reset() {
+	*x = HeatmapSensorResponse{}
+	mi := &file_keystone_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HeatmapSensorResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HeatmapSensorResponse) ProtoMessage() {}
+
+func (x *HeatmapSensorResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HeatmapSensorResponse.ProtoReflect.Descriptor instead.
+func (*HeatmapSensorResponse) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *HeatmapSensorResponse) GetCells() []*SensorHeatmapCell {
+	if x != nil {
+		return x.Cells
+	}
+	return nil
+}
+
+func (x *HeatmapSensorResponse) GetDisplayIntervalSeconds() uint32 {
+	if x != nil {
+		return x.DisplayIntervalSeconds
+	}
+	return 0
+}
+
+func (x *HeatmapSensorResponse) GetAggregationIntervalSeconds() uint32 {
+	if x != nil {
+		return x.AggregationIntervalSeconds
+	}
+	return 0
+}
+
+func (x *HeatmapSensorResponse) GetTimezone() string {
+	if x != nil {
+		return x.Timezone
+	}
+	return ""
+}
+
+func (x *HeatmapSensorResponse) GetLastReceivedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.LastReceivedAt
+	}
+	return nil
+}
+
+func (x *HeatmapSensorResponse) GetAssumedContinuousCoverage() bool {
+	if x != nil {
+		return x.AssumedContinuousCoverage
+	}
+	return false
 }
 
 type EntityObject struct {
@@ -2924,7 +4858,7 @@ type EntityObject struct {
 
 func (x *EntityObject) Reset() {
 	*x = EntityObject{}
-	mi := &file_keystone_proto_msgTypes[23]
+	mi := &file_keystone_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2936,7 +4870,7 @@ func (x *EntityObject) String() string {
 func (*EntityObject) ProtoMessage() {}
 
 func (x *EntityObject) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[23]
+	mi := &file_keystone_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2949,7 +4883,7 @@ func (x *EntityObject) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityObject.ProtoReflect.Descriptor instead.
 func (*EntityObject) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{23}
+	return file_keystone_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *EntityObject) GetPath() string {
@@ -3071,7 +5005,7 @@ type User struct {
 
 func (x *User) Reset() {
 	*x = User{}
-	mi := &file_keystone_proto_msgTypes[24]
+	mi := &file_keystone_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3083,7 +5017,7 @@ func (x *User) String() string {
 func (*User) ProtoMessage() {}
 
 func (x *User) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[24]
+	mi := &file_keystone_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3096,7 +5030,7 @@ func (x *User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{24}
+	return file_keystone_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *User) GetUserAgent() string {
@@ -3142,23 +5076,24 @@ func (x *User) GetParent() *User {
 }
 
 type Mutation struct {
-	state                   protoimpl.MessageState     `protogen:"open.v1"`
-	Mutator                 *User                      `protobuf:"bytes,1,opt,name=mutator,proto3" json:"mutator,omitempty"`
-	Timestamp               *timestamppb.Timestamp     `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	Comment                 string                     `protobuf:"bytes,3,opt,name=comment,proto3" json:"comment,omitempty"`
-	State                   EntityState                `protobuf:"varint,4,opt,name=state,proto3,enum=kubex.keystone.EntityState" json:"state,omitempty"`
-	Properties              []*EntityProperty          `protobuf:"bytes,6,rep,name=properties,proto3" json:"properties,omitempty"`
-	DynamicProperties       []*EntityProperty          `protobuf:"bytes,7,rep,name=dynamic_properties,json=dynamicProperties,proto3" json:"dynamic_properties,omitempty"`
-	RemoveDynamicProperties []string                   `protobuf:"bytes,8,rep,name=remove_dynamic_properties,json=removeDynamicProperties,proto3" json:"remove_dynamic_properties,omitempty"`
-	Logs                    []*EntityLog               `protobuf:"bytes,9,rep,name=logs,proto3" json:"logs,omitempty"`
-	Events                  []*EntityEvent             `protobuf:"bytes,10,rep,name=events,proto3" json:"events,omitempty"`
-	Children                []*EntityChild             `protobuf:"bytes,11,rep,name=children,proto3" json:"children,omitempty"`
-	RemoveChildren          []*EntityChild             `protobuf:"bytes,12,rep,name=remove_children,json=removeChildren,proto3" json:"remove_children,omitempty"`
-	Relationships           []*EntityRelationship      `protobuf:"bytes,13,rep,name=relationships,proto3" json:"relationships,omitempty"`
-	RemoveRelationships     []*EntityRelationship      `protobuf:"bytes,14,rep,name=remove_relationships,json=removeRelationships,proto3" json:"remove_relationships,omitempty"`
-	Labels                  []*EntityLabel             `protobuf:"bytes,17,rep,name=labels,proto3" json:"labels,omitempty"`
-	RemoveLabels            []*EntityLabel             `protobuf:"bytes,18,rep,name=remove_labels,json=removeLabels,proto3" json:"remove_labels,omitempty"`
-	Measurements            []*EntitySensorMeasurement `protobuf:"bytes,19,rep,name=measurements,proto3" json:"measurements,omitempty"`
+	state                   protoimpl.MessageState `protogen:"open.v1"`
+	Mutator                 *User                  `protobuf:"bytes,1,opt,name=mutator,proto3" json:"mutator,omitempty"`
+	Timestamp               *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Comment                 string                 `protobuf:"bytes,3,opt,name=comment,proto3" json:"comment,omitempty"`
+	State                   EntityState            `protobuf:"varint,4,opt,name=state,proto3,enum=kubex.keystone.EntityState" json:"state,omitempty"`
+	Properties              []*EntityProperty      `protobuf:"bytes,6,rep,name=properties,proto3" json:"properties,omitempty"`
+	DynamicProperties       []*EntityProperty      `protobuf:"bytes,7,rep,name=dynamic_properties,json=dynamicProperties,proto3" json:"dynamic_properties,omitempty"`
+	RemoveDynamicProperties []string               `protobuf:"bytes,8,rep,name=remove_dynamic_properties,json=removeDynamicProperties,proto3" json:"remove_dynamic_properties,omitempty"`
+	Logs                    []*EntityLog           `protobuf:"bytes,9,rep,name=logs,proto3" json:"logs,omitempty"`
+	Events                  []*EntityEvent         `protobuf:"bytes,10,rep,name=events,proto3" json:"events,omitempty"`
+	Children                []*EntityChild         `protobuf:"bytes,11,rep,name=children,proto3" json:"children,omitempty"`
+	RemoveChildren          []*EntityChild         `protobuf:"bytes,12,rep,name=remove_children,json=removeChildren,proto3" json:"remove_children,omitempty"`
+	Relationships           []*EntityRelationship  `protobuf:"bytes,13,rep,name=relationships,proto3" json:"relationships,omitempty"`
+	RemoveRelationships     []*EntityRelationship  `protobuf:"bytes,14,rep,name=remove_relationships,json=removeRelationships,proto3" json:"remove_relationships,omitempty"`
+	Labels                  []*EntityLabel         `protobuf:"bytes,17,rep,name=labels,proto3" json:"labels,omitempty"`
+	RemoveLabels            []*EntityLabel         `protobuf:"bytes,18,rep,name=remove_labels,json=removeLabels,proto3" json:"remove_labels,omitempty"`
+	// Deprecated: Marked as deprecated in keystone.proto.
+	Measurements            []*EntitySensorMeasurement `protobuf:"bytes,19,rep,name=measurements,proto3" json:"measurements,omitempty"` // Compatibility only; use WriteSensors.
 	Document                *EntityDocument            `protobuf:"bytes,20,opt,name=document,proto3" json:"document,omitempty"`
 	Objects                 []*EntityObject            `protobuf:"bytes,21,rep,name=objects,proto3" json:"objects,omitempty"`
 	PiiToken                string                     `protobuf:"bytes,22,opt,name=pii_token,json=piiToken,proto3" json:"pii_token,omitempty"`
@@ -3171,7 +5106,7 @@ type Mutation struct {
 
 func (x *Mutation) Reset() {
 	*x = Mutation{}
-	mi := &file_keystone_proto_msgTypes[25]
+	mi := &file_keystone_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3183,7 +5118,7 @@ func (x *Mutation) String() string {
 func (*Mutation) ProtoMessage() {}
 
 func (x *Mutation) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[25]
+	mi := &file_keystone_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3196,7 +5131,7 @@ func (x *Mutation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Mutation.ProtoReflect.Descriptor instead.
 func (*Mutation) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{25}
+	return file_keystone_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *Mutation) GetMutator() *User {
@@ -3304,6 +5239,7 @@ func (x *Mutation) GetRemoveLabels() []*EntityLabel {
 	return nil
 }
 
+// Deprecated: Marked as deprecated in keystone.proto.
 func (x *Mutation) GetMeasurements() []*EntitySensorMeasurement {
 	if x != nil {
 		return x.Measurements
@@ -3364,7 +5300,7 @@ type LogRequest struct {
 
 func (x *LogRequest) Reset() {
 	*x = LogRequest{}
-	mi := &file_keystone_proto_msgTypes[26]
+	mi := &file_keystone_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3376,7 +5312,7 @@ func (x *LogRequest) String() string {
 func (*LogRequest) ProtoMessage() {}
 
 func (x *LogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[26]
+	mi := &file_keystone_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3389,7 +5325,7 @@ func (x *LogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogRequest.ProtoReflect.Descriptor instead.
 func (*LogRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{26}
+	return file_keystone_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *LogRequest) GetAuthorization() *Authorization {
@@ -3426,7 +5362,7 @@ type LogResponse struct {
 
 func (x *LogResponse) Reset() {
 	*x = LogResponse{}
-	mi := &file_keystone_proto_msgTypes[27]
+	mi := &file_keystone_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3438,7 +5374,7 @@ func (x *LogResponse) String() string {
 func (*LogResponse) ProtoMessage() {}
 
 func (x *LogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[27]
+	mi := &file_keystone_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3451,7 +5387,7 @@ func (x *LogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogResponse.ProtoReflect.Descriptor instead.
 func (*LogResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{27}
+	return file_keystone_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *LogResponse) GetSuccess() bool {
@@ -3499,7 +5435,7 @@ type Window struct {
 
 func (x *Window) Reset() {
 	*x = Window{}
-	mi := &file_keystone_proto_msgTypes[28]
+	mi := &file_keystone_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3511,7 +5447,7 @@ func (x *Window) String() string {
 func (*Window) ProtoMessage() {}
 
 func (x *Window) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[28]
+	mi := &file_keystone_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3524,7 +5460,7 @@ func (x *Window) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Window.ProtoReflect.Descriptor instead.
 func (*Window) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{28}
+	return file_keystone_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *Window) GetSince() *timestamppb.Timestamp {
@@ -3554,7 +5490,7 @@ type PropertyFilter struct {
 
 func (x *PropertyFilter) Reset() {
 	*x = PropertyFilter{}
-	mi := &file_keystone_proto_msgTypes[29]
+	mi := &file_keystone_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3566,7 +5502,7 @@ func (x *PropertyFilter) String() string {
 func (*PropertyFilter) ProtoMessage() {}
 
 func (x *PropertyFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[29]
+	mi := &file_keystone_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3579,7 +5515,7 @@ func (x *PropertyFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PropertyFilter.ProtoReflect.Descriptor instead.
 func (*PropertyFilter) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{29}
+	return file_keystone_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *PropertyFilter) GetProperty() string {
@@ -3628,7 +5564,7 @@ type PropertySort struct {
 
 func (x *PropertySort) Reset() {
 	*x = PropertySort{}
-	mi := &file_keystone_proto_msgTypes[30]
+	mi := &file_keystone_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3640,7 +5576,7 @@ func (x *PropertySort) String() string {
 func (*PropertySort) ProtoMessage() {}
 
 func (x *PropertySort) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[30]
+	mi := &file_keystone_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3653,7 +5589,7 @@ func (x *PropertySort) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PropertySort.ProtoReflect.Descriptor instead.
 func (*PropertySort) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{30}
+	return file_keystone_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *PropertySort) GetProperty() string {
@@ -3688,7 +5624,7 @@ type SchemaRequest struct {
 
 func (x *SchemaRequest) Reset() {
 	*x = SchemaRequest{}
-	mi := &file_keystone_proto_msgTypes[31]
+	mi := &file_keystone_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3700,7 +5636,7 @@ func (x *SchemaRequest) String() string {
 func (*SchemaRequest) ProtoMessage() {}
 
 func (x *SchemaRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[31]
+	mi := &file_keystone_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3713,7 +5649,7 @@ func (x *SchemaRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SchemaRequest.ProtoReflect.Descriptor instead.
 func (*SchemaRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{31}
+	return file_keystone_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *SchemaRequest) GetAuthorization() *Authorization {
@@ -3752,7 +5688,7 @@ type MutateRequest struct {
 
 func (x *MutateRequest) Reset() {
 	*x = MutateRequest{}
-	mi := &file_keystone_proto_msgTypes[32]
+	mi := &file_keystone_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3764,7 +5700,7 @@ func (x *MutateRequest) String() string {
 func (*MutateRequest) ProtoMessage() {}
 
 func (x *MutateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[32]
+	mi := &file_keystone_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3777,7 +5713,7 @@ func (x *MutateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MutateRequest.ProtoReflect.Descriptor instead.
 func (*MutateRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{32}
+	return file_keystone_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *MutateRequest) GetAuthorization() *Authorization {
@@ -3840,7 +5776,7 @@ type SnapshotReportRequest struct {
 
 func (x *SnapshotReportRequest) Reset() {
 	*x = SnapshotReportRequest{}
-	mi := &file_keystone_proto_msgTypes[33]
+	mi := &file_keystone_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3852,7 +5788,7 @@ func (x *SnapshotReportRequest) String() string {
 func (*SnapshotReportRequest) ProtoMessage() {}
 
 func (x *SnapshotReportRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[33]
+	mi := &file_keystone_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3865,7 +5801,7 @@ func (x *SnapshotReportRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SnapshotReportRequest.ProtoReflect.Descriptor instead.
 func (*SnapshotReportRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{33}
+	return file_keystone_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *SnapshotReportRequest) GetAuthorization() *Authorization {
@@ -3902,7 +5838,7 @@ type ReportTimeSeriesRequest struct {
 
 func (x *ReportTimeSeriesRequest) Reset() {
 	*x = ReportTimeSeriesRequest{}
-	mi := &file_keystone_proto_msgTypes[34]
+	mi := &file_keystone_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3914,7 +5850,7 @@ func (x *ReportTimeSeriesRequest) String() string {
 func (*ReportTimeSeriesRequest) ProtoMessage() {}
 
 func (x *ReportTimeSeriesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[34]
+	mi := &file_keystone_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3927,7 +5863,7 @@ func (x *ReportTimeSeriesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReportTimeSeriesRequest.ProtoReflect.Descriptor instead.
 func (*ReportTimeSeriesRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{34}
+	return file_keystone_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *ReportTimeSeriesRequest) GetAuthorization() *Authorization {
@@ -3989,7 +5925,7 @@ type EntityView struct {
 
 func (x *EntityView) Reset() {
 	*x = EntityView{}
-	mi := &file_keystone_proto_msgTypes[35]
+	mi := &file_keystone_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4001,7 +5937,7 @@ func (x *EntityView) String() string {
 func (*EntityView) ProtoMessage() {}
 
 func (x *EntityView) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[35]
+	mi := &file_keystone_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4014,7 +5950,7 @@ func (x *EntityView) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityView.ProtoReflect.Descriptor instead.
 func (*EntityView) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{35}
+	return file_keystone_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *EntityView) GetName() string {
@@ -4139,7 +6075,7 @@ type TypeCount struct {
 
 func (x *TypeCount) Reset() {
 	*x = TypeCount{}
-	mi := &file_keystone_proto_msgTypes[36]
+	mi := &file_keystone_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4151,7 +6087,7 @@ func (x *TypeCount) String() string {
 func (*TypeCount) ProtoMessage() {}
 
 func (x *TypeCount) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[36]
+	mi := &file_keystone_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4164,7 +6100,7 @@ func (x *TypeCount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TypeCount.ProtoReflect.Descriptor instead.
 func (*TypeCount) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{36}
+	return file_keystone_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *TypeCount) GetType() *Key {
@@ -4195,7 +6131,7 @@ type ChildSummary struct {
 
 func (x *ChildSummary) Reset() {
 	*x = ChildSummary{}
-	mi := &file_keystone_proto_msgTypes[37]
+	mi := &file_keystone_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4207,7 +6143,7 @@ func (x *ChildSummary) String() string {
 func (*ChildSummary) ProtoMessage() {}
 
 func (x *ChildSummary) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[37]
+	mi := &file_keystone_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4220,7 +6156,7 @@ func (x *ChildSummary) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChildSummary.ProtoReflect.Descriptor instead.
 func (*ChildSummary) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{37}
+	return file_keystone_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *ChildSummary) GetType() *Key {
@@ -4282,7 +6218,7 @@ type EntityRequest struct {
 
 func (x *EntityRequest) Reset() {
 	*x = EntityRequest{}
-	mi := &file_keystone_proto_msgTypes[38]
+	mi := &file_keystone_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4294,7 +6230,7 @@ func (x *EntityRequest) String() string {
 func (*EntityRequest) ProtoMessage() {}
 
 func (x *EntityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[38]
+	mi := &file_keystone_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4307,7 +6243,7 @@ func (x *EntityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityRequest.ProtoReflect.Descriptor instead.
 func (*EntityRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{38}
+	return file_keystone_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *EntityRequest) GetAuthorization() *Authorization {
@@ -4396,7 +6332,7 @@ type EntityResponse struct {
 
 func (x *EntityResponse) Reset() {
 	*x = EntityResponse{}
-	mi := &file_keystone_proto_msgTypes[39]
+	mi := &file_keystone_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4408,7 +6344,7 @@ func (x *EntityResponse) String() string {
 func (*EntityResponse) ProtoMessage() {}
 
 func (x *EntityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[39]
+	mi := &file_keystone_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4421,7 +6357,7 @@ func (x *EntityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityResponse.ProtoReflect.Descriptor instead.
 func (*EntityResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{39}
+	return file_keystone_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *EntityResponse) GetEntity() *Entity {
@@ -4541,7 +6477,7 @@ type EntityLock struct {
 
 func (x *EntityLock) Reset() {
 	*x = EntityLock{}
-	mi := &file_keystone_proto_msgTypes[40]
+	mi := &file_keystone_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4553,7 +6489,7 @@ func (x *EntityLock) String() string {
 func (*EntityLock) ProtoMessage() {}
 
 func (x *EntityLock) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[40]
+	mi := &file_keystone_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4566,7 +6502,7 @@ func (x *EntityLock) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityLock.ProtoReflect.Descriptor instead.
 func (*EntityLock) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{40}
+	return file_keystone_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *EntityLock) GetLockAcquired() bool {
@@ -4614,7 +6550,7 @@ type MutateResponse struct {
 
 func (x *MutateResponse) Reset() {
 	*x = MutateResponse{}
-	mi := &file_keystone_proto_msgTypes[41]
+	mi := &file_keystone_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4626,7 +6562,7 @@ func (x *MutateResponse) String() string {
 func (*MutateResponse) ProtoMessage() {}
 
 func (x *MutateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[41]
+	mi := &file_keystone_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4639,7 +6575,7 @@ func (x *MutateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MutateResponse.ProtoReflect.Descriptor instead.
 func (*MutateResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{41}
+	return file_keystone_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *MutateResponse) GetTransactionId() string {
@@ -4716,7 +6652,7 @@ type IDLookup struct {
 
 func (x *IDLookup) Reset() {
 	*x = IDLookup{}
-	mi := &file_keystone_proto_msgTypes[42]
+	mi := &file_keystone_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4728,7 +6664,7 @@ func (x *IDLookup) String() string {
 func (*IDLookup) ProtoMessage() {}
 
 func (x *IDLookup) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[42]
+	mi := &file_keystone_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4741,7 +6677,7 @@ func (x *IDLookup) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IDLookup.ProtoReflect.Descriptor instead.
 func (*IDLookup) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{42}
+	return file_keystone_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *IDLookup) GetSchemaId() string {
@@ -4776,7 +6712,7 @@ type PropertyRequest struct {
 
 func (x *PropertyRequest) Reset() {
 	*x = PropertyRequest{}
-	mi := &file_keystone_proto_msgTypes[43]
+	mi := &file_keystone_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4788,7 +6724,7 @@ func (x *PropertyRequest) String() string {
 func (*PropertyRequest) ProtoMessage() {}
 
 func (x *PropertyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[43]
+	mi := &file_keystone_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4801,7 +6737,7 @@ func (x *PropertyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PropertyRequest.ProtoReflect.Descriptor instead.
 func (*PropertyRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{43}
+	return file_keystone_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *PropertyRequest) GetSource() *VendorApp {
@@ -4835,7 +6771,7 @@ type ChildRequest struct {
 
 func (x *ChildRequest) Reset() {
 	*x = ChildRequest{}
-	mi := &file_keystone_proto_msgTypes[44]
+	mi := &file_keystone_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4847,7 +6783,7 @@ func (x *ChildRequest) String() string {
 func (*ChildRequest) ProtoMessage() {}
 
 func (x *ChildRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[44]
+	mi := &file_keystone_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4860,7 +6796,7 @@ func (x *ChildRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChildRequest.ProtoReflect.Descriptor instead.
 func (*ChildRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{44}
+	return file_keystone_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *ChildRequest) GetType() *Key {
@@ -4891,7 +6827,7 @@ type LogsRequest struct {
 
 func (x *LogsRequest) Reset() {
 	*x = LogsRequest{}
-	mi := &file_keystone_proto_msgTypes[45]
+	mi := &file_keystone_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4903,7 +6839,7 @@ func (x *LogsRequest) String() string {
 func (*LogsRequest) ProtoMessage() {}
 
 func (x *LogsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[45]
+	mi := &file_keystone_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4916,7 +6852,7 @@ func (x *LogsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogsRequest.ProtoReflect.Descriptor instead.
 func (*LogsRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{45}
+	return file_keystone_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *LogsRequest) GetAuthorization() *Authorization {
@@ -4970,7 +6906,7 @@ type LogsResponse struct {
 
 func (x *LogsResponse) Reset() {
 	*x = LogsResponse{}
-	mi := &file_keystone_proto_msgTypes[46]
+	mi := &file_keystone_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4982,7 +6918,7 @@ func (x *LogsResponse) String() string {
 func (*LogsResponse) ProtoMessage() {}
 
 func (x *LogsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[46]
+	mi := &file_keystone_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4995,7 +6931,7 @@ func (x *LogsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogsResponse.ProtoReflect.Descriptor instead.
 func (*LogsResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{46}
+	return file_keystone_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *LogsResponse) GetLogs() []*EntityLog {
@@ -5017,7 +6953,7 @@ type EventRequest struct {
 
 func (x *EventRequest) Reset() {
 	*x = EventRequest{}
-	mi := &file_keystone_proto_msgTypes[47]
+	mi := &file_keystone_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5029,7 +6965,7 @@ func (x *EventRequest) String() string {
 func (*EventRequest) ProtoMessage() {}
 
 func (x *EventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[47]
+	mi := &file_keystone_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5042,7 +6978,7 @@ func (x *EventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventRequest.ProtoReflect.Descriptor instead.
 func (*EventRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{47}
+	return file_keystone_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *EventRequest) GetAuthorization() *Authorization {
@@ -5082,7 +7018,7 @@ type EventsResponse struct {
 
 func (x *EventsResponse) Reset() {
 	*x = EventsResponse{}
-	mi := &file_keystone_proto_msgTypes[48]
+	mi := &file_keystone_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5094,7 +7030,7 @@ func (x *EventsResponse) String() string {
 func (*EventsResponse) ProtoMessage() {}
 
 func (x *EventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[48]
+	mi := &file_keystone_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5107,7 +7043,7 @@ func (x *EventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventsResponse.ProtoReflect.Descriptor instead.
 func (*EventsResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{48}
+	return file_keystone_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *EventsResponse) GetEvents() []*EntityEvent {
@@ -5128,7 +7064,7 @@ type RelationOf struct {
 
 func (x *RelationOf) Reset() {
 	*x = RelationOf{}
-	mi := &file_keystone_proto_msgTypes[49]
+	mi := &file_keystone_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5140,7 +7076,7 @@ func (x *RelationOf) String() string {
 func (*RelationOf) ProtoMessage() {}
 
 func (x *RelationOf) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[49]
+	mi := &file_keystone_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5153,7 +7089,7 @@ func (x *RelationOf) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelationOf.ProtoReflect.Descriptor instead.
 func (*RelationOf) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{49}
+	return file_keystone_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *RelationOf) GetRelationship() *Key {
@@ -5194,7 +7130,7 @@ type FindRequest struct {
 
 func (x *FindRequest) Reset() {
 	*x = FindRequest{}
-	mi := &file_keystone_proto_msgTypes[50]
+	mi := &file_keystone_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5206,7 +7142,7 @@ func (x *FindRequest) String() string {
 func (*FindRequest) ProtoMessage() {}
 
 func (x *FindRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[50]
+	mi := &file_keystone_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5219,7 +7155,7 @@ func (x *FindRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindRequest.ProtoReflect.Descriptor instead.
 func (*FindRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{50}
+	return file_keystone_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *FindRequest) GetAuthorization() *Authorization {
@@ -5291,7 +7227,7 @@ type FindResponse struct {
 
 func (x *FindResponse) Reset() {
 	*x = FindResponse{}
-	mi := &file_keystone_proto_msgTypes[51]
+	mi := &file_keystone_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5303,7 +7239,7 @@ func (x *FindResponse) String() string {
 func (*FindResponse) ProtoMessage() {}
 
 func (x *FindResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[51]
+	mi := &file_keystone_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5316,7 +7252,7 @@ func (x *FindResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindResponse.ProtoReflect.Descriptor instead.
 func (*FindResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{51}
+	return file_keystone_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *FindResponse) GetEntities() []*EntityResponse {
@@ -5358,7 +7294,7 @@ type PageRequest struct {
 
 func (x *PageRequest) Reset() {
 	*x = PageRequest{}
-	mi := &file_keystone_proto_msgTypes[52]
+	mi := &file_keystone_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5370,7 +7306,7 @@ func (x *PageRequest) String() string {
 func (*PageRequest) ProtoMessage() {}
 
 func (x *PageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[52]
+	mi := &file_keystone_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5383,7 +7319,7 @@ func (x *PageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PageRequest.ProtoReflect.Descriptor instead.
 func (*PageRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{52}
+	return file_keystone_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *PageRequest) GetPageNumber() int32 {
@@ -5422,7 +7358,7 @@ type ListRequest struct {
 
 func (x *ListRequest) Reset() {
 	*x = ListRequest{}
-	mi := &file_keystone_proto_msgTypes[53]
+	mi := &file_keystone_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5434,7 +7370,7 @@ func (x *ListRequest) String() string {
 func (*ListRequest) ProtoMessage() {}
 
 func (x *ListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[53]
+	mi := &file_keystone_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5447,7 +7383,7 @@ func (x *ListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRequest.ProtoReflect.Descriptor instead.
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{53}
+	return file_keystone_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *ListRequest) GetAuthorization() *Authorization {
@@ -5505,7 +7441,7 @@ type ListResponse struct {
 
 func (x *ListResponse) Reset() {
 	*x = ListResponse{}
-	mi := &file_keystone_proto_msgTypes[54]
+	mi := &file_keystone_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5517,7 +7453,7 @@ func (x *ListResponse) String() string {
 func (*ListResponse) ProtoMessage() {}
 
 func (x *ListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[54]
+	mi := &file_keystone_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5530,7 +7466,7 @@ func (x *ListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListResponse.ProtoReflect.Descriptor instead.
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{54}
+	return file_keystone_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *ListResponse) GetEntities() []*EntityResponse {
@@ -5590,7 +7526,7 @@ type QueryRequest struct {
 
 func (x *QueryRequest) Reset() {
 	*x = QueryRequest{}
-	mi := &file_keystone_proto_msgTypes[55]
+	mi := &file_keystone_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5602,7 +7538,7 @@ func (x *QueryRequest) String() string {
 func (*QueryRequest) ProtoMessage() {}
 
 func (x *QueryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[55]
+	mi := &file_keystone_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5615,7 +7551,7 @@ func (x *QueryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryRequest.ProtoReflect.Descriptor instead.
 func (*QueryRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{55}
+	return file_keystone_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *QueryRequest) GetAuthorization() *Authorization {
@@ -5768,7 +7704,7 @@ type QueryPredicate struct {
 
 func (x *QueryPredicate) Reset() {
 	*x = QueryPredicate{}
-	mi := &file_keystone_proto_msgTypes[56]
+	mi := &file_keystone_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5780,7 +7716,7 @@ func (x *QueryPredicate) String() string {
 func (*QueryPredicate) ProtoMessage() {}
 
 func (x *QueryPredicate) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[56]
+	mi := &file_keystone_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5793,7 +7729,7 @@ func (x *QueryPredicate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryPredicate.ProtoReflect.Descriptor instead.
 func (*QueryPredicate) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{56}
+	return file_keystone_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *QueryPredicate) GetCondition() isQueryPredicate_Condition {
@@ -5906,7 +7842,7 @@ type QueryPredicateGroup struct {
 
 func (x *QueryPredicateGroup) Reset() {
 	*x = QueryPredicateGroup{}
-	mi := &file_keystone_proto_msgTypes[57]
+	mi := &file_keystone_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5918,7 +7854,7 @@ func (x *QueryPredicateGroup) String() string {
 func (*QueryPredicateGroup) ProtoMessage() {}
 
 func (x *QueryPredicateGroup) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[57]
+	mi := &file_keystone_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5931,7 +7867,7 @@ func (x *QueryPredicateGroup) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryPredicateGroup.ProtoReflect.Descriptor instead.
 func (*QueryPredicateGroup) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{57}
+	return file_keystone_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *QueryPredicateGroup) GetPredicates() []*QueryPredicate {
@@ -5952,7 +7888,7 @@ type QueryRelationship struct {
 
 func (x *QueryRelationship) Reset() {
 	*x = QueryRelationship{}
-	mi := &file_keystone_proto_msgTypes[58]
+	mi := &file_keystone_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5964,7 +7900,7 @@ func (x *QueryRelationship) String() string {
 func (*QueryRelationship) ProtoMessage() {}
 
 func (x *QueryRelationship) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[58]
+	mi := &file_keystone_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5977,7 +7913,7 @@ func (x *QueryRelationship) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryRelationship.ProtoReflect.Descriptor instead.
 func (*QueryRelationship) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{58}
+	return file_keystone_proto_rawDescGZIP(), []int{75}
 }
 
 func (x *QueryRelationship) GetType() *Key {
@@ -6013,7 +7949,7 @@ type QueryAggregate struct {
 
 func (x *QueryAggregate) Reset() {
 	*x = QueryAggregate{}
-	mi := &file_keystone_proto_msgTypes[59]
+	mi := &file_keystone_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6025,7 +7961,7 @@ func (x *QueryAggregate) String() string {
 func (*QueryAggregate) ProtoMessage() {}
 
 func (x *QueryAggregate) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[59]
+	mi := &file_keystone_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6038,7 +7974,7 @@ func (x *QueryAggregate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryAggregate.ProtoReflect.Descriptor instead.
 func (*QueryAggregate) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{59}
+	return file_keystone_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *QueryAggregate) GetFunction() QueryAggregate_Function {
@@ -6081,7 +8017,7 @@ type QueryInclude struct {
 
 func (x *QueryInclude) Reset() {
 	*x = QueryInclude{}
-	mi := &file_keystone_proto_msgTypes[60]
+	mi := &file_keystone_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6093,7 +8029,7 @@ func (x *QueryInclude) String() string {
 func (*QueryInclude) ProtoMessage() {}
 
 func (x *QueryInclude) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[60]
+	mi := &file_keystone_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6106,7 +8042,7 @@ func (x *QueryInclude) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryInclude.ProtoReflect.Descriptor instead.
 func (*QueryInclude) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{60}
+	return file_keystone_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *QueryInclude) GetLabels() bool {
@@ -6146,7 +8082,7 @@ type QueryRow struct {
 
 func (x *QueryRow) Reset() {
 	*x = QueryRow{}
-	mi := &file_keystone_proto_msgTypes[61]
+	mi := &file_keystone_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6158,7 +8094,7 @@ func (x *QueryRow) String() string {
 func (*QueryRow) ProtoMessage() {}
 
 func (x *QueryRow) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[61]
+	mi := &file_keystone_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6171,7 +8107,7 @@ func (x *QueryRow) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryRow.ProtoReflect.Descriptor instead.
 func (*QueryRow) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{61}
+	return file_keystone_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *QueryRow) GetValues() map[string]*Value {
@@ -6196,7 +8132,7 @@ type QueryExecution struct {
 
 func (x *QueryExecution) Reset() {
 	*x = QueryExecution{}
-	mi := &file_keystone_proto_msgTypes[62]
+	mi := &file_keystone_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6208,7 +8144,7 @@ func (x *QueryExecution) String() string {
 func (*QueryExecution) ProtoMessage() {}
 
 func (x *QueryExecution) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[62]
+	mi := &file_keystone_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6221,7 +8157,7 @@ func (x *QueryExecution) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryExecution.ProtoReflect.Descriptor instead.
 func (*QueryExecution) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{62}
+	return file_keystone_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *QueryExecution) GetStrategy() string {
@@ -6282,7 +8218,7 @@ type EntityIDList struct {
 
 func (x *EntityIDList) Reset() {
 	*x = EntityIDList{}
-	mi := &file_keystone_proto_msgTypes[63]
+	mi := &file_keystone_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6294,7 +8230,7 @@ func (x *EntityIDList) String() string {
 func (*EntityIDList) ProtoMessage() {}
 
 func (x *EntityIDList) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[63]
+	mi := &file_keystone_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6307,7 +8243,7 @@ func (x *EntityIDList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityIDList.ProtoReflect.Descriptor instead.
 func (*EntityIDList) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{63}
+	return file_keystone_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *EntityIDList) GetValues() []string {
@@ -6333,7 +8269,7 @@ type QueryResponse struct {
 
 func (x *QueryResponse) Reset() {
 	*x = QueryResponse{}
-	mi := &file_keystone_proto_msgTypes[64]
+	mi := &file_keystone_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6345,7 +8281,7 @@ func (x *QueryResponse) String() string {
 func (*QueryResponse) ProtoMessage() {}
 
 func (x *QueryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[64]
+	mi := &file_keystone_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6358,7 +8294,7 @@ func (x *QueryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryResponse.ProtoReflect.Descriptor instead.
 func (*QueryResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{64}
+	return file_keystone_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *QueryResponse) GetEntities() []*EntityResponse {
@@ -6433,7 +8369,7 @@ type QueryIndexRequest struct {
 
 func (x *QueryIndexRequest) Reset() {
 	*x = QueryIndexRequest{}
-	mi := &file_keystone_proto_msgTypes[65]
+	mi := &file_keystone_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6445,7 +8381,7 @@ func (x *QueryIndexRequest) String() string {
 func (*QueryIndexRequest) ProtoMessage() {}
 
 func (x *QueryIndexRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[65]
+	mi := &file_keystone_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6458,7 +8394,7 @@ func (x *QueryIndexRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryIndexRequest.ProtoReflect.Descriptor instead.
 func (*QueryIndexRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{65}
+	return file_keystone_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *QueryIndexRequest) GetAuthorization() *Authorization {
@@ -6529,7 +8465,7 @@ type QueryIndexResponse struct {
 
 func (x *QueryIndexResponse) Reset() {
 	*x = QueryIndexResponse{}
-	mi := &file_keystone_proto_msgTypes[66]
+	mi := &file_keystone_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6541,7 +8477,7 @@ func (x *QueryIndexResponse) String() string {
 func (*QueryIndexResponse) ProtoMessage() {}
 
 func (x *QueryIndexResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[66]
+	mi := &file_keystone_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6554,7 +8490,7 @@ func (x *QueryIndexResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryIndexResponse.ProtoReflect.Descriptor instead.
 func (*QueryIndexResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{66}
+	return file_keystone_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *QueryIndexResponse) GetEntities() []*EntityResponse {
@@ -6598,7 +8534,7 @@ type GroupCountRequest struct {
 
 func (x *GroupCountRequest) Reset() {
 	*x = GroupCountRequest{}
-	mi := &file_keystone_proto_msgTypes[67]
+	mi := &file_keystone_proto_msgTypes[84]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6610,7 +8546,7 @@ func (x *GroupCountRequest) String() string {
 func (*GroupCountRequest) ProtoMessage() {}
 
 func (x *GroupCountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[67]
+	mi := &file_keystone_proto_msgTypes[84]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6623,7 +8559,7 @@ func (x *GroupCountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupCountRequest.ProtoReflect.Descriptor instead.
 func (*GroupCountRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{67}
+	return file_keystone_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *GroupCountRequest) GetAuthorization() *Authorization {
@@ -6670,7 +8606,7 @@ type GroupCountResponse struct {
 
 func (x *GroupCountResponse) Reset() {
 	*x = GroupCountResponse{}
-	mi := &file_keystone_proto_msgTypes[68]
+	mi := &file_keystone_proto_msgTypes[85]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6682,7 +8618,7 @@ func (x *GroupCountResponse) String() string {
 func (*GroupCountResponse) ProtoMessage() {}
 
 func (x *GroupCountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[68]
+	mi := &file_keystone_proto_msgTypes[85]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6695,7 +8631,7 @@ func (x *GroupCountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupCountResponse.ProtoReflect.Descriptor instead.
 func (*GroupCountResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{68}
+	return file_keystone_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *GroupCountResponse) GetResults() []*GroupCountResponse_Result {
@@ -6714,7 +8650,7 @@ type EntitiesResponse struct {
 
 func (x *EntitiesResponse) Reset() {
 	*x = EntitiesResponse{}
-	mi := &file_keystone_proto_msgTypes[69]
+	mi := &file_keystone_proto_msgTypes[86]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6726,7 +8662,7 @@ func (x *EntitiesResponse) String() string {
 func (*EntitiesResponse) ProtoMessage() {}
 
 func (x *EntitiesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[69]
+	mi := &file_keystone_proto_msgTypes[86]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6739,7 +8675,7 @@ func (x *EntitiesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntitiesResponse.ProtoReflect.Descriptor instead.
 func (*EntitiesResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{69}
+	return file_keystone_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *EntitiesResponse) GetEntities() []*EntityResponse {
@@ -6760,7 +8696,7 @@ type Date struct {
 
 func (x *Date) Reset() {
 	*x = Date{}
-	mi := &file_keystone_proto_msgTypes[70]
+	mi := &file_keystone_proto_msgTypes[87]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6772,7 +8708,7 @@ func (x *Date) String() string {
 func (*Date) ProtoMessage() {}
 
 func (x *Date) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[70]
+	mi := &file_keystone_proto_msgTypes[87]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6785,7 +8721,7 @@ func (x *Date) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Date.ProtoReflect.Descriptor instead.
 func (*Date) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{70}
+	return file_keystone_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *Date) GetYear() int32 {
@@ -6823,7 +8759,7 @@ type SchemaStatisticsRequest struct {
 
 func (x *SchemaStatisticsRequest) Reset() {
 	*x = SchemaStatisticsRequest{}
-	mi := &file_keystone_proto_msgTypes[71]
+	mi := &file_keystone_proto_msgTypes[88]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6835,7 +8771,7 @@ func (x *SchemaStatisticsRequest) String() string {
 func (*SchemaStatisticsRequest) ProtoMessage() {}
 
 func (x *SchemaStatisticsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[71]
+	mi := &file_keystone_proto_msgTypes[88]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6848,7 +8784,7 @@ func (x *SchemaStatisticsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SchemaStatisticsRequest.ProtoReflect.Descriptor instead.
 func (*SchemaStatisticsRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{71}
+	return file_keystone_proto_rawDescGZIP(), []int{88}
 }
 
 func (x *SchemaStatisticsRequest) GetAuthorization() *Authorization {
@@ -6903,7 +8839,7 @@ type SchemaStatisticsResponse struct {
 
 func (x *SchemaStatisticsResponse) Reset() {
 	*x = SchemaStatisticsResponse{}
-	mi := &file_keystone_proto_msgTypes[72]
+	mi := &file_keystone_proto_msgTypes[89]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6915,7 +8851,7 @@ func (x *SchemaStatisticsResponse) String() string {
 func (*SchemaStatisticsResponse) ProtoMessage() {}
 
 func (x *SchemaStatisticsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[72]
+	mi := &file_keystone_proto_msgTypes[89]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6928,7 +8864,7 @@ func (x *SchemaStatisticsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SchemaStatisticsResponse.ProtoReflect.Descriptor instead.
 func (*SchemaStatisticsResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{72}
+	return file_keystone_proto_rawDescGZIP(), []int{89}
 }
 
 func (x *SchemaStatisticsResponse) GetDailyCount() map[string]int64 {
@@ -6959,7 +8895,7 @@ type DailyEntityRequest struct {
 
 func (x *DailyEntityRequest) Reset() {
 	*x = DailyEntityRequest{}
-	mi := &file_keystone_proto_msgTypes[73]
+	mi := &file_keystone_proto_msgTypes[90]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6971,7 +8907,7 @@ func (x *DailyEntityRequest) String() string {
 func (*DailyEntityRequest) ProtoMessage() {}
 
 func (x *DailyEntityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[73]
+	mi := &file_keystone_proto_msgTypes[90]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6984,7 +8920,7 @@ func (x *DailyEntityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DailyEntityRequest.ProtoReflect.Descriptor instead.
 func (*DailyEntityRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{73}
+	return file_keystone_proto_rawDescGZIP(), []int{90}
 }
 
 func (x *DailyEntityRequest) GetAuthorization() *Authorization {
@@ -7040,7 +8976,7 @@ type DailyEntityResponse struct {
 
 func (x *DailyEntityResponse) Reset() {
 	*x = DailyEntityResponse{}
-	mi := &file_keystone_proto_msgTypes[74]
+	mi := &file_keystone_proto_msgTypes[91]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7052,7 +8988,7 @@ func (x *DailyEntityResponse) String() string {
 func (*DailyEntityResponse) ProtoMessage() {}
 
 func (x *DailyEntityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[74]
+	mi := &file_keystone_proto_msgTypes[91]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7065,7 +9001,7 @@ func (x *DailyEntityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DailyEntityResponse.ProtoReflect.Descriptor instead.
 func (*DailyEntityResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{74}
+	return file_keystone_proto_rawDescGZIP(), []int{91}
 }
 
 func (x *DailyEntityResponse) GetEntities() map[string]string {
@@ -7107,7 +9043,7 @@ type ChartTimeSeriesRequest struct {
 
 func (x *ChartTimeSeriesRequest) Reset() {
 	*x = ChartTimeSeriesRequest{}
-	mi := &file_keystone_proto_msgTypes[75]
+	mi := &file_keystone_proto_msgTypes[92]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7119,7 +9055,7 @@ func (x *ChartTimeSeriesRequest) String() string {
 func (*ChartTimeSeriesRequest) ProtoMessage() {}
 
 func (x *ChartTimeSeriesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[75]
+	mi := &file_keystone_proto_msgTypes[92]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7132,7 +9068,7 @@ func (x *ChartTimeSeriesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChartTimeSeriesRequest.ProtoReflect.Descriptor instead.
 func (*ChartTimeSeriesRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{75}
+	return file_keystone_proto_rawDescGZIP(), []int{92}
 }
 
 func (x *ChartTimeSeriesRequest) GetAuthorization() *Authorization {
@@ -7216,7 +9152,7 @@ type PropertyAggregation struct {
 
 func (x *PropertyAggregation) Reset() {
 	*x = PropertyAggregation{}
-	mi := &file_keystone_proto_msgTypes[76]
+	mi := &file_keystone_proto_msgTypes[93]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7228,7 +9164,7 @@ func (x *PropertyAggregation) String() string {
 func (*PropertyAggregation) ProtoMessage() {}
 
 func (x *PropertyAggregation) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[76]
+	mi := &file_keystone_proto_msgTypes[93]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7241,7 +9177,7 @@ func (x *PropertyAggregation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PropertyAggregation.ProtoReflect.Descriptor instead.
 func (*PropertyAggregation) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{76}
+	return file_keystone_proto_rawDescGZIP(), []int{93}
 }
 
 func (x *PropertyAggregation) GetProperty() string {
@@ -7274,7 +9210,7 @@ type ChartTimeSeriesResponse struct {
 
 func (x *ChartTimeSeriesResponse) Reset() {
 	*x = ChartTimeSeriesResponse{}
-	mi := &file_keystone_proto_msgTypes[77]
+	mi := &file_keystone_proto_msgTypes[94]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7286,7 +9222,7 @@ func (x *ChartTimeSeriesResponse) String() string {
 func (*ChartTimeSeriesResponse) ProtoMessage() {}
 
 func (x *ChartTimeSeriesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[77]
+	mi := &file_keystone_proto_msgTypes[94]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7299,7 +9235,7 @@ func (x *ChartTimeSeriesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChartTimeSeriesResponse.ProtoReflect.Descriptor instead.
 func (*ChartTimeSeriesResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{77}
+	return file_keystone_proto_rawDescGZIP(), []int{94}
 }
 
 func (x *ChartTimeSeriesResponse) GetSeries() map[string]*ChartTimeSeriesResponse_ChartSeries {
@@ -7327,7 +9263,7 @@ type ShareViewRequest struct {
 
 func (x *ShareViewRequest) Reset() {
 	*x = ShareViewRequest{}
-	mi := &file_keystone_proto_msgTypes[78]
+	mi := &file_keystone_proto_msgTypes[95]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7339,7 +9275,7 @@ func (x *ShareViewRequest) String() string {
 func (*ShareViewRequest) ProtoMessage() {}
 
 func (x *ShareViewRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[78]
+	mi := &file_keystone_proto_msgTypes[95]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7352,7 +9288,7 @@ func (x *ShareViewRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ShareViewRequest.ProtoReflect.Descriptor instead.
 func (*ShareViewRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{78}
+	return file_keystone_proto_rawDescGZIP(), []int{95}
 }
 
 func (x *ShareViewRequest) GetAuthorization() *Authorization {
@@ -7445,7 +9381,7 @@ type SharedViewResponse struct {
 
 func (x *SharedViewResponse) Reset() {
 	*x = SharedViewResponse{}
-	mi := &file_keystone_proto_msgTypes[79]
+	mi := &file_keystone_proto_msgTypes[96]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7457,7 +9393,7 @@ func (x *SharedViewResponse) String() string {
 func (*SharedViewResponse) ProtoMessage() {}
 
 func (x *SharedViewResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[79]
+	mi := &file_keystone_proto_msgTypes[96]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7470,7 +9406,7 @@ func (x *SharedViewResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SharedViewResponse.ProtoReflect.Descriptor instead.
 func (*SharedViewResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{79}
+	return file_keystone_proto_rawDescGZIP(), []int{96}
 }
 
 func (x *SharedViewResponse) GetSuccess() bool {
@@ -7570,7 +9506,7 @@ type SharedViewsRequest struct {
 
 func (x *SharedViewsRequest) Reset() {
 	*x = SharedViewsRequest{}
-	mi := &file_keystone_proto_msgTypes[80]
+	mi := &file_keystone_proto_msgTypes[97]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7582,7 +9518,7 @@ func (x *SharedViewsRequest) String() string {
 func (*SharedViewsRequest) ProtoMessage() {}
 
 func (x *SharedViewsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[80]
+	mi := &file_keystone_proto_msgTypes[97]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7595,7 +9531,7 @@ func (x *SharedViewsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SharedViewsRequest.ProtoReflect.Descriptor instead.
 func (*SharedViewsRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{80}
+	return file_keystone_proto_rawDescGZIP(), []int{97}
 }
 
 func (x *SharedViewsRequest) GetAuthorization() *Authorization {
@@ -7642,7 +9578,7 @@ type SharedViewsResponse struct {
 
 func (x *SharedViewsResponse) Reset() {
 	*x = SharedViewsResponse{}
-	mi := &file_keystone_proto_msgTypes[81]
+	mi := &file_keystone_proto_msgTypes[98]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7654,7 +9590,7 @@ func (x *SharedViewsResponse) String() string {
 func (*SharedViewsResponse) ProtoMessage() {}
 
 func (x *SharedViewsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[81]
+	mi := &file_keystone_proto_msgTypes[98]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7667,7 +9603,7 @@ func (x *SharedViewsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SharedViewsResponse.ProtoReflect.Descriptor instead.
 func (*SharedViewsResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{81}
+	return file_keystone_proto_rawDescGZIP(), []int{98}
 }
 
 func (x *SharedViewsResponse) GetViews() []*SharedViewResponse {
@@ -7692,7 +9628,7 @@ type RateLimitRequest struct {
 
 func (x *RateLimitRequest) Reset() {
 	*x = RateLimitRequest{}
-	mi := &file_keystone_proto_msgTypes[82]
+	mi := &file_keystone_proto_msgTypes[99]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7704,7 +9640,7 @@ func (x *RateLimitRequest) String() string {
 func (*RateLimitRequest) ProtoMessage() {}
 
 func (x *RateLimitRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[82]
+	mi := &file_keystone_proto_msgTypes[99]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7717,7 +9653,7 @@ func (x *RateLimitRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RateLimitRequest.ProtoReflect.Descriptor instead.
 func (*RateLimitRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{82}
+	return file_keystone_proto_rawDescGZIP(), []int{99}
 }
 
 func (x *RateLimitRequest) GetAuthorization() *Authorization {
@@ -7779,7 +9715,7 @@ type RateLimitResponse struct {
 
 func (x *RateLimitResponse) Reset() {
 	*x = RateLimitResponse{}
-	mi := &file_keystone_proto_msgTypes[83]
+	mi := &file_keystone_proto_msgTypes[100]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7791,7 +9727,7 @@ func (x *RateLimitResponse) String() string {
 func (*RateLimitResponse) ProtoMessage() {}
 
 func (x *RateLimitResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[83]
+	mi := &file_keystone_proto_msgTypes[100]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7804,7 +9740,7 @@ func (x *RateLimitResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RateLimitResponse.ProtoReflect.Descriptor instead.
 func (*RateLimitResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{83}
+	return file_keystone_proto_rawDescGZIP(), []int{100}
 }
 
 func (x *RateLimitResponse) GetCurrentCount() int32 {
@@ -7833,7 +9769,7 @@ type LookupRequest struct {
 
 func (x *LookupRequest) Reset() {
 	*x = LookupRequest{}
-	mi := &file_keystone_proto_msgTypes[84]
+	mi := &file_keystone_proto_msgTypes[101]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7845,7 +9781,7 @@ func (x *LookupRequest) String() string {
 func (*LookupRequest) ProtoMessage() {}
 
 func (x *LookupRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[84]
+	mi := &file_keystone_proto_msgTypes[101]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7858,7 +9794,7 @@ func (x *LookupRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LookupRequest.ProtoReflect.Descriptor instead.
 func (*LookupRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{84}
+	return file_keystone_proto_rawDescGZIP(), []int{101}
 }
 
 func (x *LookupRequest) GetAuthorization() *Authorization {
@@ -7898,7 +9834,7 @@ type LookupResponse struct {
 
 func (x *LookupResponse) Reset() {
 	*x = LookupResponse{}
-	mi := &file_keystone_proto_msgTypes[85]
+	mi := &file_keystone_proto_msgTypes[102]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7910,7 +9846,7 @@ func (x *LookupResponse) String() string {
 func (*LookupResponse) ProtoMessage() {}
 
 func (x *LookupResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[85]
+	mi := &file_keystone_proto_msgTypes[102]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7923,7 +9859,7 @@ func (x *LookupResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LookupResponse.ProtoReflect.Descriptor instead.
 func (*LookupResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{85}
+	return file_keystone_proto_rawDescGZIP(), []int{102}
 }
 
 func (x *LookupResponse) GetResults() []*EntityReference {
@@ -7945,7 +9881,7 @@ type EntityReference struct {
 
 func (x *EntityReference) Reset() {
 	*x = EntityReference{}
-	mi := &file_keystone_proto_msgTypes[86]
+	mi := &file_keystone_proto_msgTypes[103]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7957,7 +9893,7 @@ func (x *EntityReference) String() string {
 func (*EntityReference) ProtoMessage() {}
 
 func (x *EntityReference) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[86]
+	mi := &file_keystone_proto_msgTypes[103]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7970,7 +9906,7 @@ func (x *EntityReference) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityReference.ProtoReflect.Descriptor instead.
 func (*EntityReference) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{86}
+	return file_keystone_proto_rawDescGZIP(), []int{103}
 }
 
 func (x *EntityReference) GetEntityId() string {
@@ -8011,7 +9947,7 @@ type AKVPutRequest struct {
 
 func (x *AKVPutRequest) Reset() {
 	*x = AKVPutRequest{}
-	mi := &file_keystone_proto_msgTypes[87]
+	mi := &file_keystone_proto_msgTypes[104]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8023,7 +9959,7 @@ func (x *AKVPutRequest) String() string {
 func (*AKVPutRequest) ProtoMessage() {}
 
 func (x *AKVPutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[87]
+	mi := &file_keystone_proto_msgTypes[104]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8036,7 +9972,7 @@ func (x *AKVPutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVPutRequest.ProtoReflect.Descriptor instead.
 func (*AKVPutRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{87}
+	return file_keystone_proto_rawDescGZIP(), []int{104}
 }
 
 func (x *AKVPutRequest) GetAuthorization() *Authorization {
@@ -8063,7 +9999,7 @@ type AKVGetRequest struct {
 
 func (x *AKVGetRequest) Reset() {
 	*x = AKVGetRequest{}
-	mi := &file_keystone_proto_msgTypes[88]
+	mi := &file_keystone_proto_msgTypes[105]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8075,7 +10011,7 @@ func (x *AKVGetRequest) String() string {
 func (*AKVGetRequest) ProtoMessage() {}
 
 func (x *AKVGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[88]
+	mi := &file_keystone_proto_msgTypes[105]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8088,7 +10024,7 @@ func (x *AKVGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVGetRequest.ProtoReflect.Descriptor instead.
 func (*AKVGetRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{88}
+	return file_keystone_proto_rawDescGZIP(), []int{105}
 }
 
 func (x *AKVGetRequest) GetAuthorization() *Authorization {
@@ -8115,7 +10051,7 @@ type AKVGetResponse struct {
 
 func (x *AKVGetResponse) Reset() {
 	*x = AKVGetResponse{}
-	mi := &file_keystone_proto_msgTypes[89]
+	mi := &file_keystone_proto_msgTypes[106]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8127,7 +10063,7 @@ func (x *AKVGetResponse) String() string {
 func (*AKVGetResponse) ProtoMessage() {}
 
 func (x *AKVGetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[89]
+	mi := &file_keystone_proto_msgTypes[106]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8140,7 +10076,7 @@ func (x *AKVGetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVGetResponse.ProtoReflect.Descriptor instead.
 func (*AKVGetResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{89}
+	return file_keystone_proto_rawDescGZIP(), []int{106}
 }
 
 func (x *AKVGetResponse) GetSummary() *GenericResponse {
@@ -8167,7 +10103,7 @@ type AKVDelRequest struct {
 
 func (x *AKVDelRequest) Reset() {
 	*x = AKVDelRequest{}
-	mi := &file_keystone_proto_msgTypes[90]
+	mi := &file_keystone_proto_msgTypes[107]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8179,7 +10115,7 @@ func (x *AKVDelRequest) String() string {
 func (*AKVDelRequest) ProtoMessage() {}
 
 func (x *AKVDelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[90]
+	mi := &file_keystone_proto_msgTypes[107]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8192,7 +10128,7 @@ func (x *AKVDelRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVDelRequest.ProtoReflect.Descriptor instead.
 func (*AKVDelRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{90}
+	return file_keystone_proto_rawDescGZIP(), []int{107}
 }
 
 func (x *AKVDelRequest) GetAuthorization() *Authorization {
@@ -8219,7 +10155,7 @@ type AKVProperty struct {
 
 func (x *AKVProperty) Reset() {
 	*x = AKVProperty{}
-	mi := &file_keystone_proto_msgTypes[91]
+	mi := &file_keystone_proto_msgTypes[108]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8231,7 +10167,7 @@ func (x *AKVProperty) String() string {
 func (*AKVProperty) ProtoMessage() {}
 
 func (x *AKVProperty) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[91]
+	mi := &file_keystone_proto_msgTypes[108]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8244,7 +10180,7 @@ func (x *AKVProperty) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVProperty.ProtoReflect.Descriptor instead.
 func (*AKVProperty) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{91}
+	return file_keystone_proto_rawDescGZIP(), []int{108}
 }
 
 func (x *AKVProperty) GetProperty() *Property {
@@ -8273,7 +10209,7 @@ type IIDCreateRequest struct {
 
 func (x *IIDCreateRequest) Reset() {
 	*x = IIDCreateRequest{}
-	mi := &file_keystone_proto_msgTypes[92]
+	mi := &file_keystone_proto_msgTypes[109]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8285,7 +10221,7 @@ func (x *IIDCreateRequest) String() string {
 func (*IIDCreateRequest) ProtoMessage() {}
 
 func (x *IIDCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[92]
+	mi := &file_keystone_proto_msgTypes[109]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8298,7 +10234,7 @@ func (x *IIDCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IIDCreateRequest.ProtoReflect.Descriptor instead.
 func (*IIDCreateRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{92}
+	return file_keystone_proto_rawDescGZIP(), []int{109}
 }
 
 func (x *IIDCreateRequest) GetAuthorization() *Authorization {
@@ -8340,7 +10276,7 @@ type IIDRequest struct {
 
 func (x *IIDRequest) Reset() {
 	*x = IIDRequest{}
-	mi := &file_keystone_proto_msgTypes[93]
+	mi := &file_keystone_proto_msgTypes[110]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8352,7 +10288,7 @@ func (x *IIDRequest) String() string {
 func (*IIDRequest) ProtoMessage() {}
 
 func (x *IIDRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[93]
+	mi := &file_keystone_proto_msgTypes[110]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8365,7 +10301,7 @@ func (x *IIDRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IIDRequest.ProtoReflect.Descriptor instead.
 func (*IIDRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{93}
+	return file_keystone_proto_rawDescGZIP(), []int{110}
 }
 
 func (x *IIDRequest) GetAuthorization() *Authorization {
@@ -8398,7 +10334,7 @@ type IIDsResponse struct {
 
 func (x *IIDsResponse) Reset() {
 	*x = IIDsResponse{}
-	mi := &file_keystone_proto_msgTypes[94]
+	mi := &file_keystone_proto_msgTypes[111]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8410,7 +10346,7 @@ func (x *IIDsResponse) String() string {
 func (*IIDsResponse) ProtoMessage() {}
 
 func (x *IIDsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[94]
+	mi := &file_keystone_proto_msgTypes[111]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8423,7 +10359,7 @@ func (x *IIDsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IIDsResponse.ProtoReflect.Descriptor instead.
 func (*IIDsResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{94}
+	return file_keystone_proto_rawDescGZIP(), []int{111}
 }
 
 func (x *IIDsResponse) GetIids() []*IIDResponse {
@@ -8445,7 +10381,7 @@ type IIDResponse struct {
 
 func (x *IIDResponse) Reset() {
 	*x = IIDResponse{}
-	mi := &file_keystone_proto_msgTypes[95]
+	mi := &file_keystone_proto_msgTypes[112]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8457,7 +10393,7 @@ func (x *IIDResponse) String() string {
 func (*IIDResponse) ProtoMessage() {}
 
 func (x *IIDResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[95]
+	mi := &file_keystone_proto_msgTypes[112]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8470,7 +10406,7 @@ func (x *IIDResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IIDResponse.ProtoReflect.Descriptor instead.
 func (*IIDResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{95}
+	return file_keystone_proto_rawDescGZIP(), []int{112}
 }
 
 func (x *IIDResponse) GetIid() string {
@@ -8518,7 +10454,7 @@ type EventStreamRequest struct {
 
 func (x *EventStreamRequest) Reset() {
 	*x = EventStreamRequest{}
-	mi := &file_keystone_proto_msgTypes[96]
+	mi := &file_keystone_proto_msgTypes[113]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8530,7 +10466,7 @@ func (x *EventStreamRequest) String() string {
 func (*EventStreamRequest) ProtoMessage() {}
 
 func (x *EventStreamRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[96]
+	mi := &file_keystone_proto_msgTypes[113]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8543,7 +10479,7 @@ func (x *EventStreamRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventStreamRequest.ProtoReflect.Descriptor instead.
 func (*EventStreamRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{96}
+	return file_keystone_proto_rawDescGZIP(), []int{113}
 }
 
 func (x *EventStreamRequest) GetAuthorization() *Authorization {
@@ -8610,7 +10546,7 @@ type EventStreamResponse struct {
 
 func (x *EventStreamResponse) Reset() {
 	*x = EventStreamResponse{}
-	mi := &file_keystone_proto_msgTypes[97]
+	mi := &file_keystone_proto_msgTypes[114]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8622,7 +10558,7 @@ func (x *EventStreamResponse) String() string {
 func (*EventStreamResponse) ProtoMessage() {}
 
 func (x *EventStreamResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[97]
+	mi := &file_keystone_proto_msgTypes[114]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8635,7 +10571,7 @@ func (x *EventStreamResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventStreamResponse.ProtoReflect.Descriptor instead.
 func (*EventStreamResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{97}
+	return file_keystone_proto_rawDescGZIP(), []int{114}
 }
 
 func (x *EventStreamResponse) GetWs() string {
@@ -8685,7 +10621,7 @@ type PushTaskRequest struct {
 
 func (x *PushTaskRequest) Reset() {
 	*x = PushTaskRequest{}
-	mi := &file_keystone_proto_msgTypes[98]
+	mi := &file_keystone_proto_msgTypes[115]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8697,7 +10633,7 @@ func (x *PushTaskRequest) String() string {
 func (*PushTaskRequest) ProtoMessage() {}
 
 func (x *PushTaskRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[98]
+	mi := &file_keystone_proto_msgTypes[115]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8710,7 +10646,7 @@ func (x *PushTaskRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PushTaskRequest.ProtoReflect.Descriptor instead.
 func (*PushTaskRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{98}
+	return file_keystone_proto_rawDescGZIP(), []int{115}
 }
 
 func (x *PushTaskRequest) GetAuthorization() *Authorization {
@@ -8753,7 +10689,7 @@ type TaskAckRequest struct {
 
 func (x *TaskAckRequest) Reset() {
 	*x = TaskAckRequest{}
-	mi := &file_keystone_proto_msgTypes[99]
+	mi := &file_keystone_proto_msgTypes[116]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8765,7 +10701,7 @@ func (x *TaskAckRequest) String() string {
 func (*TaskAckRequest) ProtoMessage() {}
 
 func (x *TaskAckRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[99]
+	mi := &file_keystone_proto_msgTypes[116]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8778,7 +10714,7 @@ func (x *TaskAckRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskAckRequest.ProtoReflect.Descriptor instead.
 func (*TaskAckRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{99}
+	return file_keystone_proto_rawDescGZIP(), []int{116}
 }
 
 func (x *TaskAckRequest) GetTaskId() string {
@@ -8806,7 +10742,7 @@ type TaskResponse struct {
 
 func (x *TaskResponse) Reset() {
 	*x = TaskResponse{}
-	mi := &file_keystone_proto_msgTypes[100]
+	mi := &file_keystone_proto_msgTypes[117]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8818,7 +10754,7 @@ func (x *TaskResponse) String() string {
 func (*TaskResponse) ProtoMessage() {}
 
 func (x *TaskResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[100]
+	mi := &file_keystone_proto_msgTypes[117]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8831,7 +10767,7 @@ func (x *TaskResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskResponse.ProtoReflect.Descriptor instead.
 func (*TaskResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{100}
+	return file_keystone_proto_rawDescGZIP(), []int{117}
 }
 
 func (x *TaskResponse) GetWs() string {
@@ -8867,7 +10803,7 @@ type DestroyRequest struct {
 
 func (x *DestroyRequest) Reset() {
 	*x = DestroyRequest{}
-	mi := &file_keystone_proto_msgTypes[101]
+	mi := &file_keystone_proto_msgTypes[118]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8879,7 +10815,7 @@ func (x *DestroyRequest) String() string {
 func (*DestroyRequest) ProtoMessage() {}
 
 func (x *DestroyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[101]
+	mi := &file_keystone_proto_msgTypes[118]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8892,7 +10828,7 @@ func (x *DestroyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DestroyRequest.ProtoReflect.Descriptor instead.
 func (*DestroyRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{101}
+	return file_keystone_proto_rawDescGZIP(), []int{118}
 }
 
 func (x *DestroyRequest) GetAuthorization() *Authorization {
@@ -8932,7 +10868,7 @@ type DestroyResponse struct {
 
 func (x *DestroyResponse) Reset() {
 	*x = DestroyResponse{}
-	mi := &file_keystone_proto_msgTypes[102]
+	mi := &file_keystone_proto_msgTypes[119]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8944,7 +10880,7 @@ func (x *DestroyResponse) String() string {
 func (*DestroyResponse) ProtoMessage() {}
 
 func (x *DestroyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[102]
+	mi := &file_keystone_proto_msgTypes[119]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8957,7 +10893,7 @@ func (x *DestroyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DestroyResponse.ProtoReflect.Descriptor instead.
 func (*DestroyResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{102}
+	return file_keystone_proto_rawDescGZIP(), []int{119}
 }
 
 func (x *DestroyResponse) GetDestroyed() bool {
@@ -8977,7 +10913,7 @@ type SquidRequest struct {
 
 func (x *SquidRequest) Reset() {
 	*x = SquidRequest{}
-	mi := &file_keystone_proto_msgTypes[103]
+	mi := &file_keystone_proto_msgTypes[120]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8989,7 +10925,7 @@ func (x *SquidRequest) String() string {
 func (*SquidRequest) ProtoMessage() {}
 
 func (x *SquidRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[103]
+	mi := &file_keystone_proto_msgTypes[120]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9002,7 +10938,7 @@ func (x *SquidRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SquidRequest.ProtoReflect.Descriptor instead.
 func (*SquidRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{103}
+	return file_keystone_proto_rawDescGZIP(), []int{120}
 }
 
 func (x *SquidRequest) GetAuthorization() *Authorization {
@@ -9030,7 +10966,7 @@ type SquidRecoverRequest struct {
 
 func (x *SquidRecoverRequest) Reset() {
 	*x = SquidRecoverRequest{}
-	mi := &file_keystone_proto_msgTypes[104]
+	mi := &file_keystone_proto_msgTypes[121]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9042,7 +10978,7 @@ func (x *SquidRecoverRequest) String() string {
 func (*SquidRecoverRequest) ProtoMessage() {}
 
 func (x *SquidRecoverRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[104]
+	mi := &file_keystone_proto_msgTypes[121]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9055,7 +10991,7 @@ func (x *SquidRecoverRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SquidRecoverRequest.ProtoReflect.Descriptor instead.
 func (*SquidRecoverRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{104}
+	return file_keystone_proto_rawDescGZIP(), []int{121}
 }
 
 func (x *SquidRecoverRequest) GetAuthorization() *Authorization {
@@ -9089,7 +11025,7 @@ type SquidResponse struct {
 
 func (x *SquidResponse) Reset() {
 	*x = SquidResponse{}
-	mi := &file_keystone_proto_msgTypes[105]
+	mi := &file_keystone_proto_msgTypes[122]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9101,7 +11037,7 @@ func (x *SquidResponse) String() string {
 func (*SquidResponse) ProtoMessage() {}
 
 func (x *SquidResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[105]
+	mi := &file_keystone_proto_msgTypes[122]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9114,7 +11050,7 @@ func (x *SquidResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SquidResponse.ProtoReflect.Descriptor instead.
 func (*SquidResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{105}
+	return file_keystone_proto_rawDescGZIP(), []int{122}
 }
 
 func (x *SquidResponse) GetSquat() string {
@@ -9144,7 +11080,7 @@ type EnumEntry struct {
 
 func (x *EnumEntry) Reset() {
 	*x = EnumEntry{}
-	mi := &file_keystone_proto_msgTypes[106]
+	mi := &file_keystone_proto_msgTypes[123]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9156,7 +11092,7 @@ func (x *EnumEntry) String() string {
 func (*EnumEntry) ProtoMessage() {}
 
 func (x *EnumEntry) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[106]
+	mi := &file_keystone_proto_msgTypes[123]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9169,7 +11105,7 @@ func (x *EnumEntry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnumEntry.ProtoReflect.Descriptor instead.
 func (*EnumEntry) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{106}
+	return file_keystone_proto_rawDescGZIP(), []int{123}
 }
 
 func (x *EnumEntry) GetType() string {
@@ -9217,7 +11153,7 @@ type EnumPutRequest struct {
 
 func (x *EnumPutRequest) Reset() {
 	*x = EnumPutRequest{}
-	mi := &file_keystone_proto_msgTypes[107]
+	mi := &file_keystone_proto_msgTypes[124]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9229,7 +11165,7 @@ func (x *EnumPutRequest) String() string {
 func (*EnumPutRequest) ProtoMessage() {}
 
 func (x *EnumPutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[107]
+	mi := &file_keystone_proto_msgTypes[124]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9242,7 +11178,7 @@ func (x *EnumPutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnumPutRequest.ProtoReflect.Descriptor instead.
 func (*EnumPutRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{107}
+	return file_keystone_proto_rawDescGZIP(), []int{124}
 }
 
 func (x *EnumPutRequest) GetAuthorization() *Authorization {
@@ -9270,7 +11206,7 @@ type EnumGetRequest struct {
 
 func (x *EnumGetRequest) Reset() {
 	*x = EnumGetRequest{}
-	mi := &file_keystone_proto_msgTypes[108]
+	mi := &file_keystone_proto_msgTypes[125]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9282,7 +11218,7 @@ func (x *EnumGetRequest) String() string {
 func (*EnumGetRequest) ProtoMessage() {}
 
 func (x *EnumGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[108]
+	mi := &file_keystone_proto_msgTypes[125]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9295,7 +11231,7 @@ func (x *EnumGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnumGetRequest.ProtoReflect.Descriptor instead.
 func (*EnumGetRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{108}
+	return file_keystone_proto_rawDescGZIP(), []int{125}
 }
 
 func (x *EnumGetRequest) GetAuthorization() *Authorization {
@@ -9329,7 +11265,7 @@ type EnumGetResponse struct {
 
 func (x *EnumGetResponse) Reset() {
 	*x = EnumGetResponse{}
-	mi := &file_keystone_proto_msgTypes[109]
+	mi := &file_keystone_proto_msgTypes[126]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9341,7 +11277,7 @@ func (x *EnumGetResponse) String() string {
 func (*EnumGetResponse) ProtoMessage() {}
 
 func (x *EnumGetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[109]
+	mi := &file_keystone_proto_msgTypes[126]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9354,7 +11290,7 @@ func (x *EnumGetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnumGetResponse.ProtoReflect.Descriptor instead.
 func (*EnumGetResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{109}
+	return file_keystone_proto_rawDescGZIP(), []int{126}
 }
 
 func (x *EnumGetResponse) GetSummary() *GenericResponse {
@@ -9382,7 +11318,7 @@ type EnumDeleteRequest struct {
 
 func (x *EnumDeleteRequest) Reset() {
 	*x = EnumDeleteRequest{}
-	mi := &file_keystone_proto_msgTypes[110]
+	mi := &file_keystone_proto_msgTypes[127]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9394,7 +11330,7 @@ func (x *EnumDeleteRequest) String() string {
 func (*EnumDeleteRequest) ProtoMessage() {}
 
 func (x *EnumDeleteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[110]
+	mi := &file_keystone_proto_msgTypes[127]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9407,7 +11343,7 @@ func (x *EnumDeleteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnumDeleteRequest.ProtoReflect.Descriptor instead.
 func (*EnumDeleteRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{110}
+	return file_keystone_proto_rawDescGZIP(), []int{127}
 }
 
 func (x *EnumDeleteRequest) GetAuthorization() *Authorization {
@@ -9441,7 +11377,7 @@ type EnumListRequest struct {
 
 func (x *EnumListRequest) Reset() {
 	*x = EnumListRequest{}
-	mi := &file_keystone_proto_msgTypes[111]
+	mi := &file_keystone_proto_msgTypes[128]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9453,7 +11389,7 @@ func (x *EnumListRequest) String() string {
 func (*EnumListRequest) ProtoMessage() {}
 
 func (x *EnumListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[111]
+	mi := &file_keystone_proto_msgTypes[128]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9466,7 +11402,7 @@ func (x *EnumListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnumListRequest.ProtoReflect.Descriptor instead.
 func (*EnumListRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{111}
+	return file_keystone_proto_rawDescGZIP(), []int{128}
 }
 
 func (x *EnumListRequest) GetAuthorization() *Authorization {
@@ -9493,7 +11429,7 @@ type EnumListResponse struct {
 
 func (x *EnumListResponse) Reset() {
 	*x = EnumListResponse{}
-	mi := &file_keystone_proto_msgTypes[112]
+	mi := &file_keystone_proto_msgTypes[129]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9505,7 +11441,7 @@ func (x *EnumListResponse) String() string {
 func (*EnumListResponse) ProtoMessage() {}
 
 func (x *EnumListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[112]
+	mi := &file_keystone_proto_msgTypes[129]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9518,7 +11454,7 @@ func (x *EnumListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnumListResponse.ProtoReflect.Descriptor instead.
 func (*EnumListResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{112}
+	return file_keystone_proto_rawDescGZIP(), []int{129}
 }
 
 func (x *EnumListResponse) GetSummary() *GenericResponse {
@@ -9546,7 +11482,7 @@ type EnumReplaceRequest struct {
 
 func (x *EnumReplaceRequest) Reset() {
 	*x = EnumReplaceRequest{}
-	mi := &file_keystone_proto_msgTypes[113]
+	mi := &file_keystone_proto_msgTypes[130]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9558,7 +11494,7 @@ func (x *EnumReplaceRequest) String() string {
 func (*EnumReplaceRequest) ProtoMessage() {}
 
 func (x *EnumReplaceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[113]
+	mi := &file_keystone_proto_msgTypes[130]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9571,7 +11507,7 @@ func (x *EnumReplaceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnumReplaceRequest.ProtoReflect.Descriptor instead.
 func (*EnumReplaceRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{113}
+	return file_keystone_proto_rawDescGZIP(), []int{130}
 }
 
 func (x *EnumReplaceRequest) GetAuthorization() *Authorization {
@@ -9608,7 +11544,7 @@ type AKVTimeEntry struct {
 
 func (x *AKVTimeEntry) Reset() {
 	*x = AKVTimeEntry{}
-	mi := &file_keystone_proto_msgTypes[114]
+	mi := &file_keystone_proto_msgTypes[131]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9620,7 +11556,7 @@ func (x *AKVTimeEntry) String() string {
 func (*AKVTimeEntry) ProtoMessage() {}
 
 func (x *AKVTimeEntry) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[114]
+	mi := &file_keystone_proto_msgTypes[131]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9633,7 +11569,7 @@ func (x *AKVTimeEntry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVTimeEntry.ProtoReflect.Descriptor instead.
 func (*AKVTimeEntry) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{114}
+	return file_keystone_proto_rawDescGZIP(), []int{131}
 }
 
 func (x *AKVTimeEntry) GetKey() string {
@@ -9681,7 +11617,7 @@ type AKVTimePutRequest struct {
 
 func (x *AKVTimePutRequest) Reset() {
 	*x = AKVTimePutRequest{}
-	mi := &file_keystone_proto_msgTypes[115]
+	mi := &file_keystone_proto_msgTypes[132]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9693,7 +11629,7 @@ func (x *AKVTimePutRequest) String() string {
 func (*AKVTimePutRequest) ProtoMessage() {}
 
 func (x *AKVTimePutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[115]
+	mi := &file_keystone_proto_msgTypes[132]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9706,7 +11642,7 @@ func (x *AKVTimePutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVTimePutRequest.ProtoReflect.Descriptor instead.
 func (*AKVTimePutRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{115}
+	return file_keystone_proto_rawDescGZIP(), []int{132}
 }
 
 func (x *AKVTimePutRequest) GetAuthorization() *Authorization {
@@ -9741,7 +11677,7 @@ type AKVTimeGetRequest struct {
 
 func (x *AKVTimeGetRequest) Reset() {
 	*x = AKVTimeGetRequest{}
-	mi := &file_keystone_proto_msgTypes[116]
+	mi := &file_keystone_proto_msgTypes[133]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9753,7 +11689,7 @@ func (x *AKVTimeGetRequest) String() string {
 func (*AKVTimeGetRequest) ProtoMessage() {}
 
 func (x *AKVTimeGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[116]
+	mi := &file_keystone_proto_msgTypes[133]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9766,7 +11702,7 @@ func (x *AKVTimeGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVTimeGetRequest.ProtoReflect.Descriptor instead.
 func (*AKVTimeGetRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{116}
+	return file_keystone_proto_rawDescGZIP(), []int{133}
 }
 
 func (x *AKVTimeGetRequest) GetAuthorization() *Authorization {
@@ -9849,7 +11785,7 @@ type AKVTimeResult struct {
 
 func (x *AKVTimeResult) Reset() {
 	*x = AKVTimeResult{}
-	mi := &file_keystone_proto_msgTypes[117]
+	mi := &file_keystone_proto_msgTypes[134]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9861,7 +11797,7 @@ func (x *AKVTimeResult) String() string {
 func (*AKVTimeResult) ProtoMessage() {}
 
 func (x *AKVTimeResult) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[117]
+	mi := &file_keystone_proto_msgTypes[134]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9874,7 +11810,7 @@ func (x *AKVTimeResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVTimeResult.ProtoReflect.Descriptor instead.
 func (*AKVTimeResult) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{117}
+	return file_keystone_proto_rawDescGZIP(), []int{134}
 }
 
 func (x *AKVTimeResult) GetTimestampUnix() int64 {
@@ -9901,7 +11837,7 @@ type AKVTimeGetResponse struct {
 
 func (x *AKVTimeGetResponse) Reset() {
 	*x = AKVTimeGetResponse{}
-	mi := &file_keystone_proto_msgTypes[118]
+	mi := &file_keystone_proto_msgTypes[135]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9913,7 +11849,7 @@ func (x *AKVTimeGetResponse) String() string {
 func (*AKVTimeGetResponse) ProtoMessage() {}
 
 func (x *AKVTimeGetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[118]
+	mi := &file_keystone_proto_msgTypes[135]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9926,7 +11862,7 @@ func (x *AKVTimeGetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVTimeGetResponse.ProtoReflect.Descriptor instead.
 func (*AKVTimeGetResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{118}
+	return file_keystone_proto_rawDescGZIP(), []int{135}
 }
 
 func (x *AKVTimeGetResponse) GetSummary() *GenericResponse {
@@ -9958,7 +11894,7 @@ type AKVTimeDelRequest struct {
 
 func (x *AKVTimeDelRequest) Reset() {
 	*x = AKVTimeDelRequest{}
-	mi := &file_keystone_proto_msgTypes[119]
+	mi := &file_keystone_proto_msgTypes[136]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9970,7 +11906,7 @@ func (x *AKVTimeDelRequest) String() string {
 func (*AKVTimeDelRequest) ProtoMessage() {}
 
 func (x *AKVTimeDelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[119]
+	mi := &file_keystone_proto_msgTypes[136]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9983,7 +11919,7 @@ func (x *AKVTimeDelRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AKVTimeDelRequest.ProtoReflect.Descriptor instead.
 func (*AKVTimeDelRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{119}
+	return file_keystone_proto_rawDescGZIP(), []int{136}
 }
 
 func (x *AKVTimeDelRequest) GetAuthorization() *Authorization {
@@ -10047,7 +11983,7 @@ type RelayCreateSessionRequest struct {
 
 func (x *RelayCreateSessionRequest) Reset() {
 	*x = RelayCreateSessionRequest{}
-	mi := &file_keystone_proto_msgTypes[120]
+	mi := &file_keystone_proto_msgTypes[137]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10059,7 +11995,7 @@ func (x *RelayCreateSessionRequest) String() string {
 func (*RelayCreateSessionRequest) ProtoMessage() {}
 
 func (x *RelayCreateSessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[120]
+	mi := &file_keystone_proto_msgTypes[137]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10072,7 +12008,7 @@ func (x *RelayCreateSessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayCreateSessionRequest.ProtoReflect.Descriptor instead.
 func (*RelayCreateSessionRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{120}
+	return file_keystone_proto_rawDescGZIP(), []int{137}
 }
 
 func (x *RelayCreateSessionRequest) GetAuthorization() *Authorization {
@@ -10116,7 +12052,7 @@ type RelayCreateSessionResponse struct {
 
 func (x *RelayCreateSessionResponse) Reset() {
 	*x = RelayCreateSessionResponse{}
-	mi := &file_keystone_proto_msgTypes[121]
+	mi := &file_keystone_proto_msgTypes[138]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10128,7 +12064,7 @@ func (x *RelayCreateSessionResponse) String() string {
 func (*RelayCreateSessionResponse) ProtoMessage() {}
 
 func (x *RelayCreateSessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[121]
+	mi := &file_keystone_proto_msgTypes[138]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10141,7 +12077,7 @@ func (x *RelayCreateSessionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayCreateSessionResponse.ProtoReflect.Descriptor instead.
 func (*RelayCreateSessionResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{121}
+	return file_keystone_proto_rawDescGZIP(), []int{138}
 }
 
 func (x *RelayCreateSessionResponse) GetSessionId() string {
@@ -10190,7 +12126,7 @@ type RelayExtendSessionRequest struct {
 
 func (x *RelayExtendSessionRequest) Reset() {
 	*x = RelayExtendSessionRequest{}
-	mi := &file_keystone_proto_msgTypes[122]
+	mi := &file_keystone_proto_msgTypes[139]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10202,7 +12138,7 @@ func (x *RelayExtendSessionRequest) String() string {
 func (*RelayExtendSessionRequest) ProtoMessage() {}
 
 func (x *RelayExtendSessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[122]
+	mi := &file_keystone_proto_msgTypes[139]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10215,7 +12151,7 @@ func (x *RelayExtendSessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayExtendSessionRequest.ProtoReflect.Descriptor instead.
 func (*RelayExtendSessionRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{122}
+	return file_keystone_proto_rawDescGZIP(), []int{139}
 }
 
 func (x *RelayExtendSessionRequest) GetAuthorization() *Authorization {
@@ -10248,7 +12184,7 @@ type RelayExtendSessionResponse struct {
 
 func (x *RelayExtendSessionResponse) Reset() {
 	*x = RelayExtendSessionResponse{}
-	mi := &file_keystone_proto_msgTypes[123]
+	mi := &file_keystone_proto_msgTypes[140]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10260,7 +12196,7 @@ func (x *RelayExtendSessionResponse) String() string {
 func (*RelayExtendSessionResponse) ProtoMessage() {}
 
 func (x *RelayExtendSessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[123]
+	mi := &file_keystone_proto_msgTypes[140]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10273,7 +12209,7 @@ func (x *RelayExtendSessionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayExtendSessionResponse.ProtoReflect.Descriptor instead.
 func (*RelayExtendSessionResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{123}
+	return file_keystone_proto_rawDescGZIP(), []int{140}
 }
 
 func (x *RelayExtendSessionResponse) GetExpiresAtMs() int64 {
@@ -10294,7 +12230,7 @@ type RelayDestroySessionRequest struct {
 
 func (x *RelayDestroySessionRequest) Reset() {
 	*x = RelayDestroySessionRequest{}
-	mi := &file_keystone_proto_msgTypes[124]
+	mi := &file_keystone_proto_msgTypes[141]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10306,7 +12242,7 @@ func (x *RelayDestroySessionRequest) String() string {
 func (*RelayDestroySessionRequest) ProtoMessage() {}
 
 func (x *RelayDestroySessionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[124]
+	mi := &file_keystone_proto_msgTypes[141]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10319,7 +12255,7 @@ func (x *RelayDestroySessionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayDestroySessionRequest.ProtoReflect.Descriptor instead.
 func (*RelayDestroySessionRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{124}
+	return file_keystone_proto_rawDescGZIP(), []int{141}
 }
 
 func (x *RelayDestroySessionRequest) GetAuthorization() *Authorization {
@@ -10351,7 +12287,7 @@ type RelayDestroySessionResponse struct {
 
 func (x *RelayDestroySessionResponse) Reset() {
 	*x = RelayDestroySessionResponse{}
-	mi := &file_keystone_proto_msgTypes[125]
+	mi := &file_keystone_proto_msgTypes[142]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10363,7 +12299,7 @@ func (x *RelayDestroySessionResponse) String() string {
 func (*RelayDestroySessionResponse) ProtoMessage() {}
 
 func (x *RelayDestroySessionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[125]
+	mi := &file_keystone_proto_msgTypes[142]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10376,7 +12312,7 @@ func (x *RelayDestroySessionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayDestroySessionResponse.ProtoReflect.Descriptor instead.
 func (*RelayDestroySessionResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{125}
+	return file_keystone_proto_rawDescGZIP(), []int{142}
 }
 
 type RelayCreateShortCodeRequest struct {
@@ -10390,7 +12326,7 @@ type RelayCreateShortCodeRequest struct {
 
 func (x *RelayCreateShortCodeRequest) Reset() {
 	*x = RelayCreateShortCodeRequest{}
-	mi := &file_keystone_proto_msgTypes[126]
+	mi := &file_keystone_proto_msgTypes[143]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10402,7 +12338,7 @@ func (x *RelayCreateShortCodeRequest) String() string {
 func (*RelayCreateShortCodeRequest) ProtoMessage() {}
 
 func (x *RelayCreateShortCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[126]
+	mi := &file_keystone_proto_msgTypes[143]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10415,7 +12351,7 @@ func (x *RelayCreateShortCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayCreateShortCodeRequest.ProtoReflect.Descriptor instead.
 func (*RelayCreateShortCodeRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{126}
+	return file_keystone_proto_rawDescGZIP(), []int{143}
 }
 
 func (x *RelayCreateShortCodeRequest) GetAuthorization() *Authorization {
@@ -10449,7 +12385,7 @@ type RelayCreateShortCodeResponse struct {
 
 func (x *RelayCreateShortCodeResponse) Reset() {
 	*x = RelayCreateShortCodeResponse{}
-	mi := &file_keystone_proto_msgTypes[127]
+	mi := &file_keystone_proto_msgTypes[144]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10461,7 +12397,7 @@ func (x *RelayCreateShortCodeResponse) String() string {
 func (*RelayCreateShortCodeResponse) ProtoMessage() {}
 
 func (x *RelayCreateShortCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[127]
+	mi := &file_keystone_proto_msgTypes[144]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10474,7 +12410,7 @@ func (x *RelayCreateShortCodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayCreateShortCodeResponse.ProtoReflect.Descriptor instead.
 func (*RelayCreateShortCodeResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{127}
+	return file_keystone_proto_rawDescGZIP(), []int{144}
 }
 
 func (x *RelayCreateShortCodeResponse) GetCode() string {
@@ -10501,7 +12437,7 @@ type RelayResolveShortCodeRequest struct {
 
 func (x *RelayResolveShortCodeRequest) Reset() {
 	*x = RelayResolveShortCodeRequest{}
-	mi := &file_keystone_proto_msgTypes[128]
+	mi := &file_keystone_proto_msgTypes[145]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10513,7 +12449,7 @@ func (x *RelayResolveShortCodeRequest) String() string {
 func (*RelayResolveShortCodeRequest) ProtoMessage() {}
 
 func (x *RelayResolveShortCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[128]
+	mi := &file_keystone_proto_msgTypes[145]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10526,7 +12462,7 @@ func (x *RelayResolveShortCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayResolveShortCodeRequest.ProtoReflect.Descriptor instead.
 func (*RelayResolveShortCodeRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{128}
+	return file_keystone_proto_rawDescGZIP(), []int{145}
 }
 
 func (x *RelayResolveShortCodeRequest) GetAuthorization() *Authorization {
@@ -10555,7 +12491,7 @@ type RelayResolveShortCodeResponse struct {
 
 func (x *RelayResolveShortCodeResponse) Reset() {
 	*x = RelayResolveShortCodeResponse{}
-	mi := &file_keystone_proto_msgTypes[129]
+	mi := &file_keystone_proto_msgTypes[146]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10567,7 +12503,7 @@ func (x *RelayResolveShortCodeResponse) String() string {
 func (*RelayResolveShortCodeResponse) ProtoMessage() {}
 
 func (x *RelayResolveShortCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[129]
+	mi := &file_keystone_proto_msgTypes[146]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10580,7 +12516,7 @@ func (x *RelayResolveShortCodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayResolveShortCodeResponse.ProtoReflect.Descriptor instead.
 func (*RelayResolveShortCodeResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{129}
+	return file_keystone_proto_rawDescGZIP(), []int{146}
 }
 
 func (x *RelayResolveShortCodeResponse) GetSessionId() string {
@@ -10621,7 +12557,7 @@ type RelayDeleteShortCodeRequest struct {
 
 func (x *RelayDeleteShortCodeRequest) Reset() {
 	*x = RelayDeleteShortCodeRequest{}
-	mi := &file_keystone_proto_msgTypes[130]
+	mi := &file_keystone_proto_msgTypes[147]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10633,7 +12569,7 @@ func (x *RelayDeleteShortCodeRequest) String() string {
 func (*RelayDeleteShortCodeRequest) ProtoMessage() {}
 
 func (x *RelayDeleteShortCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[130]
+	mi := &file_keystone_proto_msgTypes[147]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10646,7 +12582,7 @@ func (x *RelayDeleteShortCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayDeleteShortCodeRequest.ProtoReflect.Descriptor instead.
 func (*RelayDeleteShortCodeRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{130}
+	return file_keystone_proto_rawDescGZIP(), []int{147}
 }
 
 func (x *RelayDeleteShortCodeRequest) GetAuthorization() *Authorization {
@@ -10671,7 +12607,7 @@ type RelayDeleteShortCodeResponse struct {
 
 func (x *RelayDeleteShortCodeResponse) Reset() {
 	*x = RelayDeleteShortCodeResponse{}
-	mi := &file_keystone_proto_msgTypes[131]
+	mi := &file_keystone_proto_msgTypes[148]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10683,7 +12619,7 @@ func (x *RelayDeleteShortCodeResponse) String() string {
 func (*RelayDeleteShortCodeResponse) ProtoMessage() {}
 
 func (x *RelayDeleteShortCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[131]
+	mi := &file_keystone_proto_msgTypes[148]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10696,7 +12632,7 @@ func (x *RelayDeleteShortCodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayDeleteShortCodeResponse.ProtoReflect.Descriptor instead.
 func (*RelayDeleteShortCodeResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{131}
+	return file_keystone_proto_rawDescGZIP(), []int{148}
 }
 
 type RelayPublishRequest struct {
@@ -10712,7 +12648,7 @@ type RelayPublishRequest struct {
 
 func (x *RelayPublishRequest) Reset() {
 	*x = RelayPublishRequest{}
-	mi := &file_keystone_proto_msgTypes[132]
+	mi := &file_keystone_proto_msgTypes[149]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10724,7 +12660,7 @@ func (x *RelayPublishRequest) String() string {
 func (*RelayPublishRequest) ProtoMessage() {}
 
 func (x *RelayPublishRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[132]
+	mi := &file_keystone_proto_msgTypes[149]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10737,7 +12673,7 @@ func (x *RelayPublishRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayPublishRequest.ProtoReflect.Descriptor instead.
 func (*RelayPublishRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{132}
+	return file_keystone_proto_rawDescGZIP(), []int{149}
 }
 
 func (x *RelayPublishRequest) GetAuthorization() *Authorization {
@@ -10785,7 +12721,7 @@ type RelayPublishResponse struct {
 
 func (x *RelayPublishResponse) Reset() {
 	*x = RelayPublishResponse{}
-	mi := &file_keystone_proto_msgTypes[133]
+	mi := &file_keystone_proto_msgTypes[150]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10797,7 +12733,7 @@ func (x *RelayPublishResponse) String() string {
 func (*RelayPublishResponse) ProtoMessage() {}
 
 func (x *RelayPublishResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[133]
+	mi := &file_keystone_proto_msgTypes[150]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10810,7 +12746,7 @@ func (x *RelayPublishResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayPublishResponse.ProtoReflect.Descriptor instead.
 func (*RelayPublishResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{133}
+	return file_keystone_proto_rawDescGZIP(), []int{150}
 }
 
 func (x *RelayPublishResponse) GetMsgId() string {
@@ -10837,7 +12773,7 @@ type RelayGetPresenceRequest struct {
 
 func (x *RelayGetPresenceRequest) Reset() {
 	*x = RelayGetPresenceRequest{}
-	mi := &file_keystone_proto_msgTypes[134]
+	mi := &file_keystone_proto_msgTypes[151]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10849,7 +12785,7 @@ func (x *RelayGetPresenceRequest) String() string {
 func (*RelayGetPresenceRequest) ProtoMessage() {}
 
 func (x *RelayGetPresenceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[134]
+	mi := &file_keystone_proto_msgTypes[151]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10862,7 +12798,7 @@ func (x *RelayGetPresenceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayGetPresenceRequest.ProtoReflect.Descriptor instead.
 func (*RelayGetPresenceRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{134}
+	return file_keystone_proto_rawDescGZIP(), []int{151}
 }
 
 func (x *RelayGetPresenceRequest) GetAuthorization() *Authorization {
@@ -10888,7 +12824,7 @@ type RelayGetPresenceResponse struct {
 
 func (x *RelayGetPresenceResponse) Reset() {
 	*x = RelayGetPresenceResponse{}
-	mi := &file_keystone_proto_msgTypes[135]
+	mi := &file_keystone_proto_msgTypes[152]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10900,7 +12836,7 @@ func (x *RelayGetPresenceResponse) String() string {
 func (*RelayGetPresenceResponse) ProtoMessage() {}
 
 func (x *RelayGetPresenceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[135]
+	mi := &file_keystone_proto_msgTypes[152]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10913,7 +12849,7 @@ func (x *RelayGetPresenceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayGetPresenceResponse.ProtoReflect.Descriptor instead.
 func (*RelayGetPresenceResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{135}
+	return file_keystone_proto_rawDescGZIP(), []int{152}
 }
 
 func (x *RelayGetPresenceResponse) GetDevices() []*PresenceDevice {
@@ -10933,7 +12869,7 @@ type PresenceDevice struct {
 
 func (x *PresenceDevice) Reset() {
 	*x = PresenceDevice{}
-	mi := &file_keystone_proto_msgTypes[136]
+	mi := &file_keystone_proto_msgTypes[153]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10945,7 +12881,7 @@ func (x *PresenceDevice) String() string {
 func (*PresenceDevice) ProtoMessage() {}
 
 func (x *PresenceDevice) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[136]
+	mi := &file_keystone_proto_msgTypes[153]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10958,7 +12894,7 @@ func (x *PresenceDevice) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PresenceDevice.ProtoReflect.Descriptor instead.
 func (*PresenceDevice) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{136}
+	return file_keystone_proto_rawDescGZIP(), []int{153}
 }
 
 func (x *PresenceDevice) GetDeviceId() string {
@@ -10985,7 +12921,7 @@ type RelayGetSessionMetadataRequest struct {
 
 func (x *RelayGetSessionMetadataRequest) Reset() {
 	*x = RelayGetSessionMetadataRequest{}
-	mi := &file_keystone_proto_msgTypes[137]
+	mi := &file_keystone_proto_msgTypes[154]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10997,7 +12933,7 @@ func (x *RelayGetSessionMetadataRequest) String() string {
 func (*RelayGetSessionMetadataRequest) ProtoMessage() {}
 
 func (x *RelayGetSessionMetadataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[137]
+	mi := &file_keystone_proto_msgTypes[154]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11010,7 +12946,7 @@ func (x *RelayGetSessionMetadataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayGetSessionMetadataRequest.ProtoReflect.Descriptor instead.
 func (*RelayGetSessionMetadataRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{137}
+	return file_keystone_proto_rawDescGZIP(), []int{154}
 }
 
 func (x *RelayGetSessionMetadataRequest) GetAuthorization() *Authorization {
@@ -11038,7 +12974,7 @@ type RelayGetSessionMetadataResponse struct {
 
 func (x *RelayGetSessionMetadataResponse) Reset() {
 	*x = RelayGetSessionMetadataResponse{}
-	mi := &file_keystone_proto_msgTypes[138]
+	mi := &file_keystone_proto_msgTypes[155]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11050,7 +12986,7 @@ func (x *RelayGetSessionMetadataResponse) String() string {
 func (*RelayGetSessionMetadataResponse) ProtoMessage() {}
 
 func (x *RelayGetSessionMetadataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[138]
+	mi := &file_keystone_proto_msgTypes[155]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11063,7 +12999,7 @@ func (x *RelayGetSessionMetadataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelayGetSessionMetadataResponse.ProtoReflect.Descriptor instead.
 func (*RelayGetSessionMetadataResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{138}
+	return file_keystone_proto_rawDescGZIP(), []int{155}
 }
 
 func (x *RelayGetSessionMetadataResponse) GetMetadata() []byte {
@@ -11098,7 +13034,7 @@ type RelaySetSessionMetadataRequest struct {
 
 func (x *RelaySetSessionMetadataRequest) Reset() {
 	*x = RelaySetSessionMetadataRequest{}
-	mi := &file_keystone_proto_msgTypes[139]
+	mi := &file_keystone_proto_msgTypes[156]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11110,7 +13046,7 @@ func (x *RelaySetSessionMetadataRequest) String() string {
 func (*RelaySetSessionMetadataRequest) ProtoMessage() {}
 
 func (x *RelaySetSessionMetadataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[139]
+	mi := &file_keystone_proto_msgTypes[156]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11123,7 +13059,7 @@ func (x *RelaySetSessionMetadataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelaySetSessionMetadataRequest.ProtoReflect.Descriptor instead.
 func (*RelaySetSessionMetadataRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{139}
+	return file_keystone_proto_rawDescGZIP(), []int{156}
 }
 
 func (x *RelaySetSessionMetadataRequest) GetAuthorization() *Authorization {
@@ -11157,7 +13093,7 @@ type RelaySetSessionMetadataResponse struct {
 
 func (x *RelaySetSessionMetadataResponse) Reset() {
 	*x = RelaySetSessionMetadataResponse{}
-	mi := &file_keystone_proto_msgTypes[140]
+	mi := &file_keystone_proto_msgTypes[157]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11169,7 +13105,7 @@ func (x *RelaySetSessionMetadataResponse) String() string {
 func (*RelaySetSessionMetadataResponse) ProtoMessage() {}
 
 func (x *RelaySetSessionMetadataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[140]
+	mi := &file_keystone_proto_msgTypes[157]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11182,7 +13118,7 @@ func (x *RelaySetSessionMetadataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RelaySetSessionMetadataResponse.ProtoReflect.Descriptor instead.
 func (*RelaySetSessionMetadataResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{140}
+	return file_keystone_proto_rawDescGZIP(), []int{157}
 }
 
 func (x *RelaySetSessionMetadataResponse) GetUpdatedAtMs() int64 {
@@ -11211,7 +13147,7 @@ type EventStreamAck struct {
 
 func (x *EventStreamAck) Reset() {
 	*x = EventStreamAck{}
-	mi := &file_keystone_proto_msgTypes[141]
+	mi := &file_keystone_proto_msgTypes[158]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11223,7 +13159,7 @@ func (x *EventStreamAck) String() string {
 func (*EventStreamAck) ProtoMessage() {}
 
 func (x *EventStreamAck) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[141]
+	mi := &file_keystone_proto_msgTypes[158]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11236,7 +13172,7 @@ func (x *EventStreamAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventStreamAck.ProtoReflect.Descriptor instead.
 func (*EventStreamAck) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{141}
+	return file_keystone_proto_rawDescGZIP(), []int{158}
 }
 
 func (x *EventStreamAck) GetMessageId() string {
@@ -11260,6 +13196,60 @@ func (x *EventStreamAck) GetDelay() *durationpb.Duration {
 	return nil
 }
 
+// Storage options are fixed when a series is first written. Omit on later writes
+// to inherit them. Existing series retain their original storage behavior.
+type SensorStorageOptions struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SummaryOnly   bool                   `protobuf:"varint,1,opt,name=summary_only,json=summaryOnly,proto3" json:"summary_only,omitempty"`
+	Resolutions   []uint32               `protobuf:"varint,2,rep,packed,name=resolutions,proto3" json:"resolutions,omitempty"` // Summary-only: subset of 60,300,900,3600,86400; default 60,3600,86400.
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SensorStorageOptions) Reset() {
+	*x = SensorStorageOptions{}
+	mi := &file_keystone_proto_msgTypes[159]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SensorStorageOptions) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SensorStorageOptions) ProtoMessage() {}
+
+func (x *SensorStorageOptions) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[159]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SensorStorageOptions.ProtoReflect.Descriptor instead.
+func (*SensorStorageOptions) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{159}
+}
+
+func (x *SensorStorageOptions) GetSummaryOnly() bool {
+	if x != nil {
+		return x.SummaryOnly
+	}
+	return false
+}
+
+func (x *SensorStorageOptions) GetResolutions() []uint32 {
+	if x != nil {
+		return x.Resolutions
+	}
+	return nil
+}
+
 // Feeds are scoped by authorization source/workspace, type and key. No schema
 // registration is required. A feed can contain references to different types.
 type FeedKey struct {
@@ -11272,7 +13262,7 @@ type FeedKey struct {
 
 func (x *FeedKey) Reset() {
 	*x = FeedKey{}
-	mi := &file_keystone_proto_msgTypes[142]
+	mi := &file_keystone_proto_msgTypes[160]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11284,7 +13274,7 @@ func (x *FeedKey) String() string {
 func (*FeedKey) ProtoMessage() {}
 
 func (x *FeedKey) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[142]
+	mi := &file_keystone_proto_msgTypes[160]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11297,7 +13287,7 @@ func (x *FeedKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedKey.ProtoReflect.Descriptor instead.
 func (*FeedKey) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{142}
+	return file_keystone_proto_rawDescGZIP(), []int{160}
 }
 
 func (x *FeedKey) GetType() string {
@@ -11328,7 +13318,7 @@ type FeedEntry struct {
 
 func (x *FeedEntry) Reset() {
 	*x = FeedEntry{}
-	mi := &file_keystone_proto_msgTypes[143]
+	mi := &file_keystone_proto_msgTypes[161]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11340,7 +13330,7 @@ func (x *FeedEntry) String() string {
 func (*FeedEntry) ProtoMessage() {}
 
 func (x *FeedEntry) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[143]
+	mi := &file_keystone_proto_msgTypes[161]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11353,7 +13343,7 @@ func (x *FeedEntry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedEntry.ProtoReflect.Descriptor instead.
 func (*FeedEntry) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{143}
+	return file_keystone_proto_rawDescGZIP(), []int{161}
 }
 
 func (x *FeedEntry) GetPosition() string {
@@ -11395,7 +13385,7 @@ type FeedPutRequest struct {
 
 func (x *FeedPutRequest) Reset() {
 	*x = FeedPutRequest{}
-	mi := &file_keystone_proto_msgTypes[144]
+	mi := &file_keystone_proto_msgTypes[162]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11407,7 +13397,7 @@ func (x *FeedPutRequest) String() string {
 func (*FeedPutRequest) ProtoMessage() {}
 
 func (x *FeedPutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[144]
+	mi := &file_keystone_proto_msgTypes[162]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11420,7 +13410,7 @@ func (x *FeedPutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedPutRequest.ProtoReflect.Descriptor instead.
 func (*FeedPutRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{144}
+	return file_keystone_proto_rawDescGZIP(), []int{162}
 }
 
 func (x *FeedPutRequest) GetAuthorization() *Authorization {
@@ -11453,7 +13443,7 @@ type FeedPutResponse struct {
 
 func (x *FeedPutResponse) Reset() {
 	*x = FeedPutResponse{}
-	mi := &file_keystone_proto_msgTypes[145]
+	mi := &file_keystone_proto_msgTypes[163]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11465,7 +13455,7 @@ func (x *FeedPutResponse) String() string {
 func (*FeedPutResponse) ProtoMessage() {}
 
 func (x *FeedPutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[145]
+	mi := &file_keystone_proto_msgTypes[163]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11478,7 +13468,7 @@ func (x *FeedPutResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedPutResponse.ProtoReflect.Descriptor instead.
 func (*FeedPutResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{145}
+	return file_keystone_proto_rawDescGZIP(), []int{163}
 }
 
 func (x *FeedPutResponse) GetEntry() *FeedEntry {
@@ -11502,7 +13492,7 @@ type FeedReadRequest struct {
 
 func (x *FeedReadRequest) Reset() {
 	*x = FeedReadRequest{}
-	mi := &file_keystone_proto_msgTypes[146]
+	mi := &file_keystone_proto_msgTypes[164]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11514,7 +13504,7 @@ func (x *FeedReadRequest) String() string {
 func (*FeedReadRequest) ProtoMessage() {}
 
 func (x *FeedReadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[146]
+	mi := &file_keystone_proto_msgTypes[164]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11527,7 +13517,7 @@ func (x *FeedReadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedReadRequest.ProtoReflect.Descriptor instead.
 func (*FeedReadRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{146}
+	return file_keystone_proto_rawDescGZIP(), []int{164}
 }
 
 func (x *FeedReadRequest) GetAuthorization() *Authorization {
@@ -11584,7 +13574,7 @@ type FeedReadResponse struct {
 
 func (x *FeedReadResponse) Reset() {
 	*x = FeedReadResponse{}
-	mi := &file_keystone_proto_msgTypes[147]
+	mi := &file_keystone_proto_msgTypes[165]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11596,7 +13586,7 @@ func (x *FeedReadResponse) String() string {
 func (*FeedReadResponse) ProtoMessage() {}
 
 func (x *FeedReadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[147]
+	mi := &file_keystone_proto_msgTypes[165]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11609,7 +13599,7 @@ func (x *FeedReadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedReadResponse.ProtoReflect.Descriptor instead.
 func (*FeedReadResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{147}
+	return file_keystone_proto_rawDescGZIP(), []int{165}
 }
 
 func (x *FeedReadResponse) GetEntries() []*FeedEntry {
@@ -11644,7 +13634,7 @@ type FeedRemoveRequest struct {
 
 func (x *FeedRemoveRequest) Reset() {
 	*x = FeedRemoveRequest{}
-	mi := &file_keystone_proto_msgTypes[148]
+	mi := &file_keystone_proto_msgTypes[166]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11656,7 +13646,7 @@ func (x *FeedRemoveRequest) String() string {
 func (*FeedRemoveRequest) ProtoMessage() {}
 
 func (x *FeedRemoveRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[148]
+	mi := &file_keystone_proto_msgTypes[166]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11669,7 +13659,7 @@ func (x *FeedRemoveRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedRemoveRequest.ProtoReflect.Descriptor instead.
 func (*FeedRemoveRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{148}
+	return file_keystone_proto_rawDescGZIP(), []int{166}
 }
 
 func (x *FeedRemoveRequest) GetAuthorization() *Authorization {
@@ -11708,7 +13698,7 @@ type FeedSummaryRequest struct {
 
 func (x *FeedSummaryRequest) Reset() {
 	*x = FeedSummaryRequest{}
-	mi := &file_keystone_proto_msgTypes[149]
+	mi := &file_keystone_proto_msgTypes[167]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11720,7 +13710,7 @@ func (x *FeedSummaryRequest) String() string {
 func (*FeedSummaryRequest) ProtoMessage() {}
 
 func (x *FeedSummaryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[149]
+	mi := &file_keystone_proto_msgTypes[167]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11733,7 +13723,7 @@ func (x *FeedSummaryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedSummaryRequest.ProtoReflect.Descriptor instead.
 func (*FeedSummaryRequest) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{149}
+	return file_keystone_proto_rawDescGZIP(), []int{167}
 }
 
 func (x *FeedSummaryRequest) GetAuthorization() *Authorization {
@@ -11800,7 +13790,7 @@ type FeedSummaryBucket struct {
 
 func (x *FeedSummaryBucket) Reset() {
 	*x = FeedSummaryBucket{}
-	mi := &file_keystone_proto_msgTypes[150]
+	mi := &file_keystone_proto_msgTypes[168]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11812,7 +13802,7 @@ func (x *FeedSummaryBucket) String() string {
 func (*FeedSummaryBucket) ProtoMessage() {}
 
 func (x *FeedSummaryBucket) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[150]
+	mi := &file_keystone_proto_msgTypes[168]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11825,7 +13815,7 @@ func (x *FeedSummaryBucket) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedSummaryBucket.ProtoReflect.Descriptor instead.
 func (*FeedSummaryBucket) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{150}
+	return file_keystone_proto_rawDescGZIP(), []int{168}
 }
 
 func (x *FeedSummaryBucket) GetStart() *timestamppb.Timestamp {
@@ -11888,7 +13878,7 @@ type FeedSummaryResponse struct {
 
 func (x *FeedSummaryResponse) Reset() {
 	*x = FeedSummaryResponse{}
-	mi := &file_keystone_proto_msgTypes[151]
+	mi := &file_keystone_proto_msgTypes[169]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11900,7 +13890,7 @@ func (x *FeedSummaryResponse) String() string {
 func (*FeedSummaryResponse) ProtoMessage() {}
 
 func (x *FeedSummaryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[151]
+	mi := &file_keystone_proto_msgTypes[169]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11913,7 +13903,7 @@ func (x *FeedSummaryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeedSummaryResponse.ProtoReflect.Descriptor instead.
 func (*FeedSummaryResponse) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{151}
+	return file_keystone_proto_rawDescGZIP(), []int{169}
 }
 
 func (x *FeedSummaryResponse) GetBuckets() []*FeedSummaryBucket {
@@ -11948,7 +13938,7 @@ type GroupCountResponse_Result struct {
 
 func (x *GroupCountResponse_Result) Reset() {
 	*x = GroupCountResponse_Result{}
-	mi := &file_keystone_proto_msgTypes[166]
+	mi := &file_keystone_proto_msgTypes[184]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11960,7 +13950,7 @@ func (x *GroupCountResponse_Result) String() string {
 func (*GroupCountResponse_Result) ProtoMessage() {}
 
 func (x *GroupCountResponse_Result) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[166]
+	mi := &file_keystone_proto_msgTypes[184]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11973,7 +13963,7 @@ func (x *GroupCountResponse_Result) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupCountResponse_Result.ProtoReflect.Descriptor instead.
 func (*GroupCountResponse_Result) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{68, 0}
+	return file_keystone_proto_rawDescGZIP(), []int{85, 0}
 }
 
 func (x *GroupCountResponse_Result) GetKey() string {
@@ -12008,7 +13998,7 @@ type ChartTimeSeriesResponse_ChartSeries struct {
 
 func (x *ChartTimeSeriesResponse_ChartSeries) Reset() {
 	*x = ChartTimeSeriesResponse_ChartSeries{}
-	mi := &file_keystone_proto_msgTypes[171]
+	mi := &file_keystone_proto_msgTypes[189]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12020,7 +14010,7 @@ func (x *ChartTimeSeriesResponse_ChartSeries) String() string {
 func (*ChartTimeSeriesResponse_ChartSeries) ProtoMessage() {}
 
 func (x *ChartTimeSeriesResponse_ChartSeries) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[171]
+	mi := &file_keystone_proto_msgTypes[189]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12033,7 +14023,7 @@ func (x *ChartTimeSeriesResponse_ChartSeries) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use ChartTimeSeriesResponse_ChartSeries.ProtoReflect.Descriptor instead.
 func (*ChartTimeSeriesResponse_ChartSeries) Descriptor() ([]byte, []int) {
-	return file_keystone_proto_rawDescGZIP(), []int{77, 1}
+	return file_keystone_proto_rawDescGZIP(), []int{94, 1}
 }
 
 func (x *ChartTimeSeriesResponse_ChartSeries) GetBucket() *timestamppb.Timestamp {
@@ -12315,15 +14305,202 @@ const file_keystone_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"7\n" +
 	"\vEntityLabel\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"\xf3\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"\xaa\x06\n" +
 	"\x17EntitySensorMeasurement\x12\x16\n" +
 	"\x06sensor\x18\x01 \x01(\tR\x06sensor\x12*\n" +
 	"\x02at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x02at\x12\x14\n" +
-	"\x05value\x18\x03 \x01(\x01R\x05value\x12E\n" +
-	"\x04data\x18\x04 \x03(\v21.kubex.keystone.EntitySensorMeasurement.DataEntryR\x04data\x1a7\n" +
+	"\x05value\x18\x03 \x01(\x01R\x05value\x12I\n" +
+	"\x04data\x18\x04 \x03(\v21.kubex.keystone.EntitySensorMeasurement.DataEntryB\x02\x18\x01R\x04data\x12\x1a\n" +
+	"\bbackfill\x18\x05 \x01(\bR\bbackfill\x12%\n" +
+	"\x0emeasurement_id\x18\x06 \x01(\tR\rmeasurementId\x12;\n" +
+	"\vreceived_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"receivedAt\x12-\n" +
+	"\x12resolution_seconds\x18\b \x01(\rR\x11resolutionSeconds\x12)\n" +
+	"\x10observed_seconds\x18\t \x01(\x01R\x0fobservedSeconds\x12%\n" +
+	"\x0eactive_seconds\x18\n" +
+	" \x01(\x01R\ractiveSeconds\x12\x1a\n" +
+	"\battempts\x18\v \x01(\x04R\battempts\x12\x1c\n" +
+	"\tsuccesses\x18\f \x01(\x04R\tsuccesses\x12\x1f\n" +
+	"\vttl_seconds\x18\r \x01(\x05R\n" +
+	"ttlSeconds\x12>\n" +
+	"\astorage\x18\x0e \x01(\v2$.kubex.keystone.SensorStorageOptionsR\astorage\x121\n" +
+	"\x12unique_ttl_seconds\x18\x0f \x01(\x05H\x00R\x10uniqueTtlSeconds\x88\x01\x01\x123\n" +
+	"\x13summary_ttl_seconds\x18\x10 \x01(\x05H\x01R\x11summaryTtlSeconds\x88\x01\x01\x1a7\n" +
 	"\tDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc7\x05\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B\x15\n" +
+	"\x13_unique_ttl_secondsB\x16\n" +
+	"\x14_summary_ttl_seconds\"\xa6\x04\n" +
+	"\x13WriteSensorsRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
+	"\tentity_id\x18\x03 \x01(\tR\bentityId\x12K\n" +
+	"\fmeasurements\x18\x04 \x03(\v2'.kubex.keystone.EntitySensorMeasurementR\fmeasurements\x12\x1b\n" +
+	"\tapp_scope\x18\x05 \x01(\bR\bappScope\x12\x1f\n" +
+	"\vttl_seconds\x18\x06 \x01(\x05R\n" +
+	"ttlSeconds\x12\x1e\n" +
+	"\n" +
+	"background\x18\a \x01(\bR\n" +
+	"background\x12>\n" +
+	"\astorage\x18\b \x01(\v2$.kubex.keystone.SensorStorageOptionsR\astorage\x121\n" +
+	"\x12unique_ttl_seconds\x18\t \x01(\x05H\x00R\x10uniqueTtlSeconds\x88\x01\x01\x123\n" +
+	"\x13summary_ttl_seconds\x18\n" +
+	" \x01(\x05H\x01R\x11summaryTtlSeconds\x88\x01\x01B\x15\n" +
+	"\x13_unique_ttl_secondsB\x16\n" +
+	"\x14_summary_ttl_seconds\"2\n" +
+	"\x16ListAppSensorsResponse\x12\x18\n" +
+	"\asensors\x18\x01 \x03(\tR\asensors\"\xc2\x05\n" +
+	"\x14PredictSensorRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
+	"\tentity_id\x18\x03 \x01(\tR\bentityId\x12\x16\n" +
+	"\x06sensor\x18\x04 \x01(\tR\x06sensor\x12.\n" +
+	"\x04from\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x04from\x120\n" +
+	"\x05until\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x05until\x12)\n" +
+	"\x10interval_seconds\x18\a \x01(\rR\x0fintervalSeconds\x12#\n" +
+	"\rtraining_days\x18\b \x01(\rR\ftrainingDays\x12\x1a\n" +
+	"\btimezone\x18\t \x01(\tR\btimezone\x12>\n" +
+	"\x06metric\x18\n" +
+	" \x01(\x0e2&.kubex.keystone.SensorPredictionMetricR\x06metric\x12%\n" +
+	"\x0erange_coverage\x18\v \x01(\x01R\rrangeCoverage\x121\n" +
+	"\x14minimum_observations\x18\f \x01(\rR\x13minimumObservations\x12&\n" +
+	"\x0fmissing_as_zero\x18\r \x01(\bR\rmissingAsZero\x12+\n" +
+	"\x11daily_seasonality\x18\x0e \x01(\bR\x10dailySeasonality\x12)\n" +
+	"\x10exclude_backfill\x18\x0f \x01(\bR\x0fexcludeBackfill\x12\x1b\n" +
+	"\tapp_scope\x18\x10 \x01(\bR\bappScope\"\xf1\x02\n" +
+	"\x15SensorPredictionPoint\x12*\n" +
+	"\x02at\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x02at\x12\x1a\n" +
+	"\bexpected\x18\x02 \x01(\x01R\bexpected\x12\x14\n" +
+	"\x05lower\x18\x03 \x01(\x01R\x05lower\x12\x14\n" +
+	"\x05upper\x18\x04 \x01(\x01R\x05upper\x12\"\n" +
+	"\fobservations\x18\x05 \x01(\rR\fobservations\x12\x1c\n" +
+	"\tavailable\x18\x06 \x01(\bR\tavailable\x12\x16\n" +
+	"\x06actual\x18\a \x01(\x01R\x06actual\x12)\n" +
+	"\x10actual_available\x18\b \x01(\bR\x0factualAvailable\x12\x18\n" +
+	"\aanomaly\x18\t \x01(\bR\aanomaly\x12\x1a\n" +
+	"\bbaseline\x18\n" +
+	" \x01(\tR\bbaseline\x12)\n" +
+	"\x10training_samples\x18\v \x01(\x04R\x0ftrainingSamples\"\xe2\x02\n" +
+	"\x15PredictSensorResponse\x12=\n" +
+	"\x06points\x18\x01 \x03(\v2%.kubex.keystone.SensorPredictionPointR\x06points\x12-\n" +
+	"\x12resolution_seconds\x18\x02 \x01(\rR\x11resolutionSeconds\x12\x1a\n" +
+	"\btimezone\x18\x03 \x01(\tR\btimezone\x12%\n" +
+	"\x0erange_coverage\x18\x04 \x01(\x01R\rrangeCoverage\x12?\n" +
+	"\rtraining_from\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\ftrainingFrom\x12A\n" +
+	"\x0etraining_until\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\rtrainingUntil\x12\x14\n" +
+	"\x05model\x18\a \x01(\tR\x05model\"\xcc\x04\n" +
+	"\x19CreateSensorStreamRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
+	"\tentity_id\x18\x03 \x01(\tR\bentityId\x12\x16\n" +
+	"\x06sensor\x18\x04 \x01(\tR\x06sensor\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x05 \x01(\tR\tsessionId\x12H\n" +
+	"\x12session_expires_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x10sessionExpiresAt\x12\x16\n" +
+	"\x06origin\x18\a \x01(\tR\x06origin\x12%\n" +
+	"\x0ewindow_seconds\x18\b \x01(\rR\rwindowSeconds\x12)\n" +
+	"\x10interval_seconds\x18\t \x01(\rR\x0fintervalSeconds\x12>\n" +
+	"\x06metric\x18\n" +
+	" \x01(\x0e2&.kubex.keystone.SensorPredictionMetricR\x06metric\x12)\n" +
+	"\x10exclude_backfill\x18\v \x01(\bR\x0fexcludeBackfill\x12-\n" +
+	"\x12include_prediction\x18\f \x01(\bR\x11includePrediction\x12\x1b\n" +
+	"\tapp_scope\x18\r \x01(\bR\bappScope\"\xd6\x01\n" +
+	"\x1aCreateSensorStreamResponse\x12!\n" +
+	"\fsnapshot_url\x18\x01 \x01(\tR\vsnapshotUrl\x12\x1d\n" +
+	"\n" +
+	"stream_url\x18\x02 \x01(\tR\tstreamUrl\x129\n" +
+	"\n" +
+	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\x12;\n" +
+	"\vserver_time\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"serverTime\"\x80\x01\n" +
+	"\x1aRevokeSensorSessionRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x02 \x01(\tR\tsessionId\"\xb5\x03\n" +
+	"\x12ChartSensorRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
+	"\tentity_id\x18\x03 \x01(\tR\bentityId\x12\x16\n" +
+	"\x06sensor\x18\x04 \x01(\tR\x06sensor\x12.\n" +
+	"\x04from\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x04from\x120\n" +
+	"\x05until\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x05until\x12)\n" +
+	"\x10interval_seconds\x18\a \x01(\rR\x0fintervalSeconds\x12)\n" +
+	"\x10exclude_backfill\x18\b \x01(\bR\x0fexcludeBackfill\x12#\n" +
+	"\rtarget_points\x18\t \x01(\rR\ftargetPoints\x12\x1b\n" +
+	"\tapp_scope\x18\n" +
+	" \x01(\bR\bappScope\"f\n" +
+	"\fSensorBucket\x12*\n" +
+	"\x02at\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x02at\x12\x10\n" +
+	"\x03sum\x18\x02 \x01(\x01R\x03sum\x12\x18\n" +
+	"\asamples\x18\x03 \x01(\x03R\asamples\"\xe8\x02\n" +
+	"\x13ChartSensorResponse\x126\n" +
+	"\abuckets\x18\x01 \x03(\v2\x1c.kubex.keystone.SensorBucketR\abuckets\x12D\n" +
+	"\x10last_received_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x0elastReceivedAt\x12-\n" +
+	"\x12resolution_seconds\x18\x03 \x01(\rR\x11resolutionSeconds\x12\x1c\n" +
+	"\testimated\x18\x04 \x01(\bR\testimated\x12A\n" +
+	"\x0eeffective_from\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\reffectiveFrom\x12C\n" +
+	"\x0feffective_until\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x0eeffectiveUntil\"\xe8\x02\n" +
+	"\x15SensorActivityRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
+	"\tentity_id\x18\x03 \x01(\tR\bentityId\x12\x16\n" +
+	"\x06sensor\x18\x04 \x01(\tR\x06sensor\x12#\n" +
+	"\rlookback_days\x18\x05 \x01(\rR\flookbackDays\x12B\n" +
+	"\bcalendar\x18\x06 \x01(\x0e2&.kubex.keystone.SensorActivityCalendarR\bcalendar\x12\"\n" +
+	"\rmonth_of_year\x18\a \x01(\rR\vmonthOfYear\x12\x1b\n" +
+	"\tapp_scope\x18\b \x01(\bR\bappScope\"\xce\x03\n" +
+	"\x12SensorActivitySlot\x12\x18\n" +
+	"\aweekday\x18\x01 \x01(\rR\aweekday\x12\x12\n" +
+	"\x04hour\x18\x02 \x01(\rR\x04hour\x12\x10\n" +
+	"\x03sum\x18\x03 \x01(\x01R\x03sum\x12\x18\n" +
+	"\asamples\x18\x04 \x01(\x03R\asamples\x12)\n" +
+	"\x10observed_seconds\x18\x05 \x01(\x01R\x0fobservedSeconds\x12%\n" +
+	"\x0eactive_seconds\x18\x06 \x01(\x01R\ractiveSeconds\x12\x1a\n" +
+	"\battempts\x18\a \x01(\x04R\battempts\x12\x1c\n" +
+	"\tsuccesses\x18\b \x01(\x04R\tsuccesses\x12-\n" +
+	"\x12online_probability\x18\t \x01(\x01R\x11onlineProbability\x12/\n" +
+	"\x13success_probability\x18\n" +
+	" \x01(\x01R\x12successProbability\x12'\n" +
+	"\x0fexpected_volume\x18\v \x01(\x01R\x0eexpectedVolume\x12'\n" +
+	"\x0fevidence_weight\x18\f \x01(\x01R\x0eevidenceWeight\x12 \n" +
+	"\fday_of_month\x18\r \x01(\rR\n" +
+	"dayOfMonth\"\x8c\x02\n" +
+	"\x16SensorActivityResponse\x128\n" +
+	"\x05slots\x18\x01 \x03(\v2\".kubex.keystone.SensorActivitySlotR\x05slots\x12\x1a\n" +
+	"\btimezone\x18\x02 \x01(\tR\btimezone\x12!\n" +
+	"\franked_slots\x18\x03 \x03(\rR\vrankedSlots\x129\n" +
+	"\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12>\n" +
+	"\x1bassumed_continuous_coverage\x18\x05 \x01(\bR\x19assumedContinuousCoverage\"\xc0\x03\n" +
+	"\x14HeatmapSensorRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
+	"\tentity_id\x18\x03 \x01(\tR\bentityId\x12\x16\n" +
+	"\x06sensor\x18\x04 \x01(\tR\x06sensor\x12.\n" +
+	"\x04from\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x04from\x120\n" +
+	"\x05until\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x05until\x12;\n" +
+	"\x06layout\x18\a \x01(\x0e2#.kubex.keystone.SensorHeatmapLayoutR\x06layout\x12\x1a\n" +
+	"\btimezone\x18\b \x01(\tR\btimezone\x12)\n" +
+	"\x10exclude_backfill\x18\t \x01(\bR\x0fexcludeBackfill\x12\x1b\n" +
+	"\tapp_scope\x18\n" +
+	" \x01(\bR\bappScope\"\xa4\x02\n" +
+	"\x11SensorHeatmapCell\x12\x14\n" +
+	"\x05index\x18\x01 \x01(\rR\x05index\x12\x18\n" +
+	"\aweekday\x18\x02 \x01(\rR\aweekday\x12\"\n" +
+	"\rminute_of_day\x18\x03 \x01(\rR\vminuteOfDay\x12\x10\n" +
+	"\x03sum\x18\x04 \x01(\x01R\x03sum\x12\x18\n" +
+	"\asamples\x18\x05 \x01(\x01R\asamples\x12-\n" +
+	"\x12observed_intervals\x18\x06 \x01(\x01R\x11observedIntervals\x12(\n" +
+	"\x10sum_per_interval\x18\a \x01(\x01R\x0esumPerInterval\x12\x18\n" +
+	"\aaverage\x18\b \x01(\x01R\aaverage\x12\x1c\n" +
+	"\testimated\x18\t \x01(\bR\testimated\"\xee\x02\n" +
+	"\x15HeatmapSensorResponse\x127\n" +
+	"\x05cells\x18\x01 \x03(\v2!.kubex.keystone.SensorHeatmapCellR\x05cells\x128\n" +
+	"\x18display_interval_seconds\x18\x02 \x01(\rR\x16displayIntervalSeconds\x12@\n" +
+	"\x1caggregation_interval_seconds\x18\x03 \x01(\rR\x1aaggregationIntervalSeconds\x12\x1a\n" +
+	"\btimezone\x18\x04 \x01(\tR\btimezone\x12D\n" +
+	"\x10last_received_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x0elastReceivedAt\x12>\n" +
+	"\x1bassumed_continuous_coverage\x18\x06 \x01(\bR\x19assumedContinuousCoverage\"\xc7\x05\n" +
 	"\fEntityObject\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12.\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1a.kubex.keystone.ObjectTypeR\x04type\x12\x16\n" +
@@ -12354,7 +14531,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\auser_id\x18\x03 \x01(\tR\x06userId\x12\x16\n" +
 	"\x06client\x18\x04 \x01(\tR\x06client\x121\n" +
 	"\x06source\x18\x05 \x01(\v2\x19.kubex.keystone.VendorAppR\x06source\x12,\n" +
-	"\x06parent\x18\x06 \x01(\v2\x14.kubex.keystone.UserR\x06parent\"\xac\n" +
+	"\x06parent\x18\x06 \x01(\v2\x14.kubex.keystone.UserR\x06parent\"\xb0\n" +
 	"\n" +
 	"\bMutation\x12.\n" +
 	"\amutator\x18\x01 \x01(\v2\x14.kubex.keystone.UserR\amutator\x128\n" +
@@ -12374,8 +14551,8 @@ const file_keystone_proto_rawDesc = "" +
 	"\rrelationships\x18\r \x03(\v2\".kubex.keystone.EntityRelationshipR\rrelationships\x12U\n" +
 	"\x14remove_relationships\x18\x0e \x03(\v2\".kubex.keystone.EntityRelationshipR\x13removeRelationships\x123\n" +
 	"\x06labels\x18\x11 \x03(\v2\x1b.kubex.keystone.EntityLabelR\x06labels\x12@\n" +
-	"\rremove_labels\x18\x12 \x03(\v2\x1b.kubex.keystone.EntityLabelR\fremoveLabels\x12K\n" +
-	"\fmeasurements\x18\x13 \x03(\v2'.kubex.keystone.EntitySensorMeasurementR\fmeasurements\x12:\n" +
+	"\rremove_labels\x18\x12 \x03(\v2\x1b.kubex.keystone.EntityLabelR\fremoveLabels\x12O\n" +
+	"\fmeasurements\x18\x13 \x03(\v2'.kubex.keystone.EntitySensorMeasurementB\x02\x18\x01R\fmeasurements\x12:\n" +
 	"\bdocument\x18\x14 \x01(\v2\x1e.kubex.keystone.EntityDocumentR\bdocument\x126\n" +
 	"\aobjects\x18\x15 \x03(\v2\x1c.kubex.keystone.EntityObjectR\aobjects\x12\x1b\n" +
 	"\tpii_token\x18\x16 \x01(\tR\bpiiToken\x128\n" +
@@ -13125,7 +15302,10 @@ const file_keystone_proto_rawDesc = "" +
 	"\x10EVENT_STREAM_ACK\x10\x01\x12\x14\n" +
 	"\x10EVENT_STREAM_NAK\x10\x02\x12\x1f\n" +
 	"\x1bEVENT_STREAM_NAK_WITH_DELAY\x10\x03\x12\x1c\n" +
-	"\x18EVENT_STREAM_IN_PROGRESS\x10\x04\"/\n" +
+	"\x18EVENT_STREAM_IN_PROGRESS\x10\x04\"[\n" +
+	"\x14SensorStorageOptions\x12!\n" +
+	"\fsummary_only\x18\x01 \x01(\bR\vsummaryOnly\x12 \n" +
+	"\vresolutions\x18\x02 \x03(\rR\vresolutions\"/\n" +
 	"\aFeedKey\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\"\x85\x01\n" +
@@ -13195,7 +15375,17 @@ const file_keystone_proto_rawDesc = "" +
 	"\bCritical\x10\x05\x12\t\n" +
 	"\x05Alert\x10\x06\x12\t\n" +
 	"\x05Fatal\x10\a\x12\t\n" +
-	"\x05Audit\x10\b*M\n" +
+	"\x05Audit\x10\b*h\n" +
+	"\x16SensorPredictionMetric\x12\x17\n" +
+	"\x13SensorPredictionSum\x10\x00\x12\x1b\n" +
+	"\x17SensorPredictionAverage\x10\x01\x12\x18\n" +
+	"\x14SensorPredictionHits\x10\x02*I\n" +
+	"\x16SensorActivityCalendar\x12\x16\n" +
+	"\x12SensorActivityWeek\x10\x00\x12\x17\n" +
+	"\x13SensorActivityMonth\x10\x01*B\n" +
+	"\x13SensorHeatmapLayout\x12\x14\n" +
+	"\x10SensorHeatmapDay\x10\x00\x12\x15\n" +
+	"\x11SensorHeatmapWeek\x10\x01*M\n" +
 	"\n" +
 	"ObjectType\x12\b\n" +
 	"\x04None\x10\x00\x12\f\n" +
@@ -13245,7 +15435,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\x13FeedSummaryInterval\x12\x16\n" +
 	"\x12FEED_SUMMARY_DAILY\x10\x00\x12\x17\n" +
 	"\x13FEED_SUMMARY_HOURLY\x10\x01\x12\x18\n" +
-	"\x14FEED_SUMMARY_MONTHLY\x10\x022\x9a(\n" +
+	"\x14FEED_SUMMARY_MONTHLY\x10\x022\x9f.\n" +
 	"\bKeystone\x12I\n" +
 	"\x06Status\x12\x1d.kubex.keystone.Authorization\x1a\x1e.kubex.keystone.StatusResponse\"\x00\x12A\n" +
 	"\x06Define\x12\x1d.kubex.keystone.SchemaRequest\x1a\x16.kubex.keystone.Schema\"\x00\x12F\n" +
@@ -13260,7 +15450,15 @@ const file_keystone_proto_rawDesc = "" +
 	"\fSQUIDRecover\x12#.kubex.keystone.SquidRecoverRequest\x1a\x1d.kubex.keystone.SquidResponse\"\x00\x12Y\n" +
 	"\x0eSnapshotReport\x12%.kubex.keystone.SnapshotReportRequest\x1a\x1e.kubex.keystone.MutateResponse\"\x00\x12]\n" +
 	"\x10ReportTimeSeries\x12'.kubex.keystone.ReportTimeSeriesRequest\x1a\x1e.kubex.keystone.MutateResponse\"\x00\x12d\n" +
-	"\x0fChartTimeSeries\x12&.kubex.keystone.ChartTimeSeriesRequest\x1a'.kubex.keystone.ChartTimeSeriesResponse\"\x00\x12K\n" +
+	"\x0fChartTimeSeries\x12&.kubex.keystone.ChartTimeSeriesRequest\x1a'.kubex.keystone.ChartTimeSeriesResponse\"\x00\x12V\n" +
+	"\fWriteSensors\x12#.kubex.keystone.WriteSensorsRequest\x1a\x1f.kubex.keystone.GenericResponse\"\x00\x12Y\n" +
+	"\x0eListAppSensors\x12\x1d.kubex.keystone.Authorization\x1a&.kubex.keystone.ListAppSensorsResponse\"\x00\x12X\n" +
+	"\vChartSensor\x12\".kubex.keystone.ChartSensorRequest\x1a#.kubex.keystone.ChartSensorResponse\"\x00\x12^\n" +
+	"\rHeatmapSensor\x12$.kubex.keystone.HeatmapSensorRequest\x1a%.kubex.keystone.HeatmapSensorResponse\"\x00\x12a\n" +
+	"\x0eSensorActivity\x12%.kubex.keystone.SensorActivityRequest\x1a&.kubex.keystone.SensorActivityResponse\"\x00\x12^\n" +
+	"\rPredictSensor\x12$.kubex.keystone.PredictSensorRequest\x1a%.kubex.keystone.PredictSensorResponse\"\x00\x12m\n" +
+	"\x12CreateSensorStream\x12).kubex.keystone.CreateSensorStreamRequest\x1a*.kubex.keystone.CreateSensorStreamResponse\"\x00\x12d\n" +
+	"\x13RevokeSensorSession\x12*.kubex.keystone.RevokeSensorSessionRequest\x1a\x1f.kubex.keystone.GenericResponse\"\x00\x12K\n" +
 	"\bRetrieve\x12\x1d.kubex.keystone.EntityRequest\x1a\x1e.kubex.keystone.EntityResponse\"\x00\x12C\n" +
 	"\x04Find\x12\x1b.kubex.keystone.FindRequest\x1a\x1c.kubex.keystone.FindResponse\"\x00\x12F\n" +
 	"\x04List\x12\x1b.kubex.keystone.ListRequest\x1a\x1c.kubex.keystone.ListResponse\"\x03\x88\x02\x01\x12U\n" +
@@ -13327,638 +15525,718 @@ func file_keystone_proto_rawDescGZIP() []byte {
 	return file_keystone_proto_rawDescData
 }
 
-var file_keystone_proto_enumTypes = make([]protoimpl.EnumInfo, 19)
-var file_keystone_proto_msgTypes = make([]protoimpl.MessageInfo, 181)
+var file_keystone_proto_enumTypes = make([]protoimpl.EnumInfo, 22)
+var file_keystone_proto_msgTypes = make([]protoimpl.MessageInfo, 199)
 var file_keystone_proto_goTypes = []any{
 	(EntityState)(0),                            // 0: kubex.keystone.EntityState
 	(LogLevel)(0),                               // 1: kubex.keystone.LogLevel
-	(ObjectType)(0),                             // 2: kubex.keystone.ObjectType
-	(Operator)(0),                               // 3: kubex.keystone.Operator
-	(AKVTimeQueryMode)(0),                       // 4: kubex.keystone.AKVTimeQueryMode
-	(AKVTimeGroupInterval)(0),                   // 5: kubex.keystone.AKVTimeGroupInterval
-	(AKVTimeGroupPick)(0),                       // 6: kubex.keystone.AKVTimeGroupPick
-	(AKVTimeDeleteMode)(0),                      // 7: kubex.keystone.AKVTimeDeleteMode
-	(FeedSummaryInterval)(0),                    // 8: kubex.keystone.FeedSummaryInterval
-	(Schema_Option)(0),                          // 9: kubex.keystone.Schema.Option
-	(Schema_Type)(0),                            // 10: kubex.keystone.Schema.Type
-	(Property_Type)(0),                          // 11: kubex.keystone.Property.Type
-	(Property_ExtendedType)(0),                  // 12: kubex.keystone.Property.ExtendedType
-	(Property_Option)(0),                        // 13: kubex.keystone.Property.Option
-	(MutateRequest_MutateOption)(0),             // 14: kubex.keystone.MutateRequest.MutateOption
-	(QueryRelationship_Direction)(0),            // 15: kubex.keystone.QueryRelationship.Direction
-	(QueryAggregate_Function)(0),                // 16: kubex.keystone.QueryAggregate.Function
-	(PropertyAggregation_AggregationType)(0),    // 17: kubex.keystone.PropertyAggregation.AggregationType
-	(EventStreamAck_Action)(0),                  // 18: kubex.keystone.EventStreamAck.Action
-	(*StatusResponse)(nil),                      // 19: kubex.keystone.StatusResponse
-	(*ExtendedResponse)(nil),                    // 20: kubex.keystone.ExtendedResponse
-	(*VendorApp)(nil),                           // 21: kubex.keystone.VendorApp
-	(*Authorization)(nil),                       // 22: kubex.keystone.Authorization
-	(*GenericResponse)(nil),                     // 23: kubex.keystone.GenericResponse
-	(*Schema)(nil),                              // 24: kubex.keystone.Schema
-	(*Property)(nil),                            // 25: kubex.keystone.Property
-	(*Key)(nil),                                 // 26: kubex.keystone.Key
-	(*Value)(nil),                               // 27: kubex.keystone.Value
-	(*RepeatedValue)(nil),                       // 28: kubex.keystone.RepeatedValue
-	(*PiiTokenRequest)(nil),                     // 29: kubex.keystone.PiiTokenRequest
-	(*PiiTokenResponse)(nil),                    // 30: kubex.keystone.PiiTokenResponse
-	(*PiiAnonymizeRequest)(nil),                 // 31: kubex.keystone.PiiAnonymizeRequest
-	(*PiiAnonymizeResponse)(nil),                // 32: kubex.keystone.PiiAnonymizeResponse
-	(*Entity)(nil),                              // 33: kubex.keystone.Entity
-	(*EntityProperty)(nil),                      // 34: kubex.keystone.EntityProperty
-	(*EntityChild)(nil),                         // 35: kubex.keystone.EntityChild
-	(*EntityDocument)(nil),                      // 36: kubex.keystone.EntityDocument
-	(*EntityLog)(nil),                           // 37: kubex.keystone.EntityLog
-	(*EntityEvent)(nil),                         // 38: kubex.keystone.EntityEvent
-	(*EntityRelationship)(nil),                  // 39: kubex.keystone.EntityRelationship
-	(*EntityLabel)(nil),                         // 40: kubex.keystone.EntityLabel
-	(*EntitySensorMeasurement)(nil),             // 41: kubex.keystone.EntitySensorMeasurement
-	(*EntityObject)(nil),                        // 42: kubex.keystone.EntityObject
-	(*User)(nil),                                // 43: kubex.keystone.User
-	(*Mutation)(nil),                            // 44: kubex.keystone.Mutation
-	(*LogRequest)(nil),                          // 45: kubex.keystone.LogRequest
-	(*LogResponse)(nil),                         // 46: kubex.keystone.LogResponse
-	(*Window)(nil),                              // 47: kubex.keystone.Window
-	(*PropertyFilter)(nil),                      // 48: kubex.keystone.PropertyFilter
-	(*PropertySort)(nil),                        // 49: kubex.keystone.PropertySort
-	(*SchemaRequest)(nil),                       // 50: kubex.keystone.SchemaRequest
-	(*MutateRequest)(nil),                       // 51: kubex.keystone.MutateRequest
-	(*SnapshotReportRequest)(nil),               // 52: kubex.keystone.SnapshotReportRequest
-	(*ReportTimeSeriesRequest)(nil),             // 53: kubex.keystone.ReportTimeSeriesRequest
-	(*EntityView)(nil),                          // 54: kubex.keystone.EntityView
-	(*TypeCount)(nil),                           // 55: kubex.keystone.TypeCount
-	(*ChildSummary)(nil),                        // 56: kubex.keystone.ChildSummary
-	(*EntityRequest)(nil),                       // 57: kubex.keystone.EntityRequest
-	(*EntityResponse)(nil),                      // 58: kubex.keystone.EntityResponse
-	(*EntityLock)(nil),                          // 59: kubex.keystone.EntityLock
-	(*MutateResponse)(nil),                      // 60: kubex.keystone.MutateResponse
-	(*IDLookup)(nil),                            // 61: kubex.keystone.IDLookup
-	(*PropertyRequest)(nil),                     // 62: kubex.keystone.PropertyRequest
-	(*ChildRequest)(nil),                        // 63: kubex.keystone.ChildRequest
-	(*LogsRequest)(nil),                         // 64: kubex.keystone.LogsRequest
-	(*LogsResponse)(nil),                        // 65: kubex.keystone.LogsResponse
-	(*EventRequest)(nil),                        // 66: kubex.keystone.EventRequest
-	(*EventsResponse)(nil),                      // 67: kubex.keystone.EventsResponse
-	(*RelationOf)(nil),                          // 68: kubex.keystone.RelationOf
-	(*FindRequest)(nil),                         // 69: kubex.keystone.FindRequest
-	(*FindResponse)(nil),                        // 70: kubex.keystone.FindResponse
-	(*PageRequest)(nil),                         // 71: kubex.keystone.PageRequest
-	(*ListRequest)(nil),                         // 72: kubex.keystone.ListRequest
-	(*ListResponse)(nil),                        // 73: kubex.keystone.ListResponse
-	(*QueryRequest)(nil),                        // 74: kubex.keystone.QueryRequest
-	(*QueryPredicate)(nil),                      // 75: kubex.keystone.QueryPredicate
-	(*QueryPredicateGroup)(nil),                 // 76: kubex.keystone.QueryPredicateGroup
-	(*QueryRelationship)(nil),                   // 77: kubex.keystone.QueryRelationship
-	(*QueryAggregate)(nil),                      // 78: kubex.keystone.QueryAggregate
-	(*QueryInclude)(nil),                        // 79: kubex.keystone.QueryInclude
-	(*QueryRow)(nil),                            // 80: kubex.keystone.QueryRow
-	(*QueryExecution)(nil),                      // 81: kubex.keystone.QueryExecution
-	(*EntityIDList)(nil),                        // 82: kubex.keystone.EntityIDList
-	(*QueryResponse)(nil),                       // 83: kubex.keystone.QueryResponse
-	(*QueryIndexRequest)(nil),                   // 84: kubex.keystone.QueryIndexRequest
-	(*QueryIndexResponse)(nil),                  // 85: kubex.keystone.QueryIndexResponse
-	(*GroupCountRequest)(nil),                   // 86: kubex.keystone.GroupCountRequest
-	(*GroupCountResponse)(nil),                  // 87: kubex.keystone.GroupCountResponse
-	(*EntitiesResponse)(nil),                    // 88: kubex.keystone.EntitiesResponse
-	(*Date)(nil),                                // 89: kubex.keystone.Date
-	(*SchemaStatisticsRequest)(nil),             // 90: kubex.keystone.SchemaStatisticsRequest
-	(*SchemaStatisticsResponse)(nil),            // 91: kubex.keystone.SchemaStatisticsResponse
-	(*DailyEntityRequest)(nil),                  // 92: kubex.keystone.DailyEntityRequest
-	(*DailyEntityResponse)(nil),                 // 93: kubex.keystone.DailyEntityResponse
-	(*ChartTimeSeriesRequest)(nil),              // 94: kubex.keystone.ChartTimeSeriesRequest
-	(*PropertyAggregation)(nil),                 // 95: kubex.keystone.PropertyAggregation
-	(*ChartTimeSeriesResponse)(nil),             // 96: kubex.keystone.ChartTimeSeriesResponse
-	(*ShareViewRequest)(nil),                    // 97: kubex.keystone.ShareViewRequest
-	(*SharedViewResponse)(nil),                  // 98: kubex.keystone.SharedViewResponse
-	(*SharedViewsRequest)(nil),                  // 99: kubex.keystone.SharedViewsRequest
-	(*SharedViewsResponse)(nil),                 // 100: kubex.keystone.SharedViewsResponse
-	(*RateLimitRequest)(nil),                    // 101: kubex.keystone.RateLimitRequest
-	(*RateLimitResponse)(nil),                   // 102: kubex.keystone.RateLimitResponse
-	(*LookupRequest)(nil),                       // 103: kubex.keystone.LookupRequest
-	(*LookupResponse)(nil),                      // 104: kubex.keystone.LookupResponse
-	(*EntityReference)(nil),                     // 105: kubex.keystone.EntityReference
-	(*AKVPutRequest)(nil),                       // 106: kubex.keystone.AKVPutRequest
-	(*AKVGetRequest)(nil),                       // 107: kubex.keystone.AKVGetRequest
-	(*AKVGetResponse)(nil),                      // 108: kubex.keystone.AKVGetResponse
-	(*AKVDelRequest)(nil),                       // 109: kubex.keystone.AKVDelRequest
-	(*AKVProperty)(nil),                         // 110: kubex.keystone.AKVProperty
-	(*IIDCreateRequest)(nil),                    // 111: kubex.keystone.IIDCreateRequest
-	(*IIDRequest)(nil),                          // 112: kubex.keystone.IIDRequest
-	(*IIDsResponse)(nil),                        // 113: kubex.keystone.IIDsResponse
-	(*IIDResponse)(nil),                         // 114: kubex.keystone.IIDResponse
-	(*EventStreamRequest)(nil),                  // 115: kubex.keystone.EventStreamRequest
-	(*EventStreamResponse)(nil),                 // 116: kubex.keystone.EventStreamResponse
-	(*PushTaskRequest)(nil),                     // 117: kubex.keystone.PushTaskRequest
-	(*TaskAckRequest)(nil),                      // 118: kubex.keystone.TaskAckRequest
-	(*TaskResponse)(nil),                        // 119: kubex.keystone.TaskResponse
-	(*DestroyRequest)(nil),                      // 120: kubex.keystone.DestroyRequest
-	(*DestroyResponse)(nil),                     // 121: kubex.keystone.DestroyResponse
-	(*SquidRequest)(nil),                        // 122: kubex.keystone.SquidRequest
-	(*SquidRecoverRequest)(nil),                 // 123: kubex.keystone.SquidRecoverRequest
-	(*SquidResponse)(nil),                       // 124: kubex.keystone.SquidResponse
-	(*EnumEntry)(nil),                           // 125: kubex.keystone.EnumEntry
-	(*EnumPutRequest)(nil),                      // 126: kubex.keystone.EnumPutRequest
-	(*EnumGetRequest)(nil),                      // 127: kubex.keystone.EnumGetRequest
-	(*EnumGetResponse)(nil),                     // 128: kubex.keystone.EnumGetResponse
-	(*EnumDeleteRequest)(nil),                   // 129: kubex.keystone.EnumDeleteRequest
-	(*EnumListRequest)(nil),                     // 130: kubex.keystone.EnumListRequest
-	(*EnumListResponse)(nil),                    // 131: kubex.keystone.EnumListResponse
-	(*EnumReplaceRequest)(nil),                  // 132: kubex.keystone.EnumReplaceRequest
-	(*AKVTimeEntry)(nil),                        // 133: kubex.keystone.AKVTimeEntry
-	(*AKVTimePutRequest)(nil),                   // 134: kubex.keystone.AKVTimePutRequest
-	(*AKVTimeGetRequest)(nil),                   // 135: kubex.keystone.AKVTimeGetRequest
-	(*AKVTimeResult)(nil),                       // 136: kubex.keystone.AKVTimeResult
-	(*AKVTimeGetResponse)(nil),                  // 137: kubex.keystone.AKVTimeGetResponse
-	(*AKVTimeDelRequest)(nil),                   // 138: kubex.keystone.AKVTimeDelRequest
-	(*RelayCreateSessionRequest)(nil),           // 139: kubex.keystone.RelayCreateSessionRequest
-	(*RelayCreateSessionResponse)(nil),          // 140: kubex.keystone.RelayCreateSessionResponse
-	(*RelayExtendSessionRequest)(nil),           // 141: kubex.keystone.RelayExtendSessionRequest
-	(*RelayExtendSessionResponse)(nil),          // 142: kubex.keystone.RelayExtendSessionResponse
-	(*RelayDestroySessionRequest)(nil),          // 143: kubex.keystone.RelayDestroySessionRequest
-	(*RelayDestroySessionResponse)(nil),         // 144: kubex.keystone.RelayDestroySessionResponse
-	(*RelayCreateShortCodeRequest)(nil),         // 145: kubex.keystone.RelayCreateShortCodeRequest
-	(*RelayCreateShortCodeResponse)(nil),        // 146: kubex.keystone.RelayCreateShortCodeResponse
-	(*RelayResolveShortCodeRequest)(nil),        // 147: kubex.keystone.RelayResolveShortCodeRequest
-	(*RelayResolveShortCodeResponse)(nil),       // 148: kubex.keystone.RelayResolveShortCodeResponse
-	(*RelayDeleteShortCodeRequest)(nil),         // 149: kubex.keystone.RelayDeleteShortCodeRequest
-	(*RelayDeleteShortCodeResponse)(nil),        // 150: kubex.keystone.RelayDeleteShortCodeResponse
-	(*RelayPublishRequest)(nil),                 // 151: kubex.keystone.RelayPublishRequest
-	(*RelayPublishResponse)(nil),                // 152: kubex.keystone.RelayPublishResponse
-	(*RelayGetPresenceRequest)(nil),             // 153: kubex.keystone.RelayGetPresenceRequest
-	(*RelayGetPresenceResponse)(nil),            // 154: kubex.keystone.RelayGetPresenceResponse
-	(*PresenceDevice)(nil),                      // 155: kubex.keystone.PresenceDevice
-	(*RelayGetSessionMetadataRequest)(nil),      // 156: kubex.keystone.RelayGetSessionMetadataRequest
-	(*RelayGetSessionMetadataResponse)(nil),     // 157: kubex.keystone.RelayGetSessionMetadataResponse
-	(*RelaySetSessionMetadataRequest)(nil),      // 158: kubex.keystone.RelaySetSessionMetadataRequest
-	(*RelaySetSessionMetadataResponse)(nil),     // 159: kubex.keystone.RelaySetSessionMetadataResponse
-	(*EventStreamAck)(nil),                      // 160: kubex.keystone.EventStreamAck
-	(*FeedKey)(nil),                             // 161: kubex.keystone.FeedKey
-	(*FeedEntry)(nil),                           // 162: kubex.keystone.FeedEntry
-	(*FeedPutRequest)(nil),                      // 163: kubex.keystone.FeedPutRequest
-	(*FeedPutResponse)(nil),                     // 164: kubex.keystone.FeedPutResponse
-	(*FeedReadRequest)(nil),                     // 165: kubex.keystone.FeedReadRequest
-	(*FeedReadResponse)(nil),                    // 166: kubex.keystone.FeedReadResponse
-	(*FeedRemoveRequest)(nil),                   // 167: kubex.keystone.FeedRemoveRequest
-	(*FeedSummaryRequest)(nil),                  // 168: kubex.keystone.FeedSummaryRequest
-	(*FeedSummaryBucket)(nil),                   // 169: kubex.keystone.FeedSummaryBucket
-	(*FeedSummaryResponse)(nil),                 // 170: kubex.keystone.FeedSummaryResponse
-	nil,                                         // 171: kubex.keystone.RepeatedValue.KeyValueEntry
-	nil,                                         // 172: kubex.keystone.RepeatedValue.MixedEntry
-	nil,                                         // 173: kubex.keystone.EntityChild.DataEntry
-	nil,                                         // 174: kubex.keystone.EntityChild.AppendDataEntry
-	nil,                                         // 175: kubex.keystone.EntityDocument.MetaEntry
-	nil,                                         // 176: kubex.keystone.EntityDocument.AppendMetaEntry
-	nil,                                         // 177: kubex.keystone.EntityLog.DataEntry
-	nil,                                         // 178: kubex.keystone.EntityEvent.DataEntry
-	nil,                                         // 179: kubex.keystone.EntityRelationship.DataEntry
-	nil,                                         // 180: kubex.keystone.EntitySensorMeasurement.DataEntry
-	nil,                                         // 181: kubex.keystone.EntityObject.MetadataEntry
-	nil,                                         // 182: kubex.keystone.EntityObject.UploadHeadersEntry
-	nil,                                         // 183: kubex.keystone.MutateResponse.CreatedChildrenEntry
-	nil,                                         // 184: kubex.keystone.QueryRow.ValuesEntry
-	(*GroupCountResponse_Result)(nil),           // 185: kubex.keystone.GroupCountResponse.Result
-	nil,                                         // 186: kubex.keystone.GroupCountResponse.Result.PropertiesEntry
-	nil,                                         // 187: kubex.keystone.SchemaStatisticsResponse.DailyCountEntry
-	nil,                                         // 188: kubex.keystone.DailyEntityResponse.EntitiesEntry
-	nil,                                         // 189: kubex.keystone.ChartTimeSeriesResponse.SeriesEntry
-	(*ChartTimeSeriesResponse_ChartSeries)(nil), // 190: kubex.keystone.ChartTimeSeriesResponse.ChartSeries
-	nil,                           // 191: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.ValuesEntry
-	nil,                           // 192: kubex.keystone.AKVGetResponse.PropertiesEntry
-	nil,                           // 193: kubex.keystone.IIDCreateRequest.IncrEntry
-	nil,                           // 194: kubex.keystone.IIDCreateRequest.MetaEntry
-	nil,                           // 195: kubex.keystone.IIDResponse.CountsEntry
-	nil,                           // 196: kubex.keystone.IIDResponse.MetaEntry
-	nil,                           // 197: kubex.keystone.PushTaskRequest.DataEntry
-	nil,                           // 198: kubex.keystone.TaskResponse.DataEntry
-	nil,                           // 199: kubex.keystone.EnumEntry.MetadataEntry
-	(*timestamppb.Timestamp)(nil), // 200: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),   // 201: google.protobuf.Duration
+	(SensorPredictionMetric)(0),                 // 2: kubex.keystone.SensorPredictionMetric
+	(SensorActivityCalendar)(0),                 // 3: kubex.keystone.SensorActivityCalendar
+	(SensorHeatmapLayout)(0),                    // 4: kubex.keystone.SensorHeatmapLayout
+	(ObjectType)(0),                             // 5: kubex.keystone.ObjectType
+	(Operator)(0),                               // 6: kubex.keystone.Operator
+	(AKVTimeQueryMode)(0),                       // 7: kubex.keystone.AKVTimeQueryMode
+	(AKVTimeGroupInterval)(0),                   // 8: kubex.keystone.AKVTimeGroupInterval
+	(AKVTimeGroupPick)(0),                       // 9: kubex.keystone.AKVTimeGroupPick
+	(AKVTimeDeleteMode)(0),                      // 10: kubex.keystone.AKVTimeDeleteMode
+	(FeedSummaryInterval)(0),                    // 11: kubex.keystone.FeedSummaryInterval
+	(Schema_Option)(0),                          // 12: kubex.keystone.Schema.Option
+	(Schema_Type)(0),                            // 13: kubex.keystone.Schema.Type
+	(Property_Type)(0),                          // 14: kubex.keystone.Property.Type
+	(Property_ExtendedType)(0),                  // 15: kubex.keystone.Property.ExtendedType
+	(Property_Option)(0),                        // 16: kubex.keystone.Property.Option
+	(MutateRequest_MutateOption)(0),             // 17: kubex.keystone.MutateRequest.MutateOption
+	(QueryRelationship_Direction)(0),            // 18: kubex.keystone.QueryRelationship.Direction
+	(QueryAggregate_Function)(0),                // 19: kubex.keystone.QueryAggregate.Function
+	(PropertyAggregation_AggregationType)(0),    // 20: kubex.keystone.PropertyAggregation.AggregationType
+	(EventStreamAck_Action)(0),                  // 21: kubex.keystone.EventStreamAck.Action
+	(*StatusResponse)(nil),                      // 22: kubex.keystone.StatusResponse
+	(*ExtendedResponse)(nil),                    // 23: kubex.keystone.ExtendedResponse
+	(*VendorApp)(nil),                           // 24: kubex.keystone.VendorApp
+	(*Authorization)(nil),                       // 25: kubex.keystone.Authorization
+	(*GenericResponse)(nil),                     // 26: kubex.keystone.GenericResponse
+	(*Schema)(nil),                              // 27: kubex.keystone.Schema
+	(*Property)(nil),                            // 28: kubex.keystone.Property
+	(*Key)(nil),                                 // 29: kubex.keystone.Key
+	(*Value)(nil),                               // 30: kubex.keystone.Value
+	(*RepeatedValue)(nil),                       // 31: kubex.keystone.RepeatedValue
+	(*PiiTokenRequest)(nil),                     // 32: kubex.keystone.PiiTokenRequest
+	(*PiiTokenResponse)(nil),                    // 33: kubex.keystone.PiiTokenResponse
+	(*PiiAnonymizeRequest)(nil),                 // 34: kubex.keystone.PiiAnonymizeRequest
+	(*PiiAnonymizeResponse)(nil),                // 35: kubex.keystone.PiiAnonymizeResponse
+	(*Entity)(nil),                              // 36: kubex.keystone.Entity
+	(*EntityProperty)(nil),                      // 37: kubex.keystone.EntityProperty
+	(*EntityChild)(nil),                         // 38: kubex.keystone.EntityChild
+	(*EntityDocument)(nil),                      // 39: kubex.keystone.EntityDocument
+	(*EntityLog)(nil),                           // 40: kubex.keystone.EntityLog
+	(*EntityEvent)(nil),                         // 41: kubex.keystone.EntityEvent
+	(*EntityRelationship)(nil),                  // 42: kubex.keystone.EntityRelationship
+	(*EntityLabel)(nil),                         // 43: kubex.keystone.EntityLabel
+	(*EntitySensorMeasurement)(nil),             // 44: kubex.keystone.EntitySensorMeasurement
+	(*WriteSensorsRequest)(nil),                 // 45: kubex.keystone.WriteSensorsRequest
+	(*ListAppSensorsResponse)(nil),              // 46: kubex.keystone.ListAppSensorsResponse
+	(*PredictSensorRequest)(nil),                // 47: kubex.keystone.PredictSensorRequest
+	(*SensorPredictionPoint)(nil),               // 48: kubex.keystone.SensorPredictionPoint
+	(*PredictSensorResponse)(nil),               // 49: kubex.keystone.PredictSensorResponse
+	(*CreateSensorStreamRequest)(nil),           // 50: kubex.keystone.CreateSensorStreamRequest
+	(*CreateSensorStreamResponse)(nil),          // 51: kubex.keystone.CreateSensorStreamResponse
+	(*RevokeSensorSessionRequest)(nil),          // 52: kubex.keystone.RevokeSensorSessionRequest
+	(*ChartSensorRequest)(nil),                  // 53: kubex.keystone.ChartSensorRequest
+	(*SensorBucket)(nil),                        // 54: kubex.keystone.SensorBucket
+	(*ChartSensorResponse)(nil),                 // 55: kubex.keystone.ChartSensorResponse
+	(*SensorActivityRequest)(nil),               // 56: kubex.keystone.SensorActivityRequest
+	(*SensorActivitySlot)(nil),                  // 57: kubex.keystone.SensorActivitySlot
+	(*SensorActivityResponse)(nil),              // 58: kubex.keystone.SensorActivityResponse
+	(*HeatmapSensorRequest)(nil),                // 59: kubex.keystone.HeatmapSensorRequest
+	(*SensorHeatmapCell)(nil),                   // 60: kubex.keystone.SensorHeatmapCell
+	(*HeatmapSensorResponse)(nil),               // 61: kubex.keystone.HeatmapSensorResponse
+	(*EntityObject)(nil),                        // 62: kubex.keystone.EntityObject
+	(*User)(nil),                                // 63: kubex.keystone.User
+	(*Mutation)(nil),                            // 64: kubex.keystone.Mutation
+	(*LogRequest)(nil),                          // 65: kubex.keystone.LogRequest
+	(*LogResponse)(nil),                         // 66: kubex.keystone.LogResponse
+	(*Window)(nil),                              // 67: kubex.keystone.Window
+	(*PropertyFilter)(nil),                      // 68: kubex.keystone.PropertyFilter
+	(*PropertySort)(nil),                        // 69: kubex.keystone.PropertySort
+	(*SchemaRequest)(nil),                       // 70: kubex.keystone.SchemaRequest
+	(*MutateRequest)(nil),                       // 71: kubex.keystone.MutateRequest
+	(*SnapshotReportRequest)(nil),               // 72: kubex.keystone.SnapshotReportRequest
+	(*ReportTimeSeriesRequest)(nil),             // 73: kubex.keystone.ReportTimeSeriesRequest
+	(*EntityView)(nil),                          // 74: kubex.keystone.EntityView
+	(*TypeCount)(nil),                           // 75: kubex.keystone.TypeCount
+	(*ChildSummary)(nil),                        // 76: kubex.keystone.ChildSummary
+	(*EntityRequest)(nil),                       // 77: kubex.keystone.EntityRequest
+	(*EntityResponse)(nil),                      // 78: kubex.keystone.EntityResponse
+	(*EntityLock)(nil),                          // 79: kubex.keystone.EntityLock
+	(*MutateResponse)(nil),                      // 80: kubex.keystone.MutateResponse
+	(*IDLookup)(nil),                            // 81: kubex.keystone.IDLookup
+	(*PropertyRequest)(nil),                     // 82: kubex.keystone.PropertyRequest
+	(*ChildRequest)(nil),                        // 83: kubex.keystone.ChildRequest
+	(*LogsRequest)(nil),                         // 84: kubex.keystone.LogsRequest
+	(*LogsResponse)(nil),                        // 85: kubex.keystone.LogsResponse
+	(*EventRequest)(nil),                        // 86: kubex.keystone.EventRequest
+	(*EventsResponse)(nil),                      // 87: kubex.keystone.EventsResponse
+	(*RelationOf)(nil),                          // 88: kubex.keystone.RelationOf
+	(*FindRequest)(nil),                         // 89: kubex.keystone.FindRequest
+	(*FindResponse)(nil),                        // 90: kubex.keystone.FindResponse
+	(*PageRequest)(nil),                         // 91: kubex.keystone.PageRequest
+	(*ListRequest)(nil),                         // 92: kubex.keystone.ListRequest
+	(*ListResponse)(nil),                        // 93: kubex.keystone.ListResponse
+	(*QueryRequest)(nil),                        // 94: kubex.keystone.QueryRequest
+	(*QueryPredicate)(nil),                      // 95: kubex.keystone.QueryPredicate
+	(*QueryPredicateGroup)(nil),                 // 96: kubex.keystone.QueryPredicateGroup
+	(*QueryRelationship)(nil),                   // 97: kubex.keystone.QueryRelationship
+	(*QueryAggregate)(nil),                      // 98: kubex.keystone.QueryAggregate
+	(*QueryInclude)(nil),                        // 99: kubex.keystone.QueryInclude
+	(*QueryRow)(nil),                            // 100: kubex.keystone.QueryRow
+	(*QueryExecution)(nil),                      // 101: kubex.keystone.QueryExecution
+	(*EntityIDList)(nil),                        // 102: kubex.keystone.EntityIDList
+	(*QueryResponse)(nil),                       // 103: kubex.keystone.QueryResponse
+	(*QueryIndexRequest)(nil),                   // 104: kubex.keystone.QueryIndexRequest
+	(*QueryIndexResponse)(nil),                  // 105: kubex.keystone.QueryIndexResponse
+	(*GroupCountRequest)(nil),                   // 106: kubex.keystone.GroupCountRequest
+	(*GroupCountResponse)(nil),                  // 107: kubex.keystone.GroupCountResponse
+	(*EntitiesResponse)(nil),                    // 108: kubex.keystone.EntitiesResponse
+	(*Date)(nil),                                // 109: kubex.keystone.Date
+	(*SchemaStatisticsRequest)(nil),             // 110: kubex.keystone.SchemaStatisticsRequest
+	(*SchemaStatisticsResponse)(nil),            // 111: kubex.keystone.SchemaStatisticsResponse
+	(*DailyEntityRequest)(nil),                  // 112: kubex.keystone.DailyEntityRequest
+	(*DailyEntityResponse)(nil),                 // 113: kubex.keystone.DailyEntityResponse
+	(*ChartTimeSeriesRequest)(nil),              // 114: kubex.keystone.ChartTimeSeriesRequest
+	(*PropertyAggregation)(nil),                 // 115: kubex.keystone.PropertyAggregation
+	(*ChartTimeSeriesResponse)(nil),             // 116: kubex.keystone.ChartTimeSeriesResponse
+	(*ShareViewRequest)(nil),                    // 117: kubex.keystone.ShareViewRequest
+	(*SharedViewResponse)(nil),                  // 118: kubex.keystone.SharedViewResponse
+	(*SharedViewsRequest)(nil),                  // 119: kubex.keystone.SharedViewsRequest
+	(*SharedViewsResponse)(nil),                 // 120: kubex.keystone.SharedViewsResponse
+	(*RateLimitRequest)(nil),                    // 121: kubex.keystone.RateLimitRequest
+	(*RateLimitResponse)(nil),                   // 122: kubex.keystone.RateLimitResponse
+	(*LookupRequest)(nil),                       // 123: kubex.keystone.LookupRequest
+	(*LookupResponse)(nil),                      // 124: kubex.keystone.LookupResponse
+	(*EntityReference)(nil),                     // 125: kubex.keystone.EntityReference
+	(*AKVPutRequest)(nil),                       // 126: kubex.keystone.AKVPutRequest
+	(*AKVGetRequest)(nil),                       // 127: kubex.keystone.AKVGetRequest
+	(*AKVGetResponse)(nil),                      // 128: kubex.keystone.AKVGetResponse
+	(*AKVDelRequest)(nil),                       // 129: kubex.keystone.AKVDelRequest
+	(*AKVProperty)(nil),                         // 130: kubex.keystone.AKVProperty
+	(*IIDCreateRequest)(nil),                    // 131: kubex.keystone.IIDCreateRequest
+	(*IIDRequest)(nil),                          // 132: kubex.keystone.IIDRequest
+	(*IIDsResponse)(nil),                        // 133: kubex.keystone.IIDsResponse
+	(*IIDResponse)(nil),                         // 134: kubex.keystone.IIDResponse
+	(*EventStreamRequest)(nil),                  // 135: kubex.keystone.EventStreamRequest
+	(*EventStreamResponse)(nil),                 // 136: kubex.keystone.EventStreamResponse
+	(*PushTaskRequest)(nil),                     // 137: kubex.keystone.PushTaskRequest
+	(*TaskAckRequest)(nil),                      // 138: kubex.keystone.TaskAckRequest
+	(*TaskResponse)(nil),                        // 139: kubex.keystone.TaskResponse
+	(*DestroyRequest)(nil),                      // 140: kubex.keystone.DestroyRequest
+	(*DestroyResponse)(nil),                     // 141: kubex.keystone.DestroyResponse
+	(*SquidRequest)(nil),                        // 142: kubex.keystone.SquidRequest
+	(*SquidRecoverRequest)(nil),                 // 143: kubex.keystone.SquidRecoverRequest
+	(*SquidResponse)(nil),                       // 144: kubex.keystone.SquidResponse
+	(*EnumEntry)(nil),                           // 145: kubex.keystone.EnumEntry
+	(*EnumPutRequest)(nil),                      // 146: kubex.keystone.EnumPutRequest
+	(*EnumGetRequest)(nil),                      // 147: kubex.keystone.EnumGetRequest
+	(*EnumGetResponse)(nil),                     // 148: kubex.keystone.EnumGetResponse
+	(*EnumDeleteRequest)(nil),                   // 149: kubex.keystone.EnumDeleteRequest
+	(*EnumListRequest)(nil),                     // 150: kubex.keystone.EnumListRequest
+	(*EnumListResponse)(nil),                    // 151: kubex.keystone.EnumListResponse
+	(*EnumReplaceRequest)(nil),                  // 152: kubex.keystone.EnumReplaceRequest
+	(*AKVTimeEntry)(nil),                        // 153: kubex.keystone.AKVTimeEntry
+	(*AKVTimePutRequest)(nil),                   // 154: kubex.keystone.AKVTimePutRequest
+	(*AKVTimeGetRequest)(nil),                   // 155: kubex.keystone.AKVTimeGetRequest
+	(*AKVTimeResult)(nil),                       // 156: kubex.keystone.AKVTimeResult
+	(*AKVTimeGetResponse)(nil),                  // 157: kubex.keystone.AKVTimeGetResponse
+	(*AKVTimeDelRequest)(nil),                   // 158: kubex.keystone.AKVTimeDelRequest
+	(*RelayCreateSessionRequest)(nil),           // 159: kubex.keystone.RelayCreateSessionRequest
+	(*RelayCreateSessionResponse)(nil),          // 160: kubex.keystone.RelayCreateSessionResponse
+	(*RelayExtendSessionRequest)(nil),           // 161: kubex.keystone.RelayExtendSessionRequest
+	(*RelayExtendSessionResponse)(nil),          // 162: kubex.keystone.RelayExtendSessionResponse
+	(*RelayDestroySessionRequest)(nil),          // 163: kubex.keystone.RelayDestroySessionRequest
+	(*RelayDestroySessionResponse)(nil),         // 164: kubex.keystone.RelayDestroySessionResponse
+	(*RelayCreateShortCodeRequest)(nil),         // 165: kubex.keystone.RelayCreateShortCodeRequest
+	(*RelayCreateShortCodeResponse)(nil),        // 166: kubex.keystone.RelayCreateShortCodeResponse
+	(*RelayResolveShortCodeRequest)(nil),        // 167: kubex.keystone.RelayResolveShortCodeRequest
+	(*RelayResolveShortCodeResponse)(nil),       // 168: kubex.keystone.RelayResolveShortCodeResponse
+	(*RelayDeleteShortCodeRequest)(nil),         // 169: kubex.keystone.RelayDeleteShortCodeRequest
+	(*RelayDeleteShortCodeResponse)(nil),        // 170: kubex.keystone.RelayDeleteShortCodeResponse
+	(*RelayPublishRequest)(nil),                 // 171: kubex.keystone.RelayPublishRequest
+	(*RelayPublishResponse)(nil),                // 172: kubex.keystone.RelayPublishResponse
+	(*RelayGetPresenceRequest)(nil),             // 173: kubex.keystone.RelayGetPresenceRequest
+	(*RelayGetPresenceResponse)(nil),            // 174: kubex.keystone.RelayGetPresenceResponse
+	(*PresenceDevice)(nil),                      // 175: kubex.keystone.PresenceDevice
+	(*RelayGetSessionMetadataRequest)(nil),      // 176: kubex.keystone.RelayGetSessionMetadataRequest
+	(*RelayGetSessionMetadataResponse)(nil),     // 177: kubex.keystone.RelayGetSessionMetadataResponse
+	(*RelaySetSessionMetadataRequest)(nil),      // 178: kubex.keystone.RelaySetSessionMetadataRequest
+	(*RelaySetSessionMetadataResponse)(nil),     // 179: kubex.keystone.RelaySetSessionMetadataResponse
+	(*EventStreamAck)(nil),                      // 180: kubex.keystone.EventStreamAck
+	(*SensorStorageOptions)(nil),                // 181: kubex.keystone.SensorStorageOptions
+	(*FeedKey)(nil),                             // 182: kubex.keystone.FeedKey
+	(*FeedEntry)(nil),                           // 183: kubex.keystone.FeedEntry
+	(*FeedPutRequest)(nil),                      // 184: kubex.keystone.FeedPutRequest
+	(*FeedPutResponse)(nil),                     // 185: kubex.keystone.FeedPutResponse
+	(*FeedReadRequest)(nil),                     // 186: kubex.keystone.FeedReadRequest
+	(*FeedReadResponse)(nil),                    // 187: kubex.keystone.FeedReadResponse
+	(*FeedRemoveRequest)(nil),                   // 188: kubex.keystone.FeedRemoveRequest
+	(*FeedSummaryRequest)(nil),                  // 189: kubex.keystone.FeedSummaryRequest
+	(*FeedSummaryBucket)(nil),                   // 190: kubex.keystone.FeedSummaryBucket
+	(*FeedSummaryResponse)(nil),                 // 191: kubex.keystone.FeedSummaryResponse
+	nil,                                         // 192: kubex.keystone.RepeatedValue.KeyValueEntry
+	nil,                                         // 193: kubex.keystone.RepeatedValue.MixedEntry
+	nil,                                         // 194: kubex.keystone.EntityChild.DataEntry
+	nil,                                         // 195: kubex.keystone.EntityChild.AppendDataEntry
+	nil,                                         // 196: kubex.keystone.EntityDocument.MetaEntry
+	nil,                                         // 197: kubex.keystone.EntityDocument.AppendMetaEntry
+	nil,                                         // 198: kubex.keystone.EntityLog.DataEntry
+	nil,                                         // 199: kubex.keystone.EntityEvent.DataEntry
+	nil,                                         // 200: kubex.keystone.EntityRelationship.DataEntry
+	nil,                                         // 201: kubex.keystone.EntitySensorMeasurement.DataEntry
+	nil,                                         // 202: kubex.keystone.EntityObject.MetadataEntry
+	nil,                                         // 203: kubex.keystone.EntityObject.UploadHeadersEntry
+	nil,                                         // 204: kubex.keystone.MutateResponse.CreatedChildrenEntry
+	nil,                                         // 205: kubex.keystone.QueryRow.ValuesEntry
+	(*GroupCountResponse_Result)(nil),           // 206: kubex.keystone.GroupCountResponse.Result
+	nil,                                         // 207: kubex.keystone.GroupCountResponse.Result.PropertiesEntry
+	nil,                                         // 208: kubex.keystone.SchemaStatisticsResponse.DailyCountEntry
+	nil,                                         // 209: kubex.keystone.DailyEntityResponse.EntitiesEntry
+	nil,                                         // 210: kubex.keystone.ChartTimeSeriesResponse.SeriesEntry
+	(*ChartTimeSeriesResponse_ChartSeries)(nil), // 211: kubex.keystone.ChartTimeSeriesResponse.ChartSeries
+	nil,                           // 212: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.ValuesEntry
+	nil,                           // 213: kubex.keystone.AKVGetResponse.PropertiesEntry
+	nil,                           // 214: kubex.keystone.IIDCreateRequest.IncrEntry
+	nil,                           // 215: kubex.keystone.IIDCreateRequest.MetaEntry
+	nil,                           // 216: kubex.keystone.IIDResponse.CountsEntry
+	nil,                           // 217: kubex.keystone.IIDResponse.MetaEntry
+	nil,                           // 218: kubex.keystone.PushTaskRequest.DataEntry
+	nil,                           // 219: kubex.keystone.TaskResponse.DataEntry
+	nil,                           // 220: kubex.keystone.EnumEntry.MetadataEntry
+	(*timestamppb.Timestamp)(nil), // 221: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),   // 222: google.protobuf.Duration
 }
 var file_keystone_proto_depIdxs = []int32{
-	21,  // 0: kubex.keystone.Authorization.source:type_name -> kubex.keystone.VendorApp
-	43,  // 1: kubex.keystone.Authorization.user:type_name -> kubex.keystone.User
-	21,  // 2: kubex.keystone.Schema.source:type_name -> kubex.keystone.VendorApp
-	200, // 3: kubex.keystone.Schema.created:type_name -> google.protobuf.Timestamp
-	25,  // 4: kubex.keystone.Schema.properties:type_name -> kubex.keystone.Property
-	9,   // 5: kubex.keystone.Schema.options:type_name -> kubex.keystone.Schema.Option
-	10,  // 6: kubex.keystone.Schema.ks_type:type_name -> kubex.keystone.Schema.Type
-	11,  // 7: kubex.keystone.Property.data_type:type_name -> kubex.keystone.Property.Type
-	12,  // 8: kubex.keystone.Property.extended_type:type_name -> kubex.keystone.Property.ExtendedType
-	13,  // 9: kubex.keystone.Property.options:type_name -> kubex.keystone.Property.Option
-	21,  // 10: kubex.keystone.Key.source:type_name -> kubex.keystone.VendorApp
-	11,  // 11: kubex.keystone.Value.known_type:type_name -> kubex.keystone.Property.Type
-	200, // 12: kubex.keystone.Value.time:type_name -> google.protobuf.Timestamp
-	28,  // 13: kubex.keystone.Value.array:type_name -> kubex.keystone.RepeatedValue
-	28,  // 14: kubex.keystone.Value.array_append:type_name -> kubex.keystone.RepeatedValue
-	28,  // 15: kubex.keystone.Value.array_reduce:type_name -> kubex.keystone.RepeatedValue
-	171, // 16: kubex.keystone.RepeatedValue.key_value:type_name -> kubex.keystone.RepeatedValue.KeyValueEntry
-	172, // 17: kubex.keystone.RepeatedValue.mixed:type_name -> kubex.keystone.RepeatedValue.MixedEntry
-	22,  // 18: kubex.keystone.PiiTokenRequest.authorization:type_name -> kubex.keystone.Authorization
-	200, // 19: kubex.keystone.PiiTokenRequest.auto_expire:type_name -> google.protobuf.Timestamp
-	22,  // 20: kubex.keystone.PiiAnonymizeRequest.authorization:type_name -> kubex.keystone.Authorization
-	200, // 21: kubex.keystone.PiiAnonymizeResponse.recovery_until:type_name -> google.protobuf.Timestamp
-	200, // 22: kubex.keystone.Entity.created:type_name -> google.protobuf.Timestamp
-	200, // 23: kubex.keystone.Entity.state_change:type_name -> google.protobuf.Timestamp
+	24,  // 0: kubex.keystone.Authorization.source:type_name -> kubex.keystone.VendorApp
+	63,  // 1: kubex.keystone.Authorization.user:type_name -> kubex.keystone.User
+	24,  // 2: kubex.keystone.Schema.source:type_name -> kubex.keystone.VendorApp
+	221, // 3: kubex.keystone.Schema.created:type_name -> google.protobuf.Timestamp
+	28,  // 4: kubex.keystone.Schema.properties:type_name -> kubex.keystone.Property
+	12,  // 5: kubex.keystone.Schema.options:type_name -> kubex.keystone.Schema.Option
+	13,  // 6: kubex.keystone.Schema.ks_type:type_name -> kubex.keystone.Schema.Type
+	14,  // 7: kubex.keystone.Property.data_type:type_name -> kubex.keystone.Property.Type
+	15,  // 8: kubex.keystone.Property.extended_type:type_name -> kubex.keystone.Property.ExtendedType
+	16,  // 9: kubex.keystone.Property.options:type_name -> kubex.keystone.Property.Option
+	24,  // 10: kubex.keystone.Key.source:type_name -> kubex.keystone.VendorApp
+	14,  // 11: kubex.keystone.Value.known_type:type_name -> kubex.keystone.Property.Type
+	221, // 12: kubex.keystone.Value.time:type_name -> google.protobuf.Timestamp
+	31,  // 13: kubex.keystone.Value.array:type_name -> kubex.keystone.RepeatedValue
+	31,  // 14: kubex.keystone.Value.array_append:type_name -> kubex.keystone.RepeatedValue
+	31,  // 15: kubex.keystone.Value.array_reduce:type_name -> kubex.keystone.RepeatedValue
+	192, // 16: kubex.keystone.RepeatedValue.key_value:type_name -> kubex.keystone.RepeatedValue.KeyValueEntry
+	193, // 17: kubex.keystone.RepeatedValue.mixed:type_name -> kubex.keystone.RepeatedValue.MixedEntry
+	25,  // 18: kubex.keystone.PiiTokenRequest.authorization:type_name -> kubex.keystone.Authorization
+	221, // 19: kubex.keystone.PiiTokenRequest.auto_expire:type_name -> google.protobuf.Timestamp
+	25,  // 20: kubex.keystone.PiiAnonymizeRequest.authorization:type_name -> kubex.keystone.Authorization
+	221, // 21: kubex.keystone.PiiAnonymizeResponse.recovery_until:type_name -> google.protobuf.Timestamp
+	221, // 22: kubex.keystone.Entity.created:type_name -> google.protobuf.Timestamp
+	221, // 23: kubex.keystone.Entity.state_change:type_name -> google.protobuf.Timestamp
 	0,   // 24: kubex.keystone.Entity.state:type_name -> kubex.keystone.EntityState
-	200, // 25: kubex.keystone.Entity.lastUpdate:type_name -> google.protobuf.Timestamp
-	27,  // 26: kubex.keystone.EntityProperty.value:type_name -> kubex.keystone.Value
-	21,  // 27: kubex.keystone.EntityProperty.source:type_name -> kubex.keystone.VendorApp
-	26,  // 28: kubex.keystone.EntityChild.type:type_name -> kubex.keystone.Key
-	173, // 29: kubex.keystone.EntityChild.data:type_name -> kubex.keystone.EntityChild.DataEntry
-	174, // 30: kubex.keystone.EntityChild.append_data:type_name -> kubex.keystone.EntityChild.AppendDataEntry
-	175, // 31: kubex.keystone.EntityDocument.meta:type_name -> kubex.keystone.EntityDocument.MetaEntry
-	200, // 32: kubex.keystone.EntityDocument.created:type_name -> google.protobuf.Timestamp
-	176, // 33: kubex.keystone.EntityDocument.append_meta:type_name -> kubex.keystone.EntityDocument.AppendMetaEntry
+	221, // 25: kubex.keystone.Entity.lastUpdate:type_name -> google.protobuf.Timestamp
+	30,  // 26: kubex.keystone.EntityProperty.value:type_name -> kubex.keystone.Value
+	24,  // 27: kubex.keystone.EntityProperty.source:type_name -> kubex.keystone.VendorApp
+	29,  // 28: kubex.keystone.EntityChild.type:type_name -> kubex.keystone.Key
+	194, // 29: kubex.keystone.EntityChild.data:type_name -> kubex.keystone.EntityChild.DataEntry
+	195, // 30: kubex.keystone.EntityChild.append_data:type_name -> kubex.keystone.EntityChild.AppendDataEntry
+	196, // 31: kubex.keystone.EntityDocument.meta:type_name -> kubex.keystone.EntityDocument.MetaEntry
+	221, // 32: kubex.keystone.EntityDocument.created:type_name -> google.protobuf.Timestamp
+	197, // 33: kubex.keystone.EntityDocument.append_meta:type_name -> kubex.keystone.EntityDocument.AppendMetaEntry
 	1,   // 34: kubex.keystone.EntityLog.level:type_name -> kubex.keystone.LogLevel
-	200, // 35: kubex.keystone.EntityLog.time:type_name -> google.protobuf.Timestamp
-	177, // 36: kubex.keystone.EntityLog.data:type_name -> kubex.keystone.EntityLog.DataEntry
-	43,  // 37: kubex.keystone.EntityLog.audit_user:type_name -> kubex.keystone.User
-	26,  // 38: kubex.keystone.EntityEvent.type:type_name -> kubex.keystone.Key
-	200, // 39: kubex.keystone.EntityEvent.time:type_name -> google.protobuf.Timestamp
-	178, // 40: kubex.keystone.EntityEvent.data:type_name -> kubex.keystone.EntityEvent.DataEntry
-	26,  // 41: kubex.keystone.EntityRelationship.relationship:type_name -> kubex.keystone.Key
-	200, // 42: kubex.keystone.EntityRelationship.since:type_name -> google.protobuf.Timestamp
-	179, // 43: kubex.keystone.EntityRelationship.data:type_name -> kubex.keystone.EntityRelationship.DataEntry
-	200, // 44: kubex.keystone.EntitySensorMeasurement.at:type_name -> google.protobuf.Timestamp
-	180, // 45: kubex.keystone.EntitySensorMeasurement.data:type_name -> kubex.keystone.EntitySensorMeasurement.DataEntry
-	2,   // 46: kubex.keystone.EntityObject.type:type_name -> kubex.keystone.ObjectType
-	200, // 47: kubex.keystone.EntityObject.expiry:type_name -> google.protobuf.Timestamp
-	181, // 48: kubex.keystone.EntityObject.metadata:type_name -> kubex.keystone.EntityObject.MetadataEntry
-	182, // 49: kubex.keystone.EntityObject.upload_headers:type_name -> kubex.keystone.EntityObject.UploadHeadersEntry
-	21,  // 50: kubex.keystone.User.source:type_name -> kubex.keystone.VendorApp
-	43,  // 51: kubex.keystone.User.parent:type_name -> kubex.keystone.User
-	43,  // 52: kubex.keystone.Mutation.mutator:type_name -> kubex.keystone.User
-	200, // 53: kubex.keystone.Mutation.timestamp:type_name -> google.protobuf.Timestamp
-	0,   // 54: kubex.keystone.Mutation.state:type_name -> kubex.keystone.EntityState
-	34,  // 55: kubex.keystone.Mutation.properties:type_name -> kubex.keystone.EntityProperty
-	34,  // 56: kubex.keystone.Mutation.dynamic_properties:type_name -> kubex.keystone.EntityProperty
-	37,  // 57: kubex.keystone.Mutation.logs:type_name -> kubex.keystone.EntityLog
-	38,  // 58: kubex.keystone.Mutation.events:type_name -> kubex.keystone.EntityEvent
-	35,  // 59: kubex.keystone.Mutation.children:type_name -> kubex.keystone.EntityChild
-	35,  // 60: kubex.keystone.Mutation.remove_children:type_name -> kubex.keystone.EntityChild
-	39,  // 61: kubex.keystone.Mutation.relationships:type_name -> kubex.keystone.EntityRelationship
-	39,  // 62: kubex.keystone.Mutation.remove_relationships:type_name -> kubex.keystone.EntityRelationship
-	40,  // 63: kubex.keystone.Mutation.labels:type_name -> kubex.keystone.EntityLabel
-	40,  // 64: kubex.keystone.Mutation.remove_labels:type_name -> kubex.keystone.EntityLabel
-	41,  // 65: kubex.keystone.Mutation.measurements:type_name -> kubex.keystone.EntitySensorMeasurement
-	36,  // 66: kubex.keystone.Mutation.document:type_name -> kubex.keystone.EntityDocument
-	42,  // 67: kubex.keystone.Mutation.objects:type_name -> kubex.keystone.EntityObject
-	26,  // 68: kubex.keystone.Mutation.pii_reference:type_name -> kubex.keystone.Key
-	26,  // 69: kubex.keystone.Mutation.remove_all_children_by_type:type_name -> kubex.keystone.Key
-	22,  // 70: kubex.keystone.LogRequest.authorization:type_name -> kubex.keystone.Authorization
-	37,  // 71: kubex.keystone.LogRequest.logs:type_name -> kubex.keystone.EntityLog
-	20,  // 72: kubex.keystone.LogResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	200, // 73: kubex.keystone.Window.since:type_name -> google.protobuf.Timestamp
-	200, // 74: kubex.keystone.Window.until:type_name -> google.protobuf.Timestamp
-	3,   // 75: kubex.keystone.PropertyFilter.operator:type_name -> kubex.keystone.Operator
-	27,  // 76: kubex.keystone.PropertyFilter.values:type_name -> kubex.keystone.Value
-	48,  // 77: kubex.keystone.PropertyFilter.nested:type_name -> kubex.keystone.PropertyFilter
-	22,  // 78: kubex.keystone.SchemaRequest.authorization:type_name -> kubex.keystone.Authorization
-	24,  // 79: kubex.keystone.SchemaRequest.schema:type_name -> kubex.keystone.Schema
-	54,  // 80: kubex.keystone.SchemaRequest.views:type_name -> kubex.keystone.EntityView
-	22,  // 81: kubex.keystone.MutateRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 82: kubex.keystone.MutateRequest.schema:type_name -> kubex.keystone.Key
-	44,  // 83: kubex.keystone.MutateRequest.mutation:type_name -> kubex.keystone.Mutation
-	14,  // 84: kubex.keystone.MutateRequest.options:type_name -> kubex.keystone.MutateRequest.MutateOption
-	48,  // 85: kubex.keystone.MutateRequest.where:type_name -> kubex.keystone.PropertyFilter
-	22,  // 86: kubex.keystone.SnapshotReportRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 87: kubex.keystone.SnapshotReportRequest.schema:type_name -> kubex.keystone.Key
-	22,  // 88: kubex.keystone.ReportTimeSeriesRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 89: kubex.keystone.ReportTimeSeriesRequest.schema:type_name -> kubex.keystone.Key
-	44,  // 90: kubex.keystone.ReportTimeSeriesRequest.mutation:type_name -> kubex.keystone.Mutation
-	200, // 91: kubex.keystone.ReportTimeSeriesRequest.timestamp:type_name -> google.protobuf.Timestamp
-	62,  // 92: kubex.keystone.EntityView.properties:type_name -> kubex.keystone.PropertyRequest
-	63,  // 93: kubex.keystone.EntityView.children:type_name -> kubex.keystone.ChildRequest
-	26,  // 94: kubex.keystone.EntityView.relationship_by_type:type_name -> kubex.keystone.Key
-	26,  // 95: kubex.keystone.EntityView.descendant_count_type:type_name -> kubex.keystone.Key
-	26,  // 96: kubex.keystone.EntityView.relationship_count_type:type_name -> kubex.keystone.Key
-	26,  // 97: kubex.keystone.TypeCount.type:type_name -> kubex.keystone.Key
-	26,  // 98: kubex.keystone.ChildSummary.type:type_name -> kubex.keystone.Key
-	22,  // 99: kubex.keystone.EntityRequest.authorization:type_name -> kubex.keystone.Authorization
-	61,  // 100: kubex.keystone.EntityRequest.unique_id:type_name -> kubex.keystone.IDLookup
-	54,  // 101: kubex.keystone.EntityRequest.view:type_name -> kubex.keystone.EntityView
-	26,  // 102: kubex.keystone.EntityRequest.schema:type_name -> kubex.keystone.Key
-	34,  // 103: kubex.keystone.EntityRequest.verify_properties:type_name -> kubex.keystone.EntityProperty
-	33,  // 104: kubex.keystone.EntityResponse.entity:type_name -> kubex.keystone.Entity
-	34,  // 105: kubex.keystone.EntityResponse.properties:type_name -> kubex.keystone.EntityProperty
-	35,  // 106: kubex.keystone.EntityResponse.children:type_name -> kubex.keystone.EntityChild
-	36,  // 107: kubex.keystone.EntityResponse.documents:type_name -> kubex.keystone.EntityDocument
-	39,  // 108: kubex.keystone.EntityResponse.relationships:type_name -> kubex.keystone.EntityRelationship
-	40,  // 109: kubex.keystone.EntityResponse.labels:type_name -> kubex.keystone.EntityLabel
-	55,  // 110: kubex.keystone.EntityResponse.relationship_counts:type_name -> kubex.keystone.TypeCount
-	55,  // 111: kubex.keystone.EntityResponse.descendant_counts:type_name -> kubex.keystone.TypeCount
-	56,  // 112: kubex.keystone.EntityResponse.child_summary:type_name -> kubex.keystone.ChildSummary
-	42,  // 113: kubex.keystone.EntityResponse.objects:type_name -> kubex.keystone.EntityObject
-	34,  // 114: kubex.keystone.EntityResponse.dynamic_properties:type_name -> kubex.keystone.EntityProperty
-	59,  // 115: kubex.keystone.EntityResponse.lock:type_name -> kubex.keystone.EntityLock
-	20,  // 116: kubex.keystone.EntityResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	200, // 117: kubex.keystone.EntityLock.locked_until:type_name -> google.protobuf.Timestamp
-	20,  // 118: kubex.keystone.MutateResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	42,  // 119: kubex.keystone.MutateResponse.signed_object_urls:type_name -> kubex.keystone.EntityObject
-	183, // 120: kubex.keystone.MutateResponse.created_children:type_name -> kubex.keystone.MutateResponse.CreatedChildrenEntry
-	21,  // 121: kubex.keystone.PropertyRequest.source:type_name -> kubex.keystone.VendorApp
-	26,  // 122: kubex.keystone.ChildRequest.type:type_name -> kubex.keystone.Key
-	22,  // 123: kubex.keystone.LogsRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 124: kubex.keystone.LogsRequest.type:type_name -> kubex.keystone.Key
-	1,   // 125: kubex.keystone.LogsRequest.levels:type_name -> kubex.keystone.LogLevel
-	1,   // 126: kubex.keystone.LogsRequest.min_level:type_name -> kubex.keystone.LogLevel
-	47,  // 127: kubex.keystone.LogsRequest.window:type_name -> kubex.keystone.Window
-	37,  // 128: kubex.keystone.LogsResponse.logs:type_name -> kubex.keystone.EntityLog
-	22,  // 129: kubex.keystone.EventRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 130: kubex.keystone.EventRequest.event_by_type:type_name -> kubex.keystone.Key
-	47,  // 131: kubex.keystone.EventRequest.events_in_window:type_name -> kubex.keystone.Window
-	38,  // 132: kubex.keystone.EventsResponse.events:type_name -> kubex.keystone.EntityEvent
-	26,  // 133: kubex.keystone.RelationOf.relationship:type_name -> kubex.keystone.Key
-	22,  // 134: kubex.keystone.FindRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 135: kubex.keystone.FindRequest.schema:type_name -> kubex.keystone.Key
-	54,  // 136: kubex.keystone.FindRequest.view:type_name -> kubex.keystone.EntityView
-	68,  // 137: kubex.keystone.FindRequest.relation_of:type_name -> kubex.keystone.RelationOf
-	48,  // 138: kubex.keystone.FindRequest.property_filters:type_name -> kubex.keystone.PropertyFilter
-	40,  // 139: kubex.keystone.FindRequest.label_filters:type_name -> kubex.keystone.EntityLabel
-	58,  // 140: kubex.keystone.FindResponse.entities:type_name -> kubex.keystone.EntityResponse
-	20,  // 141: kubex.keystone.FindResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	22,  // 142: kubex.keystone.ListRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 143: kubex.keystone.ListRequest.schema:type_name -> kubex.keystone.Key
-	48,  // 144: kubex.keystone.ListRequest.filters:type_name -> kubex.keystone.PropertyFilter
-	49,  // 145: kubex.keystone.ListRequest.sort:type_name -> kubex.keystone.PropertySort
-	71,  // 146: kubex.keystone.ListRequest.page:type_name -> kubex.keystone.PageRequest
-	58,  // 147: kubex.keystone.ListResponse.entities:type_name -> kubex.keystone.EntityResponse
-	20,  // 148: kubex.keystone.ListResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	22,  // 149: kubex.keystone.QueryRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 150: kubex.keystone.QueryRequest.from:type_name -> kubex.keystone.Key
-	48,  // 151: kubex.keystone.QueryRequest.where:type_name -> kubex.keystone.PropertyFilter
-	49,  // 152: kubex.keystone.QueryRequest.order_by:type_name -> kubex.keystone.PropertySort
-	82,  // 153: kubex.keystone.QueryRequest.entity_ids:type_name -> kubex.keystone.EntityIDList
-	75,  // 154: kubex.keystone.QueryRequest.predicate:type_name -> kubex.keystone.QueryPredicate
-	78,  // 155: kubex.keystone.QueryRequest.aggregates:type_name -> kubex.keystone.QueryAggregate
-	48,  // 156: kubex.keystone.QueryRequest.having:type_name -> kubex.keystone.PropertyFilter
-	79,  // 157: kubex.keystone.QueryRequest.include:type_name -> kubex.keystone.QueryInclude
-	48,  // 158: kubex.keystone.QueryPredicate.property:type_name -> kubex.keystone.PropertyFilter
-	40,  // 159: kubex.keystone.QueryPredicate.label:type_name -> kubex.keystone.EntityLabel
-	77,  // 160: kubex.keystone.QueryPredicate.relationship:type_name -> kubex.keystone.QueryRelationship
-	76,  // 161: kubex.keystone.QueryPredicate.all:type_name -> kubex.keystone.QueryPredicateGroup
-	76,  // 162: kubex.keystone.QueryPredicate.any:type_name -> kubex.keystone.QueryPredicateGroup
-	75,  // 163: kubex.keystone.QueryPredicate.not:type_name -> kubex.keystone.QueryPredicate
-	75,  // 164: kubex.keystone.QueryPredicateGroup.predicates:type_name -> kubex.keystone.QueryPredicate
-	26,  // 165: kubex.keystone.QueryRelationship.type:type_name -> kubex.keystone.Key
-	15,  // 166: kubex.keystone.QueryRelationship.direction:type_name -> kubex.keystone.QueryRelationship.Direction
-	16,  // 167: kubex.keystone.QueryAggregate.function:type_name -> kubex.keystone.QueryAggregate.Function
-	26,  // 168: kubex.keystone.QueryInclude.relationships:type_name -> kubex.keystone.Key
-	26,  // 169: kubex.keystone.QueryInclude.relationship_count_types:type_name -> kubex.keystone.Key
-	184, // 170: kubex.keystone.QueryRow.values:type_name -> kubex.keystone.QueryRow.ValuesEntry
-	58,  // 171: kubex.keystone.QueryResponse.entities:type_name -> kubex.keystone.EntityResponse
-	80,  // 172: kubex.keystone.QueryResponse.rows:type_name -> kubex.keystone.QueryRow
-	81,  // 173: kubex.keystone.QueryResponse.execution:type_name -> kubex.keystone.QueryExecution
-	200, // 174: kubex.keystone.QueryResponse.result_set_expires:type_name -> google.protobuf.Timestamp
-	22,  // 175: kubex.keystone.QueryIndexRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 176: kubex.keystone.QueryIndexRequest.schema:type_name -> kubex.keystone.Key
-	48,  // 177: kubex.keystone.QueryIndexRequest.filters:type_name -> kubex.keystone.PropertyFilter
-	49,  // 178: kubex.keystone.QueryIndexRequest.sort:type_name -> kubex.keystone.PropertySort
-	71,  // 179: kubex.keystone.QueryIndexRequest.page:type_name -> kubex.keystone.PageRequest
-	58,  // 180: kubex.keystone.QueryIndexResponse.entities:type_name -> kubex.keystone.EntityResponse
-	20,  // 181: kubex.keystone.QueryIndexResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	22,  // 182: kubex.keystone.GroupCountRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 183: kubex.keystone.GroupCountRequest.schema:type_name -> kubex.keystone.Key
-	48,  // 184: kubex.keystone.GroupCountRequest.filters:type_name -> kubex.keystone.PropertyFilter
-	71,  // 185: kubex.keystone.GroupCountRequest.page:type_name -> kubex.keystone.PageRequest
-	185, // 186: kubex.keystone.GroupCountResponse.results:type_name -> kubex.keystone.GroupCountResponse.Result
-	58,  // 187: kubex.keystone.EntitiesResponse.entities:type_name -> kubex.keystone.EntityResponse
-	22,  // 188: kubex.keystone.SchemaStatisticsRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 189: kubex.keystone.SchemaStatisticsRequest.schema:type_name -> kubex.keystone.Key
-	89,  // 190: kubex.keystone.SchemaStatisticsRequest.created_from:type_name -> kubex.keystone.Date
-	89,  // 191: kubex.keystone.SchemaStatisticsRequest.created_until:type_name -> kubex.keystone.Date
-	187, // 192: kubex.keystone.SchemaStatisticsResponse.daily_count:type_name -> kubex.keystone.SchemaStatisticsResponse.DailyCountEntry
-	22,  // 193: kubex.keystone.DailyEntityRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 194: kubex.keystone.DailyEntityRequest.schema:type_name -> kubex.keystone.Key
-	89,  // 195: kubex.keystone.DailyEntityRequest.date:type_name -> kubex.keystone.Date
-	188, // 196: kubex.keystone.DailyEntityResponse.entities:type_name -> kubex.keystone.DailyEntityResponse.EntitiesEntry
-	22,  // 197: kubex.keystone.ChartTimeSeriesRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 198: kubex.keystone.ChartTimeSeriesRequest.schema:type_name -> kubex.keystone.Key
-	200, // 199: kubex.keystone.ChartTimeSeriesRequest.from:type_name -> google.protobuf.Timestamp
-	200, // 200: kubex.keystone.ChartTimeSeriesRequest.until:type_name -> google.protobuf.Timestamp
-	95,  // 201: kubex.keystone.ChartTimeSeriesRequest.aggregations:type_name -> kubex.keystone.PropertyAggregation
-	48,  // 202: kubex.keystone.ChartTimeSeriesRequest.property_filters:type_name -> kubex.keystone.PropertyFilter
-	17,  // 203: kubex.keystone.PropertyAggregation.type:type_name -> kubex.keystone.PropertyAggregation.AggregationType
-	189, // 204: kubex.keystone.ChartTimeSeriesResponse.series:type_name -> kubex.keystone.ChartTimeSeriesResponse.SeriesEntry
-	22,  // 205: kubex.keystone.ShareViewRequest.authorization:type_name -> kubex.keystone.Authorization
-	21,  // 206: kubex.keystone.ShareViewRequest.share_with:type_name -> kubex.keystone.VendorApp
-	21,  // 207: kubex.keystone.SharedViewResponse.share_with:type_name -> kubex.keystone.VendorApp
-	22,  // 208: kubex.keystone.SharedViewsRequest.authorization:type_name -> kubex.keystone.Authorization
-	21,  // 209: kubex.keystone.SharedViewsRequest.share_with:type_name -> kubex.keystone.VendorApp
-	98,  // 210: kubex.keystone.SharedViewsResponse.views:type_name -> kubex.keystone.SharedViewResponse
-	22,  // 211: kubex.keystone.RateLimitRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 212: kubex.keystone.LookupRequest.authorization:type_name -> kubex.keystone.Authorization
-	105, // 213: kubex.keystone.LookupResponse.results:type_name -> kubex.keystone.EntityReference
-	22,  // 214: kubex.keystone.AKVPutRequest.authorization:type_name -> kubex.keystone.Authorization
-	110, // 215: kubex.keystone.AKVPutRequest.properties:type_name -> kubex.keystone.AKVProperty
-	22,  // 216: kubex.keystone.AKVGetRequest.authorization:type_name -> kubex.keystone.Authorization
-	23,  // 217: kubex.keystone.AKVGetResponse.summary:type_name -> kubex.keystone.GenericResponse
-	192, // 218: kubex.keystone.AKVGetResponse.properties:type_name -> kubex.keystone.AKVGetResponse.PropertiesEntry
-	22,  // 219: kubex.keystone.AKVDelRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 220: kubex.keystone.AKVProperty.property:type_name -> kubex.keystone.Property
-	27,  // 221: kubex.keystone.AKVProperty.value:type_name -> kubex.keystone.Value
-	22,  // 222: kubex.keystone.IIDCreateRequest.authorization:type_name -> kubex.keystone.Authorization
-	193, // 223: kubex.keystone.IIDCreateRequest.incr:type_name -> kubex.keystone.IIDCreateRequest.IncrEntry
-	194, // 224: kubex.keystone.IIDCreateRequest.meta:type_name -> kubex.keystone.IIDCreateRequest.MetaEntry
-	22,  // 225: kubex.keystone.IIDRequest.authorization:type_name -> kubex.keystone.Authorization
-	114, // 226: kubex.keystone.IIDsResponse.iids:type_name -> kubex.keystone.IIDResponse
-	195, // 227: kubex.keystone.IIDResponse.counts:type_name -> kubex.keystone.IIDResponse.CountsEntry
-	196, // 228: kubex.keystone.IIDResponse.meta:type_name -> kubex.keystone.IIDResponse.MetaEntry
-	22,  // 229: kubex.keystone.EventStreamRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 230: kubex.keystone.EventStreamRequest.event_type:type_name -> kubex.keystone.Key
-	160, // 231: kubex.keystone.EventStreamRequest.ack:type_name -> kubex.keystone.EventStreamAck
-	201, // 232: kubex.keystone.EventStreamRequest.ack_wait:type_name -> google.protobuf.Duration
-	38,  // 233: kubex.keystone.EventStreamResponse.event:type_name -> kubex.keystone.EntityEvent
-	22,  // 234: kubex.keystone.PushTaskRequest.authorization:type_name -> kubex.keystone.Authorization
-	197, // 235: kubex.keystone.PushTaskRequest.data:type_name -> kubex.keystone.PushTaskRequest.DataEntry
-	198, // 236: kubex.keystone.TaskResponse.data:type_name -> kubex.keystone.TaskResponse.DataEntry
-	22,  // 237: kubex.keystone.DestroyRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 238: kubex.keystone.DestroyRequest.schema:type_name -> kubex.keystone.Key
-	22,  // 239: kubex.keystone.SquidRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 240: kubex.keystone.SquidRecoverRequest.authorization:type_name -> kubex.keystone.Authorization
-	199, // 241: kubex.keystone.EnumEntry.metadata:type_name -> kubex.keystone.EnumEntry.MetadataEntry
-	22,  // 242: kubex.keystone.EnumPutRequest.authorization:type_name -> kubex.keystone.Authorization
-	125, // 243: kubex.keystone.EnumPutRequest.enum:type_name -> kubex.keystone.EnumEntry
-	22,  // 244: kubex.keystone.EnumGetRequest.authorization:type_name -> kubex.keystone.Authorization
-	23,  // 245: kubex.keystone.EnumGetResponse.summary:type_name -> kubex.keystone.GenericResponse
-	125, // 246: kubex.keystone.EnumGetResponse.enum:type_name -> kubex.keystone.EnumEntry
-	22,  // 247: kubex.keystone.EnumDeleteRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 248: kubex.keystone.EnumListRequest.authorization:type_name -> kubex.keystone.Authorization
-	23,  // 249: kubex.keystone.EnumListResponse.summary:type_name -> kubex.keystone.GenericResponse
-	125, // 250: kubex.keystone.EnumListResponse.enums:type_name -> kubex.keystone.EnumEntry
-	22,  // 251: kubex.keystone.EnumReplaceRequest.authorization:type_name -> kubex.keystone.Authorization
-	125, // 252: kubex.keystone.EnumReplaceRequest.enums:type_name -> kubex.keystone.EnumEntry
-	22,  // 253: kubex.keystone.AKVTimePutRequest.authorization:type_name -> kubex.keystone.Authorization
-	133, // 254: kubex.keystone.AKVTimePutRequest.entries:type_name -> kubex.keystone.AKVTimeEntry
-	22,  // 255: kubex.keystone.AKVTimeGetRequest.authorization:type_name -> kubex.keystone.Authorization
-	4,   // 256: kubex.keystone.AKVTimeGetRequest.mode:type_name -> kubex.keystone.AKVTimeQueryMode
-	5,   // 257: kubex.keystone.AKVTimeGetRequest.group_interval:type_name -> kubex.keystone.AKVTimeGroupInterval
-	6,   // 258: kubex.keystone.AKVTimeGetRequest.group_pick:type_name -> kubex.keystone.AKVTimeGroupPick
-	23,  // 259: kubex.keystone.AKVTimeGetResponse.summary:type_name -> kubex.keystone.GenericResponse
-	136, // 260: kubex.keystone.AKVTimeGetResponse.results:type_name -> kubex.keystone.AKVTimeResult
-	22,  // 261: kubex.keystone.AKVTimeDelRequest.authorization:type_name -> kubex.keystone.Authorization
-	7,   // 262: kubex.keystone.AKVTimeDelRequest.mode:type_name -> kubex.keystone.AKVTimeDeleteMode
-	22,  // 263: kubex.keystone.RelayCreateSessionRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 264: kubex.keystone.RelayExtendSessionRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 265: kubex.keystone.RelayDestroySessionRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 266: kubex.keystone.RelayCreateShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 267: kubex.keystone.RelayResolveShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 268: kubex.keystone.RelayDeleteShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 269: kubex.keystone.RelayPublishRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 270: kubex.keystone.RelayGetPresenceRequest.authorization:type_name -> kubex.keystone.Authorization
-	155, // 271: kubex.keystone.RelayGetPresenceResponse.devices:type_name -> kubex.keystone.PresenceDevice
-	22,  // 272: kubex.keystone.RelayGetSessionMetadataRequest.authorization:type_name -> kubex.keystone.Authorization
-	22,  // 273: kubex.keystone.RelaySetSessionMetadataRequest.authorization:type_name -> kubex.keystone.Authorization
-	18,  // 274: kubex.keystone.EventStreamAck.action:type_name -> kubex.keystone.EventStreamAck.Action
-	201, // 275: kubex.keystone.EventStreamAck.delay:type_name -> google.protobuf.Duration
-	26,  // 276: kubex.keystone.FeedEntry.schema:type_name -> kubex.keystone.Key
-	22,  // 277: kubex.keystone.FeedPutRequest.authorization:type_name -> kubex.keystone.Authorization
-	161, // 278: kubex.keystone.FeedPutRequest.feed:type_name -> kubex.keystone.FeedKey
-	162, // 279: kubex.keystone.FeedPutRequest.entry:type_name -> kubex.keystone.FeedEntry
-	162, // 280: kubex.keystone.FeedPutResponse.entry:type_name -> kubex.keystone.FeedEntry
-	22,  // 281: kubex.keystone.FeedReadRequest.authorization:type_name -> kubex.keystone.Authorization
-	161, // 282: kubex.keystone.FeedReadRequest.feed:type_name -> kubex.keystone.FeedKey
-	162, // 283: kubex.keystone.FeedReadResponse.entries:type_name -> kubex.keystone.FeedEntry
-	22,  // 284: kubex.keystone.FeedRemoveRequest.authorization:type_name -> kubex.keystone.Authorization
-	161, // 285: kubex.keystone.FeedRemoveRequest.feed:type_name -> kubex.keystone.FeedKey
-	22,  // 286: kubex.keystone.FeedSummaryRequest.authorization:type_name -> kubex.keystone.Authorization
-	161, // 287: kubex.keystone.FeedSummaryRequest.feed:type_name -> kubex.keystone.FeedKey
-	200, // 288: kubex.keystone.FeedSummaryRequest.from:type_name -> google.protobuf.Timestamp
-	200, // 289: kubex.keystone.FeedSummaryRequest.until:type_name -> google.protobuf.Timestamp
-	8,   // 290: kubex.keystone.FeedSummaryRequest.interval:type_name -> kubex.keystone.FeedSummaryInterval
-	200, // 291: kubex.keystone.FeedSummaryBucket.start:type_name -> google.protobuf.Timestamp
-	200, // 292: kubex.keystone.FeedSummaryBucket.end:type_name -> google.protobuf.Timestamp
-	200, // 293: kubex.keystone.FeedSummaryBucket.updated_at:type_name -> google.protobuf.Timestamp
-	169, // 294: kubex.keystone.FeedSummaryResponse.buckets:type_name -> kubex.keystone.FeedSummaryBucket
-	27,  // 295: kubex.keystone.RepeatedValue.MixedEntry.value:type_name -> kubex.keystone.Value
-	27,  // 296: kubex.keystone.QueryRow.ValuesEntry.value:type_name -> kubex.keystone.Value
-	186, // 297: kubex.keystone.GroupCountResponse.Result.properties:type_name -> kubex.keystone.GroupCountResponse.Result.PropertiesEntry
-	190, // 298: kubex.keystone.ChartTimeSeriesResponse.SeriesEntry.value:type_name -> kubex.keystone.ChartTimeSeriesResponse.ChartSeries
-	200, // 299: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.bucket:type_name -> google.protobuf.Timestamp
-	191, // 300: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.values:type_name -> kubex.keystone.ChartTimeSeriesResponse.ChartSeries.ValuesEntry
-	27,  // 301: kubex.keystone.AKVGetResponse.PropertiesEntry.value:type_name -> kubex.keystone.Value
-	22,  // 302: kubex.keystone.Keystone.Status:input_type -> kubex.keystone.Authorization
-	50,  // 303: kubex.keystone.Keystone.Define:input_type -> kubex.keystone.SchemaRequest
-	111, // 304: kubex.keystone.Keystone.IID:input_type -> kubex.keystone.IIDCreateRequest
-	112, // 305: kubex.keystone.Keystone.IIDLookup:input_type -> kubex.keystone.IIDRequest
-	29,  // 306: kubex.keystone.Keystone.PiiToken:input_type -> kubex.keystone.PiiTokenRequest
-	31,  // 307: kubex.keystone.Keystone.PiiAnonymize:input_type -> kubex.keystone.PiiAnonymizeRequest
-	51,  // 308: kubex.keystone.Keystone.Mutate:input_type -> kubex.keystone.MutateRequest
-	120, // 309: kubex.keystone.Keystone.Destroy:input_type -> kubex.keystone.DestroyRequest
-	45,  // 310: kubex.keystone.Keystone.Log:input_type -> kubex.keystone.LogRequest
-	122, // 311: kubex.keystone.Keystone.SQUID:input_type -> kubex.keystone.SquidRequest
-	123, // 312: kubex.keystone.Keystone.SQUIDRecover:input_type -> kubex.keystone.SquidRecoverRequest
-	52,  // 313: kubex.keystone.Keystone.SnapshotReport:input_type -> kubex.keystone.SnapshotReportRequest
-	53,  // 314: kubex.keystone.Keystone.ReportTimeSeries:input_type -> kubex.keystone.ReportTimeSeriesRequest
-	94,  // 315: kubex.keystone.Keystone.ChartTimeSeries:input_type -> kubex.keystone.ChartTimeSeriesRequest
-	57,  // 316: kubex.keystone.Keystone.Retrieve:input_type -> kubex.keystone.EntityRequest
-	69,  // 317: kubex.keystone.Keystone.Find:input_type -> kubex.keystone.FindRequest
-	72,  // 318: kubex.keystone.Keystone.List:input_type -> kubex.keystone.ListRequest
-	84,  // 319: kubex.keystone.Keystone.QueryIndex:input_type -> kubex.keystone.QueryIndexRequest
-	74,  // 320: kubex.keystone.Keystone.Query:input_type -> kubex.keystone.QueryRequest
-	163, // 321: kubex.keystone.Keystone.FeedPut:input_type -> kubex.keystone.FeedPutRequest
-	165, // 322: kubex.keystone.Keystone.FeedRead:input_type -> kubex.keystone.FeedReadRequest
-	167, // 323: kubex.keystone.Keystone.FeedRemove:input_type -> kubex.keystone.FeedRemoveRequest
-	168, // 324: kubex.keystone.Keystone.FeedSummary:input_type -> kubex.keystone.FeedSummaryRequest
-	103, // 325: kubex.keystone.Keystone.Lookup:input_type -> kubex.keystone.LookupRequest
-	86,  // 326: kubex.keystone.Keystone.GroupCount:input_type -> kubex.keystone.GroupCountRequest
-	64,  // 327: kubex.keystone.Keystone.Logs:input_type -> kubex.keystone.LogsRequest
-	66,  // 328: kubex.keystone.Keystone.Events:input_type -> kubex.keystone.EventRequest
-	115, // 329: kubex.keystone.Keystone.EventStream:input_type -> kubex.keystone.EventStreamRequest
-	97,  // 330: kubex.keystone.Keystone.ShareView:input_type -> kubex.keystone.ShareViewRequest
-	99,  // 331: kubex.keystone.Keystone.SharedViews:input_type -> kubex.keystone.SharedViewsRequest
-	101, // 332: kubex.keystone.Keystone.RateLimit:input_type -> kubex.keystone.RateLimitRequest
-	92,  // 333: kubex.keystone.Keystone.DailyEntities:input_type -> kubex.keystone.DailyEntityRequest
-	90,  // 334: kubex.keystone.Keystone.SchemaStatistics:input_type -> kubex.keystone.SchemaStatisticsRequest
-	107, // 335: kubex.keystone.Keystone.AKVGet:input_type -> kubex.keystone.AKVGetRequest
-	106, // 336: kubex.keystone.Keystone.AKVPut:input_type -> kubex.keystone.AKVPutRequest
-	109, // 337: kubex.keystone.Keystone.AKVDel:input_type -> kubex.keystone.AKVDelRequest
-	107, // 338: kubex.keystone.Keystone.AKVWorkspaceGet:input_type -> kubex.keystone.AKVGetRequest
-	106, // 339: kubex.keystone.Keystone.AKVWorkspacePut:input_type -> kubex.keystone.AKVPutRequest
-	109, // 340: kubex.keystone.Keystone.AKVWorkspaceDel:input_type -> kubex.keystone.AKVDelRequest
-	134, // 341: kubex.keystone.Keystone.AKVTimePut:input_type -> kubex.keystone.AKVTimePutRequest
-	135, // 342: kubex.keystone.Keystone.AKVTimeGet:input_type -> kubex.keystone.AKVTimeGetRequest
-	138, // 343: kubex.keystone.Keystone.AKVTimeDel:input_type -> kubex.keystone.AKVTimeDelRequest
-	126, // 344: kubex.keystone.Keystone.EnumPut:input_type -> kubex.keystone.EnumPutRequest
-	127, // 345: kubex.keystone.Keystone.EnumGet:input_type -> kubex.keystone.EnumGetRequest
-	129, // 346: kubex.keystone.Keystone.EnumDelete:input_type -> kubex.keystone.EnumDeleteRequest
-	130, // 347: kubex.keystone.Keystone.EnumList:input_type -> kubex.keystone.EnumListRequest
-	132, // 348: kubex.keystone.Keystone.EnumReplace:input_type -> kubex.keystone.EnumReplaceRequest
-	117, // 349: kubex.keystone.Keystone.PushTask:input_type -> kubex.keystone.PushTaskRequest
-	118, // 350: kubex.keystone.Keystone.TaskStream:input_type -> kubex.keystone.TaskAckRequest
-	139, // 351: kubex.keystone.Keystone.RelayCreateSession:input_type -> kubex.keystone.RelayCreateSessionRequest
-	141, // 352: kubex.keystone.Keystone.RelayExtendSession:input_type -> kubex.keystone.RelayExtendSessionRequest
-	143, // 353: kubex.keystone.Keystone.RelayDestroySession:input_type -> kubex.keystone.RelayDestroySessionRequest
-	145, // 354: kubex.keystone.Keystone.RelayCreateShortCode:input_type -> kubex.keystone.RelayCreateShortCodeRequest
-	147, // 355: kubex.keystone.Keystone.RelayResolveShortCode:input_type -> kubex.keystone.RelayResolveShortCodeRequest
-	149, // 356: kubex.keystone.Keystone.RelayDeleteShortCode:input_type -> kubex.keystone.RelayDeleteShortCodeRequest
-	151, // 357: kubex.keystone.Keystone.RelayPublish:input_type -> kubex.keystone.RelayPublishRequest
-	153, // 358: kubex.keystone.Keystone.RelayGetPresence:input_type -> kubex.keystone.RelayGetPresenceRequest
-	156, // 359: kubex.keystone.Keystone.RelayGetSessionMetadata:input_type -> kubex.keystone.RelayGetSessionMetadataRequest
-	158, // 360: kubex.keystone.Keystone.RelaySetSessionMetadata:input_type -> kubex.keystone.RelaySetSessionMetadataRequest
-	19,  // 361: kubex.keystone.Keystone.Status:output_type -> kubex.keystone.StatusResponse
-	24,  // 362: kubex.keystone.Keystone.Define:output_type -> kubex.keystone.Schema
-	114, // 363: kubex.keystone.Keystone.IID:output_type -> kubex.keystone.IIDResponse
-	113, // 364: kubex.keystone.Keystone.IIDLookup:output_type -> kubex.keystone.IIDsResponse
-	30,  // 365: kubex.keystone.Keystone.PiiToken:output_type -> kubex.keystone.PiiTokenResponse
-	32,  // 366: kubex.keystone.Keystone.PiiAnonymize:output_type -> kubex.keystone.PiiAnonymizeResponse
-	60,  // 367: kubex.keystone.Keystone.Mutate:output_type -> kubex.keystone.MutateResponse
-	121, // 368: kubex.keystone.Keystone.Destroy:output_type -> kubex.keystone.DestroyResponse
-	46,  // 369: kubex.keystone.Keystone.Log:output_type -> kubex.keystone.LogResponse
-	124, // 370: kubex.keystone.Keystone.SQUID:output_type -> kubex.keystone.SquidResponse
-	124, // 371: kubex.keystone.Keystone.SQUIDRecover:output_type -> kubex.keystone.SquidResponse
-	60,  // 372: kubex.keystone.Keystone.SnapshotReport:output_type -> kubex.keystone.MutateResponse
-	60,  // 373: kubex.keystone.Keystone.ReportTimeSeries:output_type -> kubex.keystone.MutateResponse
-	96,  // 374: kubex.keystone.Keystone.ChartTimeSeries:output_type -> kubex.keystone.ChartTimeSeriesResponse
-	58,  // 375: kubex.keystone.Keystone.Retrieve:output_type -> kubex.keystone.EntityResponse
-	70,  // 376: kubex.keystone.Keystone.Find:output_type -> kubex.keystone.FindResponse
-	73,  // 377: kubex.keystone.Keystone.List:output_type -> kubex.keystone.ListResponse
-	85,  // 378: kubex.keystone.Keystone.QueryIndex:output_type -> kubex.keystone.QueryIndexResponse
-	83,  // 379: kubex.keystone.Keystone.Query:output_type -> kubex.keystone.QueryResponse
-	164, // 380: kubex.keystone.Keystone.FeedPut:output_type -> kubex.keystone.FeedPutResponse
-	166, // 381: kubex.keystone.Keystone.FeedRead:output_type -> kubex.keystone.FeedReadResponse
-	23,  // 382: kubex.keystone.Keystone.FeedRemove:output_type -> kubex.keystone.GenericResponse
-	170, // 383: kubex.keystone.Keystone.FeedSummary:output_type -> kubex.keystone.FeedSummaryResponse
-	104, // 384: kubex.keystone.Keystone.Lookup:output_type -> kubex.keystone.LookupResponse
-	87,  // 385: kubex.keystone.Keystone.GroupCount:output_type -> kubex.keystone.GroupCountResponse
-	65,  // 386: kubex.keystone.Keystone.Logs:output_type -> kubex.keystone.LogsResponse
-	67,  // 387: kubex.keystone.Keystone.Events:output_type -> kubex.keystone.EventsResponse
-	116, // 388: kubex.keystone.Keystone.EventStream:output_type -> kubex.keystone.EventStreamResponse
-	98,  // 389: kubex.keystone.Keystone.ShareView:output_type -> kubex.keystone.SharedViewResponse
-	100, // 390: kubex.keystone.Keystone.SharedViews:output_type -> kubex.keystone.SharedViewsResponse
-	102, // 391: kubex.keystone.Keystone.RateLimit:output_type -> kubex.keystone.RateLimitResponse
-	93,  // 392: kubex.keystone.Keystone.DailyEntities:output_type -> kubex.keystone.DailyEntityResponse
-	91,  // 393: kubex.keystone.Keystone.SchemaStatistics:output_type -> kubex.keystone.SchemaStatisticsResponse
-	108, // 394: kubex.keystone.Keystone.AKVGet:output_type -> kubex.keystone.AKVGetResponse
-	23,  // 395: kubex.keystone.Keystone.AKVPut:output_type -> kubex.keystone.GenericResponse
-	23,  // 396: kubex.keystone.Keystone.AKVDel:output_type -> kubex.keystone.GenericResponse
-	108, // 397: kubex.keystone.Keystone.AKVWorkspaceGet:output_type -> kubex.keystone.AKVGetResponse
-	23,  // 398: kubex.keystone.Keystone.AKVWorkspacePut:output_type -> kubex.keystone.GenericResponse
-	23,  // 399: kubex.keystone.Keystone.AKVWorkspaceDel:output_type -> kubex.keystone.GenericResponse
-	23,  // 400: kubex.keystone.Keystone.AKVTimePut:output_type -> kubex.keystone.GenericResponse
-	137, // 401: kubex.keystone.Keystone.AKVTimeGet:output_type -> kubex.keystone.AKVTimeGetResponse
-	23,  // 402: kubex.keystone.Keystone.AKVTimeDel:output_type -> kubex.keystone.GenericResponse
-	23,  // 403: kubex.keystone.Keystone.EnumPut:output_type -> kubex.keystone.GenericResponse
-	128, // 404: kubex.keystone.Keystone.EnumGet:output_type -> kubex.keystone.EnumGetResponse
-	23,  // 405: kubex.keystone.Keystone.EnumDelete:output_type -> kubex.keystone.GenericResponse
-	131, // 406: kubex.keystone.Keystone.EnumList:output_type -> kubex.keystone.EnumListResponse
-	23,  // 407: kubex.keystone.Keystone.EnumReplace:output_type -> kubex.keystone.GenericResponse
-	23,  // 408: kubex.keystone.Keystone.PushTask:output_type -> kubex.keystone.GenericResponse
-	119, // 409: kubex.keystone.Keystone.TaskStream:output_type -> kubex.keystone.TaskResponse
-	140, // 410: kubex.keystone.Keystone.RelayCreateSession:output_type -> kubex.keystone.RelayCreateSessionResponse
-	142, // 411: kubex.keystone.Keystone.RelayExtendSession:output_type -> kubex.keystone.RelayExtendSessionResponse
-	144, // 412: kubex.keystone.Keystone.RelayDestroySession:output_type -> kubex.keystone.RelayDestroySessionResponse
-	146, // 413: kubex.keystone.Keystone.RelayCreateShortCode:output_type -> kubex.keystone.RelayCreateShortCodeResponse
-	148, // 414: kubex.keystone.Keystone.RelayResolveShortCode:output_type -> kubex.keystone.RelayResolveShortCodeResponse
-	150, // 415: kubex.keystone.Keystone.RelayDeleteShortCode:output_type -> kubex.keystone.RelayDeleteShortCodeResponse
-	152, // 416: kubex.keystone.Keystone.RelayPublish:output_type -> kubex.keystone.RelayPublishResponse
-	154, // 417: kubex.keystone.Keystone.RelayGetPresence:output_type -> kubex.keystone.RelayGetPresenceResponse
-	157, // 418: kubex.keystone.Keystone.RelayGetSessionMetadata:output_type -> kubex.keystone.RelayGetSessionMetadataResponse
-	159, // 419: kubex.keystone.Keystone.RelaySetSessionMetadata:output_type -> kubex.keystone.RelaySetSessionMetadataResponse
-	361, // [361:420] is the sub-list for method output_type
-	302, // [302:361] is the sub-list for method input_type
-	302, // [302:302] is the sub-list for extension type_name
-	302, // [302:302] is the sub-list for extension extendee
-	0,   // [0:302] is the sub-list for field type_name
+	221, // 35: kubex.keystone.EntityLog.time:type_name -> google.protobuf.Timestamp
+	198, // 36: kubex.keystone.EntityLog.data:type_name -> kubex.keystone.EntityLog.DataEntry
+	63,  // 37: kubex.keystone.EntityLog.audit_user:type_name -> kubex.keystone.User
+	29,  // 38: kubex.keystone.EntityEvent.type:type_name -> kubex.keystone.Key
+	221, // 39: kubex.keystone.EntityEvent.time:type_name -> google.protobuf.Timestamp
+	199, // 40: kubex.keystone.EntityEvent.data:type_name -> kubex.keystone.EntityEvent.DataEntry
+	29,  // 41: kubex.keystone.EntityRelationship.relationship:type_name -> kubex.keystone.Key
+	221, // 42: kubex.keystone.EntityRelationship.since:type_name -> google.protobuf.Timestamp
+	200, // 43: kubex.keystone.EntityRelationship.data:type_name -> kubex.keystone.EntityRelationship.DataEntry
+	221, // 44: kubex.keystone.EntitySensorMeasurement.at:type_name -> google.protobuf.Timestamp
+	201, // 45: kubex.keystone.EntitySensorMeasurement.data:type_name -> kubex.keystone.EntitySensorMeasurement.DataEntry
+	221, // 46: kubex.keystone.EntitySensorMeasurement.received_at:type_name -> google.protobuf.Timestamp
+	181, // 47: kubex.keystone.EntitySensorMeasurement.storage:type_name -> kubex.keystone.SensorStorageOptions
+	25,  // 48: kubex.keystone.WriteSensorsRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 49: kubex.keystone.WriteSensorsRequest.schema:type_name -> kubex.keystone.Key
+	44,  // 50: kubex.keystone.WriteSensorsRequest.measurements:type_name -> kubex.keystone.EntitySensorMeasurement
+	181, // 51: kubex.keystone.WriteSensorsRequest.storage:type_name -> kubex.keystone.SensorStorageOptions
+	25,  // 52: kubex.keystone.PredictSensorRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 53: kubex.keystone.PredictSensorRequest.schema:type_name -> kubex.keystone.Key
+	221, // 54: kubex.keystone.PredictSensorRequest.from:type_name -> google.protobuf.Timestamp
+	221, // 55: kubex.keystone.PredictSensorRequest.until:type_name -> google.protobuf.Timestamp
+	2,   // 56: kubex.keystone.PredictSensorRequest.metric:type_name -> kubex.keystone.SensorPredictionMetric
+	221, // 57: kubex.keystone.SensorPredictionPoint.at:type_name -> google.protobuf.Timestamp
+	48,  // 58: kubex.keystone.PredictSensorResponse.points:type_name -> kubex.keystone.SensorPredictionPoint
+	221, // 59: kubex.keystone.PredictSensorResponse.training_from:type_name -> google.protobuf.Timestamp
+	221, // 60: kubex.keystone.PredictSensorResponse.training_until:type_name -> google.protobuf.Timestamp
+	25,  // 61: kubex.keystone.CreateSensorStreamRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 62: kubex.keystone.CreateSensorStreamRequest.schema:type_name -> kubex.keystone.Key
+	221, // 63: kubex.keystone.CreateSensorStreamRequest.session_expires_at:type_name -> google.protobuf.Timestamp
+	2,   // 64: kubex.keystone.CreateSensorStreamRequest.metric:type_name -> kubex.keystone.SensorPredictionMetric
+	221, // 65: kubex.keystone.CreateSensorStreamResponse.expires_at:type_name -> google.protobuf.Timestamp
+	221, // 66: kubex.keystone.CreateSensorStreamResponse.server_time:type_name -> google.protobuf.Timestamp
+	25,  // 67: kubex.keystone.RevokeSensorSessionRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 68: kubex.keystone.ChartSensorRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 69: kubex.keystone.ChartSensorRequest.schema:type_name -> kubex.keystone.Key
+	221, // 70: kubex.keystone.ChartSensorRequest.from:type_name -> google.protobuf.Timestamp
+	221, // 71: kubex.keystone.ChartSensorRequest.until:type_name -> google.protobuf.Timestamp
+	221, // 72: kubex.keystone.SensorBucket.at:type_name -> google.protobuf.Timestamp
+	54,  // 73: kubex.keystone.ChartSensorResponse.buckets:type_name -> kubex.keystone.SensorBucket
+	221, // 74: kubex.keystone.ChartSensorResponse.last_received_at:type_name -> google.protobuf.Timestamp
+	221, // 75: kubex.keystone.ChartSensorResponse.effective_from:type_name -> google.protobuf.Timestamp
+	221, // 76: kubex.keystone.ChartSensorResponse.effective_until:type_name -> google.protobuf.Timestamp
+	25,  // 77: kubex.keystone.SensorActivityRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 78: kubex.keystone.SensorActivityRequest.schema:type_name -> kubex.keystone.Key
+	3,   // 79: kubex.keystone.SensorActivityRequest.calendar:type_name -> kubex.keystone.SensorActivityCalendar
+	57,  // 80: kubex.keystone.SensorActivityResponse.slots:type_name -> kubex.keystone.SensorActivitySlot
+	221, // 81: kubex.keystone.SensorActivityResponse.updated_at:type_name -> google.protobuf.Timestamp
+	25,  // 82: kubex.keystone.HeatmapSensorRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 83: kubex.keystone.HeatmapSensorRequest.schema:type_name -> kubex.keystone.Key
+	221, // 84: kubex.keystone.HeatmapSensorRequest.from:type_name -> google.protobuf.Timestamp
+	221, // 85: kubex.keystone.HeatmapSensorRequest.until:type_name -> google.protobuf.Timestamp
+	4,   // 86: kubex.keystone.HeatmapSensorRequest.layout:type_name -> kubex.keystone.SensorHeatmapLayout
+	60,  // 87: kubex.keystone.HeatmapSensorResponse.cells:type_name -> kubex.keystone.SensorHeatmapCell
+	221, // 88: kubex.keystone.HeatmapSensorResponse.last_received_at:type_name -> google.protobuf.Timestamp
+	5,   // 89: kubex.keystone.EntityObject.type:type_name -> kubex.keystone.ObjectType
+	221, // 90: kubex.keystone.EntityObject.expiry:type_name -> google.protobuf.Timestamp
+	202, // 91: kubex.keystone.EntityObject.metadata:type_name -> kubex.keystone.EntityObject.MetadataEntry
+	203, // 92: kubex.keystone.EntityObject.upload_headers:type_name -> kubex.keystone.EntityObject.UploadHeadersEntry
+	24,  // 93: kubex.keystone.User.source:type_name -> kubex.keystone.VendorApp
+	63,  // 94: kubex.keystone.User.parent:type_name -> kubex.keystone.User
+	63,  // 95: kubex.keystone.Mutation.mutator:type_name -> kubex.keystone.User
+	221, // 96: kubex.keystone.Mutation.timestamp:type_name -> google.protobuf.Timestamp
+	0,   // 97: kubex.keystone.Mutation.state:type_name -> kubex.keystone.EntityState
+	37,  // 98: kubex.keystone.Mutation.properties:type_name -> kubex.keystone.EntityProperty
+	37,  // 99: kubex.keystone.Mutation.dynamic_properties:type_name -> kubex.keystone.EntityProperty
+	40,  // 100: kubex.keystone.Mutation.logs:type_name -> kubex.keystone.EntityLog
+	41,  // 101: kubex.keystone.Mutation.events:type_name -> kubex.keystone.EntityEvent
+	38,  // 102: kubex.keystone.Mutation.children:type_name -> kubex.keystone.EntityChild
+	38,  // 103: kubex.keystone.Mutation.remove_children:type_name -> kubex.keystone.EntityChild
+	42,  // 104: kubex.keystone.Mutation.relationships:type_name -> kubex.keystone.EntityRelationship
+	42,  // 105: kubex.keystone.Mutation.remove_relationships:type_name -> kubex.keystone.EntityRelationship
+	43,  // 106: kubex.keystone.Mutation.labels:type_name -> kubex.keystone.EntityLabel
+	43,  // 107: kubex.keystone.Mutation.remove_labels:type_name -> kubex.keystone.EntityLabel
+	44,  // 108: kubex.keystone.Mutation.measurements:type_name -> kubex.keystone.EntitySensorMeasurement
+	39,  // 109: kubex.keystone.Mutation.document:type_name -> kubex.keystone.EntityDocument
+	62,  // 110: kubex.keystone.Mutation.objects:type_name -> kubex.keystone.EntityObject
+	29,  // 111: kubex.keystone.Mutation.pii_reference:type_name -> kubex.keystone.Key
+	29,  // 112: kubex.keystone.Mutation.remove_all_children_by_type:type_name -> kubex.keystone.Key
+	25,  // 113: kubex.keystone.LogRequest.authorization:type_name -> kubex.keystone.Authorization
+	40,  // 114: kubex.keystone.LogRequest.logs:type_name -> kubex.keystone.EntityLog
+	23,  // 115: kubex.keystone.LogResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	221, // 116: kubex.keystone.Window.since:type_name -> google.protobuf.Timestamp
+	221, // 117: kubex.keystone.Window.until:type_name -> google.protobuf.Timestamp
+	6,   // 118: kubex.keystone.PropertyFilter.operator:type_name -> kubex.keystone.Operator
+	30,  // 119: kubex.keystone.PropertyFilter.values:type_name -> kubex.keystone.Value
+	68,  // 120: kubex.keystone.PropertyFilter.nested:type_name -> kubex.keystone.PropertyFilter
+	25,  // 121: kubex.keystone.SchemaRequest.authorization:type_name -> kubex.keystone.Authorization
+	27,  // 122: kubex.keystone.SchemaRequest.schema:type_name -> kubex.keystone.Schema
+	74,  // 123: kubex.keystone.SchemaRequest.views:type_name -> kubex.keystone.EntityView
+	25,  // 124: kubex.keystone.MutateRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 125: kubex.keystone.MutateRequest.schema:type_name -> kubex.keystone.Key
+	64,  // 126: kubex.keystone.MutateRequest.mutation:type_name -> kubex.keystone.Mutation
+	17,  // 127: kubex.keystone.MutateRequest.options:type_name -> kubex.keystone.MutateRequest.MutateOption
+	68,  // 128: kubex.keystone.MutateRequest.where:type_name -> kubex.keystone.PropertyFilter
+	25,  // 129: kubex.keystone.SnapshotReportRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 130: kubex.keystone.SnapshotReportRequest.schema:type_name -> kubex.keystone.Key
+	25,  // 131: kubex.keystone.ReportTimeSeriesRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 132: kubex.keystone.ReportTimeSeriesRequest.schema:type_name -> kubex.keystone.Key
+	64,  // 133: kubex.keystone.ReportTimeSeriesRequest.mutation:type_name -> kubex.keystone.Mutation
+	221, // 134: kubex.keystone.ReportTimeSeriesRequest.timestamp:type_name -> google.protobuf.Timestamp
+	82,  // 135: kubex.keystone.EntityView.properties:type_name -> kubex.keystone.PropertyRequest
+	83,  // 136: kubex.keystone.EntityView.children:type_name -> kubex.keystone.ChildRequest
+	29,  // 137: kubex.keystone.EntityView.relationship_by_type:type_name -> kubex.keystone.Key
+	29,  // 138: kubex.keystone.EntityView.descendant_count_type:type_name -> kubex.keystone.Key
+	29,  // 139: kubex.keystone.EntityView.relationship_count_type:type_name -> kubex.keystone.Key
+	29,  // 140: kubex.keystone.TypeCount.type:type_name -> kubex.keystone.Key
+	29,  // 141: kubex.keystone.ChildSummary.type:type_name -> kubex.keystone.Key
+	25,  // 142: kubex.keystone.EntityRequest.authorization:type_name -> kubex.keystone.Authorization
+	81,  // 143: kubex.keystone.EntityRequest.unique_id:type_name -> kubex.keystone.IDLookup
+	74,  // 144: kubex.keystone.EntityRequest.view:type_name -> kubex.keystone.EntityView
+	29,  // 145: kubex.keystone.EntityRequest.schema:type_name -> kubex.keystone.Key
+	37,  // 146: kubex.keystone.EntityRequest.verify_properties:type_name -> kubex.keystone.EntityProperty
+	36,  // 147: kubex.keystone.EntityResponse.entity:type_name -> kubex.keystone.Entity
+	37,  // 148: kubex.keystone.EntityResponse.properties:type_name -> kubex.keystone.EntityProperty
+	38,  // 149: kubex.keystone.EntityResponse.children:type_name -> kubex.keystone.EntityChild
+	39,  // 150: kubex.keystone.EntityResponse.documents:type_name -> kubex.keystone.EntityDocument
+	42,  // 151: kubex.keystone.EntityResponse.relationships:type_name -> kubex.keystone.EntityRelationship
+	43,  // 152: kubex.keystone.EntityResponse.labels:type_name -> kubex.keystone.EntityLabel
+	75,  // 153: kubex.keystone.EntityResponse.relationship_counts:type_name -> kubex.keystone.TypeCount
+	75,  // 154: kubex.keystone.EntityResponse.descendant_counts:type_name -> kubex.keystone.TypeCount
+	76,  // 155: kubex.keystone.EntityResponse.child_summary:type_name -> kubex.keystone.ChildSummary
+	62,  // 156: kubex.keystone.EntityResponse.objects:type_name -> kubex.keystone.EntityObject
+	37,  // 157: kubex.keystone.EntityResponse.dynamic_properties:type_name -> kubex.keystone.EntityProperty
+	79,  // 158: kubex.keystone.EntityResponse.lock:type_name -> kubex.keystone.EntityLock
+	23,  // 159: kubex.keystone.EntityResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	221, // 160: kubex.keystone.EntityLock.locked_until:type_name -> google.protobuf.Timestamp
+	23,  // 161: kubex.keystone.MutateResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	62,  // 162: kubex.keystone.MutateResponse.signed_object_urls:type_name -> kubex.keystone.EntityObject
+	204, // 163: kubex.keystone.MutateResponse.created_children:type_name -> kubex.keystone.MutateResponse.CreatedChildrenEntry
+	24,  // 164: kubex.keystone.PropertyRequest.source:type_name -> kubex.keystone.VendorApp
+	29,  // 165: kubex.keystone.ChildRequest.type:type_name -> kubex.keystone.Key
+	25,  // 166: kubex.keystone.LogsRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 167: kubex.keystone.LogsRequest.type:type_name -> kubex.keystone.Key
+	1,   // 168: kubex.keystone.LogsRequest.levels:type_name -> kubex.keystone.LogLevel
+	1,   // 169: kubex.keystone.LogsRequest.min_level:type_name -> kubex.keystone.LogLevel
+	67,  // 170: kubex.keystone.LogsRequest.window:type_name -> kubex.keystone.Window
+	40,  // 171: kubex.keystone.LogsResponse.logs:type_name -> kubex.keystone.EntityLog
+	25,  // 172: kubex.keystone.EventRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 173: kubex.keystone.EventRequest.event_by_type:type_name -> kubex.keystone.Key
+	67,  // 174: kubex.keystone.EventRequest.events_in_window:type_name -> kubex.keystone.Window
+	41,  // 175: kubex.keystone.EventsResponse.events:type_name -> kubex.keystone.EntityEvent
+	29,  // 176: kubex.keystone.RelationOf.relationship:type_name -> kubex.keystone.Key
+	25,  // 177: kubex.keystone.FindRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 178: kubex.keystone.FindRequest.schema:type_name -> kubex.keystone.Key
+	74,  // 179: kubex.keystone.FindRequest.view:type_name -> kubex.keystone.EntityView
+	88,  // 180: kubex.keystone.FindRequest.relation_of:type_name -> kubex.keystone.RelationOf
+	68,  // 181: kubex.keystone.FindRequest.property_filters:type_name -> kubex.keystone.PropertyFilter
+	43,  // 182: kubex.keystone.FindRequest.label_filters:type_name -> kubex.keystone.EntityLabel
+	78,  // 183: kubex.keystone.FindResponse.entities:type_name -> kubex.keystone.EntityResponse
+	23,  // 184: kubex.keystone.FindResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	25,  // 185: kubex.keystone.ListRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 186: kubex.keystone.ListRequest.schema:type_name -> kubex.keystone.Key
+	68,  // 187: kubex.keystone.ListRequest.filters:type_name -> kubex.keystone.PropertyFilter
+	69,  // 188: kubex.keystone.ListRequest.sort:type_name -> kubex.keystone.PropertySort
+	91,  // 189: kubex.keystone.ListRequest.page:type_name -> kubex.keystone.PageRequest
+	78,  // 190: kubex.keystone.ListResponse.entities:type_name -> kubex.keystone.EntityResponse
+	23,  // 191: kubex.keystone.ListResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	25,  // 192: kubex.keystone.QueryRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 193: kubex.keystone.QueryRequest.from:type_name -> kubex.keystone.Key
+	68,  // 194: kubex.keystone.QueryRequest.where:type_name -> kubex.keystone.PropertyFilter
+	69,  // 195: kubex.keystone.QueryRequest.order_by:type_name -> kubex.keystone.PropertySort
+	102, // 196: kubex.keystone.QueryRequest.entity_ids:type_name -> kubex.keystone.EntityIDList
+	95,  // 197: kubex.keystone.QueryRequest.predicate:type_name -> kubex.keystone.QueryPredicate
+	98,  // 198: kubex.keystone.QueryRequest.aggregates:type_name -> kubex.keystone.QueryAggregate
+	68,  // 199: kubex.keystone.QueryRequest.having:type_name -> kubex.keystone.PropertyFilter
+	99,  // 200: kubex.keystone.QueryRequest.include:type_name -> kubex.keystone.QueryInclude
+	68,  // 201: kubex.keystone.QueryPredicate.property:type_name -> kubex.keystone.PropertyFilter
+	43,  // 202: kubex.keystone.QueryPredicate.label:type_name -> kubex.keystone.EntityLabel
+	97,  // 203: kubex.keystone.QueryPredicate.relationship:type_name -> kubex.keystone.QueryRelationship
+	96,  // 204: kubex.keystone.QueryPredicate.all:type_name -> kubex.keystone.QueryPredicateGroup
+	96,  // 205: kubex.keystone.QueryPredicate.any:type_name -> kubex.keystone.QueryPredicateGroup
+	95,  // 206: kubex.keystone.QueryPredicate.not:type_name -> kubex.keystone.QueryPredicate
+	95,  // 207: kubex.keystone.QueryPredicateGroup.predicates:type_name -> kubex.keystone.QueryPredicate
+	29,  // 208: kubex.keystone.QueryRelationship.type:type_name -> kubex.keystone.Key
+	18,  // 209: kubex.keystone.QueryRelationship.direction:type_name -> kubex.keystone.QueryRelationship.Direction
+	19,  // 210: kubex.keystone.QueryAggregate.function:type_name -> kubex.keystone.QueryAggregate.Function
+	29,  // 211: kubex.keystone.QueryInclude.relationships:type_name -> kubex.keystone.Key
+	29,  // 212: kubex.keystone.QueryInclude.relationship_count_types:type_name -> kubex.keystone.Key
+	205, // 213: kubex.keystone.QueryRow.values:type_name -> kubex.keystone.QueryRow.ValuesEntry
+	78,  // 214: kubex.keystone.QueryResponse.entities:type_name -> kubex.keystone.EntityResponse
+	100, // 215: kubex.keystone.QueryResponse.rows:type_name -> kubex.keystone.QueryRow
+	101, // 216: kubex.keystone.QueryResponse.execution:type_name -> kubex.keystone.QueryExecution
+	221, // 217: kubex.keystone.QueryResponse.result_set_expires:type_name -> google.protobuf.Timestamp
+	25,  // 218: kubex.keystone.QueryIndexRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 219: kubex.keystone.QueryIndexRequest.schema:type_name -> kubex.keystone.Key
+	68,  // 220: kubex.keystone.QueryIndexRequest.filters:type_name -> kubex.keystone.PropertyFilter
+	69,  // 221: kubex.keystone.QueryIndexRequest.sort:type_name -> kubex.keystone.PropertySort
+	91,  // 222: kubex.keystone.QueryIndexRequest.page:type_name -> kubex.keystone.PageRequest
+	78,  // 223: kubex.keystone.QueryIndexResponse.entities:type_name -> kubex.keystone.EntityResponse
+	23,  // 224: kubex.keystone.QueryIndexResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	25,  // 225: kubex.keystone.GroupCountRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 226: kubex.keystone.GroupCountRequest.schema:type_name -> kubex.keystone.Key
+	68,  // 227: kubex.keystone.GroupCountRequest.filters:type_name -> kubex.keystone.PropertyFilter
+	91,  // 228: kubex.keystone.GroupCountRequest.page:type_name -> kubex.keystone.PageRequest
+	206, // 229: kubex.keystone.GroupCountResponse.results:type_name -> kubex.keystone.GroupCountResponse.Result
+	78,  // 230: kubex.keystone.EntitiesResponse.entities:type_name -> kubex.keystone.EntityResponse
+	25,  // 231: kubex.keystone.SchemaStatisticsRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 232: kubex.keystone.SchemaStatisticsRequest.schema:type_name -> kubex.keystone.Key
+	109, // 233: kubex.keystone.SchemaStatisticsRequest.created_from:type_name -> kubex.keystone.Date
+	109, // 234: kubex.keystone.SchemaStatisticsRequest.created_until:type_name -> kubex.keystone.Date
+	208, // 235: kubex.keystone.SchemaStatisticsResponse.daily_count:type_name -> kubex.keystone.SchemaStatisticsResponse.DailyCountEntry
+	25,  // 236: kubex.keystone.DailyEntityRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 237: kubex.keystone.DailyEntityRequest.schema:type_name -> kubex.keystone.Key
+	109, // 238: kubex.keystone.DailyEntityRequest.date:type_name -> kubex.keystone.Date
+	209, // 239: kubex.keystone.DailyEntityResponse.entities:type_name -> kubex.keystone.DailyEntityResponse.EntitiesEntry
+	25,  // 240: kubex.keystone.ChartTimeSeriesRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 241: kubex.keystone.ChartTimeSeriesRequest.schema:type_name -> kubex.keystone.Key
+	221, // 242: kubex.keystone.ChartTimeSeriesRequest.from:type_name -> google.protobuf.Timestamp
+	221, // 243: kubex.keystone.ChartTimeSeriesRequest.until:type_name -> google.protobuf.Timestamp
+	115, // 244: kubex.keystone.ChartTimeSeriesRequest.aggregations:type_name -> kubex.keystone.PropertyAggregation
+	68,  // 245: kubex.keystone.ChartTimeSeriesRequest.property_filters:type_name -> kubex.keystone.PropertyFilter
+	20,  // 246: kubex.keystone.PropertyAggregation.type:type_name -> kubex.keystone.PropertyAggregation.AggregationType
+	210, // 247: kubex.keystone.ChartTimeSeriesResponse.series:type_name -> kubex.keystone.ChartTimeSeriesResponse.SeriesEntry
+	25,  // 248: kubex.keystone.ShareViewRequest.authorization:type_name -> kubex.keystone.Authorization
+	24,  // 249: kubex.keystone.ShareViewRequest.share_with:type_name -> kubex.keystone.VendorApp
+	24,  // 250: kubex.keystone.SharedViewResponse.share_with:type_name -> kubex.keystone.VendorApp
+	25,  // 251: kubex.keystone.SharedViewsRequest.authorization:type_name -> kubex.keystone.Authorization
+	24,  // 252: kubex.keystone.SharedViewsRequest.share_with:type_name -> kubex.keystone.VendorApp
+	118, // 253: kubex.keystone.SharedViewsResponse.views:type_name -> kubex.keystone.SharedViewResponse
+	25,  // 254: kubex.keystone.RateLimitRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 255: kubex.keystone.LookupRequest.authorization:type_name -> kubex.keystone.Authorization
+	125, // 256: kubex.keystone.LookupResponse.results:type_name -> kubex.keystone.EntityReference
+	25,  // 257: kubex.keystone.AKVPutRequest.authorization:type_name -> kubex.keystone.Authorization
+	130, // 258: kubex.keystone.AKVPutRequest.properties:type_name -> kubex.keystone.AKVProperty
+	25,  // 259: kubex.keystone.AKVGetRequest.authorization:type_name -> kubex.keystone.Authorization
+	26,  // 260: kubex.keystone.AKVGetResponse.summary:type_name -> kubex.keystone.GenericResponse
+	213, // 261: kubex.keystone.AKVGetResponse.properties:type_name -> kubex.keystone.AKVGetResponse.PropertiesEntry
+	25,  // 262: kubex.keystone.AKVDelRequest.authorization:type_name -> kubex.keystone.Authorization
+	28,  // 263: kubex.keystone.AKVProperty.property:type_name -> kubex.keystone.Property
+	30,  // 264: kubex.keystone.AKVProperty.value:type_name -> kubex.keystone.Value
+	25,  // 265: kubex.keystone.IIDCreateRequest.authorization:type_name -> kubex.keystone.Authorization
+	214, // 266: kubex.keystone.IIDCreateRequest.incr:type_name -> kubex.keystone.IIDCreateRequest.IncrEntry
+	215, // 267: kubex.keystone.IIDCreateRequest.meta:type_name -> kubex.keystone.IIDCreateRequest.MetaEntry
+	25,  // 268: kubex.keystone.IIDRequest.authorization:type_name -> kubex.keystone.Authorization
+	134, // 269: kubex.keystone.IIDsResponse.iids:type_name -> kubex.keystone.IIDResponse
+	216, // 270: kubex.keystone.IIDResponse.counts:type_name -> kubex.keystone.IIDResponse.CountsEntry
+	217, // 271: kubex.keystone.IIDResponse.meta:type_name -> kubex.keystone.IIDResponse.MetaEntry
+	25,  // 272: kubex.keystone.EventStreamRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 273: kubex.keystone.EventStreamRequest.event_type:type_name -> kubex.keystone.Key
+	180, // 274: kubex.keystone.EventStreamRequest.ack:type_name -> kubex.keystone.EventStreamAck
+	222, // 275: kubex.keystone.EventStreamRequest.ack_wait:type_name -> google.protobuf.Duration
+	41,  // 276: kubex.keystone.EventStreamResponse.event:type_name -> kubex.keystone.EntityEvent
+	25,  // 277: kubex.keystone.PushTaskRequest.authorization:type_name -> kubex.keystone.Authorization
+	218, // 278: kubex.keystone.PushTaskRequest.data:type_name -> kubex.keystone.PushTaskRequest.DataEntry
+	219, // 279: kubex.keystone.TaskResponse.data:type_name -> kubex.keystone.TaskResponse.DataEntry
+	25,  // 280: kubex.keystone.DestroyRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 281: kubex.keystone.DestroyRequest.schema:type_name -> kubex.keystone.Key
+	25,  // 282: kubex.keystone.SquidRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 283: kubex.keystone.SquidRecoverRequest.authorization:type_name -> kubex.keystone.Authorization
+	220, // 284: kubex.keystone.EnumEntry.metadata:type_name -> kubex.keystone.EnumEntry.MetadataEntry
+	25,  // 285: kubex.keystone.EnumPutRequest.authorization:type_name -> kubex.keystone.Authorization
+	145, // 286: kubex.keystone.EnumPutRequest.enum:type_name -> kubex.keystone.EnumEntry
+	25,  // 287: kubex.keystone.EnumGetRequest.authorization:type_name -> kubex.keystone.Authorization
+	26,  // 288: kubex.keystone.EnumGetResponse.summary:type_name -> kubex.keystone.GenericResponse
+	145, // 289: kubex.keystone.EnumGetResponse.enum:type_name -> kubex.keystone.EnumEntry
+	25,  // 290: kubex.keystone.EnumDeleteRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 291: kubex.keystone.EnumListRequest.authorization:type_name -> kubex.keystone.Authorization
+	26,  // 292: kubex.keystone.EnumListResponse.summary:type_name -> kubex.keystone.GenericResponse
+	145, // 293: kubex.keystone.EnumListResponse.enums:type_name -> kubex.keystone.EnumEntry
+	25,  // 294: kubex.keystone.EnumReplaceRequest.authorization:type_name -> kubex.keystone.Authorization
+	145, // 295: kubex.keystone.EnumReplaceRequest.enums:type_name -> kubex.keystone.EnumEntry
+	25,  // 296: kubex.keystone.AKVTimePutRequest.authorization:type_name -> kubex.keystone.Authorization
+	153, // 297: kubex.keystone.AKVTimePutRequest.entries:type_name -> kubex.keystone.AKVTimeEntry
+	25,  // 298: kubex.keystone.AKVTimeGetRequest.authorization:type_name -> kubex.keystone.Authorization
+	7,   // 299: kubex.keystone.AKVTimeGetRequest.mode:type_name -> kubex.keystone.AKVTimeQueryMode
+	8,   // 300: kubex.keystone.AKVTimeGetRequest.group_interval:type_name -> kubex.keystone.AKVTimeGroupInterval
+	9,   // 301: kubex.keystone.AKVTimeGetRequest.group_pick:type_name -> kubex.keystone.AKVTimeGroupPick
+	26,  // 302: kubex.keystone.AKVTimeGetResponse.summary:type_name -> kubex.keystone.GenericResponse
+	156, // 303: kubex.keystone.AKVTimeGetResponse.results:type_name -> kubex.keystone.AKVTimeResult
+	25,  // 304: kubex.keystone.AKVTimeDelRequest.authorization:type_name -> kubex.keystone.Authorization
+	10,  // 305: kubex.keystone.AKVTimeDelRequest.mode:type_name -> kubex.keystone.AKVTimeDeleteMode
+	25,  // 306: kubex.keystone.RelayCreateSessionRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 307: kubex.keystone.RelayExtendSessionRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 308: kubex.keystone.RelayDestroySessionRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 309: kubex.keystone.RelayCreateShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 310: kubex.keystone.RelayResolveShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 311: kubex.keystone.RelayDeleteShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 312: kubex.keystone.RelayPublishRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 313: kubex.keystone.RelayGetPresenceRequest.authorization:type_name -> kubex.keystone.Authorization
+	175, // 314: kubex.keystone.RelayGetPresenceResponse.devices:type_name -> kubex.keystone.PresenceDevice
+	25,  // 315: kubex.keystone.RelayGetSessionMetadataRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 316: kubex.keystone.RelaySetSessionMetadataRequest.authorization:type_name -> kubex.keystone.Authorization
+	21,  // 317: kubex.keystone.EventStreamAck.action:type_name -> kubex.keystone.EventStreamAck.Action
+	222, // 318: kubex.keystone.EventStreamAck.delay:type_name -> google.protobuf.Duration
+	29,  // 319: kubex.keystone.FeedEntry.schema:type_name -> kubex.keystone.Key
+	25,  // 320: kubex.keystone.FeedPutRequest.authorization:type_name -> kubex.keystone.Authorization
+	182, // 321: kubex.keystone.FeedPutRequest.feed:type_name -> kubex.keystone.FeedKey
+	183, // 322: kubex.keystone.FeedPutRequest.entry:type_name -> kubex.keystone.FeedEntry
+	183, // 323: kubex.keystone.FeedPutResponse.entry:type_name -> kubex.keystone.FeedEntry
+	25,  // 324: kubex.keystone.FeedReadRequest.authorization:type_name -> kubex.keystone.Authorization
+	182, // 325: kubex.keystone.FeedReadRequest.feed:type_name -> kubex.keystone.FeedKey
+	183, // 326: kubex.keystone.FeedReadResponse.entries:type_name -> kubex.keystone.FeedEntry
+	25,  // 327: kubex.keystone.FeedRemoveRequest.authorization:type_name -> kubex.keystone.Authorization
+	182, // 328: kubex.keystone.FeedRemoveRequest.feed:type_name -> kubex.keystone.FeedKey
+	25,  // 329: kubex.keystone.FeedSummaryRequest.authorization:type_name -> kubex.keystone.Authorization
+	182, // 330: kubex.keystone.FeedSummaryRequest.feed:type_name -> kubex.keystone.FeedKey
+	221, // 331: kubex.keystone.FeedSummaryRequest.from:type_name -> google.protobuf.Timestamp
+	221, // 332: kubex.keystone.FeedSummaryRequest.until:type_name -> google.protobuf.Timestamp
+	11,  // 333: kubex.keystone.FeedSummaryRequest.interval:type_name -> kubex.keystone.FeedSummaryInterval
+	221, // 334: kubex.keystone.FeedSummaryBucket.start:type_name -> google.protobuf.Timestamp
+	221, // 335: kubex.keystone.FeedSummaryBucket.end:type_name -> google.protobuf.Timestamp
+	221, // 336: kubex.keystone.FeedSummaryBucket.updated_at:type_name -> google.protobuf.Timestamp
+	190, // 337: kubex.keystone.FeedSummaryResponse.buckets:type_name -> kubex.keystone.FeedSummaryBucket
+	30,  // 338: kubex.keystone.RepeatedValue.MixedEntry.value:type_name -> kubex.keystone.Value
+	30,  // 339: kubex.keystone.QueryRow.ValuesEntry.value:type_name -> kubex.keystone.Value
+	207, // 340: kubex.keystone.GroupCountResponse.Result.properties:type_name -> kubex.keystone.GroupCountResponse.Result.PropertiesEntry
+	211, // 341: kubex.keystone.ChartTimeSeriesResponse.SeriesEntry.value:type_name -> kubex.keystone.ChartTimeSeriesResponse.ChartSeries
+	221, // 342: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.bucket:type_name -> google.protobuf.Timestamp
+	212, // 343: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.values:type_name -> kubex.keystone.ChartTimeSeriesResponse.ChartSeries.ValuesEntry
+	30,  // 344: kubex.keystone.AKVGetResponse.PropertiesEntry.value:type_name -> kubex.keystone.Value
+	25,  // 345: kubex.keystone.Keystone.Status:input_type -> kubex.keystone.Authorization
+	70,  // 346: kubex.keystone.Keystone.Define:input_type -> kubex.keystone.SchemaRequest
+	131, // 347: kubex.keystone.Keystone.IID:input_type -> kubex.keystone.IIDCreateRequest
+	132, // 348: kubex.keystone.Keystone.IIDLookup:input_type -> kubex.keystone.IIDRequest
+	32,  // 349: kubex.keystone.Keystone.PiiToken:input_type -> kubex.keystone.PiiTokenRequest
+	34,  // 350: kubex.keystone.Keystone.PiiAnonymize:input_type -> kubex.keystone.PiiAnonymizeRequest
+	71,  // 351: kubex.keystone.Keystone.Mutate:input_type -> kubex.keystone.MutateRequest
+	140, // 352: kubex.keystone.Keystone.Destroy:input_type -> kubex.keystone.DestroyRequest
+	65,  // 353: kubex.keystone.Keystone.Log:input_type -> kubex.keystone.LogRequest
+	142, // 354: kubex.keystone.Keystone.SQUID:input_type -> kubex.keystone.SquidRequest
+	143, // 355: kubex.keystone.Keystone.SQUIDRecover:input_type -> kubex.keystone.SquidRecoverRequest
+	72,  // 356: kubex.keystone.Keystone.SnapshotReport:input_type -> kubex.keystone.SnapshotReportRequest
+	73,  // 357: kubex.keystone.Keystone.ReportTimeSeries:input_type -> kubex.keystone.ReportTimeSeriesRequest
+	114, // 358: kubex.keystone.Keystone.ChartTimeSeries:input_type -> kubex.keystone.ChartTimeSeriesRequest
+	45,  // 359: kubex.keystone.Keystone.WriteSensors:input_type -> kubex.keystone.WriteSensorsRequest
+	25,  // 360: kubex.keystone.Keystone.ListAppSensors:input_type -> kubex.keystone.Authorization
+	53,  // 361: kubex.keystone.Keystone.ChartSensor:input_type -> kubex.keystone.ChartSensorRequest
+	59,  // 362: kubex.keystone.Keystone.HeatmapSensor:input_type -> kubex.keystone.HeatmapSensorRequest
+	56,  // 363: kubex.keystone.Keystone.SensorActivity:input_type -> kubex.keystone.SensorActivityRequest
+	47,  // 364: kubex.keystone.Keystone.PredictSensor:input_type -> kubex.keystone.PredictSensorRequest
+	50,  // 365: kubex.keystone.Keystone.CreateSensorStream:input_type -> kubex.keystone.CreateSensorStreamRequest
+	52,  // 366: kubex.keystone.Keystone.RevokeSensorSession:input_type -> kubex.keystone.RevokeSensorSessionRequest
+	77,  // 367: kubex.keystone.Keystone.Retrieve:input_type -> kubex.keystone.EntityRequest
+	89,  // 368: kubex.keystone.Keystone.Find:input_type -> kubex.keystone.FindRequest
+	92,  // 369: kubex.keystone.Keystone.List:input_type -> kubex.keystone.ListRequest
+	104, // 370: kubex.keystone.Keystone.QueryIndex:input_type -> kubex.keystone.QueryIndexRequest
+	94,  // 371: kubex.keystone.Keystone.Query:input_type -> kubex.keystone.QueryRequest
+	184, // 372: kubex.keystone.Keystone.FeedPut:input_type -> kubex.keystone.FeedPutRequest
+	186, // 373: kubex.keystone.Keystone.FeedRead:input_type -> kubex.keystone.FeedReadRequest
+	188, // 374: kubex.keystone.Keystone.FeedRemove:input_type -> kubex.keystone.FeedRemoveRequest
+	189, // 375: kubex.keystone.Keystone.FeedSummary:input_type -> kubex.keystone.FeedSummaryRequest
+	123, // 376: kubex.keystone.Keystone.Lookup:input_type -> kubex.keystone.LookupRequest
+	106, // 377: kubex.keystone.Keystone.GroupCount:input_type -> kubex.keystone.GroupCountRequest
+	84,  // 378: kubex.keystone.Keystone.Logs:input_type -> kubex.keystone.LogsRequest
+	86,  // 379: kubex.keystone.Keystone.Events:input_type -> kubex.keystone.EventRequest
+	135, // 380: kubex.keystone.Keystone.EventStream:input_type -> kubex.keystone.EventStreamRequest
+	117, // 381: kubex.keystone.Keystone.ShareView:input_type -> kubex.keystone.ShareViewRequest
+	119, // 382: kubex.keystone.Keystone.SharedViews:input_type -> kubex.keystone.SharedViewsRequest
+	121, // 383: kubex.keystone.Keystone.RateLimit:input_type -> kubex.keystone.RateLimitRequest
+	112, // 384: kubex.keystone.Keystone.DailyEntities:input_type -> kubex.keystone.DailyEntityRequest
+	110, // 385: kubex.keystone.Keystone.SchemaStatistics:input_type -> kubex.keystone.SchemaStatisticsRequest
+	127, // 386: kubex.keystone.Keystone.AKVGet:input_type -> kubex.keystone.AKVGetRequest
+	126, // 387: kubex.keystone.Keystone.AKVPut:input_type -> kubex.keystone.AKVPutRequest
+	129, // 388: kubex.keystone.Keystone.AKVDel:input_type -> kubex.keystone.AKVDelRequest
+	127, // 389: kubex.keystone.Keystone.AKVWorkspaceGet:input_type -> kubex.keystone.AKVGetRequest
+	126, // 390: kubex.keystone.Keystone.AKVWorkspacePut:input_type -> kubex.keystone.AKVPutRequest
+	129, // 391: kubex.keystone.Keystone.AKVWorkspaceDel:input_type -> kubex.keystone.AKVDelRequest
+	154, // 392: kubex.keystone.Keystone.AKVTimePut:input_type -> kubex.keystone.AKVTimePutRequest
+	155, // 393: kubex.keystone.Keystone.AKVTimeGet:input_type -> kubex.keystone.AKVTimeGetRequest
+	158, // 394: kubex.keystone.Keystone.AKVTimeDel:input_type -> kubex.keystone.AKVTimeDelRequest
+	146, // 395: kubex.keystone.Keystone.EnumPut:input_type -> kubex.keystone.EnumPutRequest
+	147, // 396: kubex.keystone.Keystone.EnumGet:input_type -> kubex.keystone.EnumGetRequest
+	149, // 397: kubex.keystone.Keystone.EnumDelete:input_type -> kubex.keystone.EnumDeleteRequest
+	150, // 398: kubex.keystone.Keystone.EnumList:input_type -> kubex.keystone.EnumListRequest
+	152, // 399: kubex.keystone.Keystone.EnumReplace:input_type -> kubex.keystone.EnumReplaceRequest
+	137, // 400: kubex.keystone.Keystone.PushTask:input_type -> kubex.keystone.PushTaskRequest
+	138, // 401: kubex.keystone.Keystone.TaskStream:input_type -> kubex.keystone.TaskAckRequest
+	159, // 402: kubex.keystone.Keystone.RelayCreateSession:input_type -> kubex.keystone.RelayCreateSessionRequest
+	161, // 403: kubex.keystone.Keystone.RelayExtendSession:input_type -> kubex.keystone.RelayExtendSessionRequest
+	163, // 404: kubex.keystone.Keystone.RelayDestroySession:input_type -> kubex.keystone.RelayDestroySessionRequest
+	165, // 405: kubex.keystone.Keystone.RelayCreateShortCode:input_type -> kubex.keystone.RelayCreateShortCodeRequest
+	167, // 406: kubex.keystone.Keystone.RelayResolveShortCode:input_type -> kubex.keystone.RelayResolveShortCodeRequest
+	169, // 407: kubex.keystone.Keystone.RelayDeleteShortCode:input_type -> kubex.keystone.RelayDeleteShortCodeRequest
+	171, // 408: kubex.keystone.Keystone.RelayPublish:input_type -> kubex.keystone.RelayPublishRequest
+	173, // 409: kubex.keystone.Keystone.RelayGetPresence:input_type -> kubex.keystone.RelayGetPresenceRequest
+	176, // 410: kubex.keystone.Keystone.RelayGetSessionMetadata:input_type -> kubex.keystone.RelayGetSessionMetadataRequest
+	178, // 411: kubex.keystone.Keystone.RelaySetSessionMetadata:input_type -> kubex.keystone.RelaySetSessionMetadataRequest
+	22,  // 412: kubex.keystone.Keystone.Status:output_type -> kubex.keystone.StatusResponse
+	27,  // 413: kubex.keystone.Keystone.Define:output_type -> kubex.keystone.Schema
+	134, // 414: kubex.keystone.Keystone.IID:output_type -> kubex.keystone.IIDResponse
+	133, // 415: kubex.keystone.Keystone.IIDLookup:output_type -> kubex.keystone.IIDsResponse
+	33,  // 416: kubex.keystone.Keystone.PiiToken:output_type -> kubex.keystone.PiiTokenResponse
+	35,  // 417: kubex.keystone.Keystone.PiiAnonymize:output_type -> kubex.keystone.PiiAnonymizeResponse
+	80,  // 418: kubex.keystone.Keystone.Mutate:output_type -> kubex.keystone.MutateResponse
+	141, // 419: kubex.keystone.Keystone.Destroy:output_type -> kubex.keystone.DestroyResponse
+	66,  // 420: kubex.keystone.Keystone.Log:output_type -> kubex.keystone.LogResponse
+	144, // 421: kubex.keystone.Keystone.SQUID:output_type -> kubex.keystone.SquidResponse
+	144, // 422: kubex.keystone.Keystone.SQUIDRecover:output_type -> kubex.keystone.SquidResponse
+	80,  // 423: kubex.keystone.Keystone.SnapshotReport:output_type -> kubex.keystone.MutateResponse
+	80,  // 424: kubex.keystone.Keystone.ReportTimeSeries:output_type -> kubex.keystone.MutateResponse
+	116, // 425: kubex.keystone.Keystone.ChartTimeSeries:output_type -> kubex.keystone.ChartTimeSeriesResponse
+	26,  // 426: kubex.keystone.Keystone.WriteSensors:output_type -> kubex.keystone.GenericResponse
+	46,  // 427: kubex.keystone.Keystone.ListAppSensors:output_type -> kubex.keystone.ListAppSensorsResponse
+	55,  // 428: kubex.keystone.Keystone.ChartSensor:output_type -> kubex.keystone.ChartSensorResponse
+	61,  // 429: kubex.keystone.Keystone.HeatmapSensor:output_type -> kubex.keystone.HeatmapSensorResponse
+	58,  // 430: kubex.keystone.Keystone.SensorActivity:output_type -> kubex.keystone.SensorActivityResponse
+	49,  // 431: kubex.keystone.Keystone.PredictSensor:output_type -> kubex.keystone.PredictSensorResponse
+	51,  // 432: kubex.keystone.Keystone.CreateSensorStream:output_type -> kubex.keystone.CreateSensorStreamResponse
+	26,  // 433: kubex.keystone.Keystone.RevokeSensorSession:output_type -> kubex.keystone.GenericResponse
+	78,  // 434: kubex.keystone.Keystone.Retrieve:output_type -> kubex.keystone.EntityResponse
+	90,  // 435: kubex.keystone.Keystone.Find:output_type -> kubex.keystone.FindResponse
+	93,  // 436: kubex.keystone.Keystone.List:output_type -> kubex.keystone.ListResponse
+	105, // 437: kubex.keystone.Keystone.QueryIndex:output_type -> kubex.keystone.QueryIndexResponse
+	103, // 438: kubex.keystone.Keystone.Query:output_type -> kubex.keystone.QueryResponse
+	185, // 439: kubex.keystone.Keystone.FeedPut:output_type -> kubex.keystone.FeedPutResponse
+	187, // 440: kubex.keystone.Keystone.FeedRead:output_type -> kubex.keystone.FeedReadResponse
+	26,  // 441: kubex.keystone.Keystone.FeedRemove:output_type -> kubex.keystone.GenericResponse
+	191, // 442: kubex.keystone.Keystone.FeedSummary:output_type -> kubex.keystone.FeedSummaryResponse
+	124, // 443: kubex.keystone.Keystone.Lookup:output_type -> kubex.keystone.LookupResponse
+	107, // 444: kubex.keystone.Keystone.GroupCount:output_type -> kubex.keystone.GroupCountResponse
+	85,  // 445: kubex.keystone.Keystone.Logs:output_type -> kubex.keystone.LogsResponse
+	87,  // 446: kubex.keystone.Keystone.Events:output_type -> kubex.keystone.EventsResponse
+	136, // 447: kubex.keystone.Keystone.EventStream:output_type -> kubex.keystone.EventStreamResponse
+	118, // 448: kubex.keystone.Keystone.ShareView:output_type -> kubex.keystone.SharedViewResponse
+	120, // 449: kubex.keystone.Keystone.SharedViews:output_type -> kubex.keystone.SharedViewsResponse
+	122, // 450: kubex.keystone.Keystone.RateLimit:output_type -> kubex.keystone.RateLimitResponse
+	113, // 451: kubex.keystone.Keystone.DailyEntities:output_type -> kubex.keystone.DailyEntityResponse
+	111, // 452: kubex.keystone.Keystone.SchemaStatistics:output_type -> kubex.keystone.SchemaStatisticsResponse
+	128, // 453: kubex.keystone.Keystone.AKVGet:output_type -> kubex.keystone.AKVGetResponse
+	26,  // 454: kubex.keystone.Keystone.AKVPut:output_type -> kubex.keystone.GenericResponse
+	26,  // 455: kubex.keystone.Keystone.AKVDel:output_type -> kubex.keystone.GenericResponse
+	128, // 456: kubex.keystone.Keystone.AKVWorkspaceGet:output_type -> kubex.keystone.AKVGetResponse
+	26,  // 457: kubex.keystone.Keystone.AKVWorkspacePut:output_type -> kubex.keystone.GenericResponse
+	26,  // 458: kubex.keystone.Keystone.AKVWorkspaceDel:output_type -> kubex.keystone.GenericResponse
+	26,  // 459: kubex.keystone.Keystone.AKVTimePut:output_type -> kubex.keystone.GenericResponse
+	157, // 460: kubex.keystone.Keystone.AKVTimeGet:output_type -> kubex.keystone.AKVTimeGetResponse
+	26,  // 461: kubex.keystone.Keystone.AKVTimeDel:output_type -> kubex.keystone.GenericResponse
+	26,  // 462: kubex.keystone.Keystone.EnumPut:output_type -> kubex.keystone.GenericResponse
+	148, // 463: kubex.keystone.Keystone.EnumGet:output_type -> kubex.keystone.EnumGetResponse
+	26,  // 464: kubex.keystone.Keystone.EnumDelete:output_type -> kubex.keystone.GenericResponse
+	151, // 465: kubex.keystone.Keystone.EnumList:output_type -> kubex.keystone.EnumListResponse
+	26,  // 466: kubex.keystone.Keystone.EnumReplace:output_type -> kubex.keystone.GenericResponse
+	26,  // 467: kubex.keystone.Keystone.PushTask:output_type -> kubex.keystone.GenericResponse
+	139, // 468: kubex.keystone.Keystone.TaskStream:output_type -> kubex.keystone.TaskResponse
+	160, // 469: kubex.keystone.Keystone.RelayCreateSession:output_type -> kubex.keystone.RelayCreateSessionResponse
+	162, // 470: kubex.keystone.Keystone.RelayExtendSession:output_type -> kubex.keystone.RelayExtendSessionResponse
+	164, // 471: kubex.keystone.Keystone.RelayDestroySession:output_type -> kubex.keystone.RelayDestroySessionResponse
+	166, // 472: kubex.keystone.Keystone.RelayCreateShortCode:output_type -> kubex.keystone.RelayCreateShortCodeResponse
+	168, // 473: kubex.keystone.Keystone.RelayResolveShortCode:output_type -> kubex.keystone.RelayResolveShortCodeResponse
+	170, // 474: kubex.keystone.Keystone.RelayDeleteShortCode:output_type -> kubex.keystone.RelayDeleteShortCodeResponse
+	172, // 475: kubex.keystone.Keystone.RelayPublish:output_type -> kubex.keystone.RelayPublishResponse
+	174, // 476: kubex.keystone.Keystone.RelayGetPresence:output_type -> kubex.keystone.RelayGetPresenceResponse
+	177, // 477: kubex.keystone.Keystone.RelayGetSessionMetadata:output_type -> kubex.keystone.RelayGetSessionMetadataResponse
+	179, // 478: kubex.keystone.Keystone.RelaySetSessionMetadata:output_type -> kubex.keystone.RelaySetSessionMetadataResponse
+	412, // [412:479] is the sub-list for method output_type
+	345, // [345:412] is the sub-list for method input_type
+	345, // [345:345] is the sub-list for extension type_name
+	345, // [345:345] is the sub-list for extension extendee
+	0,   // [0:345] is the sub-list for field type_name
 }
 
 func init() { file_keystone_proto_init() }
@@ -13966,8 +16244,10 @@ func file_keystone_proto_init() {
 	if File_keystone_proto != nil {
 		return
 	}
-	file_keystone_proto_msgTypes[39].OneofWrappers = []any{}
-	file_keystone_proto_msgTypes[56].OneofWrappers = []any{
+	file_keystone_proto_msgTypes[22].OneofWrappers = []any{}
+	file_keystone_proto_msgTypes[23].OneofWrappers = []any{}
+	file_keystone_proto_msgTypes[56].OneofWrappers = []any{}
+	file_keystone_proto_msgTypes[73].OneofWrappers = []any{
 		(*QueryPredicate_Property)(nil),
 		(*QueryPredicate_Label)(nil),
 		(*QueryPredicate_Relationship)(nil),
@@ -13975,16 +16255,16 @@ func file_keystone_proto_init() {
 		(*QueryPredicate_Any)(nil),
 		(*QueryPredicate_Not)(nil),
 	}
-	file_keystone_proto_msgTypes[64].OneofWrappers = []any{}
-	file_keystone_proto_msgTypes[84].OneofWrappers = []any{}
-	file_keystone_proto_msgTypes[96].OneofWrappers = []any{}
+	file_keystone_proto_msgTypes[81].OneofWrappers = []any{}
+	file_keystone_proto_msgTypes[101].OneofWrappers = []any{}
+	file_keystone_proto_msgTypes[113].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_keystone_proto_rawDesc), len(file_keystone_proto_rawDesc)),
-			NumEnums:      19,
-			NumMessages:   181,
+			NumEnums:      22,
+			NumMessages:   199,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

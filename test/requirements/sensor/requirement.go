@@ -2,45 +2,80 @@ package sensor
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"time"
 
 	"github.com/keystonedb/sdk-go/keystone"
+	"github.com/keystonedb/sdk-go/proto"
 	"github.com/keystonedb/sdk-go/test/models"
 	"github.com/keystonedb/sdk-go/test/requirements"
 )
 
 type Requirement struct {
+	fixture sensorFixture
 }
 
 func (d *Requirement) Name() string {
 	return "Sensor"
 }
 
+// Parallel fixtures use unique sensor/entity identities or an isolated task queue.
+func (d *Requirement) Parallel() bool { return true }
+
 func (d *Requirement) Register(conn *keystone.Connection) error {
-	conn.RegisterTypes(models.User{})
+	os.Setenv("KS_SENSOR_TEST_ORIGIN", "https://l.kscdn.co/r/_sensors")
+	conn.RegisterTypes(models.Person{})
 	return nil
 }
 
 func (d *Requirement) Verify(actor *keystone.Actor, report requirements.Reporter) {
-	report(d.measure(actor))
+	scheduler := requirements.NewScheduler()
+	scheduler.StartEarly(d.Name(), func() { d.VerifyScheduled(actor, report, scheduler) })
+	scheduler.Run()
+}
+
+func (d *Requirement) VerifyScheduled(actor *keystone.Actor, report requirements.Reporter, scheduler *requirements.Scheduler) {
+	d.scheduleTTL(actor, report, scheduler)
+	scheduler.After(0, func() {
+		report(d.measure(actor))
+		d.verifyQueries(actor, func(result requirements.TestResult) { result.Name = "Entity " + result.Name; report(result) })
+		app := &Requirement{fixture: sensorFixture{appScope: true}}
+		app.verifyQueries(actor, func(result requirements.TestResult) { result.Name = "App " + result.Name; report(result) })
+		d.scheduleBackground(actor, report, scheduler)
+	})
+}
+
+func (d *Requirement) verifyQueries(actor *keystone.Actor, report requirements.Reporter) {
+	stored := d.storeQueryMeasurements(actor)
+	report(stored)
+	if stored.Error != nil {
+		return
+	}
+	report(d.chart(actor, false))
+	report(d.chart(actor, true))
+	report(d.heatmap(actor, proto.SensorHeatmapLayout_SensorHeatmapDay, false))
+	report(d.heatmap(actor, proto.SensorHeatmapLayout_SensorHeatmapWeek, true))
+	report(d.activity(actor, proto.SensorActivityCalendar_SensorActivityWeek))
+	report(d.activity(actor, proto.SensorActivityCalendar_SensorActivityMonth))
+	report(d.predict(actor))
+	report(d.predictWithoutBackfill(actor))
+	if d.fixture.appScope {
+		report(d.listAppSensors(actor))
+	}
 }
 
 func (d *Requirement) measure(actor *keystone.Actor) requirements.TestResult {
-	psn := &models.Person{}
-	psn.Name = "John Smith"
-	psn.AddSensorMeasurement("page.view", 1)
-	for i := 0; i < 100; i++ {
-		psn.AddSensorMeasurement("mouse.move", float64(time.Now().Second()))
-		time.Sleep(time.Millisecond)
-
+	ctx, cancel := context.WithTimeout(context.Background(), queryTimeout)
+	defer cancel()
+	measurements := []*proto.EntitySensorMeasurement{keystone.NewSensorMeasurement("page.view", 1)}
+	for range 100 {
+		measurements = append(measurements, keystone.NewSensorMeasurement("mouse.move", float64(time.Now().Second())))
 	}
-	psn.AddSensorMeasurementWithData("order", 100.12, map[string]string{
-		"currency": "GBP",
-	})
-	updateErr := actor.Mutate(context.Background(), psn, keystone.WithMutationComment("Write Measurement"))
-
-	return requirements.TestResult{
-		Name:  "Store Measurement",
-		Error: updateErr,
+	measurements = append(measurements, keystone.NewSensorMeasurement("order", 100.12, keystone.WithSensorData(map[string]string{"currency": "GBP"})))
+	response, err := actor.WriteSensors(ctx, &proto.WriteSensorsRequest{AppScope: true, Measurements: measurements})
+	if err == nil && !response.GetSuccess() {
+		err = fmt.Errorf("WriteSensors did not succeed")
 	}
+	return requirements.NewResult("Store Measurements through WriteSensors", err)
 }

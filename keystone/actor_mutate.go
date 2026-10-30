@@ -45,9 +45,6 @@ func (a *Actor) RemoteMutate(ctx context.Context, entityID ID, src interface{}, 
 		}
 	}
 
-	if entityWithSensor, ok := src.(SensorProvider); ok {
-		mutation.Measurements = entityWithSensor.GetSensorMeasurements()
-	}
 	if entityWithEvents, ok := src.(EventProvider); ok {
 		mutation.Events = entityWithEvents.GetEvents()
 	}
@@ -126,11 +123,6 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 	if entityWithLabels, ok := src.(LabelProvider); ok {
 		mutation.Labels = entityWithLabels.GetLabels()
 		onSuccess = append(onSuccess, entityWithLabels.ClearLabels)
-	}
-
-	if entityWithSensor, ok := src.(SensorProvider); ok {
-		mutation.Measurements = entityWithSensor.GetSensorMeasurements()
-		onSuccess = append(onSuccess, entityWithSensor.ClearSensorMeasurements)
 	}
 
 	if entityWithRelationships, ok := src.(RelationshipProvider); ok {
