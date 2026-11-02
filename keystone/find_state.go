@@ -5,7 +5,7 @@ import "github.com/keystonedb/sdk-go/proto"
 const statePropertyName = "_state"
 
 // WithStates filters entities to only return those with the specified states.
-// By default, only Active entities are returned. Use this to include other states.
+// Without a state filter, results include entities in every state.
 // Example: WithStates(proto.EntityState_Active, proto.EntityState_Archived)
 func WithStates(states ...proto.EntityState) FindOption {
 	if len(states) == 0 {
@@ -30,7 +30,6 @@ func OnlyArchived() FindOption {
 }
 
 // OnlyActive returns only entities with Active state.
-// This is the default behavior, but can be used explicitly.
 func OnlyActive() FindOption {
 	return WithStates(proto.EntityState_Active)
 }
