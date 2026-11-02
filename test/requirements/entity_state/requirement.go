@@ -536,6 +536,9 @@ func (d *Requirement) expectState(actor *keystone.Actor, indexed bool, id keysto
 	if found == nil {
 		return fmt.Errorf("lookup filtered to %v did not return the entity", want)
 	}
+	if got := found.GetEntity().GetState(); got != want {
+		return fmt.Errorf("lookup filtered to %v: expected state %v, got %v", want, want, got)
+	}
 	if indexed {
 		got := &IndexedStateTestEntity{}
 		if err := keystone.Unmarshal(found, got); err != nil {
