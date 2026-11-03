@@ -81,6 +81,9 @@ func (a *Actor) RemoteMutate(ctx context.Context, entityID ID, src interface{}, 
 }
 
 func (a *Actor) MutateWithDefaultWatcher(ctx context.Context, src interface{}, options ...MutateOption) error {
+	if _, ok := src.(dynamicRecordEntityProvider); ok {
+		return errors.New("DynamicRecordEntity tracks changes internally; use Actor.Mutate")
+	}
 	w, err := NewDefaultsWatcher(src)
 	if err != nil {
 		return err
@@ -89,6 +92,9 @@ func (a *Actor) MutateWithDefaultWatcher(ctx context.Context, src interface{}, o
 }
 
 func (a *Actor) MutateWithWatcher(ctx context.Context, src interface{}, w *Watcher, options ...MutateOption) error {
+	if _, ok := src.(dynamicRecordEntityProvider); ok {
+		return errors.New("DynamicRecordEntity tracks changes internally; use Actor.Mutate")
+	}
 	changes, err := w.Changes(src, true)
 	if err != nil {
 		return err
@@ -210,6 +216,9 @@ func (a *Actor) mutateWithProperties(ctx context.Context, src interface{}, props
 
 // Mutate is a function that can mutate an entity
 func (a *Actor) Mutate(ctx context.Context, src interface{}, options ...MutateOption) error {
+	if _, ok := src.(dynamicRecordEntityProvider); ok {
+		return a.MutateDynamicRecord(ctx, src, options...)
+	}
 	srcType := reflect.TypeOf(src)
 	if srcType.Kind() != reflect.Pointer || srcType.Elem().Kind() == reflect.Pointer {
 		return errors.New("mutate requires a pointer to a struct")

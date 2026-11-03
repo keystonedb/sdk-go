@@ -128,6 +128,10 @@ func (c *Connection) Actor(workspaceID, remoteIP, userID, userAgent string) Acto
 func (c *Connection) RegisterTypes(types ...interface{}) int {
 	registered := 0
 	for _, t := range types {
+		// Dynamic Record structs describe local fields, not a server schema.
+		if dynamicRecordEntityType(reflect.TypeOf(t)) {
+			continue
+		}
 		tt := reflect.TypeOf(t)
 		alreadyRegistered := false
 		if tt.Kind() == reflect.Ptr {

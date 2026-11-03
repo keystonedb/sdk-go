@@ -418,3 +418,101 @@ Live requirements check grants, HTTP snapshots, origin rejection, SSE updates,
 connection closure on revocation, and denial of new grants for a revoked login,
 for both entity and app scopes. Stream creation requires an actor with an
 end-user ID and a verified login expiry in the request.
+
+## Dynamic Records
+
+Use `actor.DynamicRecord(key)` for schema-free configuration scoped to the actor's
+workspace, vendor and app. No struct or schema registration is required.
+
+```go
+settings := actor.DynamicRecord("settings")
+_, err := settings.Set(ctx, "enabled", true)
+if err != nil { return err }
+
+_, err = settings.Mutate(ctx, keystone.DynamicRecordPatch{
+    Set: map[string]any{
+        "enabled": false,
+        "retries": int64(0),
+        "api_key": keystone.NewSecureString("credential", "****"),
+    },
+    Remove: []string{"legacy"},
+    Comment: "Update configuration",
+})
+if err != nil { return err }
+
+record, err := settings.Get(ctx, "enabled") // Omit names to load all properties.
+if err != nil { return err }
+if record.Exists {
+    enabled := record.Properties["enabled"].GetBool()
+    _ = enabled
+}
+
+history, err := settings.History(ctx, keystone.DynamicRecordHistoryOptions{Limit: 50})
+if err != nil { return err }
+_ = history.NextBeforeRevision // Pass as BeforeRevision for the next page.
+```
+
+`settings.Remove(ctx, names...)` removes properties; `settings.Delete(ctx, comment)`
+deletes current data while preserving history. Patch values accept supported Go
+types or `*proto.Value`; nil values are rejected. Secret values are encrypted by
+the server and omitted from history. Mark secrets using `SecureString` or an
+explicit secure `proto.Value`.
+
+The corresponding raw Connection methods are `GetDynamicRecord`,
+`MutateDynamicRecord`, `DeleteDynamicRecord`, and `ListDynamicRecordHistory`.
+Independent property writes preserve one another; same-property writes use the
+server's last-write-wins rules. Revisions identify mutations, not sequential
+versions. Retrying a mutation after an ambiguous RPC failure may add history
+entries. Selected reads reduce returned values; they do not promise partial
+collection reads from storage. Requires a server with Dynamic Records support
+and migration 011 applied.
+
+### Typed Dynamic Record entities
+
+Embed `DynamicRecordEntity` to model a record with a Go struct, using normal
+`keystone` field tags and SDK value types. The struct remains local to the app;
+no schema is registered, including when it appears in `RegisterTypes`.
+
+```go
+type WorkspaceSettings struct {
+    keystone.DynamicRecordEntity
+    Enabled bool
+    Retries int64
+    APIKey  keystone.SecureString `keystone:"api_key"`
+}
+
+settings := &WorkspaceSettings{}
+if err := actor.GetDynamicRecord(ctx, "settings", settings); err != nil {
+    return err
+}
+if !settings.DynamicRecordExists() {
+    // Configure defaults here if needed.
+}
+settings.Enabled = true
+if err := actor.Mutate(ctx, settings, keystone.WithMutationComment("Enable integration")); err != nil {
+    return err
+}
+
+settings.Enabled = false
+if err := actor.Mutate(ctx, settings, keystone.MutateProperties("enabled")); err != nil {
+    return err
+}
+```
+
+For a new record without a preceding read, initialize the embedded value with
+`keystone.NewDynamicRecordEntity("settings")`, or call
+`settings.SetDynamicRecordKey("settings")`. The first mutation writes the struct's
+marshaled fields, including primitive zero values. Subsequent mutations write
+only changed fields; `MutateProperties` explicitly selects fields to write even
+when unchanged. Only `MutateProperties` and `WithMutationComment` are supported
+mutation options. No changes means no RPC or history entry.
+
+`actor.DynamicRecord(key).Load(ctx, settings, "enabled")` and
+`actor.GetDynamicRecord(ctx, key, settings, "enabled")` support partial hydration.
+Missing selected fields are cleared; unselected fields remain unchanged and are
+not submitted by a later mutation unless modified or explicitly selected.
+Full loads clear stale fields, including when the record is missing. The entity
+exposes `GetDynamicRecordKey`, `DynamicRecordExists`, and `DynamicRecordRevision`.
+Changing the key resets tracking metadata while preserving application fields.
+Typed records use their own snapshot tracking; external watcher mutation methods
+are rejected. Use a separate struct instance for concurrent operations.

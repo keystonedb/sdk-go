@@ -14,6 +14,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/document"
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_entity"
 	"github.com/keystonedb/sdk-go/test/requirements/dynamic_properties"
+	"github.com/keystonedb/sdk-go/test/requirements/dynamic_record"
 	"github.com/keystonedb/sdk-go/test/requirements/embedded"
 	"github.com/keystonedb/sdk-go/test/requirements/entity_state"
 	"github.com/keystonedb/sdk-go/test/requirements/enums"
@@ -68,6 +69,7 @@ func init() {
 	reqs = append(reqs, &cru.Requirement{})
 	reqs = append(reqs, &dynamic_properties.Requirement{})
 	reqs = append(reqs, &dynamic_entity.Requirement{})
+	reqs = append(reqs, &dynamic_record.Requirement{})
 	reqs = append(reqs, &document.Requirement{})
 	reqs = append(reqs, &unique_id.Requirement{})
 	reqs = append(reqs, &sensor.Requirement{})

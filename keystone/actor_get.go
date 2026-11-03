@@ -18,6 +18,9 @@ func (a *Actor) GetByUniqueProperty(ctx context.Context, uniqueId, propertyName 
 
 // Get retrieves an entity by the given retrieveBy, storing the result in dst
 func (a *Actor) Get(ctx context.Context, retrieveBy RetrieveBy, dst interface{}, retrieve ...RetrieveOption) error {
+	if _, ok := dst.(dynamicRecordEntityProvider); ok {
+		return errors.New("use GetDynamicRecord to load a DynamicRecordEntity by key")
+	}
 	entityRequest := retrieveBy.BaseRequest()
 	entityRequest.Authorization = a.Authorization()
 	for _, rOpt := range retrieve {

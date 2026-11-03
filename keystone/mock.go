@@ -2,6 +2,8 @@ package keystone
 
 import (
 	"context"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"net"
 
 	"github.com/keystonedb/sdk-go/proto"
@@ -13,6 +15,11 @@ import (
 const bufSize = 1024 * 1024
 
 type MockServer struct {
+	GetDynamicRecordFunc         func(context.Context, *proto.GetDynamicRecordRequest) (*proto.DynamicRecord, error)
+	MutateDynamicRecordFunc      func(context.Context, *proto.MutateDynamicRecordRequest) (*proto.DynamicRecordMutationResponse, error)
+	DeleteDynamicRecordFunc      func(context.Context, *proto.DeleteDynamicRecordRequest) (*proto.DynamicRecordMutationResponse, error)
+	ListDynamicRecordHistoryFunc func(context.Context, *proto.ListDynamicRecordHistoryRequest) (*proto.ListDynamicRecordHistoryResponse, error)
+
 	proto.UnimplementedKeystoneServer
 	ListAppSensorsFunc      func(context.Context, *proto.Authorization) (*proto.ListAppSensorsResponse, error)
 	RevokeSensorSessionFunc func(context.Context, *proto.RevokeSensorSessionRequest) (*proto.GenericResponse, error)
@@ -533,4 +540,32 @@ func (m *MockServer) Query(ctx context.Context, req *proto.QueryRequest) (*proto
 		return m.UnimplementedKeystoneServer.Query(ctx, req)
 	}
 	return m.QueryFunc(ctx, req)
+}
+
+func (m *MockServer) GetDynamicRecord(ctx context.Context, req *proto.GetDynamicRecordRequest) (*proto.DynamicRecord, error) {
+	if m.GetDynamicRecordFunc != nil {
+		return m.GetDynamicRecordFunc(ctx, req)
+	}
+	return nil, status.Error(codes.Unimplemented, "GetDynamicRecord is not configured")
+}
+
+func (m *MockServer) MutateDynamicRecord(ctx context.Context, req *proto.MutateDynamicRecordRequest) (*proto.DynamicRecordMutationResponse, error) {
+	if m.MutateDynamicRecordFunc != nil {
+		return m.MutateDynamicRecordFunc(ctx, req)
+	}
+	return nil, status.Error(codes.Unimplemented, "MutateDynamicRecord is not configured")
+}
+
+func (m *MockServer) DeleteDynamicRecord(ctx context.Context, req *proto.DeleteDynamicRecordRequest) (*proto.DynamicRecordMutationResponse, error) {
+	if m.DeleteDynamicRecordFunc != nil {
+		return m.DeleteDynamicRecordFunc(ctx, req)
+	}
+	return nil, status.Error(codes.Unimplemented, "DeleteDynamicRecord is not configured")
+}
+
+func (m *MockServer) ListDynamicRecordHistory(ctx context.Context, req *proto.ListDynamicRecordHistoryRequest) (*proto.ListDynamicRecordHistoryResponse, error) {
+	if m.ListDynamicRecordHistoryFunc != nil {
+		return m.ListDynamicRecordHistoryFunc(ctx, req)
+	}
+	return nil, status.Error(codes.Unimplemented, "ListDynamicRecordHistory is not configured")
 }
