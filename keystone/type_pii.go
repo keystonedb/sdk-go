@@ -1,7 +1,7 @@
 package keystone
 
 import (
-	"math/rand/v2"
+	"hash/fnv"
 	"net"
 	"regexp"
 	"strings"
@@ -73,7 +73,7 @@ func NewPhone(phone string) Phone {
 	if phone == "" {
 		return Phone{}
 	}
-	mask := phoneMask.ReplaceAllString(phone, "${1}"+strings.Repeat("*", rand.IntN(1)+4)+"${3}")
+	mask := phoneMask.ReplaceAllString(phone, "${1}****${3}")
 	return Phone{NewSecureString(phone, mask)}
 }
 
@@ -140,6 +140,8 @@ func NewSecureIP(ip string) SecureIP {
 	return NewSecureIPV6(ip)
 }
 
+// BasicMask masks each word, keeping its first and last letter. The number of asterisks
+// (3-9) is derived from the word, so the same input always produces the same mask.
 func BasicMask(unmasked string) string {
 	if unmasked == "" {
 		return ""
@@ -152,15 +154,22 @@ func BasicMask(unmasked string) string {
 		if l := utf8.RuneCountInString(word); l > 2 {
 			first, _ := utf8.DecodeRuneInString(word)
 			last, _ := utf8.DecodeLastRuneInString(word)
-			words[i] = string(first) + strings.Repeat("*", rand.IntN(7)+3) + string(last)
+			words[i] = string(first) + strings.Repeat("*", maskLength(word)) + string(last)
 		} else if l > 1 {
 			// whole word becomes 3-7 asterisks
 			first, _ := utf8.DecodeRuneInString(word)
-			words[i] = string(first) + strings.Repeat("*", rand.IntN(7)+3)
+			words[i] = string(first) + strings.Repeat("*", maskLength(word))
 		} else {
 			// single character, mask it
-			words[i] = strings.Repeat("*", rand.IntN(7)+3)
+			words[i] = strings.Repeat("*", maskLength(word))
 		}
 	}
 	return strings.Join(words, " ")
+}
+
+// maskLength returns an asterisk count of 3-9 derived from the word.
+func maskLength(word string) int {
+	h := fnv.New32a()
+	_, _ = h.Write([]byte(word))
+	return int(h.Sum32()%7) + 3
 }

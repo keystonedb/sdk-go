@@ -54,7 +54,7 @@ func Marshal(v interface{}) (map[Property]*proto.Value, error) {
 		currentVal := val.FieldByIndex(field.Index)
 		ref := GetReflector(field.Type, currentVal)
 		if ref != nil {
-			if vRef, vRefOk := ref.(valueMarshalReflector); vRefOk && vRef.IsZero() {
+			if vRef, vRefOk := ref.(valueMarshalReflector); vRefOk && vRef.IsZero() && !vRef.IsCleared() {
 				continue
 			}
 			protoVal, err := ref.ToProto(currentVal)

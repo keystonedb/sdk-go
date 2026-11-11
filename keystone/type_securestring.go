@@ -12,10 +12,24 @@ type SecureString struct {
 	Original string `json:"-"`
 }
 
-func (e *SecureString) MarshalJSON() ([]byte, error) { return json.Marshal(e.Masked) }
+// MarshalJSON encodes the masked value as a JSON string; the original is never encoded.
+func (e SecureString) MarshalJSON() ([]byte, error) { return json.Marshal(e.Masked) }
 
+// UnmarshalJSON reads the masked value from a JSON string, or from the {"masked": ...}
+// object written by older SDK versions.
 func (e *SecureString) UnmarshalJSON(data []byte) error {
-	e.Masked = string(data)
+	var masked string
+	if err := json.Unmarshal(data, &masked); err != nil {
+		var obj struct {
+			Masked string `json:"masked"`
+		}
+		if objErr := json.Unmarshal(data, &obj); objErr != nil {
+			return err
+		}
+		masked = obj.Masked
+	}
+	e.Masked = masked
+	e.Original = ""
 	return nil
 }
 
@@ -54,6 +68,13 @@ func (e *SecureString) PropertyDefinition() proto.PropertyDefinition {
 	return proto.PropertyDefinition{DataType: proto.Property_SecureText}
 }
 
+// IsZero reports whether there is no original value to send.
 func (e *SecureString) IsZero() bool {
 	return e == nil || e.Original == ""
+}
+
+// IsCleared reports whether both the original and masked values are empty, which marshals
+// as an empty secure value so the stored value is removed.
+func (e *SecureString) IsCleared() bool {
+	return e == nil || (e.Original == "" && e.Masked == "")
 }

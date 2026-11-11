@@ -18,6 +18,7 @@ var (
 	timestampType        = reflect.TypeFor[timestamppb.Timestamp]()
 	refTimestampType     = reflect.TypeFor[*timestamppb.Timestamp]()
 	mutationObserverType = reflect.TypeFor[MutationObserver]()
+	propertyDefinerType  = reflect.TypeFor[propertyDefiner]()
 	NestedChildType      = reflect.TypeFor[NestedChild]()
 )
 
@@ -86,7 +87,10 @@ func GetReflector(t reflect.Type, v reflect.Value) Reflector {
 	if ref, ok := kindReflector[t.Kind()]; ok {
 		if intRef, isIntRef := ref.(reflector.Int); isIntRef {
 			intRef.Type = t
-			return intRef
+			ref = intRef
+		}
+		if def, defined := definedProperty(t); defined {
+			return definedKindReflector{Reflector: ref, definition: def}
 		}
 		return ref
 	}
@@ -148,6 +152,18 @@ func (v valueMarshalReflector) IsZero() bool {
 	return v.marshal.IsZero()
 }
 
+// IsCleared reports whether a zero value was emptied by the caller and must still be sent.
+func (v valueMarshalReflector) IsCleared() bool {
+	c, ok := v.marshal.(clearableValue)
+	return ok && c.IsCleared()
+}
+
+// clearableValue is a ValueMarshaler whose zero state covers both a value that must be
+// withheld (e.g. a SecureString hydrated without its original) and one emptied by the caller.
+type clearableValue interface {
+	IsCleared() bool
+}
+
 func (v valueMarshalReflector) ToProto(value reflect.Value) (*proto.Value, error) {
 	return v.marshal.MarshalValue()
 }
@@ -183,4 +199,31 @@ func newValueMarshalReflector(value reflect.Value) Reflector {
 		return nil
 	}
 	return valueMarshalReflector{marshal: m}
+}
+
+// propertyDefiner is a named primitive type (e.g. Country, URL, PII) that declares its own
+// property definition while being stored by its kind reflector.
+type propertyDefiner interface {
+	PropertyDefinition() proto.PropertyDefinition
+}
+
+func definedProperty(t reflect.Type) (proto.PropertyDefinition, bool) {
+	if t.Implements(propertyDefinerType) {
+		return reflect.New(t).Elem().Interface().(propertyDefiner).PropertyDefinition(), true
+	}
+	if reflect.PointerTo(t).Implements(propertyDefinerType) {
+		return reflect.New(t).Interface().(propertyDefiner).PropertyDefinition(), true
+	}
+	return proto.PropertyDefinition{}, false
+}
+
+// definedKindReflector stores a value through its kind reflector and reports the
+// definition declared by the value's type.
+type definedKindReflector struct {
+	Reflector
+	definition proto.PropertyDefinition
+}
+
+func (d definedKindReflector) PropertyDefinition() proto.PropertyDefinition {
+	return d.definition
 }
