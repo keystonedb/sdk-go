@@ -516,3 +516,58 @@ exposes `GetDynamicRecordKey`, `DynamicRecordExists`, and `DynamicRecordRevision
 Changing the key resets tracking metadata while preserving application fields.
 Typed records use their own snapshot tracking; external watcher mutation methods
 are rejected. Use a separate struct instance for concurrent operations.
+
+## Entity aliases
+
+An alias maps a linked vendor/app's external ID to a canonical customer ID. Its
+optional routing key scopes the identity; an empty key is the default namespace.
+`NewEntityAlias(vendor, app, extRef)` always takes an explicit vendor and app.
+`.WithRouting(key)` sets the optional routing key and returns the same alias.
+
+```go
+entityType := keystone.Type(&Customer{})
+alias := keystone.NewEntityAlias("billing", "stripe", "cus_123").WithRouting("eu")
+// Omit WithRouting for the default namespace.
+if err := actor.AttachAlias(ctx, entityType, customerID, alias); err != nil {
+    return err
+}
+
+// One RPC loads the customer and captures its aliases for the page.
+customer := &Customer{}
+aliases := keystone.WithAliases()
+if err := actor.GetByAlias(ctx, alias, customer,
+    keystone.WithProperties("name"), aliases); err != nil {
+    return err
+}
+for _, linkedID := range aliases.Aliases() {
+    // Render linkedID.Source, linkedID.RoutingKey and linkedID.ExternalId.
+    _ = linkedID
+}
+```
+
+`Actor.ResolveAlias(ctx, entityType, alias)` returns a canonical `keystone.ID`;
+`Actor.ListAliases(ctx, entityType, entityID)` returns active aliases, and
+`Actor.RemoveAlias(ctx, entityType, entityID, alias)` deactivates one.
+The SDK builds the schema key using the actor's vendor/app. For an entity owned by
+another app, pass `keystone.WithAliasOwner("customer-vendor", "customer-app")`:
+
+```go
+err := linkedActor.AttachAlias(ctx, keystone.Type(&Customer{}), customerID, alias,
+    keystone.WithAliasOwner("customer-vendor", "customer-app"))
+```
+
+The owner option identifies the canonical entity's app; `alias.Source` identifies the
+linked record's app. No `proto.Key` is needed in these SDK calls.
+Attach/remove require the owning app or the linked app whose namespace is being
+changed. Listing all aliases requires the owning app.
+
+Apps with write-capable Keystone tokens can attach/remove aliases in their own
+vendor/app namespace; authenticated apps can resolve their own aliases. No schema
+opt-in is required.
+Resolution grants no customer read/write access. Removal retains ownership: an alias
+cannot subsequently be attached to a different entity. Alias writes are separate
+from `Mutate`; attach after the canonical customer exists. Pass `WithAliases()`
+directly to Get, and use its `Aliases()` result after a successful call.
+
+See [alias requirements](test/requirements/aliases/README.md) for the executable
+lifecycle, authorization, isolation and destruction checks.

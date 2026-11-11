@@ -15,6 +15,11 @@ import (
 const bufSize = 1024 * 1024
 
 type MockServer struct {
+	AttachAliasFunc  func(context.Context, *proto.AliasMutationRequest) (*proto.GenericResponse, error)
+	RemoveAliasFunc  func(context.Context, *proto.AliasMutationRequest) (*proto.GenericResponse, error)
+	ResolveAliasFunc func(context.Context, *proto.ResolveAliasRequest) (*proto.ResolveAliasResponse, error)
+	ListAliasesFunc  func(context.Context, *proto.ListAliasesRequest) (*proto.ListAliasesResponse, error)
+
 	GetDynamicRecordFunc         func(context.Context, *proto.GetDynamicRecordRequest) (*proto.DynamicRecord, error)
 	MutateDynamicRecordFunc      func(context.Context, *proto.MutateDynamicRecordRequest) (*proto.DynamicRecordMutationResponse, error)
 	DeleteDynamicRecordFunc      func(context.Context, *proto.DeleteDynamicRecordRequest) (*proto.DynamicRecordMutationResponse, error)
@@ -568,4 +573,32 @@ func (m *MockServer) ListDynamicRecordHistory(ctx context.Context, req *proto.Li
 		return m.ListDynamicRecordHistoryFunc(ctx, req)
 	}
 	return nil, status.Error(codes.Unimplemented, "ListDynamicRecordHistory is not configured")
+}
+
+func (m *MockServer) AttachAlias(ctx context.Context, req *proto.AliasMutationRequest) (*proto.GenericResponse, error) {
+	if m.AttachAliasFunc == nil {
+		return m.UnimplementedKeystoneServer.AttachAlias(ctx, req)
+	}
+	return m.AttachAliasFunc(ctx, req)
+}
+
+func (m *MockServer) RemoveAlias(ctx context.Context, req *proto.AliasMutationRequest) (*proto.GenericResponse, error) {
+	if m.RemoveAliasFunc == nil {
+		return m.UnimplementedKeystoneServer.RemoveAlias(ctx, req)
+	}
+	return m.RemoveAliasFunc(ctx, req)
+}
+
+func (m *MockServer) ResolveAlias(ctx context.Context, req *proto.ResolveAliasRequest) (*proto.ResolveAliasResponse, error) {
+	if m.ResolveAliasFunc == nil {
+		return m.UnimplementedKeystoneServer.ResolveAlias(ctx, req)
+	}
+	return m.ResolveAliasFunc(ctx, req)
+}
+
+func (m *MockServer) ListAliases(ctx context.Context, req *proto.ListAliasesRequest) (*proto.ListAliasesResponse, error) {
+	if m.ListAliasesFunc == nil {
+		return m.UnimplementedKeystoneServer.ListAliases(ctx, req)
+	}
+	return m.ListAliasesFunc(ctx, req)
 }

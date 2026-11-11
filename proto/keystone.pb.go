@@ -5919,6 +5919,7 @@ type EntityView struct {
 	ObjectPaths           []string               `protobuf:"bytes,19,rep,name=object_paths,json=objectPaths,proto3" json:"object_paths,omitempty"` // Paths for objects to retrieve
 	DocumentRevisions     bool                   `protobuf:"varint,20,opt,name=document_revisions,json=documentRevisions,proto3" json:"document_revisions,omitempty"`
 	DocumentRevision      string                 `protobuf:"bytes,21,opt,name=document_revision,json=documentRevision,proto3" json:"document_revision,omitempty"`
+	Aliases               bool                   `protobuf:"varint,22,opt,name=aliases,proto3" json:"aliases,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -6063,6 +6064,13 @@ func (x *EntityView) GetDocumentRevision() string {
 		return x.DocumentRevision
 	}
 	return ""
+}
+
+func (x *EntityView) GetAliases() bool {
+	if x != nil {
+		return x.Aliases
+	}
+	return false
 }
 
 type TypeCount struct {
@@ -6212,6 +6220,7 @@ type EntityRequest struct {
 	LockTtlSeconds   int32                  `protobuf:"varint,7,opt,name=lock_ttl_seconds,json=lockTtlSeconds,proto3" json:"lock_ttl_seconds,omitempty"`
 	LockMessage      string                 `protobuf:"bytes,8,opt,name=lock_message,json=lockMessage,proto3" json:"lock_message,omitempty"`
 	VerifyProperties []*EntityProperty      `protobuf:"bytes,9,rep,name=verify_properties,json=verifyProperties,proto3" json:"verify_properties,omitempty"`
+	Alias            *EntityAlias           `protobuf:"bytes,10,opt,name=alias,proto3" json:"alias,omitempty"` // Owner-only alternative to entity_id and unique_id; schema required.
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -6309,6 +6318,13 @@ func (x *EntityRequest) GetVerifyProperties() []*EntityProperty {
 	return nil
 }
 
+func (x *EntityRequest) GetAlias() *EntityAlias {
+	if x != nil {
+		return x.Alias
+	}
+	return nil
+}
+
 type EntityResponse struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
 	Entity              *Entity                `protobuf:"bytes,1,opt,name=entity,proto3" json:"entity,omitempty"`
@@ -6326,6 +6342,7 @@ type EntityResponse struct {
 	Lock                *EntityLock            `protobuf:"bytes,14,opt,name=lock,proto3" json:"lock,omitempty"`
 	Extended            *ExtendedResponse      `protobuf:"bytes,15,opt,name=extended,proto3" json:"extended,omitempty"`
 	Exists              *bool                  `protobuf:"varint,16,opt,name=exists,proto3,oneof" json:"exists,omitempty"`
+	Aliases             []*EntityAlias         `protobuf:"bytes,17,rep,name=aliases,proto3" json:"aliases,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -6463,6 +6480,13 @@ func (x *EntityResponse) GetExists() bool {
 		return *x.Exists
 	}
 	return false
+}
+
+func (x *EntityResponse) GetAliases() []*EntityAlias {
+	if x != nil {
+		return x.Aliases
+	}
+	return nil
 }
 
 type EntityLock struct {
@@ -14472,6 +14496,343 @@ func (x *ListDynamicRecordHistoryResponse) GetNextBeforeRevision() string {
 	return ""
 }
 
+// An app-scoped external identity. Empty routing_key selects the default namespace.
+type EntityAlias struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Source        *VendorApp             `protobuf:"bytes,1,opt,name=source,proto3" json:"source,omitempty"`
+	RoutingKey    string                 `protobuf:"bytes,2,opt,name=routing_key,json=routingKey,proto3" json:"routing_key,omitempty"`
+	ExternalId    string                 `protobuf:"bytes,3,opt,name=external_id,json=externalId,proto3" json:"external_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntityAlias) Reset() {
+	*x = EntityAlias{}
+	mi := &file_keystone_proto_msgTypes[178]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntityAlias) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntityAlias) ProtoMessage() {}
+
+func (x *EntityAlias) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[178]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntityAlias.ProtoReflect.Descriptor instead.
+func (*EntityAlias) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{178}
+}
+
+func (x *EntityAlias) GetSource() *VendorApp {
+	if x != nil {
+		return x.Source
+	}
+	return nil
+}
+
+func (x *EntityAlias) GetRoutingKey() string {
+	if x != nil {
+		return x.RoutingKey
+	}
+	return ""
+}
+
+func (x *EntityAlias) GetExternalId() string {
+	if x != nil {
+		return x.ExternalId
+	}
+	return ""
+}
+
+type AliasMutationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Authorization *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	Schema        *Key                   `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	EntityId      string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	Alias         *EntityAlias           `protobuf:"bytes,4,opt,name=alias,proto3" json:"alias,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AliasMutationRequest) Reset() {
+	*x = AliasMutationRequest{}
+	mi := &file_keystone_proto_msgTypes[179]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AliasMutationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AliasMutationRequest) ProtoMessage() {}
+
+func (x *AliasMutationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[179]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AliasMutationRequest.ProtoReflect.Descriptor instead.
+func (*AliasMutationRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{179}
+}
+
+func (x *AliasMutationRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *AliasMutationRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *AliasMutationRequest) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+func (x *AliasMutationRequest) GetAlias() *EntityAlias {
+	if x != nil {
+		return x.Alias
+	}
+	return nil
+}
+
+type ResolveAliasRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Authorization *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	Schema        *Key                   `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	Alias         *EntityAlias           `protobuf:"bytes,3,opt,name=alias,proto3" json:"alias,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResolveAliasRequest) Reset() {
+	*x = ResolveAliasRequest{}
+	mi := &file_keystone_proto_msgTypes[180]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResolveAliasRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResolveAliasRequest) ProtoMessage() {}
+
+func (x *ResolveAliasRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[180]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResolveAliasRequest.ProtoReflect.Descriptor instead.
+func (*ResolveAliasRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{180}
+}
+
+func (x *ResolveAliasRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *ResolveAliasRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *ResolveAliasRequest) GetAlias() *EntityAlias {
+	if x != nil {
+		return x.Alias
+	}
+	return nil
+}
+
+type ResolveAliasResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	EntityId      string                 `protobuf:"bytes,1,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResolveAliasResponse) Reset() {
+	*x = ResolveAliasResponse{}
+	mi := &file_keystone_proto_msgTypes[181]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResolveAliasResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResolveAliasResponse) ProtoMessage() {}
+
+func (x *ResolveAliasResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[181]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResolveAliasResponse.ProtoReflect.Descriptor instead.
+func (*ResolveAliasResponse) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{181}
+}
+
+func (x *ResolveAliasResponse) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+type ListAliasesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Authorization *Authorization         `protobuf:"bytes,1,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	Schema        *Key                   `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	EntityId      string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAliasesRequest) Reset() {
+	*x = ListAliasesRequest{}
+	mi := &file_keystone_proto_msgTypes[182]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAliasesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAliasesRequest) ProtoMessage() {}
+
+func (x *ListAliasesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[182]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAliasesRequest.ProtoReflect.Descriptor instead.
+func (*ListAliasesRequest) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{182}
+}
+
+func (x *ListAliasesRequest) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *ListAliasesRequest) GetSchema() *Key {
+	if x != nil {
+		return x.Schema
+	}
+	return nil
+}
+
+func (x *ListAliasesRequest) GetEntityId() string {
+	if x != nil {
+		return x.EntityId
+	}
+	return ""
+}
+
+type ListAliasesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Aliases       []*EntityAlias         `protobuf:"bytes,1,rep,name=aliases,proto3" json:"aliases,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAliasesResponse) Reset() {
+	*x = ListAliasesResponse{}
+	mi := &file_keystone_proto_msgTypes[183]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAliasesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAliasesResponse) ProtoMessage() {}
+
+func (x *ListAliasesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_keystone_proto_msgTypes[183]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAliasesResponse.ProtoReflect.Descriptor instead.
+func (*ListAliasesResponse) Descriptor() ([]byte, []int) {
+	return file_keystone_proto_rawDescGZIP(), []int{183}
+}
+
+func (x *ListAliasesResponse) GetAliases() []*EntityAlias {
+	if x != nil {
+		return x.Aliases
+	}
+	return nil
+}
+
 type GroupCountResponse_Result struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
@@ -14483,7 +14844,7 @@ type GroupCountResponse_Result struct {
 
 func (x *GroupCountResponse_Result) Reset() {
 	*x = GroupCountResponse_Result{}
-	mi := &file_keystone_proto_msgTypes[192]
+	mi := &file_keystone_proto_msgTypes[198]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14495,7 +14856,7 @@ func (x *GroupCountResponse_Result) String() string {
 func (*GroupCountResponse_Result) ProtoMessage() {}
 
 func (x *GroupCountResponse_Result) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[192]
+	mi := &file_keystone_proto_msgTypes[198]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14543,7 +14904,7 @@ type ChartTimeSeriesResponse_ChartSeries struct {
 
 func (x *ChartTimeSeriesResponse_ChartSeries) Reset() {
 	*x = ChartTimeSeriesResponse_ChartSeries{}
-	mi := &file_keystone_proto_msgTypes[197]
+	mi := &file_keystone_proto_msgTypes[203]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14555,7 +14916,7 @@ func (x *ChartTimeSeriesResponse_ChartSeries) String() string {
 func (*ChartTimeSeriesResponse_ChartSeries) ProtoMessage() {}
 
 func (x *ChartTimeSeriesResponse_ChartSeries) ProtoReflect() protoreflect.Message {
-	mi := &file_keystone_proto_msgTypes[197]
+	mi := &file_keystone_proto_msgTypes[203]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15157,7 +15518,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\tentity_id\x18\x03 \x01(\tR\bentityId\x12+\n" +
 	"\x06schema\x18\x04 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x124\n" +
 	"\bmutation\x18\x05 \x01(\v2\x18.kubex.keystone.MutationR\bmutation\x128\n" +
-	"\ttimestamp\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\"\xf8\x05\n" +
+	"\ttimestamp\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\"\x92\x06\n" +
 	"\n" +
 	"EntityView\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
@@ -15177,7 +15538,8 @@ const file_keystone_proto_rawDesc = "" +
 	"\flist_objects\x18\x12 \x01(\bR\vlistObjects\x12!\n" +
 	"\fobject_paths\x18\x13 \x03(\tR\vobjectPaths\x12-\n" +
 	"\x12document_revisions\x18\x14 \x01(\bR\x11documentRevisions\x12+\n" +
-	"\x11document_revision\x18\x15 \x01(\tR\x10documentRevision\"J\n" +
+	"\x11document_revision\x18\x15 \x01(\tR\x10documentRevision\x12\x18\n" +
+	"\aaliases\x18\x16 \x01(\bR\aaliases\"J\n" +
 	"\tTypeCount\x12'\n" +
 	"\x04type\x18\x01 \x01(\v2\x13.kubex.keystone.KeyR\x04type\x12\x14\n" +
 	"\x05count\x18\x02 \x01(\x05R\x05count\"\x95\x01\n" +
@@ -15187,7 +15549,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\x03sum\x18\x03 \x01(\x03R\x03sum\x12\x10\n" +
 	"\x03min\x18\x04 \x01(\x03R\x03min\x12\x10\n" +
 	"\x03max\x18\x05 \x01(\x03R\x03max\x12\x10\n" +
-	"\x03avg\x18\x06 \x01(\x03R\x03avg\"\xc2\x03\n" +
+	"\x03avg\x18\x06 \x01(\x03R\x03avg\"\xf5\x03\n" +
 	"\rEntityRequest\x12C\n" +
 	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12\x1b\n" +
 	"\tentity_id\x18\x02 \x01(\tR\bentityId\x125\n" +
@@ -15197,7 +15559,9 @@ const file_keystone_proto_rawDesc = "" +
 	"\frequest_lock\x18\x06 \x01(\bR\vrequestLock\x12(\n" +
 	"\x10lock_ttl_seconds\x18\a \x01(\x05R\x0elockTtlSeconds\x12!\n" +
 	"\flock_message\x18\b \x01(\tR\vlockMessage\x12K\n" +
-	"\x11verify_properties\x18\t \x03(\v2\x1e.kubex.keystone.EntityPropertyR\x10verifyProperties\"\x9e\a\n" +
+	"\x11verify_properties\x18\t \x03(\v2\x1e.kubex.keystone.EntityPropertyR\x10verifyProperties\x121\n" +
+	"\x05alias\x18\n" +
+	" \x01(\v2\x1b.kubex.keystone.EntityAliasR\x05alias\"\xd5\a\n" +
 	"\x0eEntityResponse\x12.\n" +
 	"\x06entity\x18\x01 \x01(\v2\x16.kubex.keystone.EntityR\x06entity\x12>\n" +
 	"\n" +
@@ -15216,7 +15580,8 @@ const file_keystone_proto_rawDesc = "" +
 	"\x12dynamic_properties\x18\f \x03(\v2\x1e.kubex.keystone.EntityPropertyR\x11dynamicProperties\x12.\n" +
 	"\x04lock\x18\x0e \x01(\v2\x1a.kubex.keystone.EntityLockR\x04lock\x12<\n" +
 	"\bextended\x18\x0f \x01(\v2 .kubex.keystone.ExtendedResponseR\bextended\x12\x1b\n" +
-	"\x06exists\x18\x10 \x01(\bH\x00R\x06exists\x88\x01\x01B\t\n" +
+	"\x06exists\x18\x10 \x01(\bH\x00R\x06exists\x88\x01\x01\x125\n" +
+	"\aaliases\x18\x11 \x03(\v2\x1b.kubex.keystone.EntityAliasR\aaliasesB\t\n" +
 	"\a_exists\"\xa3\x01\n" +
 	"\n" +
 	"EntityLock\x12#\n" +
@@ -15954,7 +16319,30 @@ const file_keystone_proto_rawDesc = "" +
 	"\x0fbefore_revision\x18\x04 \x01(\tR\x0ebeforeRevision\"\x99\x01\n" +
 	" ListDynamicRecordHistoryResponse\x12C\n" +
 	"\aentries\x18\x01 \x03(\v2).kubex.keystone.DynamicRecordHistoryEntryR\aentries\x120\n" +
-	"\x14next_before_revision\x18\x02 \x01(\tR\x12nextBeforeRevision*[\n" +
+	"\x14next_before_revision\x18\x02 \x01(\tR\x12nextBeforeRevision\"\x82\x01\n" +
+	"\vEntityAlias\x121\n" +
+	"\x06source\x18\x01 \x01(\v2\x19.kubex.keystone.VendorAppR\x06source\x12\x1f\n" +
+	"\vrouting_key\x18\x02 \x01(\tR\n" +
+	"routingKey\x12\x1f\n" +
+	"\vexternal_id\x18\x03 \x01(\tR\n" +
+	"externalId\"\xd8\x01\n" +
+	"\x14AliasMutationRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
+	"\tentity_id\x18\x03 \x01(\tR\bentityId\x121\n" +
+	"\x05alias\x18\x04 \x01(\v2\x1b.kubex.keystone.EntityAliasR\x05alias\"\xba\x01\n" +
+	"\x13ResolveAliasRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x121\n" +
+	"\x05alias\x18\x03 \x01(\v2\x1b.kubex.keystone.EntityAliasR\x05alias\"3\n" +
+	"\x14ResolveAliasResponse\x12\x1b\n" +
+	"\tentity_id\x18\x01 \x01(\tR\bentityId\"\xa3\x01\n" +
+	"\x12ListAliasesRequest\x12C\n" +
+	"\rauthorization\x18\x01 \x01(\v2\x1d.kubex.keystone.AuthorizationR\rauthorization\x12+\n" +
+	"\x06schema\x18\x02 \x01(\v2\x13.kubex.keystone.KeyR\x06schema\x12\x1b\n" +
+	"\tentity_id\x18\x03 \x01(\tR\bentityId\"L\n" +
+	"\x13ListAliasesResponse\x125\n" +
+	"\aaliases\x18\x01 \x03(\v2\x1b.kubex.keystone.EntityAliasR\aaliases*[\n" +
 	"\vEntityState\x12\v\n" +
 	"\aInvalid\x10\x00\x12\n" +
 	"\n" +
@@ -16033,7 +16421,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\x13FeedSummaryInterval\x12\x16\n" +
 	"\x12FEED_SUMMARY_DAILY\x10\x00\x12\x17\n" +
 	"\x13FEED_SUMMARY_HOURLY\x10\x01\x12\x18\n" +
-	"\x14FEED_SUMMARY_MONTHLY\x10\x022\xe61\n" +
+	"\x14FEED_SUMMARY_MONTHLY\x10\x022\xcd4\n" +
 	"\bKeystone\x12I\n" +
 	"\x06Status\x12\x1d.kubex.keystone.Authorization\x1a\x1e.kubex.keystone.StatusResponse\"\x00\x12A\n" +
 	"\x06Define\x12\x1d.kubex.keystone.SchemaRequest\x1a\x16.kubex.keystone.Schema\"\x00\x12F\n" +
@@ -16067,7 +16455,11 @@ const file_keystone_proto_rawDesc = "" +
 	"\bFeedRead\x12\x1f.kubex.keystone.FeedReadRequest\x1a .kubex.keystone.FeedReadResponse\"\x00\x12R\n" +
 	"\n" +
 	"FeedRemove\x12!.kubex.keystone.FeedRemoveRequest\x1a\x1f.kubex.keystone.GenericResponse\"\x00\x12X\n" +
-	"\vFeedSummary\x12\".kubex.keystone.FeedSummaryRequest\x1a#.kubex.keystone.FeedSummaryResponse\"\x00\x12I\n" +
+	"\vFeedSummary\x12\".kubex.keystone.FeedSummaryRequest\x1a#.kubex.keystone.FeedSummaryResponse\"\x00\x12V\n" +
+	"\vAttachAlias\x12$.kubex.keystone.AliasMutationRequest\x1a\x1f.kubex.keystone.GenericResponse\"\x00\x12V\n" +
+	"\vRemoveAlias\x12$.kubex.keystone.AliasMutationRequest\x1a\x1f.kubex.keystone.GenericResponse\"\x00\x12[\n" +
+	"\fResolveAlias\x12#.kubex.keystone.ResolveAliasRequest\x1a$.kubex.keystone.ResolveAliasResponse\"\x00\x12X\n" +
+	"\vListAliases\x12\".kubex.keystone.ListAliasesRequest\x1a#.kubex.keystone.ListAliasesResponse\"\x00\x12I\n" +
 	"\x06Lookup\x12\x1d.kubex.keystone.LookupRequest\x1a\x1e.kubex.keystone.LookupResponse\"\x00\x12U\n" +
 	"\n" +
 	"GroupCount\x12!.kubex.keystone.GroupCountRequest\x1a\".kubex.keystone.GroupCountResponse\"\x00\x12C\n" +
@@ -16128,7 +16520,7 @@ func file_keystone_proto_rawDescGZIP() []byte {
 }
 
 var file_keystone_proto_enumTypes = make([]protoimpl.EnumInfo, 22)
-var file_keystone_proto_msgTypes = make([]protoimpl.MessageInfo, 210)
+var file_keystone_proto_msgTypes = make([]protoimpl.MessageInfo, 216)
 var file_keystone_proto_goTypes = []any{
 	(EntityState)(0),                            // 0: kubex.keystone.EntityState
 	(LogLevel)(0),                               // 1: kubex.keystone.LogLevel
@@ -16330,46 +16722,52 @@ var file_keystone_proto_goTypes = []any{
 	(*DynamicRecordHistoryEntry)(nil),           // 197: kubex.keystone.DynamicRecordHistoryEntry
 	(*ListDynamicRecordHistoryRequest)(nil),     // 198: kubex.keystone.ListDynamicRecordHistoryRequest
 	(*ListDynamicRecordHistoryResponse)(nil),    // 199: kubex.keystone.ListDynamicRecordHistoryResponse
-	nil,                                         // 200: kubex.keystone.RepeatedValue.KeyValueEntry
-	nil,                                         // 201: kubex.keystone.RepeatedValue.MixedEntry
-	nil,                                         // 202: kubex.keystone.EntityChild.DataEntry
-	nil,                                         // 203: kubex.keystone.EntityChild.AppendDataEntry
-	nil,                                         // 204: kubex.keystone.EntityDocument.MetaEntry
-	nil,                                         // 205: kubex.keystone.EntityDocument.AppendMetaEntry
-	nil,                                         // 206: kubex.keystone.EntityLog.DataEntry
-	nil,                                         // 207: kubex.keystone.EntityEvent.DataEntry
-	nil,                                         // 208: kubex.keystone.EntityRelationship.DataEntry
-	nil,                                         // 209: kubex.keystone.EntitySensorMeasurement.DataEntry
-	nil,                                         // 210: kubex.keystone.EntityObject.MetadataEntry
-	nil,                                         // 211: kubex.keystone.EntityObject.UploadHeadersEntry
-	nil,                                         // 212: kubex.keystone.MutateResponse.CreatedChildrenEntry
-	nil,                                         // 213: kubex.keystone.QueryRow.ValuesEntry
-	(*GroupCountResponse_Result)(nil),           // 214: kubex.keystone.GroupCountResponse.Result
-	nil,                                         // 215: kubex.keystone.GroupCountResponse.Result.PropertiesEntry
-	nil,                                         // 216: kubex.keystone.SchemaStatisticsResponse.DailyCountEntry
-	nil,                                         // 217: kubex.keystone.DailyEntityResponse.EntitiesEntry
-	nil,                                         // 218: kubex.keystone.ChartTimeSeriesResponse.SeriesEntry
-	(*ChartTimeSeriesResponse_ChartSeries)(nil), // 219: kubex.keystone.ChartTimeSeriesResponse.ChartSeries
-	nil,                           // 220: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.ValuesEntry
-	nil,                           // 221: kubex.keystone.AKVGetResponse.PropertiesEntry
-	nil,                           // 222: kubex.keystone.IIDCreateRequest.IncrEntry
-	nil,                           // 223: kubex.keystone.IIDCreateRequest.MetaEntry
-	nil,                           // 224: kubex.keystone.IIDResponse.CountsEntry
-	nil,                           // 225: kubex.keystone.IIDResponse.MetaEntry
-	nil,                           // 226: kubex.keystone.PushTaskRequest.DataEntry
-	nil,                           // 227: kubex.keystone.TaskResponse.DataEntry
-	nil,                           // 228: kubex.keystone.EnumEntry.MetadataEntry
-	nil,                           // 229: kubex.keystone.DynamicRecord.PropertiesEntry
-	nil,                           // 230: kubex.keystone.MutateDynamicRecordRequest.SetEntry
-	nil,                           // 231: kubex.keystone.DynamicRecordHistoryEntry.SetEntry
-	(*timestamppb.Timestamp)(nil), // 232: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),   // 233: google.protobuf.Duration
+	(*EntityAlias)(nil),                         // 200: kubex.keystone.EntityAlias
+	(*AliasMutationRequest)(nil),                // 201: kubex.keystone.AliasMutationRequest
+	(*ResolveAliasRequest)(nil),                 // 202: kubex.keystone.ResolveAliasRequest
+	(*ResolveAliasResponse)(nil),                // 203: kubex.keystone.ResolveAliasResponse
+	(*ListAliasesRequest)(nil),                  // 204: kubex.keystone.ListAliasesRequest
+	(*ListAliasesResponse)(nil),                 // 205: kubex.keystone.ListAliasesResponse
+	nil,                                         // 206: kubex.keystone.RepeatedValue.KeyValueEntry
+	nil,                                         // 207: kubex.keystone.RepeatedValue.MixedEntry
+	nil,                                         // 208: kubex.keystone.EntityChild.DataEntry
+	nil,                                         // 209: kubex.keystone.EntityChild.AppendDataEntry
+	nil,                                         // 210: kubex.keystone.EntityDocument.MetaEntry
+	nil,                                         // 211: kubex.keystone.EntityDocument.AppendMetaEntry
+	nil,                                         // 212: kubex.keystone.EntityLog.DataEntry
+	nil,                                         // 213: kubex.keystone.EntityEvent.DataEntry
+	nil,                                         // 214: kubex.keystone.EntityRelationship.DataEntry
+	nil,                                         // 215: kubex.keystone.EntitySensorMeasurement.DataEntry
+	nil,                                         // 216: kubex.keystone.EntityObject.MetadataEntry
+	nil,                                         // 217: kubex.keystone.EntityObject.UploadHeadersEntry
+	nil,                                         // 218: kubex.keystone.MutateResponse.CreatedChildrenEntry
+	nil,                                         // 219: kubex.keystone.QueryRow.ValuesEntry
+	(*GroupCountResponse_Result)(nil),           // 220: kubex.keystone.GroupCountResponse.Result
+	nil,                                         // 221: kubex.keystone.GroupCountResponse.Result.PropertiesEntry
+	nil,                                         // 222: kubex.keystone.SchemaStatisticsResponse.DailyCountEntry
+	nil,                                         // 223: kubex.keystone.DailyEntityResponse.EntitiesEntry
+	nil,                                         // 224: kubex.keystone.ChartTimeSeriesResponse.SeriesEntry
+	(*ChartTimeSeriesResponse_ChartSeries)(nil), // 225: kubex.keystone.ChartTimeSeriesResponse.ChartSeries
+	nil,                           // 226: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.ValuesEntry
+	nil,                           // 227: kubex.keystone.AKVGetResponse.PropertiesEntry
+	nil,                           // 228: kubex.keystone.IIDCreateRequest.IncrEntry
+	nil,                           // 229: kubex.keystone.IIDCreateRequest.MetaEntry
+	nil,                           // 230: kubex.keystone.IIDResponse.CountsEntry
+	nil,                           // 231: kubex.keystone.IIDResponse.MetaEntry
+	nil,                           // 232: kubex.keystone.PushTaskRequest.DataEntry
+	nil,                           // 233: kubex.keystone.TaskResponse.DataEntry
+	nil,                           // 234: kubex.keystone.EnumEntry.MetadataEntry
+	nil,                           // 235: kubex.keystone.DynamicRecord.PropertiesEntry
+	nil,                           // 236: kubex.keystone.MutateDynamicRecordRequest.SetEntry
+	nil,                           // 237: kubex.keystone.DynamicRecordHistoryEntry.SetEntry
+	(*timestamppb.Timestamp)(nil), // 238: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),   // 239: google.protobuf.Duration
 }
 var file_keystone_proto_depIdxs = []int32{
 	24,  // 0: kubex.keystone.Authorization.source:type_name -> kubex.keystone.VendorApp
 	63,  // 1: kubex.keystone.Authorization.user:type_name -> kubex.keystone.User
 	24,  // 2: kubex.keystone.Schema.source:type_name -> kubex.keystone.VendorApp
-	232, // 3: kubex.keystone.Schema.created:type_name -> google.protobuf.Timestamp
+	238, // 3: kubex.keystone.Schema.created:type_name -> google.protobuf.Timestamp
 	28,  // 4: kubex.keystone.Schema.properties:type_name -> kubex.keystone.Property
 	12,  // 5: kubex.keystone.Schema.options:type_name -> kubex.keystone.Schema.Option
 	13,  // 6: kubex.keystone.Schema.ks_type:type_name -> kubex.keystone.Schema.Type
@@ -16378,41 +16776,41 @@ var file_keystone_proto_depIdxs = []int32{
 	16,  // 9: kubex.keystone.Property.options:type_name -> kubex.keystone.Property.Option
 	24,  // 10: kubex.keystone.Key.source:type_name -> kubex.keystone.VendorApp
 	14,  // 11: kubex.keystone.Value.known_type:type_name -> kubex.keystone.Property.Type
-	232, // 12: kubex.keystone.Value.time:type_name -> google.protobuf.Timestamp
+	238, // 12: kubex.keystone.Value.time:type_name -> google.protobuf.Timestamp
 	31,  // 13: kubex.keystone.Value.array:type_name -> kubex.keystone.RepeatedValue
 	31,  // 14: kubex.keystone.Value.array_append:type_name -> kubex.keystone.RepeatedValue
 	31,  // 15: kubex.keystone.Value.array_reduce:type_name -> kubex.keystone.RepeatedValue
-	200, // 16: kubex.keystone.RepeatedValue.key_value:type_name -> kubex.keystone.RepeatedValue.KeyValueEntry
-	201, // 17: kubex.keystone.RepeatedValue.mixed:type_name -> kubex.keystone.RepeatedValue.MixedEntry
+	206, // 16: kubex.keystone.RepeatedValue.key_value:type_name -> kubex.keystone.RepeatedValue.KeyValueEntry
+	207, // 17: kubex.keystone.RepeatedValue.mixed:type_name -> kubex.keystone.RepeatedValue.MixedEntry
 	25,  // 18: kubex.keystone.PiiTokenRequest.authorization:type_name -> kubex.keystone.Authorization
-	232, // 19: kubex.keystone.PiiTokenRequest.auto_expire:type_name -> google.protobuf.Timestamp
+	238, // 19: kubex.keystone.PiiTokenRequest.auto_expire:type_name -> google.protobuf.Timestamp
 	25,  // 20: kubex.keystone.PiiAnonymizeRequest.authorization:type_name -> kubex.keystone.Authorization
-	232, // 21: kubex.keystone.PiiAnonymizeResponse.recovery_until:type_name -> google.protobuf.Timestamp
-	232, // 22: kubex.keystone.Entity.created:type_name -> google.protobuf.Timestamp
-	232, // 23: kubex.keystone.Entity.state_change:type_name -> google.protobuf.Timestamp
+	238, // 21: kubex.keystone.PiiAnonymizeResponse.recovery_until:type_name -> google.protobuf.Timestamp
+	238, // 22: kubex.keystone.Entity.created:type_name -> google.protobuf.Timestamp
+	238, // 23: kubex.keystone.Entity.state_change:type_name -> google.protobuf.Timestamp
 	0,   // 24: kubex.keystone.Entity.state:type_name -> kubex.keystone.EntityState
-	232, // 25: kubex.keystone.Entity.lastUpdate:type_name -> google.protobuf.Timestamp
+	238, // 25: kubex.keystone.Entity.lastUpdate:type_name -> google.protobuf.Timestamp
 	30,  // 26: kubex.keystone.EntityProperty.value:type_name -> kubex.keystone.Value
 	24,  // 27: kubex.keystone.EntityProperty.source:type_name -> kubex.keystone.VendorApp
 	29,  // 28: kubex.keystone.EntityChild.type:type_name -> kubex.keystone.Key
-	202, // 29: kubex.keystone.EntityChild.data:type_name -> kubex.keystone.EntityChild.DataEntry
-	203, // 30: kubex.keystone.EntityChild.append_data:type_name -> kubex.keystone.EntityChild.AppendDataEntry
-	204, // 31: kubex.keystone.EntityDocument.meta:type_name -> kubex.keystone.EntityDocument.MetaEntry
-	232, // 32: kubex.keystone.EntityDocument.created:type_name -> google.protobuf.Timestamp
-	205, // 33: kubex.keystone.EntityDocument.append_meta:type_name -> kubex.keystone.EntityDocument.AppendMetaEntry
+	208, // 29: kubex.keystone.EntityChild.data:type_name -> kubex.keystone.EntityChild.DataEntry
+	209, // 30: kubex.keystone.EntityChild.append_data:type_name -> kubex.keystone.EntityChild.AppendDataEntry
+	210, // 31: kubex.keystone.EntityDocument.meta:type_name -> kubex.keystone.EntityDocument.MetaEntry
+	238, // 32: kubex.keystone.EntityDocument.created:type_name -> google.protobuf.Timestamp
+	211, // 33: kubex.keystone.EntityDocument.append_meta:type_name -> kubex.keystone.EntityDocument.AppendMetaEntry
 	1,   // 34: kubex.keystone.EntityLog.level:type_name -> kubex.keystone.LogLevel
-	232, // 35: kubex.keystone.EntityLog.time:type_name -> google.protobuf.Timestamp
-	206, // 36: kubex.keystone.EntityLog.data:type_name -> kubex.keystone.EntityLog.DataEntry
+	238, // 35: kubex.keystone.EntityLog.time:type_name -> google.protobuf.Timestamp
+	212, // 36: kubex.keystone.EntityLog.data:type_name -> kubex.keystone.EntityLog.DataEntry
 	63,  // 37: kubex.keystone.EntityLog.audit_user:type_name -> kubex.keystone.User
 	29,  // 38: kubex.keystone.EntityEvent.type:type_name -> kubex.keystone.Key
-	232, // 39: kubex.keystone.EntityEvent.time:type_name -> google.protobuf.Timestamp
-	207, // 40: kubex.keystone.EntityEvent.data:type_name -> kubex.keystone.EntityEvent.DataEntry
+	238, // 39: kubex.keystone.EntityEvent.time:type_name -> google.protobuf.Timestamp
+	213, // 40: kubex.keystone.EntityEvent.data:type_name -> kubex.keystone.EntityEvent.DataEntry
 	29,  // 41: kubex.keystone.EntityRelationship.relationship:type_name -> kubex.keystone.Key
-	232, // 42: kubex.keystone.EntityRelationship.since:type_name -> google.protobuf.Timestamp
-	208, // 43: kubex.keystone.EntityRelationship.data:type_name -> kubex.keystone.EntityRelationship.DataEntry
-	232, // 44: kubex.keystone.EntitySensorMeasurement.at:type_name -> google.protobuf.Timestamp
-	209, // 45: kubex.keystone.EntitySensorMeasurement.data:type_name -> kubex.keystone.EntitySensorMeasurement.DataEntry
-	232, // 46: kubex.keystone.EntitySensorMeasurement.received_at:type_name -> google.protobuf.Timestamp
+	238, // 42: kubex.keystone.EntityRelationship.since:type_name -> google.protobuf.Timestamp
+	214, // 43: kubex.keystone.EntityRelationship.data:type_name -> kubex.keystone.EntityRelationship.DataEntry
+	238, // 44: kubex.keystone.EntitySensorMeasurement.at:type_name -> google.protobuf.Timestamp
+	215, // 45: kubex.keystone.EntitySensorMeasurement.data:type_name -> kubex.keystone.EntitySensorMeasurement.DataEntry
+	238, // 46: kubex.keystone.EntitySensorMeasurement.received_at:type_name -> google.protobuf.Timestamp
 	181, // 47: kubex.keystone.EntitySensorMeasurement.storage:type_name -> kubex.keystone.SensorStorageOptions
 	25,  // 48: kubex.keystone.WriteSensorsRequest.authorization:type_name -> kubex.keystone.Authorization
 	29,  // 49: kubex.keystone.WriteSensorsRequest.schema:type_name -> kubex.keystone.Key
@@ -16420,49 +16818,49 @@ var file_keystone_proto_depIdxs = []int32{
 	181, // 51: kubex.keystone.WriteSensorsRequest.storage:type_name -> kubex.keystone.SensorStorageOptions
 	25,  // 52: kubex.keystone.PredictSensorRequest.authorization:type_name -> kubex.keystone.Authorization
 	29,  // 53: kubex.keystone.PredictSensorRequest.schema:type_name -> kubex.keystone.Key
-	232, // 54: kubex.keystone.PredictSensorRequest.from:type_name -> google.protobuf.Timestamp
-	232, // 55: kubex.keystone.PredictSensorRequest.until:type_name -> google.protobuf.Timestamp
+	238, // 54: kubex.keystone.PredictSensorRequest.from:type_name -> google.protobuf.Timestamp
+	238, // 55: kubex.keystone.PredictSensorRequest.until:type_name -> google.protobuf.Timestamp
 	2,   // 56: kubex.keystone.PredictSensorRequest.metric:type_name -> kubex.keystone.SensorPredictionMetric
-	232, // 57: kubex.keystone.SensorPredictionPoint.at:type_name -> google.protobuf.Timestamp
+	238, // 57: kubex.keystone.SensorPredictionPoint.at:type_name -> google.protobuf.Timestamp
 	48,  // 58: kubex.keystone.PredictSensorResponse.points:type_name -> kubex.keystone.SensorPredictionPoint
-	232, // 59: kubex.keystone.PredictSensorResponse.training_from:type_name -> google.protobuf.Timestamp
-	232, // 60: kubex.keystone.PredictSensorResponse.training_until:type_name -> google.protobuf.Timestamp
+	238, // 59: kubex.keystone.PredictSensorResponse.training_from:type_name -> google.protobuf.Timestamp
+	238, // 60: kubex.keystone.PredictSensorResponse.training_until:type_name -> google.protobuf.Timestamp
 	25,  // 61: kubex.keystone.CreateSensorStreamRequest.authorization:type_name -> kubex.keystone.Authorization
 	29,  // 62: kubex.keystone.CreateSensorStreamRequest.schema:type_name -> kubex.keystone.Key
-	232, // 63: kubex.keystone.CreateSensorStreamRequest.session_expires_at:type_name -> google.protobuf.Timestamp
+	238, // 63: kubex.keystone.CreateSensorStreamRequest.session_expires_at:type_name -> google.protobuf.Timestamp
 	2,   // 64: kubex.keystone.CreateSensorStreamRequest.metric:type_name -> kubex.keystone.SensorPredictionMetric
-	232, // 65: kubex.keystone.CreateSensorStreamResponse.expires_at:type_name -> google.protobuf.Timestamp
-	232, // 66: kubex.keystone.CreateSensorStreamResponse.server_time:type_name -> google.protobuf.Timestamp
+	238, // 65: kubex.keystone.CreateSensorStreamResponse.expires_at:type_name -> google.protobuf.Timestamp
+	238, // 66: kubex.keystone.CreateSensorStreamResponse.server_time:type_name -> google.protobuf.Timestamp
 	25,  // 67: kubex.keystone.RevokeSensorSessionRequest.authorization:type_name -> kubex.keystone.Authorization
 	25,  // 68: kubex.keystone.ChartSensorRequest.authorization:type_name -> kubex.keystone.Authorization
 	29,  // 69: kubex.keystone.ChartSensorRequest.schema:type_name -> kubex.keystone.Key
-	232, // 70: kubex.keystone.ChartSensorRequest.from:type_name -> google.protobuf.Timestamp
-	232, // 71: kubex.keystone.ChartSensorRequest.until:type_name -> google.protobuf.Timestamp
-	232, // 72: kubex.keystone.SensorBucket.at:type_name -> google.protobuf.Timestamp
+	238, // 70: kubex.keystone.ChartSensorRequest.from:type_name -> google.protobuf.Timestamp
+	238, // 71: kubex.keystone.ChartSensorRequest.until:type_name -> google.protobuf.Timestamp
+	238, // 72: kubex.keystone.SensorBucket.at:type_name -> google.protobuf.Timestamp
 	54,  // 73: kubex.keystone.ChartSensorResponse.buckets:type_name -> kubex.keystone.SensorBucket
-	232, // 74: kubex.keystone.ChartSensorResponse.last_received_at:type_name -> google.protobuf.Timestamp
-	232, // 75: kubex.keystone.ChartSensorResponse.effective_from:type_name -> google.protobuf.Timestamp
-	232, // 76: kubex.keystone.ChartSensorResponse.effective_until:type_name -> google.protobuf.Timestamp
+	238, // 74: kubex.keystone.ChartSensorResponse.last_received_at:type_name -> google.protobuf.Timestamp
+	238, // 75: kubex.keystone.ChartSensorResponse.effective_from:type_name -> google.protobuf.Timestamp
+	238, // 76: kubex.keystone.ChartSensorResponse.effective_until:type_name -> google.protobuf.Timestamp
 	25,  // 77: kubex.keystone.SensorActivityRequest.authorization:type_name -> kubex.keystone.Authorization
 	29,  // 78: kubex.keystone.SensorActivityRequest.schema:type_name -> kubex.keystone.Key
 	3,   // 79: kubex.keystone.SensorActivityRequest.calendar:type_name -> kubex.keystone.SensorActivityCalendar
 	57,  // 80: kubex.keystone.SensorActivityResponse.slots:type_name -> kubex.keystone.SensorActivitySlot
-	232, // 81: kubex.keystone.SensorActivityResponse.updated_at:type_name -> google.protobuf.Timestamp
+	238, // 81: kubex.keystone.SensorActivityResponse.updated_at:type_name -> google.protobuf.Timestamp
 	25,  // 82: kubex.keystone.HeatmapSensorRequest.authorization:type_name -> kubex.keystone.Authorization
 	29,  // 83: kubex.keystone.HeatmapSensorRequest.schema:type_name -> kubex.keystone.Key
-	232, // 84: kubex.keystone.HeatmapSensorRequest.from:type_name -> google.protobuf.Timestamp
-	232, // 85: kubex.keystone.HeatmapSensorRequest.until:type_name -> google.protobuf.Timestamp
+	238, // 84: kubex.keystone.HeatmapSensorRequest.from:type_name -> google.protobuf.Timestamp
+	238, // 85: kubex.keystone.HeatmapSensorRequest.until:type_name -> google.protobuf.Timestamp
 	4,   // 86: kubex.keystone.HeatmapSensorRequest.layout:type_name -> kubex.keystone.SensorHeatmapLayout
 	60,  // 87: kubex.keystone.HeatmapSensorResponse.cells:type_name -> kubex.keystone.SensorHeatmapCell
-	232, // 88: kubex.keystone.HeatmapSensorResponse.last_received_at:type_name -> google.protobuf.Timestamp
+	238, // 88: kubex.keystone.HeatmapSensorResponse.last_received_at:type_name -> google.protobuf.Timestamp
 	5,   // 89: kubex.keystone.EntityObject.type:type_name -> kubex.keystone.ObjectType
-	232, // 90: kubex.keystone.EntityObject.expiry:type_name -> google.protobuf.Timestamp
-	210, // 91: kubex.keystone.EntityObject.metadata:type_name -> kubex.keystone.EntityObject.MetadataEntry
-	211, // 92: kubex.keystone.EntityObject.upload_headers:type_name -> kubex.keystone.EntityObject.UploadHeadersEntry
+	238, // 90: kubex.keystone.EntityObject.expiry:type_name -> google.protobuf.Timestamp
+	216, // 91: kubex.keystone.EntityObject.metadata:type_name -> kubex.keystone.EntityObject.MetadataEntry
+	217, // 92: kubex.keystone.EntityObject.upload_headers:type_name -> kubex.keystone.EntityObject.UploadHeadersEntry
 	24,  // 93: kubex.keystone.User.source:type_name -> kubex.keystone.VendorApp
 	63,  // 94: kubex.keystone.User.parent:type_name -> kubex.keystone.User
 	63,  // 95: kubex.keystone.Mutation.mutator:type_name -> kubex.keystone.User
-	232, // 96: kubex.keystone.Mutation.timestamp:type_name -> google.protobuf.Timestamp
+	238, // 96: kubex.keystone.Mutation.timestamp:type_name -> google.protobuf.Timestamp
 	0,   // 97: kubex.keystone.Mutation.state:type_name -> kubex.keystone.EntityState
 	37,  // 98: kubex.keystone.Mutation.properties:type_name -> kubex.keystone.EntityProperty
 	37,  // 99: kubex.keystone.Mutation.dynamic_properties:type_name -> kubex.keystone.EntityProperty
@@ -16482,8 +16880,8 @@ var file_keystone_proto_depIdxs = []int32{
 	25,  // 113: kubex.keystone.LogRequest.authorization:type_name -> kubex.keystone.Authorization
 	40,  // 114: kubex.keystone.LogRequest.logs:type_name -> kubex.keystone.EntityLog
 	23,  // 115: kubex.keystone.LogResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	232, // 116: kubex.keystone.Window.since:type_name -> google.protobuf.Timestamp
-	232, // 117: kubex.keystone.Window.until:type_name -> google.protobuf.Timestamp
+	238, // 116: kubex.keystone.Window.since:type_name -> google.protobuf.Timestamp
+	238, // 117: kubex.keystone.Window.until:type_name -> google.protobuf.Timestamp
 	6,   // 118: kubex.keystone.PropertyFilter.operator:type_name -> kubex.keystone.Operator
 	30,  // 119: kubex.keystone.PropertyFilter.values:type_name -> kubex.keystone.Value
 	68,  // 120: kubex.keystone.PropertyFilter.nested:type_name -> kubex.keystone.PropertyFilter
@@ -16500,7 +16898,7 @@ var file_keystone_proto_depIdxs = []int32{
 	25,  // 131: kubex.keystone.ReportTimeSeriesRequest.authorization:type_name -> kubex.keystone.Authorization
 	29,  // 132: kubex.keystone.ReportTimeSeriesRequest.schema:type_name -> kubex.keystone.Key
 	64,  // 133: kubex.keystone.ReportTimeSeriesRequest.mutation:type_name -> kubex.keystone.Mutation
-	232, // 134: kubex.keystone.ReportTimeSeriesRequest.timestamp:type_name -> google.protobuf.Timestamp
+	238, // 134: kubex.keystone.ReportTimeSeriesRequest.timestamp:type_name -> google.protobuf.Timestamp
 	82,  // 135: kubex.keystone.EntityView.properties:type_name -> kubex.keystone.PropertyRequest
 	83,  // 136: kubex.keystone.EntityView.children:type_name -> kubex.keystone.ChildRequest
 	29,  // 137: kubex.keystone.EntityView.relationship_by_type:type_name -> kubex.keystone.Key
@@ -16513,366 +16911,386 @@ var file_keystone_proto_depIdxs = []int32{
 	74,  // 144: kubex.keystone.EntityRequest.view:type_name -> kubex.keystone.EntityView
 	29,  // 145: kubex.keystone.EntityRequest.schema:type_name -> kubex.keystone.Key
 	37,  // 146: kubex.keystone.EntityRequest.verify_properties:type_name -> kubex.keystone.EntityProperty
-	36,  // 147: kubex.keystone.EntityResponse.entity:type_name -> kubex.keystone.Entity
-	37,  // 148: kubex.keystone.EntityResponse.properties:type_name -> kubex.keystone.EntityProperty
-	38,  // 149: kubex.keystone.EntityResponse.children:type_name -> kubex.keystone.EntityChild
-	39,  // 150: kubex.keystone.EntityResponse.documents:type_name -> kubex.keystone.EntityDocument
-	42,  // 151: kubex.keystone.EntityResponse.relationships:type_name -> kubex.keystone.EntityRelationship
-	43,  // 152: kubex.keystone.EntityResponse.labels:type_name -> kubex.keystone.EntityLabel
-	75,  // 153: kubex.keystone.EntityResponse.relationship_counts:type_name -> kubex.keystone.TypeCount
-	75,  // 154: kubex.keystone.EntityResponse.descendant_counts:type_name -> kubex.keystone.TypeCount
-	76,  // 155: kubex.keystone.EntityResponse.child_summary:type_name -> kubex.keystone.ChildSummary
-	62,  // 156: kubex.keystone.EntityResponse.objects:type_name -> kubex.keystone.EntityObject
-	37,  // 157: kubex.keystone.EntityResponse.dynamic_properties:type_name -> kubex.keystone.EntityProperty
-	79,  // 158: kubex.keystone.EntityResponse.lock:type_name -> kubex.keystone.EntityLock
-	23,  // 159: kubex.keystone.EntityResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	232, // 160: kubex.keystone.EntityLock.locked_until:type_name -> google.protobuf.Timestamp
-	23,  // 161: kubex.keystone.MutateResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	62,  // 162: kubex.keystone.MutateResponse.signed_object_urls:type_name -> kubex.keystone.EntityObject
-	212, // 163: kubex.keystone.MutateResponse.created_children:type_name -> kubex.keystone.MutateResponse.CreatedChildrenEntry
-	24,  // 164: kubex.keystone.PropertyRequest.source:type_name -> kubex.keystone.VendorApp
-	29,  // 165: kubex.keystone.ChildRequest.type:type_name -> kubex.keystone.Key
-	25,  // 166: kubex.keystone.LogsRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 167: kubex.keystone.LogsRequest.type:type_name -> kubex.keystone.Key
-	1,   // 168: kubex.keystone.LogsRequest.levels:type_name -> kubex.keystone.LogLevel
-	1,   // 169: kubex.keystone.LogsRequest.min_level:type_name -> kubex.keystone.LogLevel
-	67,  // 170: kubex.keystone.LogsRequest.window:type_name -> kubex.keystone.Window
-	40,  // 171: kubex.keystone.LogsResponse.logs:type_name -> kubex.keystone.EntityLog
-	25,  // 172: kubex.keystone.EventRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 173: kubex.keystone.EventRequest.event_by_type:type_name -> kubex.keystone.Key
-	67,  // 174: kubex.keystone.EventRequest.events_in_window:type_name -> kubex.keystone.Window
-	41,  // 175: kubex.keystone.EventsResponse.events:type_name -> kubex.keystone.EntityEvent
-	29,  // 176: kubex.keystone.RelationOf.relationship:type_name -> kubex.keystone.Key
-	25,  // 177: kubex.keystone.FindRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 178: kubex.keystone.FindRequest.schema:type_name -> kubex.keystone.Key
-	74,  // 179: kubex.keystone.FindRequest.view:type_name -> kubex.keystone.EntityView
-	88,  // 180: kubex.keystone.FindRequest.relation_of:type_name -> kubex.keystone.RelationOf
-	68,  // 181: kubex.keystone.FindRequest.property_filters:type_name -> kubex.keystone.PropertyFilter
-	43,  // 182: kubex.keystone.FindRequest.label_filters:type_name -> kubex.keystone.EntityLabel
-	78,  // 183: kubex.keystone.FindResponse.entities:type_name -> kubex.keystone.EntityResponse
-	23,  // 184: kubex.keystone.FindResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	25,  // 185: kubex.keystone.ListRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 186: kubex.keystone.ListRequest.schema:type_name -> kubex.keystone.Key
-	68,  // 187: kubex.keystone.ListRequest.filters:type_name -> kubex.keystone.PropertyFilter
-	69,  // 188: kubex.keystone.ListRequest.sort:type_name -> kubex.keystone.PropertySort
-	91,  // 189: kubex.keystone.ListRequest.page:type_name -> kubex.keystone.PageRequest
-	78,  // 190: kubex.keystone.ListResponse.entities:type_name -> kubex.keystone.EntityResponse
-	23,  // 191: kubex.keystone.ListResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	25,  // 192: kubex.keystone.QueryRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 193: kubex.keystone.QueryRequest.from:type_name -> kubex.keystone.Key
-	68,  // 194: kubex.keystone.QueryRequest.where:type_name -> kubex.keystone.PropertyFilter
-	69,  // 195: kubex.keystone.QueryRequest.order_by:type_name -> kubex.keystone.PropertySort
-	102, // 196: kubex.keystone.QueryRequest.entity_ids:type_name -> kubex.keystone.EntityIDList
-	95,  // 197: kubex.keystone.QueryRequest.predicate:type_name -> kubex.keystone.QueryPredicate
-	98,  // 198: kubex.keystone.QueryRequest.aggregates:type_name -> kubex.keystone.QueryAggregate
-	68,  // 199: kubex.keystone.QueryRequest.having:type_name -> kubex.keystone.PropertyFilter
-	99,  // 200: kubex.keystone.QueryRequest.include:type_name -> kubex.keystone.QueryInclude
-	68,  // 201: kubex.keystone.QueryPredicate.property:type_name -> kubex.keystone.PropertyFilter
-	43,  // 202: kubex.keystone.QueryPredicate.label:type_name -> kubex.keystone.EntityLabel
-	97,  // 203: kubex.keystone.QueryPredicate.relationship:type_name -> kubex.keystone.QueryRelationship
-	96,  // 204: kubex.keystone.QueryPredicate.all:type_name -> kubex.keystone.QueryPredicateGroup
-	96,  // 205: kubex.keystone.QueryPredicate.any:type_name -> kubex.keystone.QueryPredicateGroup
-	95,  // 206: kubex.keystone.QueryPredicate.not:type_name -> kubex.keystone.QueryPredicate
-	95,  // 207: kubex.keystone.QueryPredicateGroup.predicates:type_name -> kubex.keystone.QueryPredicate
-	29,  // 208: kubex.keystone.QueryRelationship.type:type_name -> kubex.keystone.Key
-	18,  // 209: kubex.keystone.QueryRelationship.direction:type_name -> kubex.keystone.QueryRelationship.Direction
-	19,  // 210: kubex.keystone.QueryAggregate.function:type_name -> kubex.keystone.QueryAggregate.Function
-	29,  // 211: kubex.keystone.QueryInclude.relationships:type_name -> kubex.keystone.Key
-	29,  // 212: kubex.keystone.QueryInclude.relationship_count_types:type_name -> kubex.keystone.Key
-	213, // 213: kubex.keystone.QueryRow.values:type_name -> kubex.keystone.QueryRow.ValuesEntry
-	78,  // 214: kubex.keystone.QueryResponse.entities:type_name -> kubex.keystone.EntityResponse
-	100, // 215: kubex.keystone.QueryResponse.rows:type_name -> kubex.keystone.QueryRow
-	101, // 216: kubex.keystone.QueryResponse.execution:type_name -> kubex.keystone.QueryExecution
-	232, // 217: kubex.keystone.QueryResponse.result_set_expires:type_name -> google.protobuf.Timestamp
-	25,  // 218: kubex.keystone.QueryIndexRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 219: kubex.keystone.QueryIndexRequest.schema:type_name -> kubex.keystone.Key
-	68,  // 220: kubex.keystone.QueryIndexRequest.filters:type_name -> kubex.keystone.PropertyFilter
-	69,  // 221: kubex.keystone.QueryIndexRequest.sort:type_name -> kubex.keystone.PropertySort
-	91,  // 222: kubex.keystone.QueryIndexRequest.page:type_name -> kubex.keystone.PageRequest
-	78,  // 223: kubex.keystone.QueryIndexResponse.entities:type_name -> kubex.keystone.EntityResponse
-	23,  // 224: kubex.keystone.QueryIndexResponse.extended:type_name -> kubex.keystone.ExtendedResponse
-	25,  // 225: kubex.keystone.GroupCountRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 226: kubex.keystone.GroupCountRequest.schema:type_name -> kubex.keystone.Key
-	68,  // 227: kubex.keystone.GroupCountRequest.filters:type_name -> kubex.keystone.PropertyFilter
-	91,  // 228: kubex.keystone.GroupCountRequest.page:type_name -> kubex.keystone.PageRequest
-	214, // 229: kubex.keystone.GroupCountResponse.results:type_name -> kubex.keystone.GroupCountResponse.Result
-	78,  // 230: kubex.keystone.EntitiesResponse.entities:type_name -> kubex.keystone.EntityResponse
-	25,  // 231: kubex.keystone.SchemaStatisticsRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 232: kubex.keystone.SchemaStatisticsRequest.schema:type_name -> kubex.keystone.Key
-	109, // 233: kubex.keystone.SchemaStatisticsRequest.created_from:type_name -> kubex.keystone.Date
-	109, // 234: kubex.keystone.SchemaStatisticsRequest.created_until:type_name -> kubex.keystone.Date
-	216, // 235: kubex.keystone.SchemaStatisticsResponse.daily_count:type_name -> kubex.keystone.SchemaStatisticsResponse.DailyCountEntry
-	25,  // 236: kubex.keystone.DailyEntityRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 237: kubex.keystone.DailyEntityRequest.schema:type_name -> kubex.keystone.Key
-	109, // 238: kubex.keystone.DailyEntityRequest.date:type_name -> kubex.keystone.Date
-	217, // 239: kubex.keystone.DailyEntityResponse.entities:type_name -> kubex.keystone.DailyEntityResponse.EntitiesEntry
-	25,  // 240: kubex.keystone.ChartTimeSeriesRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 241: kubex.keystone.ChartTimeSeriesRequest.schema:type_name -> kubex.keystone.Key
-	232, // 242: kubex.keystone.ChartTimeSeriesRequest.from:type_name -> google.protobuf.Timestamp
-	232, // 243: kubex.keystone.ChartTimeSeriesRequest.until:type_name -> google.protobuf.Timestamp
-	115, // 244: kubex.keystone.ChartTimeSeriesRequest.aggregations:type_name -> kubex.keystone.PropertyAggregation
-	68,  // 245: kubex.keystone.ChartTimeSeriesRequest.property_filters:type_name -> kubex.keystone.PropertyFilter
-	20,  // 246: kubex.keystone.PropertyAggregation.type:type_name -> kubex.keystone.PropertyAggregation.AggregationType
-	218, // 247: kubex.keystone.ChartTimeSeriesResponse.series:type_name -> kubex.keystone.ChartTimeSeriesResponse.SeriesEntry
-	25,  // 248: kubex.keystone.ShareViewRequest.authorization:type_name -> kubex.keystone.Authorization
-	24,  // 249: kubex.keystone.ShareViewRequest.share_with:type_name -> kubex.keystone.VendorApp
-	24,  // 250: kubex.keystone.SharedViewResponse.share_with:type_name -> kubex.keystone.VendorApp
-	25,  // 251: kubex.keystone.SharedViewsRequest.authorization:type_name -> kubex.keystone.Authorization
-	24,  // 252: kubex.keystone.SharedViewsRequest.share_with:type_name -> kubex.keystone.VendorApp
-	118, // 253: kubex.keystone.SharedViewsResponse.views:type_name -> kubex.keystone.SharedViewResponse
-	25,  // 254: kubex.keystone.RateLimitRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 255: kubex.keystone.LookupRequest.authorization:type_name -> kubex.keystone.Authorization
-	125, // 256: kubex.keystone.LookupResponse.results:type_name -> kubex.keystone.EntityReference
-	25,  // 257: kubex.keystone.AKVPutRequest.authorization:type_name -> kubex.keystone.Authorization
-	130, // 258: kubex.keystone.AKVPutRequest.properties:type_name -> kubex.keystone.AKVProperty
-	25,  // 259: kubex.keystone.AKVGetRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 260: kubex.keystone.AKVGetResponse.summary:type_name -> kubex.keystone.GenericResponse
-	221, // 261: kubex.keystone.AKVGetResponse.properties:type_name -> kubex.keystone.AKVGetResponse.PropertiesEntry
-	25,  // 262: kubex.keystone.AKVDelRequest.authorization:type_name -> kubex.keystone.Authorization
-	28,  // 263: kubex.keystone.AKVProperty.property:type_name -> kubex.keystone.Property
-	30,  // 264: kubex.keystone.AKVProperty.value:type_name -> kubex.keystone.Value
-	25,  // 265: kubex.keystone.IIDCreateRequest.authorization:type_name -> kubex.keystone.Authorization
-	222, // 266: kubex.keystone.IIDCreateRequest.incr:type_name -> kubex.keystone.IIDCreateRequest.IncrEntry
-	223, // 267: kubex.keystone.IIDCreateRequest.meta:type_name -> kubex.keystone.IIDCreateRequest.MetaEntry
-	25,  // 268: kubex.keystone.IIDRequest.authorization:type_name -> kubex.keystone.Authorization
-	134, // 269: kubex.keystone.IIDsResponse.iids:type_name -> kubex.keystone.IIDResponse
-	224, // 270: kubex.keystone.IIDResponse.counts:type_name -> kubex.keystone.IIDResponse.CountsEntry
-	225, // 271: kubex.keystone.IIDResponse.meta:type_name -> kubex.keystone.IIDResponse.MetaEntry
-	25,  // 272: kubex.keystone.EventStreamRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 273: kubex.keystone.EventStreamRequest.event_type:type_name -> kubex.keystone.Key
-	180, // 274: kubex.keystone.EventStreamRequest.ack:type_name -> kubex.keystone.EventStreamAck
-	233, // 275: kubex.keystone.EventStreamRequest.ack_wait:type_name -> google.protobuf.Duration
-	41,  // 276: kubex.keystone.EventStreamResponse.event:type_name -> kubex.keystone.EntityEvent
-	25,  // 277: kubex.keystone.PushTaskRequest.authorization:type_name -> kubex.keystone.Authorization
-	226, // 278: kubex.keystone.PushTaskRequest.data:type_name -> kubex.keystone.PushTaskRequest.DataEntry
-	227, // 279: kubex.keystone.TaskResponse.data:type_name -> kubex.keystone.TaskResponse.DataEntry
-	25,  // 280: kubex.keystone.DestroyRequest.authorization:type_name -> kubex.keystone.Authorization
-	29,  // 281: kubex.keystone.DestroyRequest.schema:type_name -> kubex.keystone.Key
-	25,  // 282: kubex.keystone.SquidRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 283: kubex.keystone.SquidRecoverRequest.authorization:type_name -> kubex.keystone.Authorization
-	228, // 284: kubex.keystone.EnumEntry.metadata:type_name -> kubex.keystone.EnumEntry.MetadataEntry
-	25,  // 285: kubex.keystone.EnumPutRequest.authorization:type_name -> kubex.keystone.Authorization
-	145, // 286: kubex.keystone.EnumPutRequest.enum:type_name -> kubex.keystone.EnumEntry
-	25,  // 287: kubex.keystone.EnumGetRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 288: kubex.keystone.EnumGetResponse.summary:type_name -> kubex.keystone.GenericResponse
-	145, // 289: kubex.keystone.EnumGetResponse.enum:type_name -> kubex.keystone.EnumEntry
-	25,  // 290: kubex.keystone.EnumDeleteRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 291: kubex.keystone.EnumListRequest.authorization:type_name -> kubex.keystone.Authorization
-	26,  // 292: kubex.keystone.EnumListResponse.summary:type_name -> kubex.keystone.GenericResponse
-	145, // 293: kubex.keystone.EnumListResponse.enums:type_name -> kubex.keystone.EnumEntry
-	25,  // 294: kubex.keystone.EnumReplaceRequest.authorization:type_name -> kubex.keystone.Authorization
-	145, // 295: kubex.keystone.EnumReplaceRequest.enums:type_name -> kubex.keystone.EnumEntry
-	25,  // 296: kubex.keystone.AKVTimePutRequest.authorization:type_name -> kubex.keystone.Authorization
-	153, // 297: kubex.keystone.AKVTimePutRequest.entries:type_name -> kubex.keystone.AKVTimeEntry
-	25,  // 298: kubex.keystone.AKVTimeGetRequest.authorization:type_name -> kubex.keystone.Authorization
-	7,   // 299: kubex.keystone.AKVTimeGetRequest.mode:type_name -> kubex.keystone.AKVTimeQueryMode
-	8,   // 300: kubex.keystone.AKVTimeGetRequest.group_interval:type_name -> kubex.keystone.AKVTimeGroupInterval
-	9,   // 301: kubex.keystone.AKVTimeGetRequest.group_pick:type_name -> kubex.keystone.AKVTimeGroupPick
-	26,  // 302: kubex.keystone.AKVTimeGetResponse.summary:type_name -> kubex.keystone.GenericResponse
-	156, // 303: kubex.keystone.AKVTimeGetResponse.results:type_name -> kubex.keystone.AKVTimeResult
-	25,  // 304: kubex.keystone.AKVTimeDelRequest.authorization:type_name -> kubex.keystone.Authorization
-	10,  // 305: kubex.keystone.AKVTimeDelRequest.mode:type_name -> kubex.keystone.AKVTimeDeleteMode
-	25,  // 306: kubex.keystone.RelayCreateSessionRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 307: kubex.keystone.RelayExtendSessionRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 308: kubex.keystone.RelayDestroySessionRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 309: kubex.keystone.RelayCreateShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 310: kubex.keystone.RelayResolveShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 311: kubex.keystone.RelayDeleteShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 312: kubex.keystone.RelayPublishRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 313: kubex.keystone.RelayGetPresenceRequest.authorization:type_name -> kubex.keystone.Authorization
-	175, // 314: kubex.keystone.RelayGetPresenceResponse.devices:type_name -> kubex.keystone.PresenceDevice
-	25,  // 315: kubex.keystone.RelayGetSessionMetadataRequest.authorization:type_name -> kubex.keystone.Authorization
-	25,  // 316: kubex.keystone.RelaySetSessionMetadataRequest.authorization:type_name -> kubex.keystone.Authorization
-	21,  // 317: kubex.keystone.EventStreamAck.action:type_name -> kubex.keystone.EventStreamAck.Action
-	233, // 318: kubex.keystone.EventStreamAck.delay:type_name -> google.protobuf.Duration
-	29,  // 319: kubex.keystone.FeedEntry.schema:type_name -> kubex.keystone.Key
-	25,  // 320: kubex.keystone.FeedPutRequest.authorization:type_name -> kubex.keystone.Authorization
-	182, // 321: kubex.keystone.FeedPutRequest.feed:type_name -> kubex.keystone.FeedKey
-	183, // 322: kubex.keystone.FeedPutRequest.entry:type_name -> kubex.keystone.FeedEntry
-	183, // 323: kubex.keystone.FeedPutResponse.entry:type_name -> kubex.keystone.FeedEntry
-	25,  // 324: kubex.keystone.FeedReadRequest.authorization:type_name -> kubex.keystone.Authorization
-	182, // 325: kubex.keystone.FeedReadRequest.feed:type_name -> kubex.keystone.FeedKey
-	183, // 326: kubex.keystone.FeedReadResponse.entries:type_name -> kubex.keystone.FeedEntry
-	25,  // 327: kubex.keystone.FeedRemoveRequest.authorization:type_name -> kubex.keystone.Authorization
-	182, // 328: kubex.keystone.FeedRemoveRequest.feed:type_name -> kubex.keystone.FeedKey
-	25,  // 329: kubex.keystone.FeedSummaryRequest.authorization:type_name -> kubex.keystone.Authorization
-	182, // 330: kubex.keystone.FeedSummaryRequest.feed:type_name -> kubex.keystone.FeedKey
-	232, // 331: kubex.keystone.FeedSummaryRequest.from:type_name -> google.protobuf.Timestamp
-	232, // 332: kubex.keystone.FeedSummaryRequest.until:type_name -> google.protobuf.Timestamp
-	11,  // 333: kubex.keystone.FeedSummaryRequest.interval:type_name -> kubex.keystone.FeedSummaryInterval
-	232, // 334: kubex.keystone.FeedSummaryBucket.start:type_name -> google.protobuf.Timestamp
-	232, // 335: kubex.keystone.FeedSummaryBucket.end:type_name -> google.protobuf.Timestamp
-	232, // 336: kubex.keystone.FeedSummaryBucket.updated_at:type_name -> google.protobuf.Timestamp
-	190, // 337: kubex.keystone.FeedSummaryResponse.buckets:type_name -> kubex.keystone.FeedSummaryBucket
-	25,  // 338: kubex.keystone.GetDynamicRecordRequest.authorization:type_name -> kubex.keystone.Authorization
-	229, // 339: kubex.keystone.DynamicRecord.properties:type_name -> kubex.keystone.DynamicRecord.PropertiesEntry
-	232, // 340: kubex.keystone.DynamicRecord.updated:type_name -> google.protobuf.Timestamp
-	25,  // 341: kubex.keystone.MutateDynamicRecordRequest.authorization:type_name -> kubex.keystone.Authorization
-	230, // 342: kubex.keystone.MutateDynamicRecordRequest.set:type_name -> kubex.keystone.MutateDynamicRecordRequest.SetEntry
-	25,  // 343: kubex.keystone.DeleteDynamicRecordRequest.authorization:type_name -> kubex.keystone.Authorization
-	232, // 344: kubex.keystone.DynamicRecordMutationResponse.timestamp:type_name -> google.protobuf.Timestamp
-	232, // 345: kubex.keystone.DynamicRecordHistoryEntry.timestamp:type_name -> google.protobuf.Timestamp
-	63,  // 346: kubex.keystone.DynamicRecordHistoryEntry.actor:type_name -> kubex.keystone.User
-	231, // 347: kubex.keystone.DynamicRecordHistoryEntry.set:type_name -> kubex.keystone.DynamicRecordHistoryEntry.SetEntry
-	25,  // 348: kubex.keystone.ListDynamicRecordHistoryRequest.authorization:type_name -> kubex.keystone.Authorization
-	197, // 349: kubex.keystone.ListDynamicRecordHistoryResponse.entries:type_name -> kubex.keystone.DynamicRecordHistoryEntry
-	30,  // 350: kubex.keystone.RepeatedValue.MixedEntry.value:type_name -> kubex.keystone.Value
-	30,  // 351: kubex.keystone.QueryRow.ValuesEntry.value:type_name -> kubex.keystone.Value
-	215, // 352: kubex.keystone.GroupCountResponse.Result.properties:type_name -> kubex.keystone.GroupCountResponse.Result.PropertiesEntry
-	219, // 353: kubex.keystone.ChartTimeSeriesResponse.SeriesEntry.value:type_name -> kubex.keystone.ChartTimeSeriesResponse.ChartSeries
-	232, // 354: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.bucket:type_name -> google.protobuf.Timestamp
-	220, // 355: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.values:type_name -> kubex.keystone.ChartTimeSeriesResponse.ChartSeries.ValuesEntry
-	30,  // 356: kubex.keystone.AKVGetResponse.PropertiesEntry.value:type_name -> kubex.keystone.Value
-	30,  // 357: kubex.keystone.DynamicRecord.PropertiesEntry.value:type_name -> kubex.keystone.Value
-	30,  // 358: kubex.keystone.MutateDynamicRecordRequest.SetEntry.value:type_name -> kubex.keystone.Value
-	30,  // 359: kubex.keystone.DynamicRecordHistoryEntry.SetEntry.value:type_name -> kubex.keystone.Value
-	25,  // 360: kubex.keystone.Keystone.Status:input_type -> kubex.keystone.Authorization
-	70,  // 361: kubex.keystone.Keystone.Define:input_type -> kubex.keystone.SchemaRequest
-	131, // 362: kubex.keystone.Keystone.IID:input_type -> kubex.keystone.IIDCreateRequest
-	132, // 363: kubex.keystone.Keystone.IIDLookup:input_type -> kubex.keystone.IIDRequest
-	32,  // 364: kubex.keystone.Keystone.PiiToken:input_type -> kubex.keystone.PiiTokenRequest
-	34,  // 365: kubex.keystone.Keystone.PiiAnonymize:input_type -> kubex.keystone.PiiAnonymizeRequest
-	71,  // 366: kubex.keystone.Keystone.Mutate:input_type -> kubex.keystone.MutateRequest
-	140, // 367: kubex.keystone.Keystone.Destroy:input_type -> kubex.keystone.DestroyRequest
-	65,  // 368: kubex.keystone.Keystone.Log:input_type -> kubex.keystone.LogRequest
-	142, // 369: kubex.keystone.Keystone.SQUID:input_type -> kubex.keystone.SquidRequest
-	143, // 370: kubex.keystone.Keystone.SQUIDRecover:input_type -> kubex.keystone.SquidRecoverRequest
-	72,  // 371: kubex.keystone.Keystone.SnapshotReport:input_type -> kubex.keystone.SnapshotReportRequest
-	73,  // 372: kubex.keystone.Keystone.ReportTimeSeries:input_type -> kubex.keystone.ReportTimeSeriesRequest
-	114, // 373: kubex.keystone.Keystone.ChartTimeSeries:input_type -> kubex.keystone.ChartTimeSeriesRequest
-	45,  // 374: kubex.keystone.Keystone.WriteSensors:input_type -> kubex.keystone.WriteSensorsRequest
-	25,  // 375: kubex.keystone.Keystone.ListAppSensors:input_type -> kubex.keystone.Authorization
-	53,  // 376: kubex.keystone.Keystone.ChartSensor:input_type -> kubex.keystone.ChartSensorRequest
-	59,  // 377: kubex.keystone.Keystone.HeatmapSensor:input_type -> kubex.keystone.HeatmapSensorRequest
-	56,  // 378: kubex.keystone.Keystone.SensorActivity:input_type -> kubex.keystone.SensorActivityRequest
-	47,  // 379: kubex.keystone.Keystone.PredictSensor:input_type -> kubex.keystone.PredictSensorRequest
-	50,  // 380: kubex.keystone.Keystone.CreateSensorStream:input_type -> kubex.keystone.CreateSensorStreamRequest
-	52,  // 381: kubex.keystone.Keystone.RevokeSensorSession:input_type -> kubex.keystone.RevokeSensorSessionRequest
-	77,  // 382: kubex.keystone.Keystone.Retrieve:input_type -> kubex.keystone.EntityRequest
-	89,  // 383: kubex.keystone.Keystone.Find:input_type -> kubex.keystone.FindRequest
-	92,  // 384: kubex.keystone.Keystone.List:input_type -> kubex.keystone.ListRequest
-	104, // 385: kubex.keystone.Keystone.QueryIndex:input_type -> kubex.keystone.QueryIndexRequest
-	94,  // 386: kubex.keystone.Keystone.Query:input_type -> kubex.keystone.QueryRequest
-	184, // 387: kubex.keystone.Keystone.FeedPut:input_type -> kubex.keystone.FeedPutRequest
-	186, // 388: kubex.keystone.Keystone.FeedRead:input_type -> kubex.keystone.FeedReadRequest
-	188, // 389: kubex.keystone.Keystone.FeedRemove:input_type -> kubex.keystone.FeedRemoveRequest
-	189, // 390: kubex.keystone.Keystone.FeedSummary:input_type -> kubex.keystone.FeedSummaryRequest
-	123, // 391: kubex.keystone.Keystone.Lookup:input_type -> kubex.keystone.LookupRequest
-	106, // 392: kubex.keystone.Keystone.GroupCount:input_type -> kubex.keystone.GroupCountRequest
-	84,  // 393: kubex.keystone.Keystone.Logs:input_type -> kubex.keystone.LogsRequest
-	86,  // 394: kubex.keystone.Keystone.Events:input_type -> kubex.keystone.EventRequest
-	135, // 395: kubex.keystone.Keystone.EventStream:input_type -> kubex.keystone.EventStreamRequest
-	117, // 396: kubex.keystone.Keystone.ShareView:input_type -> kubex.keystone.ShareViewRequest
-	119, // 397: kubex.keystone.Keystone.SharedViews:input_type -> kubex.keystone.SharedViewsRequest
-	121, // 398: kubex.keystone.Keystone.RateLimit:input_type -> kubex.keystone.RateLimitRequest
-	112, // 399: kubex.keystone.Keystone.DailyEntities:input_type -> kubex.keystone.DailyEntityRequest
-	110, // 400: kubex.keystone.Keystone.SchemaStatistics:input_type -> kubex.keystone.SchemaStatisticsRequest
-	192, // 401: kubex.keystone.Keystone.GetDynamicRecord:input_type -> kubex.keystone.GetDynamicRecordRequest
-	194, // 402: kubex.keystone.Keystone.MutateDynamicRecord:input_type -> kubex.keystone.MutateDynamicRecordRequest
-	195, // 403: kubex.keystone.Keystone.DeleteDynamicRecord:input_type -> kubex.keystone.DeleteDynamicRecordRequest
-	198, // 404: kubex.keystone.Keystone.ListDynamicRecordHistory:input_type -> kubex.keystone.ListDynamicRecordHistoryRequest
-	127, // 405: kubex.keystone.Keystone.AKVGet:input_type -> kubex.keystone.AKVGetRequest
-	126, // 406: kubex.keystone.Keystone.AKVPut:input_type -> kubex.keystone.AKVPutRequest
-	129, // 407: kubex.keystone.Keystone.AKVDel:input_type -> kubex.keystone.AKVDelRequest
-	127, // 408: kubex.keystone.Keystone.AKVWorkspaceGet:input_type -> kubex.keystone.AKVGetRequest
-	126, // 409: kubex.keystone.Keystone.AKVWorkspacePut:input_type -> kubex.keystone.AKVPutRequest
-	129, // 410: kubex.keystone.Keystone.AKVWorkspaceDel:input_type -> kubex.keystone.AKVDelRequest
-	154, // 411: kubex.keystone.Keystone.AKVTimePut:input_type -> kubex.keystone.AKVTimePutRequest
-	155, // 412: kubex.keystone.Keystone.AKVTimeGet:input_type -> kubex.keystone.AKVTimeGetRequest
-	158, // 413: kubex.keystone.Keystone.AKVTimeDel:input_type -> kubex.keystone.AKVTimeDelRequest
-	146, // 414: kubex.keystone.Keystone.EnumPut:input_type -> kubex.keystone.EnumPutRequest
-	147, // 415: kubex.keystone.Keystone.EnumGet:input_type -> kubex.keystone.EnumGetRequest
-	149, // 416: kubex.keystone.Keystone.EnumDelete:input_type -> kubex.keystone.EnumDeleteRequest
-	150, // 417: kubex.keystone.Keystone.EnumList:input_type -> kubex.keystone.EnumListRequest
-	152, // 418: kubex.keystone.Keystone.EnumReplace:input_type -> kubex.keystone.EnumReplaceRequest
-	137, // 419: kubex.keystone.Keystone.PushTask:input_type -> kubex.keystone.PushTaskRequest
-	138, // 420: kubex.keystone.Keystone.TaskStream:input_type -> kubex.keystone.TaskAckRequest
-	159, // 421: kubex.keystone.Keystone.RelayCreateSession:input_type -> kubex.keystone.RelayCreateSessionRequest
-	161, // 422: kubex.keystone.Keystone.RelayExtendSession:input_type -> kubex.keystone.RelayExtendSessionRequest
-	163, // 423: kubex.keystone.Keystone.RelayDestroySession:input_type -> kubex.keystone.RelayDestroySessionRequest
-	165, // 424: kubex.keystone.Keystone.RelayCreateShortCode:input_type -> kubex.keystone.RelayCreateShortCodeRequest
-	167, // 425: kubex.keystone.Keystone.RelayResolveShortCode:input_type -> kubex.keystone.RelayResolveShortCodeRequest
-	169, // 426: kubex.keystone.Keystone.RelayDeleteShortCode:input_type -> kubex.keystone.RelayDeleteShortCodeRequest
-	171, // 427: kubex.keystone.Keystone.RelayPublish:input_type -> kubex.keystone.RelayPublishRequest
-	173, // 428: kubex.keystone.Keystone.RelayGetPresence:input_type -> kubex.keystone.RelayGetPresenceRequest
-	176, // 429: kubex.keystone.Keystone.RelayGetSessionMetadata:input_type -> kubex.keystone.RelayGetSessionMetadataRequest
-	178, // 430: kubex.keystone.Keystone.RelaySetSessionMetadata:input_type -> kubex.keystone.RelaySetSessionMetadataRequest
-	22,  // 431: kubex.keystone.Keystone.Status:output_type -> kubex.keystone.StatusResponse
-	27,  // 432: kubex.keystone.Keystone.Define:output_type -> kubex.keystone.Schema
-	134, // 433: kubex.keystone.Keystone.IID:output_type -> kubex.keystone.IIDResponse
-	133, // 434: kubex.keystone.Keystone.IIDLookup:output_type -> kubex.keystone.IIDsResponse
-	33,  // 435: kubex.keystone.Keystone.PiiToken:output_type -> kubex.keystone.PiiTokenResponse
-	35,  // 436: kubex.keystone.Keystone.PiiAnonymize:output_type -> kubex.keystone.PiiAnonymizeResponse
-	80,  // 437: kubex.keystone.Keystone.Mutate:output_type -> kubex.keystone.MutateResponse
-	141, // 438: kubex.keystone.Keystone.Destroy:output_type -> kubex.keystone.DestroyResponse
-	66,  // 439: kubex.keystone.Keystone.Log:output_type -> kubex.keystone.LogResponse
-	144, // 440: kubex.keystone.Keystone.SQUID:output_type -> kubex.keystone.SquidResponse
-	144, // 441: kubex.keystone.Keystone.SQUIDRecover:output_type -> kubex.keystone.SquidResponse
-	80,  // 442: kubex.keystone.Keystone.SnapshotReport:output_type -> kubex.keystone.MutateResponse
-	80,  // 443: kubex.keystone.Keystone.ReportTimeSeries:output_type -> kubex.keystone.MutateResponse
-	116, // 444: kubex.keystone.Keystone.ChartTimeSeries:output_type -> kubex.keystone.ChartTimeSeriesResponse
-	26,  // 445: kubex.keystone.Keystone.WriteSensors:output_type -> kubex.keystone.GenericResponse
-	46,  // 446: kubex.keystone.Keystone.ListAppSensors:output_type -> kubex.keystone.ListAppSensorsResponse
-	55,  // 447: kubex.keystone.Keystone.ChartSensor:output_type -> kubex.keystone.ChartSensorResponse
-	61,  // 448: kubex.keystone.Keystone.HeatmapSensor:output_type -> kubex.keystone.HeatmapSensorResponse
-	58,  // 449: kubex.keystone.Keystone.SensorActivity:output_type -> kubex.keystone.SensorActivityResponse
-	49,  // 450: kubex.keystone.Keystone.PredictSensor:output_type -> kubex.keystone.PredictSensorResponse
-	51,  // 451: kubex.keystone.Keystone.CreateSensorStream:output_type -> kubex.keystone.CreateSensorStreamResponse
-	26,  // 452: kubex.keystone.Keystone.RevokeSensorSession:output_type -> kubex.keystone.GenericResponse
-	78,  // 453: kubex.keystone.Keystone.Retrieve:output_type -> kubex.keystone.EntityResponse
-	90,  // 454: kubex.keystone.Keystone.Find:output_type -> kubex.keystone.FindResponse
-	93,  // 455: kubex.keystone.Keystone.List:output_type -> kubex.keystone.ListResponse
-	105, // 456: kubex.keystone.Keystone.QueryIndex:output_type -> kubex.keystone.QueryIndexResponse
-	103, // 457: kubex.keystone.Keystone.Query:output_type -> kubex.keystone.QueryResponse
-	185, // 458: kubex.keystone.Keystone.FeedPut:output_type -> kubex.keystone.FeedPutResponse
-	187, // 459: kubex.keystone.Keystone.FeedRead:output_type -> kubex.keystone.FeedReadResponse
-	26,  // 460: kubex.keystone.Keystone.FeedRemove:output_type -> kubex.keystone.GenericResponse
-	191, // 461: kubex.keystone.Keystone.FeedSummary:output_type -> kubex.keystone.FeedSummaryResponse
-	124, // 462: kubex.keystone.Keystone.Lookup:output_type -> kubex.keystone.LookupResponse
-	107, // 463: kubex.keystone.Keystone.GroupCount:output_type -> kubex.keystone.GroupCountResponse
-	85,  // 464: kubex.keystone.Keystone.Logs:output_type -> kubex.keystone.LogsResponse
-	87,  // 465: kubex.keystone.Keystone.Events:output_type -> kubex.keystone.EventsResponse
-	136, // 466: kubex.keystone.Keystone.EventStream:output_type -> kubex.keystone.EventStreamResponse
-	118, // 467: kubex.keystone.Keystone.ShareView:output_type -> kubex.keystone.SharedViewResponse
-	120, // 468: kubex.keystone.Keystone.SharedViews:output_type -> kubex.keystone.SharedViewsResponse
-	122, // 469: kubex.keystone.Keystone.RateLimit:output_type -> kubex.keystone.RateLimitResponse
-	113, // 470: kubex.keystone.Keystone.DailyEntities:output_type -> kubex.keystone.DailyEntityResponse
-	111, // 471: kubex.keystone.Keystone.SchemaStatistics:output_type -> kubex.keystone.SchemaStatisticsResponse
-	193, // 472: kubex.keystone.Keystone.GetDynamicRecord:output_type -> kubex.keystone.DynamicRecord
-	196, // 473: kubex.keystone.Keystone.MutateDynamicRecord:output_type -> kubex.keystone.DynamicRecordMutationResponse
-	196, // 474: kubex.keystone.Keystone.DeleteDynamicRecord:output_type -> kubex.keystone.DynamicRecordMutationResponse
-	199, // 475: kubex.keystone.Keystone.ListDynamicRecordHistory:output_type -> kubex.keystone.ListDynamicRecordHistoryResponse
-	128, // 476: kubex.keystone.Keystone.AKVGet:output_type -> kubex.keystone.AKVGetResponse
-	26,  // 477: kubex.keystone.Keystone.AKVPut:output_type -> kubex.keystone.GenericResponse
-	26,  // 478: kubex.keystone.Keystone.AKVDel:output_type -> kubex.keystone.GenericResponse
-	128, // 479: kubex.keystone.Keystone.AKVWorkspaceGet:output_type -> kubex.keystone.AKVGetResponse
-	26,  // 480: kubex.keystone.Keystone.AKVWorkspacePut:output_type -> kubex.keystone.GenericResponse
-	26,  // 481: kubex.keystone.Keystone.AKVWorkspaceDel:output_type -> kubex.keystone.GenericResponse
-	26,  // 482: kubex.keystone.Keystone.AKVTimePut:output_type -> kubex.keystone.GenericResponse
-	157, // 483: kubex.keystone.Keystone.AKVTimeGet:output_type -> kubex.keystone.AKVTimeGetResponse
-	26,  // 484: kubex.keystone.Keystone.AKVTimeDel:output_type -> kubex.keystone.GenericResponse
-	26,  // 485: kubex.keystone.Keystone.EnumPut:output_type -> kubex.keystone.GenericResponse
-	148, // 486: kubex.keystone.Keystone.EnumGet:output_type -> kubex.keystone.EnumGetResponse
-	26,  // 487: kubex.keystone.Keystone.EnumDelete:output_type -> kubex.keystone.GenericResponse
-	151, // 488: kubex.keystone.Keystone.EnumList:output_type -> kubex.keystone.EnumListResponse
-	26,  // 489: kubex.keystone.Keystone.EnumReplace:output_type -> kubex.keystone.GenericResponse
-	26,  // 490: kubex.keystone.Keystone.PushTask:output_type -> kubex.keystone.GenericResponse
-	139, // 491: kubex.keystone.Keystone.TaskStream:output_type -> kubex.keystone.TaskResponse
-	160, // 492: kubex.keystone.Keystone.RelayCreateSession:output_type -> kubex.keystone.RelayCreateSessionResponse
-	162, // 493: kubex.keystone.Keystone.RelayExtendSession:output_type -> kubex.keystone.RelayExtendSessionResponse
-	164, // 494: kubex.keystone.Keystone.RelayDestroySession:output_type -> kubex.keystone.RelayDestroySessionResponse
-	166, // 495: kubex.keystone.Keystone.RelayCreateShortCode:output_type -> kubex.keystone.RelayCreateShortCodeResponse
-	168, // 496: kubex.keystone.Keystone.RelayResolveShortCode:output_type -> kubex.keystone.RelayResolveShortCodeResponse
-	170, // 497: kubex.keystone.Keystone.RelayDeleteShortCode:output_type -> kubex.keystone.RelayDeleteShortCodeResponse
-	172, // 498: kubex.keystone.Keystone.RelayPublish:output_type -> kubex.keystone.RelayPublishResponse
-	174, // 499: kubex.keystone.Keystone.RelayGetPresence:output_type -> kubex.keystone.RelayGetPresenceResponse
-	177, // 500: kubex.keystone.Keystone.RelayGetSessionMetadata:output_type -> kubex.keystone.RelayGetSessionMetadataResponse
-	179, // 501: kubex.keystone.Keystone.RelaySetSessionMetadata:output_type -> kubex.keystone.RelaySetSessionMetadataResponse
-	431, // [431:502] is the sub-list for method output_type
-	360, // [360:431] is the sub-list for method input_type
-	360, // [360:360] is the sub-list for extension type_name
-	360, // [360:360] is the sub-list for extension extendee
-	0,   // [0:360] is the sub-list for field type_name
+	200, // 147: kubex.keystone.EntityRequest.alias:type_name -> kubex.keystone.EntityAlias
+	36,  // 148: kubex.keystone.EntityResponse.entity:type_name -> kubex.keystone.Entity
+	37,  // 149: kubex.keystone.EntityResponse.properties:type_name -> kubex.keystone.EntityProperty
+	38,  // 150: kubex.keystone.EntityResponse.children:type_name -> kubex.keystone.EntityChild
+	39,  // 151: kubex.keystone.EntityResponse.documents:type_name -> kubex.keystone.EntityDocument
+	42,  // 152: kubex.keystone.EntityResponse.relationships:type_name -> kubex.keystone.EntityRelationship
+	43,  // 153: kubex.keystone.EntityResponse.labels:type_name -> kubex.keystone.EntityLabel
+	75,  // 154: kubex.keystone.EntityResponse.relationship_counts:type_name -> kubex.keystone.TypeCount
+	75,  // 155: kubex.keystone.EntityResponse.descendant_counts:type_name -> kubex.keystone.TypeCount
+	76,  // 156: kubex.keystone.EntityResponse.child_summary:type_name -> kubex.keystone.ChildSummary
+	62,  // 157: kubex.keystone.EntityResponse.objects:type_name -> kubex.keystone.EntityObject
+	37,  // 158: kubex.keystone.EntityResponse.dynamic_properties:type_name -> kubex.keystone.EntityProperty
+	79,  // 159: kubex.keystone.EntityResponse.lock:type_name -> kubex.keystone.EntityLock
+	23,  // 160: kubex.keystone.EntityResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	200, // 161: kubex.keystone.EntityResponse.aliases:type_name -> kubex.keystone.EntityAlias
+	238, // 162: kubex.keystone.EntityLock.locked_until:type_name -> google.protobuf.Timestamp
+	23,  // 163: kubex.keystone.MutateResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	62,  // 164: kubex.keystone.MutateResponse.signed_object_urls:type_name -> kubex.keystone.EntityObject
+	218, // 165: kubex.keystone.MutateResponse.created_children:type_name -> kubex.keystone.MutateResponse.CreatedChildrenEntry
+	24,  // 166: kubex.keystone.PropertyRequest.source:type_name -> kubex.keystone.VendorApp
+	29,  // 167: kubex.keystone.ChildRequest.type:type_name -> kubex.keystone.Key
+	25,  // 168: kubex.keystone.LogsRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 169: kubex.keystone.LogsRequest.type:type_name -> kubex.keystone.Key
+	1,   // 170: kubex.keystone.LogsRequest.levels:type_name -> kubex.keystone.LogLevel
+	1,   // 171: kubex.keystone.LogsRequest.min_level:type_name -> kubex.keystone.LogLevel
+	67,  // 172: kubex.keystone.LogsRequest.window:type_name -> kubex.keystone.Window
+	40,  // 173: kubex.keystone.LogsResponse.logs:type_name -> kubex.keystone.EntityLog
+	25,  // 174: kubex.keystone.EventRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 175: kubex.keystone.EventRequest.event_by_type:type_name -> kubex.keystone.Key
+	67,  // 176: kubex.keystone.EventRequest.events_in_window:type_name -> kubex.keystone.Window
+	41,  // 177: kubex.keystone.EventsResponse.events:type_name -> kubex.keystone.EntityEvent
+	29,  // 178: kubex.keystone.RelationOf.relationship:type_name -> kubex.keystone.Key
+	25,  // 179: kubex.keystone.FindRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 180: kubex.keystone.FindRequest.schema:type_name -> kubex.keystone.Key
+	74,  // 181: kubex.keystone.FindRequest.view:type_name -> kubex.keystone.EntityView
+	88,  // 182: kubex.keystone.FindRequest.relation_of:type_name -> kubex.keystone.RelationOf
+	68,  // 183: kubex.keystone.FindRequest.property_filters:type_name -> kubex.keystone.PropertyFilter
+	43,  // 184: kubex.keystone.FindRequest.label_filters:type_name -> kubex.keystone.EntityLabel
+	78,  // 185: kubex.keystone.FindResponse.entities:type_name -> kubex.keystone.EntityResponse
+	23,  // 186: kubex.keystone.FindResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	25,  // 187: kubex.keystone.ListRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 188: kubex.keystone.ListRequest.schema:type_name -> kubex.keystone.Key
+	68,  // 189: kubex.keystone.ListRequest.filters:type_name -> kubex.keystone.PropertyFilter
+	69,  // 190: kubex.keystone.ListRequest.sort:type_name -> kubex.keystone.PropertySort
+	91,  // 191: kubex.keystone.ListRequest.page:type_name -> kubex.keystone.PageRequest
+	78,  // 192: kubex.keystone.ListResponse.entities:type_name -> kubex.keystone.EntityResponse
+	23,  // 193: kubex.keystone.ListResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	25,  // 194: kubex.keystone.QueryRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 195: kubex.keystone.QueryRequest.from:type_name -> kubex.keystone.Key
+	68,  // 196: kubex.keystone.QueryRequest.where:type_name -> kubex.keystone.PropertyFilter
+	69,  // 197: kubex.keystone.QueryRequest.order_by:type_name -> kubex.keystone.PropertySort
+	102, // 198: kubex.keystone.QueryRequest.entity_ids:type_name -> kubex.keystone.EntityIDList
+	95,  // 199: kubex.keystone.QueryRequest.predicate:type_name -> kubex.keystone.QueryPredicate
+	98,  // 200: kubex.keystone.QueryRequest.aggregates:type_name -> kubex.keystone.QueryAggregate
+	68,  // 201: kubex.keystone.QueryRequest.having:type_name -> kubex.keystone.PropertyFilter
+	99,  // 202: kubex.keystone.QueryRequest.include:type_name -> kubex.keystone.QueryInclude
+	68,  // 203: kubex.keystone.QueryPredicate.property:type_name -> kubex.keystone.PropertyFilter
+	43,  // 204: kubex.keystone.QueryPredicate.label:type_name -> kubex.keystone.EntityLabel
+	97,  // 205: kubex.keystone.QueryPredicate.relationship:type_name -> kubex.keystone.QueryRelationship
+	96,  // 206: kubex.keystone.QueryPredicate.all:type_name -> kubex.keystone.QueryPredicateGroup
+	96,  // 207: kubex.keystone.QueryPredicate.any:type_name -> kubex.keystone.QueryPredicateGroup
+	95,  // 208: kubex.keystone.QueryPredicate.not:type_name -> kubex.keystone.QueryPredicate
+	95,  // 209: kubex.keystone.QueryPredicateGroup.predicates:type_name -> kubex.keystone.QueryPredicate
+	29,  // 210: kubex.keystone.QueryRelationship.type:type_name -> kubex.keystone.Key
+	18,  // 211: kubex.keystone.QueryRelationship.direction:type_name -> kubex.keystone.QueryRelationship.Direction
+	19,  // 212: kubex.keystone.QueryAggregate.function:type_name -> kubex.keystone.QueryAggregate.Function
+	29,  // 213: kubex.keystone.QueryInclude.relationships:type_name -> kubex.keystone.Key
+	29,  // 214: kubex.keystone.QueryInclude.relationship_count_types:type_name -> kubex.keystone.Key
+	219, // 215: kubex.keystone.QueryRow.values:type_name -> kubex.keystone.QueryRow.ValuesEntry
+	78,  // 216: kubex.keystone.QueryResponse.entities:type_name -> kubex.keystone.EntityResponse
+	100, // 217: kubex.keystone.QueryResponse.rows:type_name -> kubex.keystone.QueryRow
+	101, // 218: kubex.keystone.QueryResponse.execution:type_name -> kubex.keystone.QueryExecution
+	238, // 219: kubex.keystone.QueryResponse.result_set_expires:type_name -> google.protobuf.Timestamp
+	25,  // 220: kubex.keystone.QueryIndexRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 221: kubex.keystone.QueryIndexRequest.schema:type_name -> kubex.keystone.Key
+	68,  // 222: kubex.keystone.QueryIndexRequest.filters:type_name -> kubex.keystone.PropertyFilter
+	69,  // 223: kubex.keystone.QueryIndexRequest.sort:type_name -> kubex.keystone.PropertySort
+	91,  // 224: kubex.keystone.QueryIndexRequest.page:type_name -> kubex.keystone.PageRequest
+	78,  // 225: kubex.keystone.QueryIndexResponse.entities:type_name -> kubex.keystone.EntityResponse
+	23,  // 226: kubex.keystone.QueryIndexResponse.extended:type_name -> kubex.keystone.ExtendedResponse
+	25,  // 227: kubex.keystone.GroupCountRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 228: kubex.keystone.GroupCountRequest.schema:type_name -> kubex.keystone.Key
+	68,  // 229: kubex.keystone.GroupCountRequest.filters:type_name -> kubex.keystone.PropertyFilter
+	91,  // 230: kubex.keystone.GroupCountRequest.page:type_name -> kubex.keystone.PageRequest
+	220, // 231: kubex.keystone.GroupCountResponse.results:type_name -> kubex.keystone.GroupCountResponse.Result
+	78,  // 232: kubex.keystone.EntitiesResponse.entities:type_name -> kubex.keystone.EntityResponse
+	25,  // 233: kubex.keystone.SchemaStatisticsRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 234: kubex.keystone.SchemaStatisticsRequest.schema:type_name -> kubex.keystone.Key
+	109, // 235: kubex.keystone.SchemaStatisticsRequest.created_from:type_name -> kubex.keystone.Date
+	109, // 236: kubex.keystone.SchemaStatisticsRequest.created_until:type_name -> kubex.keystone.Date
+	222, // 237: kubex.keystone.SchemaStatisticsResponse.daily_count:type_name -> kubex.keystone.SchemaStatisticsResponse.DailyCountEntry
+	25,  // 238: kubex.keystone.DailyEntityRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 239: kubex.keystone.DailyEntityRequest.schema:type_name -> kubex.keystone.Key
+	109, // 240: kubex.keystone.DailyEntityRequest.date:type_name -> kubex.keystone.Date
+	223, // 241: kubex.keystone.DailyEntityResponse.entities:type_name -> kubex.keystone.DailyEntityResponse.EntitiesEntry
+	25,  // 242: kubex.keystone.ChartTimeSeriesRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 243: kubex.keystone.ChartTimeSeriesRequest.schema:type_name -> kubex.keystone.Key
+	238, // 244: kubex.keystone.ChartTimeSeriesRequest.from:type_name -> google.protobuf.Timestamp
+	238, // 245: kubex.keystone.ChartTimeSeriesRequest.until:type_name -> google.protobuf.Timestamp
+	115, // 246: kubex.keystone.ChartTimeSeriesRequest.aggregations:type_name -> kubex.keystone.PropertyAggregation
+	68,  // 247: kubex.keystone.ChartTimeSeriesRequest.property_filters:type_name -> kubex.keystone.PropertyFilter
+	20,  // 248: kubex.keystone.PropertyAggregation.type:type_name -> kubex.keystone.PropertyAggregation.AggregationType
+	224, // 249: kubex.keystone.ChartTimeSeriesResponse.series:type_name -> kubex.keystone.ChartTimeSeriesResponse.SeriesEntry
+	25,  // 250: kubex.keystone.ShareViewRequest.authorization:type_name -> kubex.keystone.Authorization
+	24,  // 251: kubex.keystone.ShareViewRequest.share_with:type_name -> kubex.keystone.VendorApp
+	24,  // 252: kubex.keystone.SharedViewResponse.share_with:type_name -> kubex.keystone.VendorApp
+	25,  // 253: kubex.keystone.SharedViewsRequest.authorization:type_name -> kubex.keystone.Authorization
+	24,  // 254: kubex.keystone.SharedViewsRequest.share_with:type_name -> kubex.keystone.VendorApp
+	118, // 255: kubex.keystone.SharedViewsResponse.views:type_name -> kubex.keystone.SharedViewResponse
+	25,  // 256: kubex.keystone.RateLimitRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 257: kubex.keystone.LookupRequest.authorization:type_name -> kubex.keystone.Authorization
+	125, // 258: kubex.keystone.LookupResponse.results:type_name -> kubex.keystone.EntityReference
+	25,  // 259: kubex.keystone.AKVPutRequest.authorization:type_name -> kubex.keystone.Authorization
+	130, // 260: kubex.keystone.AKVPutRequest.properties:type_name -> kubex.keystone.AKVProperty
+	25,  // 261: kubex.keystone.AKVGetRequest.authorization:type_name -> kubex.keystone.Authorization
+	26,  // 262: kubex.keystone.AKVGetResponse.summary:type_name -> kubex.keystone.GenericResponse
+	227, // 263: kubex.keystone.AKVGetResponse.properties:type_name -> kubex.keystone.AKVGetResponse.PropertiesEntry
+	25,  // 264: kubex.keystone.AKVDelRequest.authorization:type_name -> kubex.keystone.Authorization
+	28,  // 265: kubex.keystone.AKVProperty.property:type_name -> kubex.keystone.Property
+	30,  // 266: kubex.keystone.AKVProperty.value:type_name -> kubex.keystone.Value
+	25,  // 267: kubex.keystone.IIDCreateRequest.authorization:type_name -> kubex.keystone.Authorization
+	228, // 268: kubex.keystone.IIDCreateRequest.incr:type_name -> kubex.keystone.IIDCreateRequest.IncrEntry
+	229, // 269: kubex.keystone.IIDCreateRequest.meta:type_name -> kubex.keystone.IIDCreateRequest.MetaEntry
+	25,  // 270: kubex.keystone.IIDRequest.authorization:type_name -> kubex.keystone.Authorization
+	134, // 271: kubex.keystone.IIDsResponse.iids:type_name -> kubex.keystone.IIDResponse
+	230, // 272: kubex.keystone.IIDResponse.counts:type_name -> kubex.keystone.IIDResponse.CountsEntry
+	231, // 273: kubex.keystone.IIDResponse.meta:type_name -> kubex.keystone.IIDResponse.MetaEntry
+	25,  // 274: kubex.keystone.EventStreamRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 275: kubex.keystone.EventStreamRequest.event_type:type_name -> kubex.keystone.Key
+	180, // 276: kubex.keystone.EventStreamRequest.ack:type_name -> kubex.keystone.EventStreamAck
+	239, // 277: kubex.keystone.EventStreamRequest.ack_wait:type_name -> google.protobuf.Duration
+	41,  // 278: kubex.keystone.EventStreamResponse.event:type_name -> kubex.keystone.EntityEvent
+	25,  // 279: kubex.keystone.PushTaskRequest.authorization:type_name -> kubex.keystone.Authorization
+	232, // 280: kubex.keystone.PushTaskRequest.data:type_name -> kubex.keystone.PushTaskRequest.DataEntry
+	233, // 281: kubex.keystone.TaskResponse.data:type_name -> kubex.keystone.TaskResponse.DataEntry
+	25,  // 282: kubex.keystone.DestroyRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 283: kubex.keystone.DestroyRequest.schema:type_name -> kubex.keystone.Key
+	25,  // 284: kubex.keystone.SquidRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 285: kubex.keystone.SquidRecoverRequest.authorization:type_name -> kubex.keystone.Authorization
+	234, // 286: kubex.keystone.EnumEntry.metadata:type_name -> kubex.keystone.EnumEntry.MetadataEntry
+	25,  // 287: kubex.keystone.EnumPutRequest.authorization:type_name -> kubex.keystone.Authorization
+	145, // 288: kubex.keystone.EnumPutRequest.enum:type_name -> kubex.keystone.EnumEntry
+	25,  // 289: kubex.keystone.EnumGetRequest.authorization:type_name -> kubex.keystone.Authorization
+	26,  // 290: kubex.keystone.EnumGetResponse.summary:type_name -> kubex.keystone.GenericResponse
+	145, // 291: kubex.keystone.EnumGetResponse.enum:type_name -> kubex.keystone.EnumEntry
+	25,  // 292: kubex.keystone.EnumDeleteRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 293: kubex.keystone.EnumListRequest.authorization:type_name -> kubex.keystone.Authorization
+	26,  // 294: kubex.keystone.EnumListResponse.summary:type_name -> kubex.keystone.GenericResponse
+	145, // 295: kubex.keystone.EnumListResponse.enums:type_name -> kubex.keystone.EnumEntry
+	25,  // 296: kubex.keystone.EnumReplaceRequest.authorization:type_name -> kubex.keystone.Authorization
+	145, // 297: kubex.keystone.EnumReplaceRequest.enums:type_name -> kubex.keystone.EnumEntry
+	25,  // 298: kubex.keystone.AKVTimePutRequest.authorization:type_name -> kubex.keystone.Authorization
+	153, // 299: kubex.keystone.AKVTimePutRequest.entries:type_name -> kubex.keystone.AKVTimeEntry
+	25,  // 300: kubex.keystone.AKVTimeGetRequest.authorization:type_name -> kubex.keystone.Authorization
+	7,   // 301: kubex.keystone.AKVTimeGetRequest.mode:type_name -> kubex.keystone.AKVTimeQueryMode
+	8,   // 302: kubex.keystone.AKVTimeGetRequest.group_interval:type_name -> kubex.keystone.AKVTimeGroupInterval
+	9,   // 303: kubex.keystone.AKVTimeGetRequest.group_pick:type_name -> kubex.keystone.AKVTimeGroupPick
+	26,  // 304: kubex.keystone.AKVTimeGetResponse.summary:type_name -> kubex.keystone.GenericResponse
+	156, // 305: kubex.keystone.AKVTimeGetResponse.results:type_name -> kubex.keystone.AKVTimeResult
+	25,  // 306: kubex.keystone.AKVTimeDelRequest.authorization:type_name -> kubex.keystone.Authorization
+	10,  // 307: kubex.keystone.AKVTimeDelRequest.mode:type_name -> kubex.keystone.AKVTimeDeleteMode
+	25,  // 308: kubex.keystone.RelayCreateSessionRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 309: kubex.keystone.RelayExtendSessionRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 310: kubex.keystone.RelayDestroySessionRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 311: kubex.keystone.RelayCreateShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 312: kubex.keystone.RelayResolveShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 313: kubex.keystone.RelayDeleteShortCodeRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 314: kubex.keystone.RelayPublishRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 315: kubex.keystone.RelayGetPresenceRequest.authorization:type_name -> kubex.keystone.Authorization
+	175, // 316: kubex.keystone.RelayGetPresenceResponse.devices:type_name -> kubex.keystone.PresenceDevice
+	25,  // 317: kubex.keystone.RelayGetSessionMetadataRequest.authorization:type_name -> kubex.keystone.Authorization
+	25,  // 318: kubex.keystone.RelaySetSessionMetadataRequest.authorization:type_name -> kubex.keystone.Authorization
+	21,  // 319: kubex.keystone.EventStreamAck.action:type_name -> kubex.keystone.EventStreamAck.Action
+	239, // 320: kubex.keystone.EventStreamAck.delay:type_name -> google.protobuf.Duration
+	29,  // 321: kubex.keystone.FeedEntry.schema:type_name -> kubex.keystone.Key
+	25,  // 322: kubex.keystone.FeedPutRequest.authorization:type_name -> kubex.keystone.Authorization
+	182, // 323: kubex.keystone.FeedPutRequest.feed:type_name -> kubex.keystone.FeedKey
+	183, // 324: kubex.keystone.FeedPutRequest.entry:type_name -> kubex.keystone.FeedEntry
+	183, // 325: kubex.keystone.FeedPutResponse.entry:type_name -> kubex.keystone.FeedEntry
+	25,  // 326: kubex.keystone.FeedReadRequest.authorization:type_name -> kubex.keystone.Authorization
+	182, // 327: kubex.keystone.FeedReadRequest.feed:type_name -> kubex.keystone.FeedKey
+	183, // 328: kubex.keystone.FeedReadResponse.entries:type_name -> kubex.keystone.FeedEntry
+	25,  // 329: kubex.keystone.FeedRemoveRequest.authorization:type_name -> kubex.keystone.Authorization
+	182, // 330: kubex.keystone.FeedRemoveRequest.feed:type_name -> kubex.keystone.FeedKey
+	25,  // 331: kubex.keystone.FeedSummaryRequest.authorization:type_name -> kubex.keystone.Authorization
+	182, // 332: kubex.keystone.FeedSummaryRequest.feed:type_name -> kubex.keystone.FeedKey
+	238, // 333: kubex.keystone.FeedSummaryRequest.from:type_name -> google.protobuf.Timestamp
+	238, // 334: kubex.keystone.FeedSummaryRequest.until:type_name -> google.protobuf.Timestamp
+	11,  // 335: kubex.keystone.FeedSummaryRequest.interval:type_name -> kubex.keystone.FeedSummaryInterval
+	238, // 336: kubex.keystone.FeedSummaryBucket.start:type_name -> google.protobuf.Timestamp
+	238, // 337: kubex.keystone.FeedSummaryBucket.end:type_name -> google.protobuf.Timestamp
+	238, // 338: kubex.keystone.FeedSummaryBucket.updated_at:type_name -> google.protobuf.Timestamp
+	190, // 339: kubex.keystone.FeedSummaryResponse.buckets:type_name -> kubex.keystone.FeedSummaryBucket
+	25,  // 340: kubex.keystone.GetDynamicRecordRequest.authorization:type_name -> kubex.keystone.Authorization
+	235, // 341: kubex.keystone.DynamicRecord.properties:type_name -> kubex.keystone.DynamicRecord.PropertiesEntry
+	238, // 342: kubex.keystone.DynamicRecord.updated:type_name -> google.protobuf.Timestamp
+	25,  // 343: kubex.keystone.MutateDynamicRecordRequest.authorization:type_name -> kubex.keystone.Authorization
+	236, // 344: kubex.keystone.MutateDynamicRecordRequest.set:type_name -> kubex.keystone.MutateDynamicRecordRequest.SetEntry
+	25,  // 345: kubex.keystone.DeleteDynamicRecordRequest.authorization:type_name -> kubex.keystone.Authorization
+	238, // 346: kubex.keystone.DynamicRecordMutationResponse.timestamp:type_name -> google.protobuf.Timestamp
+	238, // 347: kubex.keystone.DynamicRecordHistoryEntry.timestamp:type_name -> google.protobuf.Timestamp
+	63,  // 348: kubex.keystone.DynamicRecordHistoryEntry.actor:type_name -> kubex.keystone.User
+	237, // 349: kubex.keystone.DynamicRecordHistoryEntry.set:type_name -> kubex.keystone.DynamicRecordHistoryEntry.SetEntry
+	25,  // 350: kubex.keystone.ListDynamicRecordHistoryRequest.authorization:type_name -> kubex.keystone.Authorization
+	197, // 351: kubex.keystone.ListDynamicRecordHistoryResponse.entries:type_name -> kubex.keystone.DynamicRecordHistoryEntry
+	24,  // 352: kubex.keystone.EntityAlias.source:type_name -> kubex.keystone.VendorApp
+	25,  // 353: kubex.keystone.AliasMutationRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 354: kubex.keystone.AliasMutationRequest.schema:type_name -> kubex.keystone.Key
+	200, // 355: kubex.keystone.AliasMutationRequest.alias:type_name -> kubex.keystone.EntityAlias
+	25,  // 356: kubex.keystone.ResolveAliasRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 357: kubex.keystone.ResolveAliasRequest.schema:type_name -> kubex.keystone.Key
+	200, // 358: kubex.keystone.ResolveAliasRequest.alias:type_name -> kubex.keystone.EntityAlias
+	25,  // 359: kubex.keystone.ListAliasesRequest.authorization:type_name -> kubex.keystone.Authorization
+	29,  // 360: kubex.keystone.ListAliasesRequest.schema:type_name -> kubex.keystone.Key
+	200, // 361: kubex.keystone.ListAliasesResponse.aliases:type_name -> kubex.keystone.EntityAlias
+	30,  // 362: kubex.keystone.RepeatedValue.MixedEntry.value:type_name -> kubex.keystone.Value
+	30,  // 363: kubex.keystone.QueryRow.ValuesEntry.value:type_name -> kubex.keystone.Value
+	221, // 364: kubex.keystone.GroupCountResponse.Result.properties:type_name -> kubex.keystone.GroupCountResponse.Result.PropertiesEntry
+	225, // 365: kubex.keystone.ChartTimeSeriesResponse.SeriesEntry.value:type_name -> kubex.keystone.ChartTimeSeriesResponse.ChartSeries
+	238, // 366: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.bucket:type_name -> google.protobuf.Timestamp
+	226, // 367: kubex.keystone.ChartTimeSeriesResponse.ChartSeries.values:type_name -> kubex.keystone.ChartTimeSeriesResponse.ChartSeries.ValuesEntry
+	30,  // 368: kubex.keystone.AKVGetResponse.PropertiesEntry.value:type_name -> kubex.keystone.Value
+	30,  // 369: kubex.keystone.DynamicRecord.PropertiesEntry.value:type_name -> kubex.keystone.Value
+	30,  // 370: kubex.keystone.MutateDynamicRecordRequest.SetEntry.value:type_name -> kubex.keystone.Value
+	30,  // 371: kubex.keystone.DynamicRecordHistoryEntry.SetEntry.value:type_name -> kubex.keystone.Value
+	25,  // 372: kubex.keystone.Keystone.Status:input_type -> kubex.keystone.Authorization
+	70,  // 373: kubex.keystone.Keystone.Define:input_type -> kubex.keystone.SchemaRequest
+	131, // 374: kubex.keystone.Keystone.IID:input_type -> kubex.keystone.IIDCreateRequest
+	132, // 375: kubex.keystone.Keystone.IIDLookup:input_type -> kubex.keystone.IIDRequest
+	32,  // 376: kubex.keystone.Keystone.PiiToken:input_type -> kubex.keystone.PiiTokenRequest
+	34,  // 377: kubex.keystone.Keystone.PiiAnonymize:input_type -> kubex.keystone.PiiAnonymizeRequest
+	71,  // 378: kubex.keystone.Keystone.Mutate:input_type -> kubex.keystone.MutateRequest
+	140, // 379: kubex.keystone.Keystone.Destroy:input_type -> kubex.keystone.DestroyRequest
+	65,  // 380: kubex.keystone.Keystone.Log:input_type -> kubex.keystone.LogRequest
+	142, // 381: kubex.keystone.Keystone.SQUID:input_type -> kubex.keystone.SquidRequest
+	143, // 382: kubex.keystone.Keystone.SQUIDRecover:input_type -> kubex.keystone.SquidRecoverRequest
+	72,  // 383: kubex.keystone.Keystone.SnapshotReport:input_type -> kubex.keystone.SnapshotReportRequest
+	73,  // 384: kubex.keystone.Keystone.ReportTimeSeries:input_type -> kubex.keystone.ReportTimeSeriesRequest
+	114, // 385: kubex.keystone.Keystone.ChartTimeSeries:input_type -> kubex.keystone.ChartTimeSeriesRequest
+	45,  // 386: kubex.keystone.Keystone.WriteSensors:input_type -> kubex.keystone.WriteSensorsRequest
+	25,  // 387: kubex.keystone.Keystone.ListAppSensors:input_type -> kubex.keystone.Authorization
+	53,  // 388: kubex.keystone.Keystone.ChartSensor:input_type -> kubex.keystone.ChartSensorRequest
+	59,  // 389: kubex.keystone.Keystone.HeatmapSensor:input_type -> kubex.keystone.HeatmapSensorRequest
+	56,  // 390: kubex.keystone.Keystone.SensorActivity:input_type -> kubex.keystone.SensorActivityRequest
+	47,  // 391: kubex.keystone.Keystone.PredictSensor:input_type -> kubex.keystone.PredictSensorRequest
+	50,  // 392: kubex.keystone.Keystone.CreateSensorStream:input_type -> kubex.keystone.CreateSensorStreamRequest
+	52,  // 393: kubex.keystone.Keystone.RevokeSensorSession:input_type -> kubex.keystone.RevokeSensorSessionRequest
+	77,  // 394: kubex.keystone.Keystone.Retrieve:input_type -> kubex.keystone.EntityRequest
+	89,  // 395: kubex.keystone.Keystone.Find:input_type -> kubex.keystone.FindRequest
+	92,  // 396: kubex.keystone.Keystone.List:input_type -> kubex.keystone.ListRequest
+	104, // 397: kubex.keystone.Keystone.QueryIndex:input_type -> kubex.keystone.QueryIndexRequest
+	94,  // 398: kubex.keystone.Keystone.Query:input_type -> kubex.keystone.QueryRequest
+	184, // 399: kubex.keystone.Keystone.FeedPut:input_type -> kubex.keystone.FeedPutRequest
+	186, // 400: kubex.keystone.Keystone.FeedRead:input_type -> kubex.keystone.FeedReadRequest
+	188, // 401: kubex.keystone.Keystone.FeedRemove:input_type -> kubex.keystone.FeedRemoveRequest
+	189, // 402: kubex.keystone.Keystone.FeedSummary:input_type -> kubex.keystone.FeedSummaryRequest
+	201, // 403: kubex.keystone.Keystone.AttachAlias:input_type -> kubex.keystone.AliasMutationRequest
+	201, // 404: kubex.keystone.Keystone.RemoveAlias:input_type -> kubex.keystone.AliasMutationRequest
+	202, // 405: kubex.keystone.Keystone.ResolveAlias:input_type -> kubex.keystone.ResolveAliasRequest
+	204, // 406: kubex.keystone.Keystone.ListAliases:input_type -> kubex.keystone.ListAliasesRequest
+	123, // 407: kubex.keystone.Keystone.Lookup:input_type -> kubex.keystone.LookupRequest
+	106, // 408: kubex.keystone.Keystone.GroupCount:input_type -> kubex.keystone.GroupCountRequest
+	84,  // 409: kubex.keystone.Keystone.Logs:input_type -> kubex.keystone.LogsRequest
+	86,  // 410: kubex.keystone.Keystone.Events:input_type -> kubex.keystone.EventRequest
+	135, // 411: kubex.keystone.Keystone.EventStream:input_type -> kubex.keystone.EventStreamRequest
+	117, // 412: kubex.keystone.Keystone.ShareView:input_type -> kubex.keystone.ShareViewRequest
+	119, // 413: kubex.keystone.Keystone.SharedViews:input_type -> kubex.keystone.SharedViewsRequest
+	121, // 414: kubex.keystone.Keystone.RateLimit:input_type -> kubex.keystone.RateLimitRequest
+	112, // 415: kubex.keystone.Keystone.DailyEntities:input_type -> kubex.keystone.DailyEntityRequest
+	110, // 416: kubex.keystone.Keystone.SchemaStatistics:input_type -> kubex.keystone.SchemaStatisticsRequest
+	192, // 417: kubex.keystone.Keystone.GetDynamicRecord:input_type -> kubex.keystone.GetDynamicRecordRequest
+	194, // 418: kubex.keystone.Keystone.MutateDynamicRecord:input_type -> kubex.keystone.MutateDynamicRecordRequest
+	195, // 419: kubex.keystone.Keystone.DeleteDynamicRecord:input_type -> kubex.keystone.DeleteDynamicRecordRequest
+	198, // 420: kubex.keystone.Keystone.ListDynamicRecordHistory:input_type -> kubex.keystone.ListDynamicRecordHistoryRequest
+	127, // 421: kubex.keystone.Keystone.AKVGet:input_type -> kubex.keystone.AKVGetRequest
+	126, // 422: kubex.keystone.Keystone.AKVPut:input_type -> kubex.keystone.AKVPutRequest
+	129, // 423: kubex.keystone.Keystone.AKVDel:input_type -> kubex.keystone.AKVDelRequest
+	127, // 424: kubex.keystone.Keystone.AKVWorkspaceGet:input_type -> kubex.keystone.AKVGetRequest
+	126, // 425: kubex.keystone.Keystone.AKVWorkspacePut:input_type -> kubex.keystone.AKVPutRequest
+	129, // 426: kubex.keystone.Keystone.AKVWorkspaceDel:input_type -> kubex.keystone.AKVDelRequest
+	154, // 427: kubex.keystone.Keystone.AKVTimePut:input_type -> kubex.keystone.AKVTimePutRequest
+	155, // 428: kubex.keystone.Keystone.AKVTimeGet:input_type -> kubex.keystone.AKVTimeGetRequest
+	158, // 429: kubex.keystone.Keystone.AKVTimeDel:input_type -> kubex.keystone.AKVTimeDelRequest
+	146, // 430: kubex.keystone.Keystone.EnumPut:input_type -> kubex.keystone.EnumPutRequest
+	147, // 431: kubex.keystone.Keystone.EnumGet:input_type -> kubex.keystone.EnumGetRequest
+	149, // 432: kubex.keystone.Keystone.EnumDelete:input_type -> kubex.keystone.EnumDeleteRequest
+	150, // 433: kubex.keystone.Keystone.EnumList:input_type -> kubex.keystone.EnumListRequest
+	152, // 434: kubex.keystone.Keystone.EnumReplace:input_type -> kubex.keystone.EnumReplaceRequest
+	137, // 435: kubex.keystone.Keystone.PushTask:input_type -> kubex.keystone.PushTaskRequest
+	138, // 436: kubex.keystone.Keystone.TaskStream:input_type -> kubex.keystone.TaskAckRequest
+	159, // 437: kubex.keystone.Keystone.RelayCreateSession:input_type -> kubex.keystone.RelayCreateSessionRequest
+	161, // 438: kubex.keystone.Keystone.RelayExtendSession:input_type -> kubex.keystone.RelayExtendSessionRequest
+	163, // 439: kubex.keystone.Keystone.RelayDestroySession:input_type -> kubex.keystone.RelayDestroySessionRequest
+	165, // 440: kubex.keystone.Keystone.RelayCreateShortCode:input_type -> kubex.keystone.RelayCreateShortCodeRequest
+	167, // 441: kubex.keystone.Keystone.RelayResolveShortCode:input_type -> kubex.keystone.RelayResolveShortCodeRequest
+	169, // 442: kubex.keystone.Keystone.RelayDeleteShortCode:input_type -> kubex.keystone.RelayDeleteShortCodeRequest
+	171, // 443: kubex.keystone.Keystone.RelayPublish:input_type -> kubex.keystone.RelayPublishRequest
+	173, // 444: kubex.keystone.Keystone.RelayGetPresence:input_type -> kubex.keystone.RelayGetPresenceRequest
+	176, // 445: kubex.keystone.Keystone.RelayGetSessionMetadata:input_type -> kubex.keystone.RelayGetSessionMetadataRequest
+	178, // 446: kubex.keystone.Keystone.RelaySetSessionMetadata:input_type -> kubex.keystone.RelaySetSessionMetadataRequest
+	22,  // 447: kubex.keystone.Keystone.Status:output_type -> kubex.keystone.StatusResponse
+	27,  // 448: kubex.keystone.Keystone.Define:output_type -> kubex.keystone.Schema
+	134, // 449: kubex.keystone.Keystone.IID:output_type -> kubex.keystone.IIDResponse
+	133, // 450: kubex.keystone.Keystone.IIDLookup:output_type -> kubex.keystone.IIDsResponse
+	33,  // 451: kubex.keystone.Keystone.PiiToken:output_type -> kubex.keystone.PiiTokenResponse
+	35,  // 452: kubex.keystone.Keystone.PiiAnonymize:output_type -> kubex.keystone.PiiAnonymizeResponse
+	80,  // 453: kubex.keystone.Keystone.Mutate:output_type -> kubex.keystone.MutateResponse
+	141, // 454: kubex.keystone.Keystone.Destroy:output_type -> kubex.keystone.DestroyResponse
+	66,  // 455: kubex.keystone.Keystone.Log:output_type -> kubex.keystone.LogResponse
+	144, // 456: kubex.keystone.Keystone.SQUID:output_type -> kubex.keystone.SquidResponse
+	144, // 457: kubex.keystone.Keystone.SQUIDRecover:output_type -> kubex.keystone.SquidResponse
+	80,  // 458: kubex.keystone.Keystone.SnapshotReport:output_type -> kubex.keystone.MutateResponse
+	80,  // 459: kubex.keystone.Keystone.ReportTimeSeries:output_type -> kubex.keystone.MutateResponse
+	116, // 460: kubex.keystone.Keystone.ChartTimeSeries:output_type -> kubex.keystone.ChartTimeSeriesResponse
+	26,  // 461: kubex.keystone.Keystone.WriteSensors:output_type -> kubex.keystone.GenericResponse
+	46,  // 462: kubex.keystone.Keystone.ListAppSensors:output_type -> kubex.keystone.ListAppSensorsResponse
+	55,  // 463: kubex.keystone.Keystone.ChartSensor:output_type -> kubex.keystone.ChartSensorResponse
+	61,  // 464: kubex.keystone.Keystone.HeatmapSensor:output_type -> kubex.keystone.HeatmapSensorResponse
+	58,  // 465: kubex.keystone.Keystone.SensorActivity:output_type -> kubex.keystone.SensorActivityResponse
+	49,  // 466: kubex.keystone.Keystone.PredictSensor:output_type -> kubex.keystone.PredictSensorResponse
+	51,  // 467: kubex.keystone.Keystone.CreateSensorStream:output_type -> kubex.keystone.CreateSensorStreamResponse
+	26,  // 468: kubex.keystone.Keystone.RevokeSensorSession:output_type -> kubex.keystone.GenericResponse
+	78,  // 469: kubex.keystone.Keystone.Retrieve:output_type -> kubex.keystone.EntityResponse
+	90,  // 470: kubex.keystone.Keystone.Find:output_type -> kubex.keystone.FindResponse
+	93,  // 471: kubex.keystone.Keystone.List:output_type -> kubex.keystone.ListResponse
+	105, // 472: kubex.keystone.Keystone.QueryIndex:output_type -> kubex.keystone.QueryIndexResponse
+	103, // 473: kubex.keystone.Keystone.Query:output_type -> kubex.keystone.QueryResponse
+	185, // 474: kubex.keystone.Keystone.FeedPut:output_type -> kubex.keystone.FeedPutResponse
+	187, // 475: kubex.keystone.Keystone.FeedRead:output_type -> kubex.keystone.FeedReadResponse
+	26,  // 476: kubex.keystone.Keystone.FeedRemove:output_type -> kubex.keystone.GenericResponse
+	191, // 477: kubex.keystone.Keystone.FeedSummary:output_type -> kubex.keystone.FeedSummaryResponse
+	26,  // 478: kubex.keystone.Keystone.AttachAlias:output_type -> kubex.keystone.GenericResponse
+	26,  // 479: kubex.keystone.Keystone.RemoveAlias:output_type -> kubex.keystone.GenericResponse
+	203, // 480: kubex.keystone.Keystone.ResolveAlias:output_type -> kubex.keystone.ResolveAliasResponse
+	205, // 481: kubex.keystone.Keystone.ListAliases:output_type -> kubex.keystone.ListAliasesResponse
+	124, // 482: kubex.keystone.Keystone.Lookup:output_type -> kubex.keystone.LookupResponse
+	107, // 483: kubex.keystone.Keystone.GroupCount:output_type -> kubex.keystone.GroupCountResponse
+	85,  // 484: kubex.keystone.Keystone.Logs:output_type -> kubex.keystone.LogsResponse
+	87,  // 485: kubex.keystone.Keystone.Events:output_type -> kubex.keystone.EventsResponse
+	136, // 486: kubex.keystone.Keystone.EventStream:output_type -> kubex.keystone.EventStreamResponse
+	118, // 487: kubex.keystone.Keystone.ShareView:output_type -> kubex.keystone.SharedViewResponse
+	120, // 488: kubex.keystone.Keystone.SharedViews:output_type -> kubex.keystone.SharedViewsResponse
+	122, // 489: kubex.keystone.Keystone.RateLimit:output_type -> kubex.keystone.RateLimitResponse
+	113, // 490: kubex.keystone.Keystone.DailyEntities:output_type -> kubex.keystone.DailyEntityResponse
+	111, // 491: kubex.keystone.Keystone.SchemaStatistics:output_type -> kubex.keystone.SchemaStatisticsResponse
+	193, // 492: kubex.keystone.Keystone.GetDynamicRecord:output_type -> kubex.keystone.DynamicRecord
+	196, // 493: kubex.keystone.Keystone.MutateDynamicRecord:output_type -> kubex.keystone.DynamicRecordMutationResponse
+	196, // 494: kubex.keystone.Keystone.DeleteDynamicRecord:output_type -> kubex.keystone.DynamicRecordMutationResponse
+	199, // 495: kubex.keystone.Keystone.ListDynamicRecordHistory:output_type -> kubex.keystone.ListDynamicRecordHistoryResponse
+	128, // 496: kubex.keystone.Keystone.AKVGet:output_type -> kubex.keystone.AKVGetResponse
+	26,  // 497: kubex.keystone.Keystone.AKVPut:output_type -> kubex.keystone.GenericResponse
+	26,  // 498: kubex.keystone.Keystone.AKVDel:output_type -> kubex.keystone.GenericResponse
+	128, // 499: kubex.keystone.Keystone.AKVWorkspaceGet:output_type -> kubex.keystone.AKVGetResponse
+	26,  // 500: kubex.keystone.Keystone.AKVWorkspacePut:output_type -> kubex.keystone.GenericResponse
+	26,  // 501: kubex.keystone.Keystone.AKVWorkspaceDel:output_type -> kubex.keystone.GenericResponse
+	26,  // 502: kubex.keystone.Keystone.AKVTimePut:output_type -> kubex.keystone.GenericResponse
+	157, // 503: kubex.keystone.Keystone.AKVTimeGet:output_type -> kubex.keystone.AKVTimeGetResponse
+	26,  // 504: kubex.keystone.Keystone.AKVTimeDel:output_type -> kubex.keystone.GenericResponse
+	26,  // 505: kubex.keystone.Keystone.EnumPut:output_type -> kubex.keystone.GenericResponse
+	148, // 506: kubex.keystone.Keystone.EnumGet:output_type -> kubex.keystone.EnumGetResponse
+	26,  // 507: kubex.keystone.Keystone.EnumDelete:output_type -> kubex.keystone.GenericResponse
+	151, // 508: kubex.keystone.Keystone.EnumList:output_type -> kubex.keystone.EnumListResponse
+	26,  // 509: kubex.keystone.Keystone.EnumReplace:output_type -> kubex.keystone.GenericResponse
+	26,  // 510: kubex.keystone.Keystone.PushTask:output_type -> kubex.keystone.GenericResponse
+	139, // 511: kubex.keystone.Keystone.TaskStream:output_type -> kubex.keystone.TaskResponse
+	160, // 512: kubex.keystone.Keystone.RelayCreateSession:output_type -> kubex.keystone.RelayCreateSessionResponse
+	162, // 513: kubex.keystone.Keystone.RelayExtendSession:output_type -> kubex.keystone.RelayExtendSessionResponse
+	164, // 514: kubex.keystone.Keystone.RelayDestroySession:output_type -> kubex.keystone.RelayDestroySessionResponse
+	166, // 515: kubex.keystone.Keystone.RelayCreateShortCode:output_type -> kubex.keystone.RelayCreateShortCodeResponse
+	168, // 516: kubex.keystone.Keystone.RelayResolveShortCode:output_type -> kubex.keystone.RelayResolveShortCodeResponse
+	170, // 517: kubex.keystone.Keystone.RelayDeleteShortCode:output_type -> kubex.keystone.RelayDeleteShortCodeResponse
+	172, // 518: kubex.keystone.Keystone.RelayPublish:output_type -> kubex.keystone.RelayPublishResponse
+	174, // 519: kubex.keystone.Keystone.RelayGetPresence:output_type -> kubex.keystone.RelayGetPresenceResponse
+	177, // 520: kubex.keystone.Keystone.RelayGetSessionMetadata:output_type -> kubex.keystone.RelayGetSessionMetadataResponse
+	179, // 521: kubex.keystone.Keystone.RelaySetSessionMetadata:output_type -> kubex.keystone.RelaySetSessionMetadataResponse
+	447, // [447:522] is the sub-list for method output_type
+	372, // [372:447] is the sub-list for method input_type
+	372, // [372:372] is the sub-list for extension type_name
+	372, // [372:372] is the sub-list for extension extendee
+	0,   // [0:372] is the sub-list for field type_name
 }
 
 func init() { file_keystone_proto_init() }
@@ -16900,7 +17318,7 @@ func file_keystone_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_keystone_proto_rawDesc), len(file_keystone_proto_rawDesc)),
 			NumEnums:      22,
-			NumMessages:   210,
+			NumMessages:   216,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

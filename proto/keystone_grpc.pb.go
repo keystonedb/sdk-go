@@ -50,6 +50,10 @@ const (
 	Keystone_FeedRead_FullMethodName                 = "/kubex.keystone.Keystone/FeedRead"
 	Keystone_FeedRemove_FullMethodName               = "/kubex.keystone.Keystone/FeedRemove"
 	Keystone_FeedSummary_FullMethodName              = "/kubex.keystone.Keystone/FeedSummary"
+	Keystone_AttachAlias_FullMethodName              = "/kubex.keystone.Keystone/AttachAlias"
+	Keystone_RemoveAlias_FullMethodName              = "/kubex.keystone.Keystone/RemoveAlias"
+	Keystone_ResolveAlias_FullMethodName             = "/kubex.keystone.Keystone/ResolveAlias"
+	Keystone_ListAliases_FullMethodName              = "/kubex.keystone.Keystone/ListAliases"
 	Keystone_Lookup_FullMethodName                   = "/kubex.keystone.Keystone/Lookup"
 	Keystone_GroupCount_FullMethodName               = "/kubex.keystone.Keystone/GroupCount"
 	Keystone_Logs_FullMethodName                     = "/kubex.keystone.Keystone/Logs"
@@ -136,6 +140,10 @@ type KeystoneClient interface {
 	FeedRead(ctx context.Context, in *FeedReadRequest, opts ...grpc.CallOption) (*FeedReadResponse, error)
 	FeedRemove(ctx context.Context, in *FeedRemoveRequest, opts ...grpc.CallOption) (*GenericResponse, error)
 	FeedSummary(ctx context.Context, in *FeedSummaryRequest, opts ...grpc.CallOption) (*FeedSummaryResponse, error)
+	AttachAlias(ctx context.Context, in *AliasMutationRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	RemoveAlias(ctx context.Context, in *AliasMutationRequest, opts ...grpc.CallOption) (*GenericResponse, error)
+	ResolveAlias(ctx context.Context, in *ResolveAliasRequest, opts ...grpc.CallOption) (*ResolveAliasResponse, error)
+	ListAliases(ctx context.Context, in *ListAliasesRequest, opts ...grpc.CallOption) (*ListAliasesResponse, error)
 	Lookup(ctx context.Context, in *LookupRequest, opts ...grpc.CallOption) (*LookupResponse, error)
 	GroupCount(ctx context.Context, in *GroupCountRequest, opts ...grpc.CallOption) (*GroupCountResponse, error)
 	Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsResponse, error)
@@ -499,6 +507,46 @@ func (c *keystoneClient) FeedSummary(ctx context.Context, in *FeedSummaryRequest
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(FeedSummaryResponse)
 	err := c.cc.Invoke(ctx, Keystone_FeedSummary_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) AttachAlias(ctx context.Context, in *AliasMutationRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_AttachAlias_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) RemoveAlias(ctx context.Context, in *AliasMutationRequest, opts ...grpc.CallOption) (*GenericResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericResponse)
+	err := c.cc.Invoke(ctx, Keystone_RemoveAlias_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) ResolveAlias(ctx context.Context, in *ResolveAliasRequest, opts ...grpc.CallOption) (*ResolveAliasResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResolveAliasResponse)
+	err := c.cc.Invoke(ctx, Keystone_ResolveAlias_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *keystoneClient) ListAliases(ctx context.Context, in *ListAliasesRequest, opts ...grpc.CallOption) (*ListAliasesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListAliasesResponse)
+	err := c.cc.Invoke(ctx, Keystone_ListAliases_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -955,6 +1003,10 @@ type KeystoneServer interface {
 	FeedRead(context.Context, *FeedReadRequest) (*FeedReadResponse, error)
 	FeedRemove(context.Context, *FeedRemoveRequest) (*GenericResponse, error)
 	FeedSummary(context.Context, *FeedSummaryRequest) (*FeedSummaryResponse, error)
+	AttachAlias(context.Context, *AliasMutationRequest) (*GenericResponse, error)
+	RemoveAlias(context.Context, *AliasMutationRequest) (*GenericResponse, error)
+	ResolveAlias(context.Context, *ResolveAliasRequest) (*ResolveAliasResponse, error)
+	ListAliases(context.Context, *ListAliasesRequest) (*ListAliasesResponse, error)
 	Lookup(context.Context, *LookupRequest) (*LookupResponse, error)
 	GroupCount(context.Context, *GroupCountRequest) (*GroupCountResponse, error)
 	Logs(context.Context, *LogsRequest) (*LogsResponse, error)
@@ -1105,6 +1157,18 @@ func (UnimplementedKeystoneServer) FeedRemove(context.Context, *FeedRemoveReques
 }
 func (UnimplementedKeystoneServer) FeedSummary(context.Context, *FeedSummaryRequest) (*FeedSummaryResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method FeedSummary not implemented")
+}
+func (UnimplementedKeystoneServer) AttachAlias(context.Context, *AliasMutationRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AttachAlias not implemented")
+}
+func (UnimplementedKeystoneServer) RemoveAlias(context.Context, *AliasMutationRequest) (*GenericResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RemoveAlias not implemented")
+}
+func (UnimplementedKeystoneServer) ResolveAlias(context.Context, *ResolveAliasRequest) (*ResolveAliasResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResolveAlias not implemented")
+}
+func (UnimplementedKeystoneServer) ListAliases(context.Context, *ListAliasesRequest) (*ListAliasesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListAliases not implemented")
 }
 func (UnimplementedKeystoneServer) Lookup(context.Context, *LookupRequest) (*LookupResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Lookup not implemented")
@@ -1801,6 +1865,78 @@ func _Keystone_FeedSummary_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KeystoneServer).FeedSummary(ctx, req.(*FeedSummaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_AttachAlias_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AliasMutationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).AttachAlias(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_AttachAlias_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).AttachAlias(ctx, req.(*AliasMutationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_RemoveAlias_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AliasMutationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).RemoveAlias(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_RemoveAlias_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).RemoveAlias(ctx, req.(*AliasMutationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_ResolveAlias_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResolveAliasRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).ResolveAlias(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_ResolveAlias_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).ResolveAlias(ctx, req.(*ResolveAliasRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Keystone_ListAliases_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAliasesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KeystoneServer).ListAliases(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Keystone_ListAliases_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KeystoneServer).ListAliases(ctx, req.(*ListAliasesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2633,6 +2769,22 @@ var Keystone_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FeedSummary",
 			Handler:    _Keystone_FeedSummary_Handler,
+		},
+		{
+			MethodName: "AttachAlias",
+			Handler:    _Keystone_AttachAlias_Handler,
+		},
+		{
+			MethodName: "RemoveAlias",
+			Handler:    _Keystone_RemoveAlias_Handler,
+		},
+		{
+			MethodName: "ResolveAlias",
+			Handler:    _Keystone_ResolveAlias_Handler,
+		},
+		{
+			MethodName: "ListAliases",
+			Handler:    _Keystone_ListAliases_Handler,
 		},
 		{
 			MethodName: "Lookup",

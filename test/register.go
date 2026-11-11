@@ -6,6 +6,7 @@ import (
 	"github.com/keystonedb/sdk-go/test/requirements/akv"
 	"github.com/keystonedb/sdk-go/test/requirements/akv_timeline"
 	"github.com/keystonedb/sdk-go/test/requirements/akvw"
+	"github.com/keystonedb/sdk-go/test/requirements/aliases"
 	"github.com/keystonedb/sdk-go/test/requirements/child_entities"
 	"github.com/keystonedb/sdk-go/test/requirements/cru"
 	"github.com/keystonedb/sdk-go/test/requirements/daily"
@@ -61,6 +62,7 @@ import (
 var reqs []requirements.Requirement
 
 func init() {
+	reqs = append(reqs, &aliases.Requirement{}, &aliases.DestructionRequirement{})
 	//reqs = append(reqs, &requirements.DummyRequirement{})
 	reqs = append(reqs, &akv.Requirement{})
 	reqs = append(reqs, &akvw.Requirement{})
