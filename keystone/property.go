@@ -245,6 +245,7 @@ func (fOpt fieldOptions) applyOptions(onto []proto.Property_Option) []proto.Prop
 	onto = appendOption(proto.Property_Metric, onto, fOpt.metric)
 	onto = appendOption(proto.Property_MetricFilter, onto, fOpt.metricFilter)
 	onto = appendOption(proto.Property_NoSnapshot, onto, fOpt.noSnapshot)
+	onto = appendOption(proto.Property_PII, onto, fOpt.personalData)
 	return onto
 }
 

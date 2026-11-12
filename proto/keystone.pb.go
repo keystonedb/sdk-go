@@ -979,6 +979,7 @@ const (
 	Property_Deprecated Property_Option = 9
 	Property_Primary    Property_Option = 10 // Primary key for the entity
 	Property_NoSnapshot Property_Option = 11 // Do not include in snapshot report
+	Property_PII        Property_Option = 12 // Personal data, independent of extended type. Requires SecureText storage.
 )
 
 // Enum value maps for Property_Option.
@@ -996,6 +997,7 @@ var (
 		9:  "Deprecated",
 		10: "Primary",
 		11: "NoSnapshot",
+		12: "PII",
 	}
 	Property_Option_value = map[string]int32{
 		"None":          0,
@@ -1010,6 +1012,7 @@ var (
 		"Deprecated":    9,
 		"Primary":       10,
 		"NoSnapshot":    11,
+		"PII":           12,
 	}
 )
 
@@ -15010,7 +15013,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\n" +
 	"\x06Entity\x10\x00\x12\x0e\n" +
 	"\n" +
-	"TimeSeries\x10\x01\"\xa8\x06\n" +
+	"TimeSeries\x10\x01\"\xb1\x06\n" +
 	"\bProperty\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12:\n" +
 	"\tdata_type\x18\x02 \x01(\x0e2\x1d.kubex.keystone.Property.TypeR\bdataType\x12J\n" +
@@ -15056,7 +15059,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\x02IP\x10\x0e\x12\v\n" +
 	"\aCountry\x10\x0f\x12\a\n" +
 	"\x03URL\x10\x10\x12\f\n" +
-	"\bInterval\x10\x11\"\xb6\x01\n" +
+	"\bInterval\x10\x11\"\xbf\x01\n" +
 	"\x06Option\x12\b\n" +
 	"\x04None\x10\x00\x12\n" +
 	"\n" +
@@ -15075,7 +15078,8 @@ const file_keystone_proto_rawDesc = "" +
 	"\aPrimary\x10\n" +
 	"\x12\x0e\n" +
 	"\n" +
-	"NoSnapshot\x10\v\"J\n" +
+	"NoSnapshot\x10\v\x12\a\n" +
+	"\x03PII\x10\f\"J\n" +
 	"\x03Key\x121\n" +
 	"\x06source\x18\x01 \x01(\v2\x19.kubex.keystone.VendorAppR\x06source\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\"\xca\x03\n" +
