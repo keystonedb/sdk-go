@@ -1050,6 +1050,7 @@ const (
 	Value_PII_AVAILABLE       Value_PIIState = 1 // Includes genuine empty or null PII values.
 	Value_PII_PENDING_ERASURE Value_PIIState = 2 // Revoked, but recoverable within the recovery window.
 	Value_PII_ERASED          Value_PIIState = 3 // No usable token or recovery window remains.
+	Value_PII_MASKED          Value_PIIState = 4 // Value holds the mask; the full value was not decrypted.
 )
 
 // Enum value maps for Value_PIIState.
@@ -1059,12 +1060,14 @@ var (
 		1: "PII_AVAILABLE",
 		2: "PII_PENDING_ERASURE",
 		3: "PII_ERASED",
+		4: "PII_MASKED",
 	}
 	Value_PIIState_value = map[string]int32{
 		"PII_UNSPECIFIED":     0,
 		"PII_AVAILABLE":       1,
 		"PII_PENDING_ERASURE": 2,
 		"PII_ERASED":          3,
+		"PII_MASKED":          4,
 	}
 )
 
@@ -15142,7 +15145,7 @@ const file_keystone_proto_rawDesc = "" +
 	"\x03PII\x10\f\"J\n" +
 	"\x03Key\x121\n" +
 	"\x06source\x18\x01 \x01(\v2\x19.kubex.keystone.VendorAppR\x06source\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\tR\x03key\"\xe4\x04\n" +
+	"\x03key\x18\x02 \x01(\tR\x03key\"\xf4\x04\n" +
 	"\x05Value\x12;\n" +
 	"\tpii_state\x18\r \x01(\x0e2\x1e.kubex.keystone.Value.PIIStateR\bpiiState\x12<\n" +
 	"\n" +
@@ -15159,13 +15162,15 @@ const file_keystone_proto_rawDesc = "" +
 	"\farray_append\x18\n" +
 	" \x01(\v2\x1d.kubex.keystone.RepeatedValueR\varrayAppend\x12@\n" +
 	"\farray_reduce\x18\v \x01(\v2\x1d.kubex.keystone.RepeatedValueR\varrayReduce\x12\x17\n" +
-	"\ais_null\x18\f \x01(\bR\x06isNull\"[\n" +
+	"\ais_null\x18\f \x01(\bR\x06isNull\"k\n" +
 	"\bPIIState\x12\x13\n" +
 	"\x0fPII_UNSPECIFIED\x10\x00\x12\x11\n" +
 	"\rPII_AVAILABLE\x10\x01\x12\x17\n" +
 	"\x13PII_PENDING_ERASURE\x10\x02\x12\x0e\n" +
 	"\n" +
-	"PII_ERASED\x10\x03\"\xd5\x02\n" +
+	"PII_ERASED\x10\x03\x12\x0e\n" +
+	"\n" +
+	"PII_MASKED\x10\x04\"\xd5\x02\n" +
 	"\rRepeatedValue\x12H\n" +
 	"\tkey_value\x18\x01 \x03(\v2+.kubex.keystone.RepeatedValue.KeyValueEntryR\bkeyValue\x12\x18\n" +
 	"\astrings\x18\x02 \x03(\tR\astrings\x12\x12\n" +
